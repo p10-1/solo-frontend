@@ -4,7 +4,8 @@ import MenuItem from './MenuItem.vue'
 import AccountMenuItem from './AccountMenuItem.vue'
 import LogoutMenuItem from './LogoutMenuItem.vue'
 import config from '@/config'
-const { login, join } = config.accoutMenus
+const { login } = config.accoutMenus
+
 const islogin = computed(() => false) // 임시: 로그인하지 않음
 const username = computed(() => '') // 임시: 사용자명 없음
 </script>
@@ -16,7 +17,6 @@ const username = computed(() => '') // 임시: 사용자명 없음
     </template>
     <template v-else>
       <MenuItem :menu="login" />
-      <MenuItem :menu="join" />
     </template>
   </ul>
 </template>

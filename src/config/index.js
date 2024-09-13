@@ -25,10 +25,6 @@ export default {
     login: {
       url: '/login',
       title: '로그인'
-    },
-    join: {
-      url: '/join',
-      title: '회원가입'
     }
   }
 }

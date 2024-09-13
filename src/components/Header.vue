@@ -13,7 +13,7 @@ import config from '@/config'
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  color: white;
+  color: green;
   padding: 2rem;
 }
 </style>

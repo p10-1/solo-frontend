@@ -20,11 +20,6 @@ export default [
     component: () => import('../pages/asset/Asset.vue')
   },
   {
-    path: '/auth/join',
-    name: 'join',
-    component: () => import('../pages/auth/JoinPage.vue')
-  },
-  {
     path: '/mypage',
     name: 'mypage',
     component: () => import('../pages/auth/MyPage.vue')

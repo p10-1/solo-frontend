@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-// 이게 각각의 page를 가져오는 것 
+// 이게 각각의 page를 가져오는 것
 import Home from '../pages/Home.vue'
 import Login from '../pages/auth/Login.vue'
 import Board from '../pages/board/Board.vue'
@@ -7,7 +7,6 @@ import Asset from '../pages/asset/Asset.vue'
 import MyPage from '../pages/auth/MyPage.vue'
 import News from '../pages/news/News.vue'
 import Policy from '../pages/policy/Policy.vue'
-import Join from '../pages/auth/JoinPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,11 +35,6 @@ const router = createRouter({
       path: '/mypage',
       name: 'mypage',
       component: MyPage
-    },
-    {
-      path: '/auth/join',
-      name: 'join',
-      component: Join
     },
     {
       path: '/news',
