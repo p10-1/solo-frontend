@@ -2,37 +2,54 @@
   <div class="community-page">
     <h1 class="mb-4">커뮤니티</h1>
 
-    <!-- 검색 바 -->
-    <SearchBar @search="handleSearch" v-if="!showWriteForm && !showPostDetail" />
-
-    <!-- 게시글 리스트 -->
-    <PostList
-      :posts="posts"
-      @post-click="openPostDetail"
-      v-if="!showWriteForm && !showPostDetail"
-    />
-
-    <!-- 페이지네이션 & 글 작성 버튼 -->
-    <div
-      class="d-flex justify-content-between align-items-center mt-4"
-      v-if="!showWriteForm && !showPostDetail"
-    >
-      <Pagination :current-page="currentPage" :total-pages="totalPages" @page-change="changePage" />
-      <WriteButton @write-click="showWriteForm = true" />
+    <div v-if="isLoading" class="text-center">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">로딩 중...</span>
+      </div>
     </div>
 
-    <!-- 글 작성 폼 -->
-    <WriteForm v-if="showWriteForm" @submit="handleSubmit" @cancel="showWriteForm = false" />
+    <div v-if="error" class="alert alert-danger" role="alert">
+      {{ error }}
+    </div>
 
-    <!-- 게시글 상세보기 -->
-    <PostDetail v-if="showPostDetail" :post="selectedPost" @back="showPostDetail = false" />
+    <template v-if="!isLoading && !error">
+      <SearchBar v-if="!showWriteForm && !showPostDetail" @search="handleSearch" />
+
+      <PostList
+        v-if="!showWriteForm && !showPostDetail"
+        :posts="filteredPosts"
+        @post-click="openPostDetail"
+      />
+
+      <div
+        v-if="!showWriteForm && !showPostDetail"
+        class="d-flex justify-content-between align-items-center mt-4"
+      >
+        <Pagination
+          v-if="postStore.totalPages > 0"
+          :current-page="currentPage"
+          :total-pages="postStore.totalPages"
+          @page-change="changePage"
+        />
+        <WriteButton @write-click="showWriteForm = true" />
+      </div>
+
+      <WriteForm v-if="showWriteForm" @submit="handleSubmit" @cancel="showWriteForm = false" />
+
+      <PostDetail
+        v-if="showPostDetail"
+        :post="selectedPost"
+        @back="closePostDetail"
+        @update="handleUpdatePost"
+        @delete="handleDeletePost"
+      />
+    </template>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
-
+import { ref, computed, onMounted, watch } from 'vue'
+import { usePostStore } from '@/stores/postStore'
 import SearchBar from '@/components/common/SearchBar.vue'
 import PostList from '@/components/CommunityPage/PostList.vue'
 import Pagination from '@/components/common/Pagination.vue'
@@ -40,69 +57,114 @@ import WriteButton from '@/components/CommunityPage/WriteButton.vue'
 import WriteForm from '@/components/CommunityPage/WriteForm.vue'
 import PostDetail from '@/components/CommunityPage/PostDetail.vue'
 
-const currentPage = ref(1)
-const totalPages = ref(1)
-const posts = ref([])
+const postStore = usePostStore()
+const isLoading = ref(false)
+const error = ref(null)
 const showWriteForm = ref(false)
 const showPostDetail = ref(false)
 const selectedPost = ref(null)
 const searchTerm = ref('')
+const currentPage = ref(1)
 
-// 게시물 가져오기 함수
-const fetchPosts = async () => {
-  try {
-    const response = await axios.get(
-      `http://localhost:3000/community?_page=${currentPage.value}&_limit=10`
-    )
-    posts.value = response.data
-    const totalPosts = parseInt(response.headers['x-total-count'])
-    totalPages.value = isNaN(totalPosts) ? 1 : Math.ceil(totalPosts / 10) // 페이지 수 계산
-  } catch (error) {
-    console.error('Error fetching posts:', error)
-    totalPages.value = 1 // 오류 시 페이지 수 기본값 설정
-  }
-}
-
-// 컴포넌트가 마운트될 때 게시물 가져오기
-onMounted(() => {
-  fetchPosts()
+const filteredPosts = computed(() => {
+  if (!searchTerm.value) return postStore.posts
+  return postStore.posts.filter(
+    (post) =>
+      post.title.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+      post.content.toLowerCase().includes(searchTerm.value.toLowerCase())
+  )
 })
 
-// 검색 처리 함수
-const handleSearch = async (term) => {
-  searchTerm.value = term
+onMounted(async () => {
+  await fetchPosts()
+})
+
+watch(currentPage, async () => {
+  await fetchPosts()
+})
+
+async function fetchPosts() {
+  isLoading.value = true
+  error.value = null
   try {
-    const response = await axios.get(`http://localhost:3000/community?q=${searchTerm.value}`)
-    posts.value = response.data
-    totalPages.value = 1 // 검색 결과에서는 페이지네이션 적용 X
-  } catch (error) {
-    console.error('Error searching posts:', error)
+    await postStore.fetchPosts(currentPage.value)
+    if (postStore.posts.length === 0) {
+      console.warn('No posts returned from the server')
+    }
+  } catch (err) {
+    error.value = '게시글을 불러오는 데 실패했습니다.'
+    console.error('Failed to fetch posts:', err)
+  } finally {
+    isLoading.value = false
   }
 }
 
-// 페이지 변경 처리 함수
-const changePage = async (page) => {
+const handleSearch = (term) => {
+  searchTerm.value = term
+  currentPage.value = 1
+}
+
+const changePage = (page) => {
   currentPage.value = page
-  await fetchPosts() // 페이지 변경 시 게시물 다시 로드
 }
 
-// 글 작성 처리 함수
-const handleSubmit = (postData) => {
-  posts.value.unshift({
-    id: posts.value.length + 1,
-    ...postData,
-    date: 'now',
-    views: 0,
-    comments: 0,
-    likes: 0
-  })
-  showWriteForm.value = false
+const handleSubmit = async (postData) => {
+  isLoading.value = true
+  error.value = null
+  try {
+    await postStore.createPost(postData)
+    showWriteForm.value = false
+    currentPage.value = 1
+    await fetchPosts()
+  } catch (err) {
+    error.value = '게시글 작성에 실패했습니다.'
+    console.error('Failed to create post:', err)
+  } finally {
+    isLoading.value = false
+  }
 }
 
-// 게시물 상세보기 열기
 const openPostDetail = (post) => {
-  selectedPost.value = post
-  showPostDetail.value = true
+  if (post) {
+    selectedPost.value = { ...post, comments: post.comments || [] }
+    showPostDetail.value = true
+  }
+}
+
+const closePostDetail = () => {
+  showPostDetail.value = false
+  selectedPost.value = null
+}
+
+const handleUpdatePost = async (postData) => {
+  isLoading.value = true
+  error.value = null
+  try {
+    await postStore.updatePost(postData)
+    closePostDetail()
+    await fetchPosts()
+  } catch (err) {
+    error.value = '게시글 수정에 실패했습니다.'
+    console.error('Failed to update post:', err)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const handleDeletePost = async (postId) => {
+  isLoading.value = true
+  error.value = null
+  try {
+    await postStore.deletePost(postId)
+    closePostDetail()
+    currentPage.value = 1
+    await fetchPosts()
+  } catch (err) {
+    error.value = '게시글 삭제에 실패했습니다.'
+    console.error('Failed to delete post:', err)
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
 

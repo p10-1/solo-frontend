@@ -2,13 +2,34 @@
   "assets": {
     "totalAmount": 13460000,
     "assetData": [
-      { "name": "현금자산", "value": 38 },
-      { "name": "예금", "value": 25 },
-      { "name": "주식", "value": 23 },
-      { "name": "기타", "value": 14 },
-      { "name": "부동산", "value": 20 },
-      { "name": "채권", "value": 12 },
-      { "name": "가상화폐", "value": 18 }
+      {
+        "name": "현금자산",
+        "value": 38
+      },
+      {
+        "name": "예금",
+        "value": 25
+      },
+      {
+        "name": "주식",
+        "value": 23
+      },
+      {
+        "name": "기타",
+        "value": 14
+      },
+      {
+        "name": "부동산",
+        "value": 20
+      },
+      {
+        "name": "채권",
+        "value": 12
+      },
+      {
+        "name": "가상화폐",
+        "value": 18
+      }
     ],
     "loanAmount": -150000000,
     "payment": -2050,
@@ -19,7 +40,7 @@
   },
   "policies": [
     {
-      "id": 1,
+      "id": "1",
       "title": "추천 정책 1",
       "description": "청년 일자리 지원 정책입니다.",
       "category": "주거",
@@ -27,7 +48,7 @@
       "popularity": 100
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "추천 정책 2",
       "description": "중소기업을 위한 지원 정책입니다.",
       "category": "교육",
@@ -35,7 +56,7 @@
       "popularity": 80
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "추천 정책 3",
       "description": "주거 안정화를 위한 정책입니다.",
       "category": "복지",
@@ -43,7 +64,7 @@
       "popularity": 120
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "추천 정책 4",
       "description": "기술 창업 지원을 위한 정책입니다.",
       "category": "일자리",
@@ -51,7 +72,7 @@
       "popularity": 90
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "추천 정책 5",
       "description": "청년을 위한 금융 지원 정책입니다.",
       "category": "금융",
@@ -59,7 +80,7 @@
       "popularity": 95
     },
     {
-      "id": 6,
+      "id": "6",
       "title": "추천 정책 6",
       "description": "농업 및 어업 종사자를 위한 지원 정책입니다.",
       "category": "복지",
@@ -67,7 +88,7 @@
       "popularity": 105
     },
     {
-      "id": 7,
+      "id": "7",
       "title": "추천 정책 7",
       "description": "국가 재정 건전성을 위한 경제 정책입니다.",
       "category": "경제",
@@ -75,7 +96,7 @@
       "popularity": 85
     },
     {
-      "id": 8,
+      "id": "8",
       "title": "추천 정책 8",
       "description": "환경 보호를 위한 정책입니다.",
       "category": "환경",
@@ -85,54 +106,129 @@
   ],
   "community": [
     {
-      "id": 1,
+      "id": "1",
       "title": "인기글 1번의 제목",
       "author": "KB",
       "date": "6일전",
       "views": 123,
-      "likes": 12,
-      "content": "인기글 1번의 내용..."
+      "likes": 13,
+      "content": "인기글 1번의 내용...",
+      "comments": [
+        {
+          "id": "1",
+          "author": "댓글 작성자 1",
+          "content": "첫 번째 댓글입니다."
+        },
+        {
+          "id": "2",
+          "author": "댓글 작성자 2",
+          "content": "두 번째 댓글입니다."
+        },
+        {
+          "id": "1726736190956",
+          "content": "ㅇㄴㄹㄴㅇ",
+          "author": "현재 사용자"
+        },
+        {
+          "id": "1726736198746",
+          "content": "ㄴㅇㄹㄴㅇ",
+          "author": "현재 사용자"
+        },
+        {
+          "id": "1726736400352",
+          "content": "ㅇㄹㄴㅇ",
+          "author": "현재 사용자"
+        }
+      ]
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "인기글 2번의 제목",
       "author": "윤재",
       "date": "4일전",
       "views": 100,
       "likes": 8,
-      "content": "인기글 2번의 내용..."
+      "content": "인기글 2번의 내용...",
+      "comments": [
+        {
+          "id": "3",
+          "author": "댓글 작성자 3",
+          "content": "세 번째 댓글입니다."
+        },
+        {
+          "id": "4",
+          "author": "댓글 작성자 4",
+          "content": "네 번째 댓글입니다."
+        }
+      ]
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "인기글 3번의 제목",
       "author": "수진",
       "date": "5일전",
       "views": 150,
       "likes": 20,
-      "content": "인기글 3번의 내용..."
+      "content": "인기글 3번의 내용...",
+      "comments": [
+        {
+          "id": "5",
+          "author": "댓글 작성자 5",
+          "content": "다섯 번째 댓글입니다."
+        },
+        {
+          "id": "6",
+          "author": "댓글 작성자 6",
+          "content": "여섯 번째 댓글입니다."
+        }
+      ]
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "인기글 4번의 제목",
       "author": "혜린",
       "date": "7일전",
       "views": 200,
       "likes": 35,
-      "content": "인기글 4번의 내용..."
+      "content": "인기글 4번의 내용...",
+      "comments": [
+        {
+          "id": "7",
+          "author": "댓글 작성자 7",
+          "content": "일곱 번째 댓글입니다."
+        }
+      ]
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "인기글 5번의 제목",
       "author": "민수",
       "date": "2일전",
       "views": 90,
       "likes": 5,
-      "content": "인기글 5번의 내용..."
+      "content": "인기글 5번의 내용...",
+      "comments": [
+        {
+          "id": "8",
+          "author": "댓글 작성자 8",
+          "content": "여덟 번째 댓글입니다."
+        }
+      ]
+    },
+    {
+      "id": "9cb5",
+      "title": "ㄴㅇㄹㄴㅇ",
+      "content": "ㄴㅇㄹㄴㅇㄹㄴ",
+      "author": "KB",
+      "date": "방금 전",
+      "views": 0,
+      "likes": 1,
+      "comments": []
     }
   ],
   "financial_news": [
     {
-      "id": 10,
+      "id": "10",
       "title": "주식시장 호황, 투자자들의 관심 급증",
       "date": "2024-03-15",
       "content": "최근 주식시장이 호황을 맞이하면서 투자자들의 관심이 급증하고 있습니다. 특히 기술주와 친환경 관련 주식들의 상승세가 두드러지고 있습니다.",
@@ -140,7 +236,7 @@
       "popular": true
     },
     {
-      "id": 9,
+      "id": "9",
       "title": "가상화폐 시장 동향: 비트코인 가격 상승세",
       "date": "2024-03-14",
       "content": "비트코인 가격이 최근 상승세를 보이며 가상화폐 시장의 활기를 되찾고 있습니다.",
@@ -148,7 +244,7 @@
       "popular": false
     },
     {
-      "id": 11,
+      "id": "11",
       "title": "부동산 시장 변화와 투자 전략",
       "date": "2024-05-20",
       "content": "최근 부동산 시장에서의 변화가 발생하며 투자자들의 관심이 부동산으로 향하고 있습니다.",
@@ -156,7 +252,7 @@
       "popular": true
     },
     {
-      "id": 12,
+      "id": "12",
       "title": "금리 인상에 따른 투자 방향",
       "date": "2024-05-10",
       "content": "금리 인상이 예상됨에 따라 투자자들이 포트폴리오 재조정에 나서고 있습니다.",
@@ -164,62 +260,12 @@
       "popular": false
     },
     {
-      "id": 13,
+      "id": "13",
       "title": "기술주 강세와 전망",
       "date": "2024-06-01",
       "content": "기술주가 다시 강세를 보이며 투자자들이 집중하고 있습니다. 향후 전망이 밝습니다.",
       "category": "주식",
       "popular": true
-    }
-  ],
-  "comments": [
-    {
-      "id": 1,
-      "postId": 1,
-      "author": "댓글 작성자 1",
-      "content": "첫 번째 댓글입니다."
-    },
-    {
-      "id": 2,
-      "postId": 1,
-      "author": "댓글 작성자 2",
-      "content": "두 번째 댓글입니다."
-    },
-    {
-      "id": 3,
-      "postId": 2,
-      "author": "댓글 작성자 3",
-      "content": "세 번째 댓글입니다."
-    },
-    {
-      "id": 4,
-      "postId": 2,
-      "author": "댓글 작성자 4",
-      "content": "네 번째 댓글입니다."
-    },
-    {
-      "id": 5,
-      "postId": 3,
-      "author": "댓글 작성자 5",
-      "content": "다섯 번째 댓글입니다."
-    },
-    {
-      "id": 6,
-      "postId": 3,
-      "author": "댓글 작성자 6",
-      "content": "여섯 번째 댓글입니다."
-    },
-    {
-      "id": 7,
-      "postId": 4,
-      "author": "댓글 작성자 7",
-      "content": "일곱 번째 댓글입니다."
-    },
-    {
-      "id": 8,
-      "postId": 5,
-      "author": "댓글 작성자 8",
-      "content": "여덟 번째 댓글입니다."
     }
   ]
 }

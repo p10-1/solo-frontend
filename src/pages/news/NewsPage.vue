@@ -49,7 +49,6 @@ const handleSearch = (term) => {
 // 페이지 변경 처리 함수
 const changePage = (page) => {
   currentPage.value = page
-  fetchNews() // 페이지 변경 시 데이터 가져오기
 }
 
 // 컴포넌트가 마운트될 때 데이터를 가져옴
