@@ -10,7 +10,7 @@ export default {
     {
       title: '게시판',
       url: '/board',
-      icon: 'fa-solid fa-paste',
+      icon: 'fa-solid fa-paste'
     },
     {
       title: '뉴스',
@@ -25,8 +25,13 @@ export default {
     // 인증 관련 메뉴 정보
     login: {
       url: '/login',
-      title: '로그인'
-      ,icon: 'fa-solid fa-right-to-bracket',
+      title: '로그인',
+      icon: 'fa-solid fa-right-to-bracket'
+    },
+    join: {
+      url: '/join',
+      title: '회원가입',
+      icon: 'fa-solid fa-user-plus'
     }
   }
 }

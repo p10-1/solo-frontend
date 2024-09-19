@@ -5,6 +5,11 @@ export default [
     component: () => import('../pages/HomePage.vue')
   },
   {
+    path: '/join',
+    name: 'join',
+    component: () => import('../pages/auth/JoinPage.vue')
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../pages/auth/LoginPage.vue')
