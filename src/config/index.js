@@ -9,7 +9,8 @@ export default {
     },
     {
       title: '게시판',
-      url: '/board'
+      url: '/board',
+      icon: 'fa-solid fa-paste',
     },
     {
       title: '뉴스',
@@ -25,6 +26,7 @@ export default {
     login: {
       url: '/login',
       title: '로그인'
+      ,icon: 'fa-solid fa-right-to-bracket',
     }
   }
 }

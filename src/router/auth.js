@@ -2,36 +2,36 @@ export default [
   {
     path: '/',
     name: 'home',
-    component: () => import('../pages/Home.vue')
+    component: () => import('../pages/HomePage.vue')
   },
   {
     path: '/login',
     name: 'login',
-    component: () => import('../pages/auth/Login.vue')
+    component: () => import('../pages/auth/LoginPage.vue')
   },
   {
     path: '/board',
     name: 'board',
-    component: () => import('../pages/board/Board.vue')
+    component: () => import('../pages/board/BoardPage.vue')
   },
   {
     path: '/asset',
     name: 'asset',
-    component: () => import('../pages/asset/Asset.vue')
+    component: () => import('../pages/asset/AssetPage.vue')
   },
   {
     path: '/mypage',
     name: 'mypage',
-    component: () => import('../pages/auth/MyPage.vue')
+    component: () => import('../pages/auth/MyPagePage.vue')
   },
   {
     path: '/news',
     name: 'news',
-    component: () => import('../pages/news/News.vue')
+    component: () => import('../pages/news/NewsPage.vue')
   },
   {
     path: '/policy',
     name: 'policy',
-    component: () => import('../pages/policy/Policy.vue')
+    component: () => import('../pages/policy/PolicyPage.vue')
   }
 ]

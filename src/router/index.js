@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 // 이게 각각의 page를 가져오는 것
-import Home from '../pages/Home.vue'
-import Login from '../pages/auth/Login.vue'
-import Board from '../pages/board/Board.vue'
-import Asset from '../pages/asset/Asset.vue'
-import MyPage from '../pages/auth/MyPage.vue'
-import News from '../pages/news/News.vue'
-import Policy from '../pages/policy/Policy.vue'
+import Home from '../pages/HomePage.vue'
+import Login from '../pages/auth/LoginPage.vue'
+import Board from '../pages/board/BoardPage.vue'
+import Asset from '../pages/asset/AssetPage.vue'
+import MyPage from '../pages/auth/MyPagePage.vue'
+import News from '../pages/news/NewsPage.vue'
+import Policy from '../pages/policy/PolicyPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
