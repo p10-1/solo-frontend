@@ -26,30 +26,28 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import axios from 'axios'
 import PolicyCarousel from '@/components/PolicyPage/PolicyCarousel.vue'
 import PolicySearch from '@/components/PolicyPage/PolicySearch.vue'
 import PolicyFilter from '@/components/PolicyPage/PolicyFilter.vue'
 import PolicyList from '@/components/PolicyPage/PolicyList.vue'
 import Pagination from '@/components/common/Pagination.vue'
 
-// 추천 정책 데이터
-const recommendedPolicies = ref([
-  { id: 1, title: '추천 정책 1', description: '청년 일자리 지원 정책입니다.' },
-  { id: 2, title: '추천 정책 2', description: '중소기업을 위한 지원 정책입니다.' },
-  { id: 3, title: '추천 정책 3', description: '주거 안정화를 위한 정책입니다.' },
-  { id: 4, title: '추천 정책 4', description: '교육 지원을 위한 장학금 정책입니다.' },
-  { id: 5, title: '추천 정책 5', description: '기술 창업 지원을 위한 정책입니다.' },
-  { id: 6, title: '추천 정책 6', description: '복지 향상을 위한 소득 보전 정책입니다.' }
-])
+// 추천 정책 데이터 및 전체 정책 리스트
+const recommendedPolicies = ref([])
+const policies = ref([])
 
-// 정책 리스트 데이터
-const policies = ref([
-  { id: 1, title: '정책 1', category: '주거', date: '2024-09-01', popularity: 100 },
-  { id: 2, title: '정책 2', category: '교육', date: '2024-08-15', popularity: 80 },
-  { id: 3, title: '정책 3', category: '복지', date: '2024-09-10', popularity: 120 },
-  { id: 4, title: '정책 4', category: '일자리', date: '2024-08-20', popularity: 90 }
-])
+// JSON 서버에서 데이터를 가져와서 설정
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/policies')
+    policies.value = response.data
+    recommendedPolicies.value = response.data.slice(0, 4) // 추천 정책은 상위 4개로 설정
+  } catch (error) {
+    console.error('데이터를 불러오는 중 오류가 발생했습니다:', error)
+  }
+})
 
 // 필터 데이터
 const filters = ref({
@@ -120,7 +118,6 @@ const filteredAndSortedPolicies = computed(() => {
     case 'popularity':
       result.sort((a, b) => b.popularity - a.popularity)
       break
-    // 'recommended'는 기본 정렬이므로 별도 처리 불필요
   }
 
   return result
@@ -141,7 +138,6 @@ const handleFilterChange = (newFilters) => {
 // 페이지 변경 처리 함수
 const changePage = (page) => {
   currentPage.value = page
-  // 여기에 페이지 변경 시 데이터를 가져오는 로직을 추가할 수 있습니다.
 }
 </script>
 
@@ -166,14 +162,4 @@ const changePage = (page) => {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
 }
-.policy-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.policy-search, .sort-options, .policy-list, .pagination {
-  margin-bottom: 30px; /* 각 섹션에 여백 추가 */
-}
-
 </style>

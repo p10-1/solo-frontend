@@ -1,17 +1,24 @@
 <template>
   <div class="time-comparison">
-    <h3>지난달과 비교</h3>
-    <div>
-      <span>평균</span>
-      <span>나</span>
-    </div>
-    <canvas id="timeComparison"></canvas>
+    <h3>시간에 따른 비교</h3>
+    <canvas ref="timeComparisonCanvas"></canvas>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { Chart } from 'chart.js'
+import { ref, onMounted, watch } from 'vue'
+import {
+  Chart,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend
+} from 'chart.js'
+
+// Chart.js 등록
+Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
 const props = defineProps({
   comparisonData: {
@@ -20,15 +27,22 @@ const props = defineProps({
   }
 })
 
-onMounted(() => {
-  const ctx = document.getElementById('timeComparison').getContext('2d')
-  new Chart(ctx, {
+const timeComparisonCanvas = ref(null)
+let chartInstance = null
+
+const renderChart = () => {
+  if (chartInstance) {
+    chartInstance.destroy()
+  }
+
+  const ctx = timeComparisonCanvas.value.getContext('2d')
+  chartInstance = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['평균', '나'], // x축 레이블
+      labels: ['평균', '나'],
       datasets: [
         {
-          label: '지난달과 비교 비교', // 여기서 label을 추가
+          label: '시간 비교',
           data: [props.comparisonData.average, props.comparisonData.user],
           backgroundColor: ['#4caf50', '#FF6384']
         }
@@ -36,9 +50,15 @@ onMounted(() => {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false // 비율을 유지하지 않고 부모 크기에 맞추기
+      maintainAspectRatio: true
     }
   })
+}
+
+watch(() => props.comparisonData, renderChart)
+
+onMounted(() => {
+  renderChart()
 })
 </script>
 
@@ -47,5 +67,10 @@ onMounted(() => {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
+}
+
+canvas {
+  max-width: 400px;
+  height: 400px;
 }
 </style>

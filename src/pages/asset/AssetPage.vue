@@ -1,9 +1,12 @@
 <template>
-  <div class="asset-page">
-    <TotalAsset :totalAmount="13460000" />
+  <div
+    class="asset-page"
+    v-if="totalAmount && assetData.length && comparisonData.average && comparisonData.user"
+  >
+    <TotalAsset :totalAmount="totalAmount" />
     <div class="charts-section">
       <AssetRatioChart :data="assetData" />
-      <LoanInfo :loanAmount="-100000000" :payment="-1052" />
+      <LoanInfo :loanAmount="loanData.loanAmount" :payment="loanData.payment" />
     </div>
     <div class="comparison-section">
       <AssetComparison :comparisonData="comparisonData" />
@@ -11,9 +14,13 @@
     </div>
     <Recommendation />
   </div>
+  <div v-else>데이터를 불러오는 중...</div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+
 import TotalAsset from '@/components/AssetPage/TotalAsset.vue'
 import AssetRatioChart from '@/components/AssetPage/AssetRatioChart.vue'
 import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
@@ -21,23 +28,35 @@ import AssetComparison from '@/components/AssetPage/AssetComparison.vue'
 import Recommendation from '@/components/AssetPage/Recommendation.vue'
 import TimeComparison from '@/components/AssetPage/TimeComparison.vue'
 
-const assetData = [
-  { name: '현금자산', value: 38 },
-  { name: '예금', value: 25 },
-  { name: '주식', value: 23 },
-  { name: '기타', value: 14 }
-]
+const totalAmount = ref(0)
+const assetData = ref([])
+const loanData = ref({ loanAmount: 0, payment: 0 })
+const comparisonData = ref({ average: 0, user: 0 })
 
-const comparisonData = {
-  average: 40,
-  user: 60
+const fetchAssetData = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/assets')
+    totalAmount.value = response.data.totalAmount
+    assetData.value = response.data.assetData
+    loanData.value = {
+      loanAmount: response.data.loanAmount,
+      payment: response.data.payment
+    }
+    comparisonData.value = response.data.comparisonData
+  } catch (error) {
+    console.error('Error fetching asset data:', error)
+  }
 }
+
+onMounted(() => {
+  fetchAssetData()
+})
 </script>
 
 <style scoped>
 .asset-page {
-  background-color: #f8f8f8; /* 페이지 전체 배경색 */
-  padding: 20px; /* 페이지 전체 여백 */
+  background-color: #f8f8f8;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -49,14 +68,13 @@ const comparisonData = {
   gap: 20px;
 }
 
-.charts-section > *,
-.comparison-section > * {
+.charts-section > * {
   flex: 1;
 }
 
 .asset-comparison,
 .time-comparison {
-  width: 400px; /* 차트 크기 고정 */
-  height: 400px; /* 차트 크기 고정 */
+  width: 400px;
+  height: 400px;
 }
 </style>

@@ -5,10 +5,17 @@
 </template>
 
 <script setup>
-defineProps({
-  totalAmount: {
-    type: Number,
-    required: true
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+
+const totalAmount = ref(0)
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/assets')
+    totalAmount.value = response.data.totalAmount
+  } catch (error) {
+    console.error('Error fetching total asset data:', error)
   }
 })
 </script>
