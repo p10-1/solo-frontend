@@ -1,5 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+// 이게 각각의 page를 가져오는 것
+import Home from '../pages/HomePage.vue'
+import Login from '../pages/auth/LoginPage.vue'
+import Logout from '../pages/auth/LogoutPage.vue'
+import Board from '../pages/board/BoardPage.vue'
+import Asset from '../pages/asset/AssetPage.vue'
+import MyPage from '../pages/auth/MyPage.vue'
+import News from '../pages/news/NewsPage.vue'
+import Policy from '../pages/policy/PolicyPage.vue'
+import Join from '../pages/auth/JoinPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,15 +16,47 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: Home
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      path: '/join',
+      name: 'join',
+      component: Join
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout
+    },
+    {
+      path: '/board',
+      name: 'board',
+      component: Board
+    },
+    {
+      path: '/asset',
+      name: 'asset',
+      component: Asset
+    },
+    {
+      path: '/mypage',
+      name: 'mypage',
+      component: MyPage
+    },
+    {
+      path: '/news',
+      name: 'news',
+      component: News
+    },
+    {
+      path: '/policy',
+      name: 'policy',
+      component: Policy
     }
   ]
 })
