@@ -15,6 +15,11 @@ export default [
     component: () => import('../pages/auth/LoginPage.vue')
   },
   {
+    path: '/logout',
+    name: 'logout',
+    component: () => import('../pages/auth/LogoutPage.vue')
+  },
+  {
     path: '/board',
     name: 'board',
     component: () => import('../pages/board/BoardPage.vue')
