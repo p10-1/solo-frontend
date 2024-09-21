@@ -18,8 +18,8 @@
       >
         <td>{{ post.id }}</td>
         <td>
-          {{ post.title }}
-          <span class="text-muted ml-2">[{{ post.comments }}]</span>
+          {{ getPostTitle(post.title) }}
+          <span class="text-muted ml-2">[{{ getCommentCount(post) }}]</span>
           <span v-if="post.likes" class="text-success ml-2">👍 {{ post.likes }}</span>
         </td>
         <td>{{ post.author }}</td>
@@ -31,9 +31,24 @@
 </template>
 
 <script setup>
-defineProps({
+import { defineProps, defineEmits } from 'vue'
+
+const props = defineProps({
   posts: Array
 })
 
 defineEmits(['post-click'])
+
+function getPostTitle(title) {
+  try {
+    const parsedTitle = JSON.parse(title)
+    return parsedTitle.title || '제목 없음'
+  } catch (e) {
+    return title || '제목 없음'
+  }
+}
+
+function getCommentCount(post) {
+  return post.comments ? (Array.isArray(post.comments) ? post.comments.length : post.comments) : 0
+}
 </script>

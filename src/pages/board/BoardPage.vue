@@ -49,7 +49,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { usePostStore } from '@/stores/postStore'
+import { usePostStore } from '@/stores/PostStore'
 import SearchBar from '@/components/common/SearchBar.vue'
 import PostList from '@/components/CommunityPage/PostList.vue'
 import Pagination from '@/components/common/Pagination.vue'
