@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getPosts, createPost, updatePost, deletePost, likePost, addComment } from '@/api/posts'
+import { getPosts, createPost, getPostById, updatePost } from '@/api/boardApi'
 
 export const usePostStore = defineStore('post', {
   state: () => ({
@@ -7,50 +7,58 @@ export const usePostStore = defineStore('post', {
     totalPages: 0
   }),
   actions: {
-    async fetchPosts(page) {
+    async fetchPosts(page = 1) {
       try {
         const response = await getPosts(page)
-        this.posts = response.data || []
-        this.totalPages = response.totalPages || 0
+        this.posts = response.data
+        this.totalPages = response.totalPages
       } catch (error) {
         console.error('Error fetching posts:', error)
-        this.posts = []
-        this.totalPages = 0
         throw error
       }
     },
     async createPost(postData) {
       try {
-        const newPost = await createPost(postData)
-        this.posts.unshift(newPost)
+        await createPost(postData)
+        await this.fetchPosts()
       } catch (error) {
         console.error('Error creating post:', error)
         throw error
       }
     },
-    async updatePost(postData) {
-      const updatedPost = await updatePost(postData)
-      const index = this.posts.findIndex((post) => post.id === updatedPost.id)
-      if (index !== -1) {
-        this.posts[index] = updatedPost
+    async getPostById(id) {
+      try {
+        return await getPostById(id)
+      } catch (error) {
+        console.error('Error fetching post by ID:', error)
+        throw error
       }
     },
-    async deletePost(postId) {
-      await deletePost(postId)
-      this.posts = this.posts.filter((post) => post.id !== postId)
-    },
     async likePost(postId) {
-      const updatedPost = await likePost(postId)
-      const index = this.posts.findIndex((post) => post.id === updatedPost.id)
-      if (index !== -1) {
-        this.posts[index] = updatedPost
+      try {
+        const post = await this.getPostById(postId)
+        post.likes = (post.likes || 0) + 1
+        await updatePost(postId, post)
+        return post
+      } catch (error) {
+        console.error('Error liking post:', error)
+        throw error
       }
     },
     async addComment(postId, commentData) {
-      const updatedPost = await addComment(postId, commentData)
-      const index = this.posts.findIndex((post) => post.id === updatedPost.id)
-      if (index !== -1) {
-        this.posts[index] = updatedPost
+      try {
+        const post = await this.getPostById(postId)
+        post.comments = post.comments || []
+        post.comments.push({
+          id: Date.now().toString(),
+          ...commentData,
+          date: new Date().toISOString()
+        })
+        await updatePost(postId, post)
+        return post
+      } catch (error) {
+        console.error('Error adding comment:', error)
+        throw error
       }
     }
   }

@@ -1,23 +1,30 @@
+<template>
+  <div>
+    <ul class="navbar-nav ms-auto">
+      <template v-if="isLogin">
+        <AccountMenuItem :username="username" />
+        <MenuItem v-for="menu in accountMenus" :key="menu.url" :menu="menu" />
+      </template>
+      <template v-else>
+        <MenuItem v-for="menu in loginMenus" :key="menu.url" :menu="menu" />
+      </template>
+    </ul>
+  </div>
+</template>
+
 <script setup>
 import { computed } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 import MenuItem from './MenuItem.vue'
 import AccountMenuItem from './AccountMenuItem.vue'
-import LogoutMenuItem from './LogoutMenuItem.vue'
 import config from '@/config'
-const { login,join } = config.accoutMenus
 
-const islogin = computed(() => false) // 임시: 로그인하지 않음
-const username = computed(() => '') // 임시: 사용자명 없음
+const authStore = useAuthStore()
+
+const isLogin = computed(() => authStore.isLogin)
+const username = computed(() => authStore.username)
+
+const { accoutMenus } = config
+const loginMenus = computed(() => accoutMenus.filter((menu) => menu.url === '/login'))
+const accountMenus = computed(() => accoutMenus.filter((menu) => menu.url !== '/login'))
 </script>
-<template>
-  <ul class="navbar-nav ms-auto">
-    <template v-if="islogin">
-      <AccountMenuItem :username="username" />
-      <LogoutMenuItem />
-    </template>
-    <template v-else>
-      <MenuItem :menu="login" />
-      <MenuItem :menu="join" />
-    </template>
-  </ul>
-</template>

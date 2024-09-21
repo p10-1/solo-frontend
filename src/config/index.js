@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import MyPage from '@/pages/auth/MyPage.vue'
+import { defineStore } from 'pinia'
 
 export default {
   title: '빚이 없는 솔로', // 메인 타이틀
@@ -8,34 +9,36 @@ export default {
     // 메인 메뉴 구성 정보
     {
       title: '자산',
-      url: '/asset'
+      url: '/asset',
+      icon: 'fa-solid fa-chart-line' // 자산 증가를 나타내는 차트 아이콘
     },
     {
       title: '게시판',
       url: '/board',
-      icon: 'fa-solid fa-paste'
+      icon: 'fa-solid fa-clipboard' // 클립보드 아이콘
     },
     {
       title: '뉴스',
-      url: '/news'
+      url: '/news',
+      icon: 'fa-solid fa-newspaper' // 신문 아이콘
     },
     {
       title: '정책',
-      url: '/policy'
+      url: '/policy',
+      icon: 'fa-solid fa-gavel' // 정책을 나타내는 망치 아이콘
     }
   ],
-  accoutMenus: {
-    // 인증 관련 메뉴 정보
-    login: {
+  accoutMenus: [
+    // 인증 관련 메뉴를 배열로 변경
+    {
+      url: '/login',
+      title: '로그인',
+      icon: 'fa-solid fa-sign-out-alt' // 로그아웃 아이콘
+    },
+    {
       url: '/mypage',
       title: '마이페이지',
-      icon: ''
-    },
-
-    join: {
-      url: '/logout',
-      title: '로그아웃',
-      icon: ''
+      icon: 'fa-solid fa-user' // 사용자 아이콘
     }
-  }
+  ]
 }

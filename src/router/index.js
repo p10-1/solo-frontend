@@ -9,6 +9,8 @@ import MyPage from '../pages/auth/MyPage.vue'
 import News from '../pages/news/NewsPage.vue'
 import Policy from '../pages/policy/PolicyPage.vue'
 import Join from '../pages/auth/JoinPage.vue'
+import WritePage from '@/pages/board/WritePage.vue'
+import PostDetailPage from '@/pages/board/PostDetailPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,7 +48,8 @@ const router = createRouter({
     {
       path: '/mypage',
       name: 'mypage',
-      component: MyPage
+      component: MyPage,
+      meta: { requiresAuth: true } // 로그인 필요
     },
     {
       path: '/news',
@@ -57,8 +60,27 @@ const router = createRouter({
       path: '/policy',
       name: 'policy',
       component: Policy
+    },
+    {
+      path: '/board/write',
+      name: 'WritePage',
+      component: WritePage
+    },
+    {
+      path: '/board/:id',
+      name: 'PostDetailPage',
+      component: PostDetailPage
     }
   ]
 })
 
+// 전역 네비게이션 가드
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = !!localStorage.getItem('token')
+  if (to.meta.requiresAuth && !isLoggedIn) {
+    next('/login') // 로그인 필요 시 로그인 페이지로 이동
+  } else {
+    next() // 계속 진행
+  }
+})
 export default router

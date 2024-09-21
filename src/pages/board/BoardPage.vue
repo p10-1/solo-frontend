@@ -1,177 +1,150 @@
 <template>
-  <div class="community-page">
-    <h1 class="mb-4">커뮤니티</h1>
+  <div class="board-page">
+    <h2 class="text-2xl font-bold mb-4">커뮤니티 게시판</h2>
 
-    <div v-if="isLoading" class="text-center">
-      <div class="spinner-border" role="status">
-        <span class="visually-hidden">로딩 중...</span>
-      </div>
+    <div class="mb-4 flex justify-between items-center">
+      <input
+        v-model="searchTerm"
+        @input="handleSearch"
+        placeholder="검색어를 입력하세요"
+        class="px-4 py-2 border rounded"
+      />
+      <select v-model="activeFilter" @change="handleFilterChange" class="px-4 py-2 border rounded">
+        <option value="latest">최신순</option>
+        <option value="hot">인기순</option>
+      </select>
     </div>
 
-    <div v-if="error" class="alert alert-danger" role="alert">
-      {{ error }}
-    </div>
+    <table class="w-full border-collapse border">
+      <thead>
+        <tr>
+          <th class="border p-2">번호</th>
+          <th class="border p-2">제목</th>
+          <th class="border p-2">작성자</th>
+          <th class="border p-2">작성일</th>
+          <th class="border p-2">조회수</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="post in displayedPosts"
+          :key="post.id"
+          @click="goToPostDetail(post.id)"
+          class="cursor-pointer hover:bg-gray-100"
+        >
+          <td class="border p-2">{{ post.id }}</td>
+          <td class="border p-2">{{ post.title }}</td>
+          <td class="border p-2">{{ post.author }}</td>
+          <td class="border p-2">{{ formatDate(post.date) }}</td>
+          <td class="border p-2">{{ post.views }}</td>
+        </tr>
+      </tbody>
+    </table>
 
-    <template v-if="!isLoading && !error">
-      <SearchBar v-if="!showWriteForm && !showPostDetail" @search="handleSearch" />
+    <div v-if="isLoading" class="text-center my-4">로딩 중...</div>
 
-      <PostList
-        v-if="!showWriteForm && !showPostDetail"
-        :posts="filteredPosts"
-        @post-click="openPostDetail"
-      />
+    <div v-if="error" class="text-red-500 text-center my-4">{{ error }}</div>
 
-      <div
-        v-if="!showWriteForm && !showPostDetail"
-        class="d-flex justify-content-between align-items-center mt-4"
-      >
-        <Pagination
-          v-if="postStore.totalPages > 0"
-          :current-page="currentPage"
-          :total-pages="postStore.totalPages"
-          @page-change="changePage"
-        />
-        <WriteButton @write-click="showWriteForm = true" />
+    <div class="mt-4 flex justify-between items-center">
+      <div class="flex space-x-2">
+        <button
+          v-for="page in paginationRange"
+          :key="page"
+          @click="changePage(page)"
+          :class="[
+            'px-3 py-1 border rounded',
+            currentPage === page ? 'bg-blue-500 text-white' : ''
+          ]"
+        >
+          {{ page }}
+        </button>
       </div>
-
-      <WriteForm v-if="showWriteForm" @submit="handleSubmit" @cancel="showWriteForm = false" />
-
-      <PostDetail
-        v-if="showPostDetail"
-        :post="selectedPost"
-        @back="closePostDetail"
-        @update="handleUpdatePost"
-        @delete="handleDeletePost"
-      />
-    </template>
+      <button @click="goToWritePage" class="px-4 py-2 bg-blue-500 text-white rounded">
+        글 작성
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { usePostStore } from '@/stores/PostStore'
-import SearchBar from '@/components/common/SearchBar.vue'
-import PostList from '@/components/CommunityPage/PostList.vue'
-import Pagination from '@/components/common/Pagination.vue'
-import WriteButton from '@/components/CommunityPage/WriteButton.vue'
-import WriteForm from '@/components/CommunityPage/WriteForm.vue'
-import PostDetail from '@/components/CommunityPage/PostDetail.vue'
 
+const router = useRouter()
 const postStore = usePostStore()
+
+const currentPage = ref(1)
+const searchTerm = ref('')
+const activeFilter = ref('latest')
 const isLoading = ref(false)
 const error = ref(null)
-const showWriteForm = ref(false)
-const showPostDetail = ref(false)
-const selectedPost = ref(null)
-const searchTerm = ref('')
-const currentPage = ref(1)
 
-const filteredPosts = computed(() => {
-  if (!searchTerm.value) return postStore.posts
-  return postStore.posts.filter(
-    (post) =>
-      post.title.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-      post.content.toLowerCase().includes(searchTerm.value.toLowerCase())
-  )
+const displayedPosts = computed(() => {
+  if (searchTerm.value) {
+    return postStore.posts.filter(
+      (post) =>
+        post.title.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+        post.content.toLowerCase().includes(searchTerm.value.toLowerCase())
+    )
+  }
+  return postStore.posts
 })
 
-onMounted(async () => {
-  await fetchPosts()
+const paginationRange = computed(() => {
+  const range = []
+  for (let i = 1; i <= postStore.totalPages; i++) {
+    range.push(i)
+  }
+  return range
 })
 
-watch(currentPage, async () => {
-  await fetchPosts()
+onMounted(() => {
+  fetchPosts()
 })
+
+watch(currentPage, fetchPosts)
 
 async function fetchPosts() {
   isLoading.value = true
   error.value = null
   try {
-    await postStore.fetchPosts(currentPage.value)
-    if (postStore.posts.length === 0) {
-      console.warn('No posts returned from the server')
+    if (activeFilter.value === 'hot') {
+      await postStore.fetchHotPosts()
+    } else {
+      await postStore.fetchPosts(currentPage.value)
     }
   } catch (err) {
-    error.value = '게시글을 불러오는 데 실패했습니다.'
-    console.error('Failed to fetch posts:', err)
+    error.value = '게시글을 불러오는데 실패했습니다.'
   } finally {
     isLoading.value = false
   }
 }
 
-const handleSearch = (term) => {
-  searchTerm.value = term
+function handleSearch() {
   currentPage.value = 1
+  fetchPosts()
 }
 
-const changePage = (page) => {
+function handleFilterChange() {
+  currentPage.value = 1
+  fetchPosts()
+}
+
+function changePage(page) {
   currentPage.value = page
 }
 
-const handleSubmit = async (postData) => {
-  isLoading.value = true
-  error.value = null
-  try {
-    await postStore.createPost(postData)
-    showWriteForm.value = false
-    currentPage.value = 1
-    await fetchPosts()
-  } catch (err) {
-    error.value = '게시글 작성에 실패했습니다.'
-    console.error('Failed to create post:', err)
-  } finally {
-    isLoading.value = false
-  }
+function goToPostDetail(postId) {
+  router.push({ name: 'PostDetailPage', params: { id: postId } })
 }
 
-const openPostDetail = (post) => {
-  if (post) {
-    selectedPost.value = { ...post, comments: post.comments || [] }
-    showPostDetail.value = true
-  }
+function goToWritePage() {
+  router.push({ name: 'WritePage' })
 }
 
-const closePostDetail = () => {
-  showPostDetail.value = false
-  selectedPost.value = null
-}
-
-const handleUpdatePost = async (postData) => {
-  isLoading.value = true
-  error.value = null
-  try {
-    await postStore.updatePost(postData)
-    closePostDetail()
-    await fetchPosts()
-  } catch (err) {
-    error.value = '게시글 수정에 실패했습니다.'
-    console.error('Failed to update post:', err)
-  } finally {
-    isLoading.value = false
-  }
-}
-
-const handleDeletePost = async (postId) => {
-  isLoading.value = true
-  error.value = null
-  try {
-    await postStore.deletePost(postId)
-    closePostDetail()
-    currentPage.value = 1
-    await fetchPosts()
-  } catch (err) {
-    error.value = '게시글 삭제에 실패했습니다.'
-    console.error('Failed to delete post:', err)
-  } finally {
-    isLoading.value = false
-  }
+function formatDate(dateString) {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
 }
 </script>
-
-<style scoped>
-.community-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-</style>
