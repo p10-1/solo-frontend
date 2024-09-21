@@ -99,11 +99,10 @@ export default {
         assets: {}
     };
 
-    // 자산 유형에서 amount만 가져오기
-    for (const type in this.newAssets) {
-        dataToSubmit.assets[type] = this.newAssets[type].map(asset => ({
-            amount: asset.amount 
-        }));
+   // 자산 유형에서 amount만 가져오기
+   for (const type in this.newAssets) {
+        const totalAmount = this.newAssets[type].reduce((sum, asset) => sum + (asset.amount || 0), 0);
+        dataToSubmit.assets[type] = [{ amount: totalAmount }]; // 총 금액으로 설정
     }
 
     try {
