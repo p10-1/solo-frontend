@@ -32,7 +32,7 @@ export default [
   {
     path: '/mypage',
     name: 'mypage',
-    component: () => import('../pages/auth/MyPagePage.vue')
+    component: () => import('../pages/auth/MyPage.vue')
   },
   {
     path: '/news',

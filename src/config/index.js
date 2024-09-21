@@ -1,5 +1,4 @@
 // eslint-disable-next-line no-unused-vars
-import MyPage from '@/pages/auth/MyPage.vue'
 import { defineStore } from 'pinia'
 
 export default {
@@ -39,6 +38,11 @@ export default {
       url: '/mypage',
       title: '마이페이지',
       icon: 'fa-solid fa-user' // 사용자 아이콘
+    },
+    {
+      url: '/logout',
+      title: '로그아웃',
+      icon: 'fa-solid fa-sign-out-alt' // 사용자 아이콘
     }
   ]
 }

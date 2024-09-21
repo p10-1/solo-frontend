@@ -1,59 +1,48 @@
-<script setup>
-import { reactive, computed } from 'vue'
-import config from '@/config'
-import MenuGroup from './menu/MenuGroup.vue'
-import AccountMenuGroup from './menu/AccountMenuGroup.vue'
-import { useAuthStore } from '@/stores/auth'
-
-// 네비게이션 상태
-const state = reactive({ isNavShow: false })
-
-// 로그인 상태 가져오기
-const authStore = useAuthStore()
-const isLogin = computed(() => authStore.isLogin)
-
-// 네비게이션 바 클래스 설정
-const navClass = computed(() =>
-  state.isNavShow ? 'collapse navbar-collapse show' : 'collapse navbar-collapse'
-)
-
-// 네비게이션 바 토글
-const toggleNavShow = () => (state.isNavShow = !state.isNavShow)
-</script>
-
 <template>
   <nav class="navbar navbar-expand-sm custom-navbar navbar-dark">
     <div class="container-fluid">
       <!-- 홈 링크 -->
       <router-link class="navbar-brand" to="/"> <i class="fa-solid fa-house"></i> 홈 </router-link>
 
-      <!-- 모바일 토글 버튼 -->
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#collapsibleNavbar"
-        @click="toggleNavShow"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <div class="navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <router-link v-for="menu in mainMenus" :key="menu.url" :to="menu.url" class="nav-link">
+            <i :class="menu.icon"></i> {{ menu.title }}
+          </router-link>
 
-      <!-- 네비게이션 바 -->
-      <div :class="navClass" id="collapsibleNavbar">
-        <!-- 기본 메뉴 그룹 -->
-        <MenuGroup :menus="config.menus" />
-
-        <!-- 로그인 상태에 따른 메뉴 -->
-        <template v-if="isLogin">
-          <AccountMenuGroup />
-        </template>
-        <template v-else>
-          <MenuGroup :menus="config.accoutMenus" />
-        </template>
+          <!-- 로그인 상태에 따라 로그인/로그아웃 버튼 표시 -->
+          <template v-if="isLogin">
+            <router-link to="/mypage" class="nav-link">
+              <i class="fa-solid fa-user"></i> 마이페이지
+            </router-link>
+            <router-link to="/logout" class="nav-link">
+              <i class="fa-solid fa-sign-out-alt"></i> 로그아웃
+            </router-link>
+          </template>
+          <template v-else>
+            <router-link to="/login" class="nav-link">
+              <i class="fa-solid fa-sign-in-alt"></i> 로그인
+            </router-link>
+          </template>
+        </ul>
       </div>
     </div>
   </nav>
 </template>
+
+<script setup>
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import config from '@/config'
+
+const authStore = useAuthStore()
+
+// 로그인 여부 확인
+const isLogin = computed(() => authStore.isLogin)
+
+// 메뉴 데이터
+const mainMenus = config.menus
+</script>
 
 <style scoped>
 .custom-navbar {
