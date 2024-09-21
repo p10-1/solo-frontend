@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const API_URL = 'http://localhost:3000/board'
+const postsPerPage = 10 // or whatever your limit is
 
 export const getPosts = async (page = 1, limit = 10) => {
   try {
@@ -27,6 +28,9 @@ export const getPostById = async (id) => {
 
 export const createPost = async (postData) => {
   try {
+    const existingPosts = await axios.get(API_URL)
+    const maxId = Math.max(...existingPosts.data.map((post) => post.id), 0) // find the max ID
+    postData.id = maxId + 1 // assign the new post an incremented ID
     const response = await axios.post(API_URL, postData)
     return response.data
   } catch (error) {

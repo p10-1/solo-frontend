@@ -7,7 +7,7 @@
         class="page-item"
         :class="{ active: page === currentPage }"
       >
-        <a class="page-link" href="#" @click.prevent="$emit('page-change', page)">{{ page }}</a>
+        <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
       </li>
     </ul>
   </nav>
@@ -27,6 +27,8 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['page-change'])
+
 const pageRange = computed(() => {
   const range = []
   for (let i = 1; i <= Math.max(1, props.totalPages); i++) {
@@ -34,4 +36,36 @@ const pageRange = computed(() => {
   }
   return range
 })
+
+const changePage = (page) => {
+  if (page !== props.currentPage) {
+    emit('page-change', page)
+  }
+}
 </script>
+
+<style scoped>
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+.page-item {
+  margin: 0 5px;
+}
+
+.page-item a {
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #007bff;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.page-item.active a {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+</style>
