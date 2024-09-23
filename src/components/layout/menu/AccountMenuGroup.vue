@@ -1,27 +1,25 @@
 <script setup>
-import MenuItem from './MenuItem.vue'
 import AccountMenuItem from './AccountMenuItem.vue'
-import config from '@/config'
-import { useAuthStore } from '@/stores/auth'
+import LoginMenuItem from './LoginMenuItem.vue'
 import LogoutMenuItem from './LogoutMenuItem.vue'
+import { useAuthStore } from '@/stores/authStore'
 import { computed } from 'vue'
 
-const { login, join } = config.accoutMenus
-const auth = useAuthStore()
+const authStore = useAuthStore()
 
-const islogin = computed(() => auth.isLogin)
-const username = computed(() => auth.username)
+// 로그인 상태 확인
+const isLogin = computed(() => authStore.isLoggedIn)
+const username = computed(() => authStore.username)
 </script>
 
 <template>
   <ul class="navbar-nav ms-auto">
-    <template v-if="islogin">
+    <template v-if="isLogin">
       <AccountMenuItem :username="username" />
       <LogoutMenuItem />
     </template>
     <template v-else>
-      <MenuItem :menu="login" />
-      <MenuItem :menu="join" />
+      <LoginMenuItem />
     </template>
   </ul>
 </template>
