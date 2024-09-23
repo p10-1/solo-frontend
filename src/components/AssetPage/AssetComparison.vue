@@ -1,24 +1,13 @@
 <template>
   <div class="asset-comparison">
     <h3>자산 비교</h3>
-    <canvas ref="assetComparisonCanvas"></canvas>
+    <canvas id="assetComparison"></canvas>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import {
-  Chart,
-  BarController,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend
-} from 'chart.js'
-
-// Chart.js 등록
-Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend)
+import { onMounted } from 'vue'
+import { Chart } from 'chart.js'
 
 const props = defineProps({
   comparisonData: {
@@ -27,31 +16,25 @@ const props = defineProps({
   }
 })
 
-const assetComparisonCanvas = ref(null)
-
 onMounted(() => {
-  if (props.comparisonData && props.comparisonData.average && props.comparisonData.user) {
-    const ctx = assetComparisonCanvas.value.getContext('2d')
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['평균', '나'],
-        datasets: [
-          {
-            label: '자산 비교',
-            data: [props.comparisonData.average, props.comparisonData.user],
-            backgroundColor: ['#4caf50', '#FF6384']
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true
-      }
-    })
-  } else {
-    console.warn('No comparison data available')
-  }
+  const ctx = document.getElementById('assetComparison').getContext('2d')
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['평균', '나'], // x축 레이블
+      datasets: [
+        {
+          label: '자산 비교', // 여기서 label을 추가
+          data: [props.comparisonData.average, props.comparisonData.user],
+          backgroundColor: ['#4caf50', '#FF6384']
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false // 비율을 유지하지 않고 부모 크기에 맞추기
+    }
+  })
 })
 </script>
 
@@ -60,10 +43,5 @@ onMounted(() => {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
-}
-
-.asset-comparison canvas {
-  max-width: 400px;
-  height: 400px;
 }
 </style>

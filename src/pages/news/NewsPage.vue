@@ -11,50 +11,41 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import { ref } from 'vue'
 import SearchBar from '@/components/common/SearchBar.vue'
 import NewsList from '@/components/NewsPage/NewsList.vue'
 import Pagination from '@/components/common/Pagination.vue'
 
 const currentPage = ref(1)
 const totalPages = ref(5)
-const searchTerm = ref('')
-const newsItems = ref([])
 
-// JSON 서버에서 뉴스 데이터를 가져오는 함수
-const fetchNews = async () => {
-  try {
-    const response = await axios.get('http://localhost:3000/financial_news', {
-      params: {
-        _page: currentPage.value,
-        _limit: 5,
-        q: searchTerm.value // 검색어 적용
-      }
-    })
-    newsItems.value = response.data
-    totalPages.value = Math.ceil(response.headers['x-total-count'] / 5) // 전체 페이지 수 계산
-  } catch (error) {
-    console.error('Error fetching news:', error)
+const newsItems = ref([
+  {
+    id: 10,
+    title: '주식시장 호황, 투자자들의 관심 급증',
+    date: '2024.03.15',
+    content:
+      '최근 주식시장이 호황을 맞이하면서 투자자들의 관심이 급증하고 있습니다. 특히 기술주와 친환경 관련 주식들의 상승세가 두드러지고 있습니다.'
+  },
+  {
+    id: 9,
+    title: '가상화폐 시장 동향: 비트코인 가격 상승세',
+    date: '2024.03.14',
+    content:
+      '비트코인을 비롯한 주요 가상화폐의 가격이 상승세를 보이고 있습니다. 전문가들은 기관 투자자들의 참여 증가와 글로벌 경제 불확실성을 주요 원인으로 분석하고 있습니다.'
   }
+  // ... 더 많은 뉴스 항목
+])
+
+const handleSearch = (searchTerm) => {
+  console.log('Searching for:', searchTerm)
+  // 검색 로직 구현
 }
 
-// 검색 처리 함수
-const handleSearch = (term) => {
-  searchTerm.value = term
-  currentPage.value = 1 // 검색 시 첫 페이지로 이동
-  fetchNews() // 새로운 검색어로 데이터 가져오기
-}
-
-// 페이지 변경 처리 함수
 const changePage = (page) => {
   currentPage.value = page
+  // 페이지 변경 시 데이터 fetch 로직 구현
 }
-
-// 컴포넌트가 마운트될 때 데이터를 가져옴
-onMounted(() => {
-  fetchNews()
-})
 </script>
 
 <style scoped>

@@ -1,19 +1,18 @@
 <template>
   <div class="asset-ratio-chart">
     <h3>자산 비율</h3>
-    <div v-if="data && data.length" class="chart-container">
-      <canvas ref="assetRatioCanvas"></canvas>
+    <div class="chart-container">
+      <!-- 차트 컨테이너 추가 -->
+      <canvas id="assetRatio"></canvas>
     </div>
-    <div v-else>데이터가 없습니다.</div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import { Chart, PieController, ArcElement, Tooltip, Legend } from 'chart.js'
+import { onMounted } from 'vue'
+import { Chart, registerables } from 'chart.js'
 
-// Chart.js 등록
-Chart.register(PieController, ArcElement, Tooltip, Legend)
+Chart.register(...registerables)
 
 const props = defineProps({
   data: {
@@ -22,30 +21,24 @@ const props = defineProps({
   }
 })
 
-const assetRatioCanvas = ref(null)
-
 onMounted(() => {
-  if (props.data && props.data.length > 0) {
-    const ctx = assetRatioCanvas.value.getContext('2d')
-    new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: props.data.map((d) => d.name),
-        datasets: [
-          {
-            data: props.data.map((d) => d.value),
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true
-      }
-    })
-  } else {
-    console.warn('No asset data available')
-  }
+  const ctx = document.getElementById('assetRatio').getContext('2d')
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: props.data.map((d) => d.name),
+      datasets: [
+        {
+          data: props.data.map((d) => d.value),
+          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+        }
+      ]
+    },
+    options: {
+      responsive: true, // 반응형 차트
+      maintainAspectRatio: false // 비율 유지 여부
+    }
+  })
 })
 </script>
 
@@ -57,9 +50,8 @@ onMounted(() => {
 }
 
 .chart-container {
-  width: 100%;
-  max-width: 400px;
-  height: 400px;
+  width: 400px; /* 원하는 너비 */
+  height: 400px; /* 원하는 높이 */
   position: relative;
 }
 </style>

@@ -1,4 +1,3 @@
-
 <template>
   <a href="#" class="nav-link" @click.prevent="login">
     <i class="fa-solid fa-right-from-bracket"></i>
