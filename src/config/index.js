@@ -27,15 +27,15 @@ export default {
   accoutMenus: {
     // 인증 관련 메뉴 정보
     login: {
-      url: '/mypage',
+      url: '/login',
       title: '마이페이지',
       icon: ''
     },
 
-    join: {
-      url: '/logout',
-      title: '로그아웃',
-      icon: ''
-    }
+    // join: {
+    //   url: '/logout',
+    //   title: '로그아웃',
+    //   icon: ''
+    // }
   }
 }

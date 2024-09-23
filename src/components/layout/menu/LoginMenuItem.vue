@@ -1,25 +1,3 @@
-<!-- <script setup>
-import { loginWithKakao } from '@/api/authApi.js'
-
-// 로그인 함수 정의
-const login = () => {
-  loginWithKakao()
-}
-</script>
-<template>
-  <a href="#" class="nav-link" @click.prevent="login">
-    <i class="fa-solid fa-right-from-bracket"></i>
-    로그인
-  </a>
-</template> -->
-
-<!-- <template>
-  <div>
-    <h1 v-if="!isProcessing">Login with Kakao</h1>
-    <button v-if="!isProcessing" @click="login">Login</button>
-    <h1 v-else>Processing Login...</h1>
-  </div>
-</template> -->
 
 <template>
   <a href="#" class="nav-link" @click.prevent="login">
