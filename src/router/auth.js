@@ -1,47 +1,42 @@
-export default [
+// src/router/index.js
+import { createRouter, createWebHistory } from 'vue-router'
+import LoginView from '@/views/LoginView.vue'
+import LogoutView from '@/views/LogoutView.vue'
+import CallbackView from '@/views/CallbackView.vue'
+import FirstUserView from '@/views/FirstUserView.vue' // 새 사용자 등록 페이지
+import HomeView from '@/views/HomeView.vue' // 홈 페이지
+
+const routes = [
   {
     path: '/',
-    name: 'home',
-    component: () => import('../pages/HomePage.vue')
-  },
-  {
-    path: '/join',
-    name: 'join',
-    component: () => import('../pages/auth/JoinPage.vue')
+    name: 'Home',
+    component: HomeView
   },
   {
     path: '/login',
-    name: 'login',
-    component: () => import('../pages/auth/LoginPage.vue')
+    name: 'Login',
+    component: LoginView
   },
   {
     path: '/logout',
-    name: 'logout',
-    component: () => import('../pages/auth/LogoutPage.vue')
+    name: 'Logout',
+    component: LogoutView
   },
   {
-    path: '/board',
-    name: 'board',
-    component: () => import('../pages/board/BoardPage.vue')
+    path: '/callback',
+    name: 'Callback',
+    component: CallbackView
   },
   {
-    path: '/asset',
-    name: 'asset',
-    component: () => import('../pages/asset/AssetPage.vue')
-  },
-  {
-    path: '/mypage',
-    name: 'mypage',
-    component: () => import('../pages/auth/MyPagePage.vue')
-  },
-  {
-    path: '/news',
-    name: 'news',
-    component: () => import('../pages/news/NewsPage.vue')
-  },
-  {
-    path: '/policy',
-    name: 'policy',
-    component: () => import('../pages/policy/PolicyPage.vue')
+    path: '/firstUser',
+    name: 'FirstUser',
+    component: FirstUserView // 새 사용자 등록 페이지 컴포넌트
   }
 ]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes
+})
+
+export default router
