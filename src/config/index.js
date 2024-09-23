@@ -27,22 +27,18 @@ export default {
       icon: 'fa-solid fa-gavel' // 정책을 나타내는 망치 아이콘
     }
   ],
-  accoutMenus: [
-    // 인증 관련 메뉴를 배열로 변경
-    {
+  accoutMenus: {
+    // 인증 관련 메뉴 정보
+    login: {
       url: '/login',
-      title: '로그인',
-      icon: 'fa-solid fa-sign-out-alt' // 로그아웃 아이콘
-    },
-    {
-      url: '/mypage',
       title: '마이페이지',
       icon: 'fa-solid fa-user' // 사용자 아이콘
     },
-    {
-      url: '/logout',
-      title: '로그아웃',
-      icon: 'fa-solid fa-sign-out-alt' // 사용자 아이콘
-    }
-  ]
+
+    // join: {
+    //   url: '/logout',
+    //   title: '로그아웃',
+    //   icon: ''
+    // }
+  }
 }
