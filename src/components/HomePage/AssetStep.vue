@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="asset-risk-chart">
     <h2>"대상 솔루션"의 자산 관리 현황</h2>
     <canvas id="riskChart"></canvas>
@@ -60,4 +60,4 @@ export default {
   font-size: 16px;
   font-weight: bold;
 }
-</style>
+</style> -->

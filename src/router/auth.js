@@ -5,7 +5,6 @@ import LogoutView from '@/views/LogoutView.vue'
 import CallbackView from '@/views/CallbackView.vue'
 import FirstUserView from '@/views/FirstUserView.vue' // 새 사용자 등록 페이지
 import HomeView from '@/views/HomeView.vue' // 홈 페이지
-
 const routes = [
   {
     path: '/',
@@ -33,10 +32,8 @@ const routes = [
     component: FirstUserView // 새 사용자 등록 페이지 컴포넌트
   }
 ]
-
 const router = createRouter({
   history: createWebHistory(),
   routes
 })
-
 export default router

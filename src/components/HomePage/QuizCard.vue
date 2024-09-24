@@ -1,12 +1,16 @@
 <template>
-  <div class="financial-quiz">
-    <div class="quiz-question">
-      <h3>금융 퀴즈</h3>
-      <p>{{ currentQuestion.text }}</p>
+  <div class="quiz-container">
+    <div class="quiz-box" v-if="!answered">
+      <h2>{{ question.title }}</h2>
+      <ul class="options-list">
+        <li v-for="(option, index) in question.options" :key="index">
+          <button class="option-button" @click="submitAnswer(index)">{{ option }}</button>
+        </li>
+      </ul>
     </div>
-    <div class="quiz-options">
-      <button @click="submitAnswer(true)" class="option-button correct">확인</button>
-      <button @click="submitAnswer(false)" class="option-button incorrect">아니요</button>
+    <div v-else class="result-box">
+      <p class="result-message">{{ resultMessage }}</p>
+      <p v-if="isCorrect" class="score-message">포인트: {{ points }}점</p>
     </div>
   </div>
 </template>
@@ -15,62 +19,100 @@
 export default {
   data() {
     return {
-      currentQuestion: {
-        id: 1,
-        text: 'IPO를 올해하며 1년에 최대 900만원까지 공제받을 수 있나요?'
-      }
+      question: {
+        title: "IPO에서 'IPO'의 약자는 무엇인가요?",
+        options: [
+          'Initial Public Offering',
+          'International Purchase Option',
+          'Investment Payout Option',
+          'Internal Public Organization'
+        ],
+        correctAnswer: 0
+      },
+      answered: false,
+      isCorrect: false,
+      points: 0,
+      resultMessage: ''
     }
   },
   methods: {
-    submitAnswer(answer) {
-      // 여기서 answer를 기반으로 로직 처리
-      console.log(`Answer submitted: ${answer}`)
-      // 실제 앱에서는 여기서 결과 페이지로 넘어가거나 추가 질문을 로드할 수 있습니다.
+    submitAnswer(index) {
+      this.answered = true
+      if (index === this.question.correctAnswer) {
+        this.isCorrect = true
+        this.points += 10 // 정답 시 부여할 점수
+        this.resultMessage = '정답입니다!'
+      } else {
+        this.resultMessage =
+          '틀렸습니다. 정답은: ' + this.question.options[this.question.correctAnswer]
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-.financial-quiz {
-  max-width: 300px;
-  margin: auto;
+/* 퀴즈 컨테이너 스타일 */
+.quiz-container {
+  max-width: 600px;
+  margin: 50px auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #f9f9f9;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
   text-align: center;
 }
 
-.quiz-question h3 {
-  margin: 0;
+/* 퀴즈 박스 스타일 */
+.quiz-box h2 {
+  font-size: 24px;
   color: #333;
+  margin-bottom: 20px;
 }
 
-.quiz-question p {
-  color: #555;
-}
-
-.quiz-options {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
+.options-list {
+  list-style-type: none;
+  padding: 0;
 }
 
 .option-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  background-color: #007bff;
   color: white;
-  font-size: 16px;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
-.correct {
-  background-color: #4caf50; /* Green */
+.option-button:hover {
+  background-color: #0056b3;
 }
 
-.incorrect {
-  background-color: #f44336; /* Red */
+/* 결과 박스 스타일 */
+.result-box {
+  text-align: center;
+}
+
+.result-message {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.score-message {
+  font-size: 20px;
+  color: #28a745;
+}
+
+/* 점수 및 결과 스타일 */
+.score {
+  font-size: 32px;
+  font-weight: bold;
+  color: #28a745;
 }
 </style>
