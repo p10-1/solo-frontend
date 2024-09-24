@@ -1,118 +1,104 @@
 <template>
   <div class="quiz-container">
-    <div class="quiz-box" v-if="!answered">
-      <h2>{{ question.title }}</h2>
-      <ul class="options-list">
-        <li v-for="(option, index) in question.options" :key="index">
-          <button class="option-button" @click="submitAnswer(index)">{{ option }}</button>
-        </li>
-      </ul>
-    </div>
-    <div v-else class="result-box">
-      <p class="result-message">{{ resultMessage }}</p>
-      <p v-if="isCorrect" class="score-message">포인트: {{ points }}점</p>
-    </div>
+    <h2>퀴즈 목록</h2>
+    <ul v-if="quizzes.length">
+      <li v-for="quiz in quizzes" :key="quiz.quizNo" class="quiz-item">
+        <h3 class="quiz-question">{{ quiz.question }}</h3>
+        <ul class="options">
+          <li
+            v-for="(option, index) in [quiz.optionA, quiz.optionB, quiz.optionC, quiz.optionD]"
+            :key="index"
+            class="option-item"
+          >
+            {{ option }}
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <p v-else>퀴즈를 불러오는 중입니다...</p>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data() {
     return {
-      question: {
-        title: "IPO에서 'IPO'의 약자는 무엇인가요?",
-        options: [
-          'Initial Public Offering',
-          'International Purchase Option',
-          'Investment Payout Option',
-          'Internal Public Organization'
-        ],
-        correctAnswer: 0
-      },
-      answered: false,
-      isCorrect: false,
-      points: 0,
-      resultMessage: ''
+      quizzes: []
     }
   },
-  methods: {
-    submitAnswer(index) {
-      this.answered = true
-      if (index === this.question.correctAnswer) {
-        this.isCorrect = true
-        this.points += 10 // 정답 시 부여할 점수
-        this.resultMessage = '정답입니다!'
-      } else {
-        this.resultMessage =
-          '틀렸습니다. 정답은: ' + this.question.options[this.question.correctAnswer]
-      }
-    }
+  mounted() {
+    axios
+      .get('http://localhost:9000/api/quizzes')
+      .then((response) => {
+        this.quizzes = response.data
+      })
+      .catch((error) => {
+        console.error('퀴즈 데이터를 가져오는 중 오류 발생:', error)
+      })
   }
 }
 </script>
 
 <style scoped>
-/* 퀴즈 컨테이너 스타일 */
 .quiz-container {
-  max-width: 600px;
-  margin: 50px auto;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
   background-color: #f9f9f9;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-container h2 {
   text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
 }
 
-/* 퀴즈 박스 스타일 */
-.quiz-box h2 {
-  font-size: 24px;
-  color: #333;
+.quiz-item {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   margin-bottom: 20px;
+  transition: transform 0.2s ease-in-out;
 }
 
-.options-list {
+.quiz-item:hover {
+  transform: translateY(-5px);
+}
+
+.quiz-question {
+  font-size: 1.2em;
+  color: #333333;
+  margin-bottom: 15px;
+}
+
+.options {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
-.option-button {
-  width: 100%;
-  padding: 15px;
-  margin: 10px 0;
-  background-color: #007bff;
-  color: white;
-  border: none;
+.option-item {
+  padding: 10px;
+  background-color: #f1f1f1;
   border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
+  margin-bottom: 10px;
   transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
-.option-button:hover {
-  background-color: #0056b3;
+.option-item:hover {
+  background-color: #dce775;
 }
 
-/* 결과 박스 스타일 */
-.result-box {
+p {
   text-align: center;
-}
-
-.result-message {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.score-message {
-  font-size: 20px;
-  color: #28a745;
-}
-
-/* 점수 및 결과 스타일 */
-.score {
-  font-size: 32px;
-  font-weight: bold;
-  color: #28a745;
+  color: #888888;
+  font-size: 1em;
 }
 </style>
