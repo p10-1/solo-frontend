@@ -33,8 +33,13 @@ export default {
     login: {
       url: '/login',
       title: '마이페이지',
+<<<<<<< HEAD
       icon: ''
     }
+=======
+      icon: 'fa-solid fa-user' // 사용자 아이콘
+    },
+>>>>>>> f352a662ee9479f1e39b4eed1a07780563779666
 
     // join: {
     //   url: '/logout',
