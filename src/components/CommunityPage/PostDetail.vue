@@ -13,6 +13,8 @@
       <button @click="likePost" class="btn btn-outline-primary">
         👍 좋아요 ({{ post.likes }})
       </button>
+      <button @click="editPost" class="btn btn-outline-secondary ml-2">수정</button>
+      <button @click="deletePost" class="btn btn-outline-danger ml-2">삭제</button>
     </div>
     <h3>댓글</h3>
     <div class="comments">
@@ -36,19 +38,27 @@ const props = defineProps({
   post: Object
 })
 
-const emit = defineEmits(['back'])
+const emit = defineEmits(['back', 'like', 'edit', 'delete', 'addComment'])
 
 const newComment = ref('')
 
 const likePost = () => {
-  // 좋아요 기능 구현
-  console.log('Post liked')
+  emit('like', props.post.id)
+}
+
+const editPost = () => {
+  emit('edit', props.post.id)
+}
+
+const deletePost = () => {
+  if (confirm('정말로 이 게시글을 삭제하시겠습니까?')) {
+    emit('delete', props.post.id)
+  }
 }
 
 const addComment = () => {
   if (newComment.value.trim()) {
-    // 댓글 추가 로직 구현
-    console.log('Comment added:', newComment.value)
+    emit('addComment', { postId: props.post.id, content: newComment.value })
     newComment.value = ''
   }
 }
