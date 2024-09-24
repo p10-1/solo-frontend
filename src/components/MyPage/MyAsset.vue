@@ -22,8 +22,8 @@
                     <option disabled value="">선택</option>
                     <option v-for="bank in banks[type]" :key="bank" :value="bank">{{ bank }}</option>
                 </select>
-                <input v-model="asset.accountNumber" placeholder="계좌번호 입력" />
-                <input type="number" v-model.number="asset.amount" placeholder="금액 입력" />
+                <input v-model="asset.accountNumber" placeholder="계좌번호 입력" :disabled="asset.bank === '해당 자산 없음'"/>
+                <input type="number" v-model.number="asset.amount" placeholder="금액 입력" :disabled="asset.bank === '해당 자산 없음'" />
                 <button v-if="newAssets[type].length > 1 && index === newAssets[type].length - 1"
                     @click="removeNewAsset(type, index)">삭제</button>
             </div>
@@ -48,7 +48,8 @@
                     <option value="목적4">목적4</option>
                     <option value="대출 없음">대출 없음</option> <!-- "대출 없음" 추가 -->
                 </select>
-                <input v-model.number="loanAmount" type="number" placeholder="대출액 입력" :disabled="loanPurpose === '대출 없음'" />
+                <input v-model.number="loanAmount" type="number" placeholder="대출액 입력"
+                    :disabled="loanPurpose === '대출 없음'" />
                 <input v-model.number="period" placeholder="목표 상환 기간 (개월)" :disabled="loanPurpose === '대출 없음'" />
             </div>
         </div>
@@ -79,10 +80,10 @@ export default {
                 예적금자산: [{ bank: '', accountNumber: '', amount: 0 }]
             },
             banks: {
-                현금자산: ['국민은행', '우리은행', '신한은행', '하나은행'],
-                증권자산: ['KB증권', '우리증권', '신한증권', '하나증권'],
-                부동산자산: ['아파트', '대지'],
-                예적금자산: ['농협', '신협', '국민은행']
+                현금자산: ['해당 자산 없음','국민은행', '우리은행', '신한은행', '하나은행'],
+                증권자산: ['해당 자산 없음','KB증권', '우리증권', '신한증권', '하나증권'],
+                부동산자산: ['해당 자산 없음','아파트', '대지'],
+                예적금자산: ['해당 자산 없음','국민은행', '우리은행', '신한은행', '하나은행']
             },
             consumeType: '',
             loanAmount: null,
@@ -114,40 +115,62 @@ export default {
                 return;
             }
 
-            // 대출 유효성 검사
-            if ((this.loanPurpose === '대출 없음') ||
-                (this.loanAmount && this.loanPurpose && this.period)) {
-                const dataToSubmit = {
-                    consume: this.consumeType,
-                    assets: {},
-                    loan: {
-                        amount: this.loanPurpose === '대출 없음' ? 0 : this.loanAmount || 0,
-                        purpose: this.loanPurpose || "",
-                        period: this.loanPurpose === '대출 없음' ? 0 : this.period || 0
-                    }
-                };
+            const dataToSubmit = {
+                consume: this.consumeType,
+                cash: 0,
+                stock: 0,
+                property: 0,
+                deposit: 0,
+                loanAmount: 0,
+                loanPurpose: "",
+                period: 0
+            };
 
-                for (const type in this.newAssets) {
-                    const totalAmount = parseInt(this.TotalAmount(type).replace(/,/g, ''), 10) || 0; // 총합을 숫자로 변환
-                    dataToSubmit.assets[type] = [{ amount: totalAmount }]; // 총합으로 전송
-                }
-
-                console.log('전송할 데이터:', JSON.stringify(dataToSubmit, null, 2));
-
-                try {
-                    const response = await axios.post('/api/mypage/insertAsset', dataToSubmit, { withCredentials: true });
-                    console.log('서버 응답:', response.data);
-                    alert('자산과 소비 데이터가 성공적으로 저장되었습니다.');
-
-                    this.resetForm();
-                } catch (error) {
-                    console.error('서버 요청 실패:', error);
-                    alert('자산과 소비 데이터 저장 실패. 다시 시도해 주세요.');
-                }
+            // 대출 관련 유효성 검사
+            if (this.loanPurpose === '대출 없음') {
+                dataToSubmit.loanPurpose = this.loanPurpose;
+                dataToSubmit.loanAmount = 0; // 대출 없음일 경우
+                dataToSubmit.period = 0; // 대출 없음일 경우
             } else {
-                alert('대출 관련 정보를 모두 입력하거나 모두 입력하지 않아야 합니다.');
+                dataToSubmit.loanPurpose = this.loanPurpose || "";
+                dataToSubmit.loanAmount = this.loanAmount || 0;
+                dataToSubmit.period = this.period || 0;
+            }
+
+            // 각 자산 유형의 총합 계산
+            for (const type in this.newAssets) {
+                const totalAmount = this.newAssets[type].reduce((sum, asset) => sum + (asset.amount || 0), 0);
+
+                switch (type) {
+                    case '현금자산':
+                        dataToSubmit.cash = totalAmount;
+                        break;
+                    case '증권자산':
+                        dataToSubmit.stock = totalAmount;
+                        break;
+                    case '부동산자산':
+                        dataToSubmit.property = totalAmount;
+                        break;
+                    case '예적금자산':
+                        dataToSubmit.deposit = totalAmount;
+                        break;
+                }
+            }
+
+            console.log('전송할 데이터:', JSON.stringify(dataToSubmit, null, 2));
+
+            try {
+                const response = await axios.post('/api/mypage/insertAsset', dataToSubmit, { withCredentials: true });
+                console.log('서버 응답:', response.data);
+                alert('자산과 소비 데이터가 성공적으로 저장되었습니다.');
+
+                this.resetForm();
+            } catch (error) {
+                console.error('서버 요청 실패:', error);
+                alert('자산과 소비 데이터 저장 실패. 다시 시도해 주세요.');
             }
         },
+
         async submitUpdatedAssets() {
             // 소비 유형 유효성 검사
             if (!this.consumeType) {
@@ -155,38 +178,59 @@ export default {
                 return;
             }
 
-            // 대출 유효성 검사
-            if ((this.loanPurpose === '대출 없음') ||
-                (this.loanAmount && this.loanPurpose && this.period)) {
-                const dataToSubmit = {
-                    consume: this.consumeType,
-                    assets: {},
-                    loan: {
-                        amount: this.loanPurpose === '대출 없음' ? 0 : this.loanAmount || 0,
-                        purpose: this.loanPurpose || "",
-                        period: this.loanPurpose === '대출 없음' ? 0 : this.period || 0
-                    }
-                };
+            const dataToSubmit = {
+                consume: this.consumeType,
+                cash: 0,
+                stock: 0,
+                property: 0,
+                deposit: 0,
+                loanAmount: 0,
+                loanPurpose: "",
+                period: 0
+            };
 
-                for (const type in this.newAssets) {
-                    const totalAmount = parseInt(this.TotalAmount(type).replace(/,/g, ''), 10) || 0; // 총합을 숫자로 변환
-                    dataToSubmit.assets[type] = [{ amount: totalAmount }]; // 총합으로 전송
-                }
-
-                console.log('수정된 데이터 전송할 데이터:', JSON.stringify(dataToSubmit, null, 2));
-
-                try {
-                    const response = await axios.put('/api/mypage/updateAsset', dataToSubmit, { withCredentials: true });
-                    console.log('서버 응답:', response.data);
-                    alert('자산 데이터가 성공적으로 수정되었습니다.');
-
-                    this.resetForm();
-                } catch (error) {
-                    console.error('수정 요청 실패:', error);
-                    alert('자산 데이터 수정 실패. 다시 시도해 주세요.');
-                }
+            // 대출 관련 유효성 검사
+            if (this.loanPurpose === '대출 없음') {
+                dataToSubmit.loanPurpose = this.loanPurpose;
+                dataToSubmit.loanAmount = 0; // 대출 없음일 경우
+                dataToSubmit.period = 0; // 대출 없음일 경우
             } else {
-                alert('대출 관련 정보를 모두 입력하거나 모두 입력하지 않아야 합니다.');
+                dataToSubmit.loanPurpose = this.loanPurpose || "";
+                dataToSubmit.loanAmount = this.loanAmount || 0;
+                dataToSubmit.period = this.period || 0;
+            }
+
+            // 각 자산 유형의 총합 계산
+            for (const type in this.newAssets) {
+                const totalAmount = this.newAssets[type].reduce((sum, asset) => sum + (asset.amount || 0), 0);
+
+                switch (type) {
+                    case '현금자산':
+                        dataToSubmit.cash = totalAmount;
+                        break;
+                    case '증권자산':
+                        dataToSubmit.stock = totalAmount;
+                        break;
+                    case '부동산자산':
+                        dataToSubmit.property = totalAmount;
+                        break;
+                    case '예적금자산':
+                        dataToSubmit.deposit = totalAmount;
+                        break;
+                }
+            }
+
+            console.log('수정된 데이터 전송할 데이터:', JSON.stringify(dataToSubmit, null, 2));
+
+            try {
+                const response = await axios.put('/api/mypage/updateAsset', dataToSubmit, { withCredentials: true });
+                console.log('서버 응답:', response.data);
+                alert('자산 데이터가 성공적으로 수정되었습니다.');
+
+                this.resetForm();
+            } catch (error) {
+                console.error('수정 요청 실패:', error);
+                alert('자산 데이터 수정 실패. 다시 시도해 주세요.');
             }
         },
         resetForm() {
@@ -204,6 +248,8 @@ export default {
         }
     }
 }
+
+
 </script>
 
 <style scoped>
