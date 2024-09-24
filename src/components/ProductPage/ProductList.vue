@@ -1,13 +1,17 @@
 <template>
   <div>
-    <h1>정책 목록</h1>
+    <h1>예적금 상품 목록</h1>
     <div class="search-bar">
       <!-- SearchBar 컴포넌트 사용 -->
-      <SearchBar v-model="keyword" @search="searchPolicies" />
+      <SearchBar v-model="keyword" @search="searchProducts" />
       <!-- <button @click="viewAllPolicies" class="btn btn-secondary">전체보기</button> -->
     </div>
     <ul>
-      <PolicyItem v-for="policy in list" :key="policy.bizId" :policy="policy" />
+      <ProductItem
+        v-for="product in list"
+        :key="`${product.finPrdtNm}-${product.spclCnd}`"
+        :product="product"
+      />
     </ul>
 
     <!-- Pagination 컴포넌트 사용 -->
@@ -16,14 +20,14 @@
 </template>
 
 <script>
-import { fetchPolicies } from '@/api/policyApi'
-import PolicyItem from '@/components/PolicyPage/PolicyItem.vue'
+import { fetchProducts } from '@/api/productApi'
+import ProductItem from './ProductItem.vue'
 import Pagination from '@/components/common/Pagination.vue'
 import SearchBar from '@/components/common/SearchBar.vue'
 
 export default {
   components: {
-    PolicyItem,
+    ProductItem,
     Pagination,
     SearchBar
   },
@@ -37,32 +41,32 @@ export default {
     }
   },
   methods: {
-    async loadPolicies() {
+    async loadProducts() {
       console.log('현재 페이지:', this.pageNum, '검색어:', this.keyword)
-      const data = await fetchPolicies(this.pageNum, this.keyword)
+      const data = await fetchProducts(this.pageNum, this.keyword)
       console.log('내부에서 호출: ', data)
       this.list = data.list || [] // 정책 데이터 초기화
       this.totalPage = data.totalPage || 0 // 총 페이지 수 초기화
       this.pageNum = data.pageNum || 1 // 현재 페이지 초기화
     },
-    async searchPolicies(searchTerm) {
+    async searchProducts(searchTerm) {
       console.log('검색어: ', searchTerm)
       this.keyword = searchTerm // 검색어 설정
       this.currentPage = 1 // 첫 페이지로 설정
       this.$router.push({
-        path: '/policy',
+        path: '/product',
         query: { keyword: this.keyword, page: this.pageNum }
       })
-      await this.loadPolicies() // 정책 데이터 가져오기
+      await this.loadProducts() // 정책 데이터 가져오기
     },
     async changePage(page) {
       console.log('부모 페이지: ', page)
       this.pageNum = page // 현재 페이지 업데이트
       this.$router.push({
-        path: '/policy',
+        path: '/product',
         query: { keyword: this.keyword, page: this.pageNum }
       })
-      await this.loadPolicies() // 새로운 페이지의 정책 데이터를 가져옴
+      await this.loadProducts() // 새로운 페이지의 정책 데이터를 가져옴
     }
   },
   mounted() {
@@ -70,7 +74,7 @@ export default {
     const query = this.$route.query
     this.keyword = query.keyword || ''
     this.pageNum = parseInt(query.page) || 1
-    this.loadPolicies()
+    this.loadProducts()
   },
   watch: {
     // 쿼리 파라미터가 변경될 때마다 loadPolicies를 호출
@@ -78,7 +82,7 @@ export default {
       handler() {
         this.keyword = this.$route.query.keyword || ''
         this.pageNum = parseInt(this.$route.query.page) || 1
-        this.loadPolicies()
+        this.loadProducts()
       },
       immediate: true // 컴포넌트가 마운트될 때도 호출
     }
