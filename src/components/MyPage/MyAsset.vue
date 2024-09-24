@@ -1,10 +1,9 @@
 <template>
     <div class="asset-manager">
-  
         <!-- 소비 입력 폼 -->
         <div class="consume-section">
             <h3>소비 입력</h3>
-            <select v-model="ConsumeType">
+            <select v-model="consumeType"> <!-- 변수 이름 수정 -->
                 <option disabled value="">소비 유형 선택:</option>
                 <option value="유형1">유형1</option>
                 <option value="유형2">유형2</option>
@@ -12,7 +11,7 @@
                 <option value="유형4">유형4</option>
             </select>
         </div>
-  
+
         <div class="asset-section" v-for="(assets, type) in assetTypes" :key="type">
             <h3>{{ type }}</h3>
             <div v-for="(asset, index) in newAssets[type]" :key="index" class="input-row">
@@ -33,7 +32,7 @@
             </ul>
             <h4>자산합계: {{ TotalAmount(type) }}원</h4>
         </div>
-  
+
         <!-- 대출 자산 입력 폼 -->
         <div class="loan-section">
             <h3>대출 자산 입력</h3>
@@ -46,17 +45,17 @@
                     <option value="목적4">목적4</option>
                 </select>
                 <input v-model.number="loanAmount" type="number" placeholder="대출액 입력" />
-                <input v-model.number="repaymentPeriod" placeholder="목표 상환 기간 (개월)" />
+                <input v-model.number="period" placeholder="목표 상환 기간 (개월)" /> <!-- 변수 이름 수정 -->
             </div>
         </div>
-  
+
         <button @click="submitAllAssets">자산 입력완료</button>
     </div>
 </template>
-  
+
 <script>
 import axios from 'axios';
-  
+
 export default {
     data() {
         return {
@@ -78,10 +77,10 @@ export default {
                 부동산자산: ['아파트', '대지'],
                 예적금자산: ['농협', '신협','국민은행']
             },
-            ConsumeType: '',
+            consumeType: '', // 변수 이름 수정
             loanAmount: 0,
             loanPurpose: '',
-            repaymentPeriod: ''
+            period: ''
         }
     },
     methods: {
@@ -93,35 +92,31 @@ export default {
         },
         TotalAmount(type) {
             if (!this.newAssets[type]) {
-                return 0; // newAssets[type]가 존재하지 않는 경우 0 반환
+                return 0;
             }
-  
+
             const newAssetsTotal = this.newAssets[type].reduce((sum, asset) => sum + (asset.amount || 0), 0);
-  
-            if (!this.assetTypes[type]) {
-                return newAssetsTotal.toLocaleString(); // assetTypes[type]가 존재하지 않는 경우 newAssetsTotal만 반환
-            }
-  
-            const existingAssetsTotal = this.assetTypes[type].reduce((sum, asset) => sum + asset.amount, 0);
-  
+            const existingAssetsTotal = this.assetTypes[type] ? this.assetTypes[type].reduce((sum, asset) => sum + asset.amount, 0) : 0;
+
             return (newAssetsTotal + existingAssetsTotal).toLocaleString();
         },
         async submitAllAssets() {
             const dataToSubmit = {
-                consumeType: this.ConsumeType,
+                consume: this.consumeType,
                 assets: {},
                 loan: {
                     amount: this.loanAmount,
                     purpose: this.loanPurpose,
-                    repaymentPeriod: this.repaymentPeriod
+                    period: this.period // 대출 기간
                 }
             };
-  
+
             for (const type in this.newAssets) {
                 const totalAmount = this.newAssets[type].reduce((sum, asset) => sum + (asset.amount || 0), 0);
-                dataToSubmit.assets[type] = [{ amount: totalAmount }]; // 총 금액으로 설정
+                dataToSubmit.assets[type] = [{ amount: totalAmount }];
             }
-  
+            console.log('전송할 데이터:', JSON.stringify(dataToSubmit, null, 2));
+
             try {
                 const response = await axios.post('/api/mypage/insertAsset', dataToSubmit, { withCredentials: true });
                 console.log('서버 응답:', response.data);
@@ -134,34 +129,34 @@ export default {
     }
 }
 </script>
-  
+
 <style scoped>
 .asset-manager .asset-section {
     margin-bottom: 40px;
 }
-  
+
 .loan-section {
     margin-top: 20px;
     margin-bottom: 40px;
 }
-  
+
 .consume-section {
     margin-top: 20px;
     margin-bottom: 40px;
 }
-  
+
 .input-row {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-  
+
 input,
 select {
     padding: 8px;
     margin-right: 10px;
 }
-  
+
 button {
     padding: 8px 16px;
 }
