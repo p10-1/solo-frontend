@@ -22,6 +22,10 @@ export default {
     {
       title: '정책',
       url: '/policy'
+    },
+    {
+      title: '상품',
+      url: '/product'
     }
   ],
   accoutMenus: {
@@ -30,7 +34,7 @@ export default {
       url: '/login',
       title: '마이페이지',
       icon: ''
-    },
+    }
 
     // join: {
     //   url: '/logout',

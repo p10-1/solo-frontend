@@ -29,7 +29,6 @@ const emit = defineEmits(['page-change'])
 
 const changePage = (page) => {
   if (page >= 1 && page <= props.totalPages) {
-    console.log('페이지 변경: ', page)
     emit('page-change', page)
   }
 }

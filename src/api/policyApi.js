@@ -1,12 +1,14 @@
 import axios from 'axios'
 
 const API_URL = 'http://localhost:9000/api/policy'
+const DEFAULT_AMOUNT = 10
 
 export const fetchPolicies = async (currentPage, keyword) => {
   try {
     const response = await axios.get(`${API_URL}/list`, {
       params: {
         page: currentPage,
+        amount: DEFAULT_AMOUNT,
         keyword: keyword
       }
     })
