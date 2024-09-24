@@ -3,6 +3,7 @@
     <h2>{{ isEditing ? '글 수정' : '글 작성' }}</h2>
     <input v-model="title" placeholder="제목" class="form-control mb-3" />
     <textarea v-model="content" placeholder="내용" class="form-control mb-3" rows="5"></textarea>
+    <input type="file" @change="handleFileChange" multiple class="form-control mb-3" />
     <div class="d-flex justify-content-between">
       <button @click="$emit('cancel')" class="btn btn-secondary">취소</button>
       <button @click="submitPost" class="btn btn-primary">
@@ -22,6 +23,7 @@ const props = defineProps({
 
 const title = ref('')
 const content = ref('')
+const files = ref([])
 
 const emit = defineEmits(['submit', 'cancel'])
 
@@ -32,19 +34,25 @@ onMounted(() => {
   }
 })
 
+const handleFileChange = (event) => {
+  files.value = event.target.files
+}
+
 const submitPost = () => {
   const postData = {
     title: title.value,
     content: content.value,
-    author: 'KB' // 실제로는 로그인한 사용자 정보를 사용해야 합니다
+    writer: 'CurrentUser', // 실제 사용자 정보로 대체해야 합니다
+    files: files.value
   }
 
   if (props.isEditing) {
-    postData.id = props.editingPost.id
+    postData.no = props.editingPost.no
   }
 
   emit('submit', postData)
   title.value = ''
   content.value = ''
+  files.value = []
 }
 </script>
