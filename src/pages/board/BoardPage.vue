@@ -17,74 +17,100 @@
   </div>
 </template>
 
-<script>
-import axios from 'axios'
-import PostItem from '@/components/BoardPage/PostItem.vue'
-import Pagination from '@/components/common/Pagination.vue'
+<script setup>
+import { ref, onMounted } from 'vue'
 import SearchBar from '@/components/common/SearchBar.vue'
+import PostList from '@/components/CommunityPage/PostList.vue'
+import Pagination from '@/components/common/Pagination.vue'
+import WriteButton from '@/components/CommunityPage/WriteButton.vue'
+import WriteForm from '@/components/CommunityPage/WriteForm.vue'
+import PostDetail from '@/components/CommunityPage/PostDetail.vue'
+import { getPosts, getPostDetail, createPost, updatePost, deletePost } from '@/api/boardApi'
 
-export default {
-  components: {
-    PostItem,
-    Pagination,
-    SearchBar
-  },
-  data() {
-    return {
-      posts: [],
-      currentPage: 1,
-      totalPages: 0,
-      keyword: '',
-      pageSize: 10
-    }
-  },
-  methods: {
-    async fetchPosts() {
-      try {
-        const response = await axios.get('/api/board', {
-          params: {
-            page: this.currentPage,
-            keyword: this.keyword,
-            pageSize: this.pageSize
-          },
-          withCredentials: true
-        })
+const currentPage = ref(1)
+const totalPages = ref(1)
+const showWriteForm = ref(false)
+const showPostDetail = ref(false)
+const selectedPost = ref(null)
+const posts = ref([])
 
-        this.posts = response.data.posts
-        this.totalPages = response.data.totalPages
-        this.currentPage = response.data.currentPage
-      } catch (error) {
-        console.error('게시글을 가져오는 데 실패했습니다:', error)
-      }
-    },
-    async searchPosts(searchTerm) {
-      this.keyword = searchTerm // 검색어 설정
-      this.currentPage = 1 // 첫 페이지로 설정
-      this.fetchPosts() // 게시글 데이터 가져오기
-    },
-    changePage(page) {
-      this.currentPage = page // 현재 페이지 업데이트
-      this.fetchPosts() // 새로운 페이지의 게시글 데이터를 가져옴
-    },
-    openPostDetail(post) {
-      // 게시글 상세 페이지로 이동하는 로직
-      this.$router.push({ name: 'PostDetail', params: { id: post.boardNo } })
-    }
-  },
-  mounted() {
-    this.fetchPosts() // 컴포넌트가 마운트될 때 게시글 데이터 가져오기
+onMounted(async () => {
+  await fetchPosts()
+})
+
+const fetchPosts = async () => {
+  try {
+    const response = await getPosts(currentPage.value)
+    posts.value = response.content
+    totalPages.value = response.totalPages
+  } catch (error) {
+    console.error('Failed to fetch posts:', error)
   }
 }
+
+const handleSearch = async (searchTerm) => {
+  try {
+    const response = await getPosts(1, searchTerm)
+    posts.value = response.content
+    totalPages.value = response.totalPages
+    currentPage.value = 1
+  } catch (error) {
+    console.error('Search failed:', error)
+  }
+}
+
+const prevPage = async () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+    await fetchPosts()
+  }
+}
+
+const nextPage = async () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+    await fetchPosts()
+  }
+}
+
+const handleSubmit = async (postData) => {
+  try {
+    await createPost(postData)
+    await fetchPosts()
+    showWriteForm.value = false
+  } catch (error) {
+    console.error('Failed to create post:', error)
+  }
+}
+
+const openPostDetail = async (post) => {
+  try {
+    const detailedPost = await getPostDetail(post.id)
+    selectedPost.value = detailedPost
+    showPostDetail.value = true
+  } catch (error) {
+    console.error('Failed to fetch post detail:', error)
+  }
+}
+
+const handleUpdatePost = async (boardNo, updatedData) => {
+  try {
+    await updatePost(boardNo, updatedData)
+    await fetchPosts()
+    showPostDetail.value = false
+  } catch (error) {
+    console.error('Failed to update post:', error)
+  }
+}
+
+const handleDeletePost = async (boardNo) => {
+  try {
+    await deletePost(boardNo)
+    await fetchPosts()
+    showPostDetail.value = false
+  } catch (error) {
+    console.error('Failed to delete post:', error)
+  }
+}
+
 </script>
-
-<style scoped>
-/* 스타일링 추가 */
-.search-bar {
-  margin-bottom: 20px;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-</style>

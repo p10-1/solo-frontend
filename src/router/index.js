@@ -10,6 +10,7 @@ import News from '../pages/news/NewsPage.vue'
 import Policy from '../pages/policy/PolicyPage.vue'
 // import Join from '../pages/auth/JoinPage.vue'
 import FirstUser from '@/pages/auth/FirstUser.vue'
+import Product from '@/pages/product/ProductPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -63,6 +64,11 @@ const router = createRouter({
       path: '/policy',
       name: 'policy',
       component: Policy
+    },
+    {
+      path: '/product',
+      name: 'product',
+      component: Product
     }
   ]
 })

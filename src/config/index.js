@@ -22,6 +22,10 @@ export default {
     {
       title: '정책',
       url: '/policy'
+    },
+    {
+      title: '상품',
+      url: '/product'
     }
   ],
   accoutMenus: {

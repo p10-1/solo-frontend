@@ -19,7 +19,7 @@
         <td>{{ post.id }}</td>
         <td>
           {{ post.title }}
-          <span class="text-muted ml-2">[{{ post.comments }}]</span>
+          <span class="text-muted ml-2">[{{ post.comments?.length || 0 }}]</span>
           <span v-if="post.likes" class="text-success ml-2">👍 {{ post.likes }}</span>
         </td>
         <td>{{ post.author }}</td>
