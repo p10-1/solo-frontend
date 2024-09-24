@@ -14,7 +14,7 @@
 import { ref } from 'vue'
 import SearchBar from '@/components/common/SearchBar.vue'
 import NewsList from '@/components/NewsPage/NewsList.vue'
-import Pagination from '@/components/common/Pagination.vue'
+import Pagination from '@/components/common/PaginationComp.vue'
 
 const currentPage = ref(1)
 const totalPages = ref(5)
