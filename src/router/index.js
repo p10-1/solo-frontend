@@ -10,12 +10,7 @@ import News from '../pages/news/NewsPage.vue'
 import Policy from '../pages/policy/PolicyPage.vue'
 // import Join from '../pages/auth/JoinPage.vue'
 import FirstUser from '@/pages/auth/FirstUser.vue'
-<<<<<<< HEAD
 import Product from '@/pages/product/ProductPage.vue'
-=======
-import WritePage from '@/pages/board/WritePage.vue'
-import PostDetailPage from '@/pages/board/PostDetailPage.vue'
->>>>>>> f352a662ee9479f1e39b4eed1a07780563779666
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

@@ -1,7 +1,7 @@
 // src/authApi.js
 import axios from 'axios'
 
-const API_URL = 'http:m//localhost:9000/api/ember'
+const API_URL = 'http://localhost:9000/api/member'
 
 export const loginWithKakao = async () => {
   try {
