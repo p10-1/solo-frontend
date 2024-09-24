@@ -22,20 +22,24 @@ export default {
     {
       title: '정책',
       url: '/policy'
+    },
+    {
+      title: '상품',
+      url: '/product'
     }
   ],
   accoutMenus: {
     // 인증 관련 메뉴 정보
     login: {
-      url: '/mypage',
+      url: '/login',
       title: '마이페이지',
       icon: ''
-    },
-
-    join: {
-      url: '/logout',
-      title: '로그아웃',
-      icon: ''
     }
+
+    // join: {
+    //   url: '/logout',
+    //   title: '로그아웃',
+    //   icon: ''
+    // }
   }
 }

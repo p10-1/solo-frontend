@@ -12,7 +12,6 @@ import { logoutWithKakao } from '@/api/authApi.js'
 const logout = async () => {
   // 로그아웃 API 호출
   await logoutWithKakao()
-
   // 세션 스토리지에서 사용자 정보 삭제
   sessionStorage.removeItem('userInfo')
 }
