@@ -1,109 +1,114 @@
-<script setup>
-import { getList } from '@/api/boardApi.js'
-import { ref, reactive, computed, watch } from 'vue'
-import moment from 'moment'
-import { useRoute, useRouter } from 'vue-router'
-
-const cr = useRoute()
-const router = useRouter()
-
-const page = ref({})
-
-const articles = computed(() => page.value.list)
-
-const pageRequest = reactive({
-  page: parseInt(cr.query.page) || 1,
-  amount: parseInt(cr.query.amount) || 10
-})
-
-console.log('QUERY', cr.query)
-console.log('PAGE REQUEST', pageRequest)
-
-// 페이지네이션 페이지 변경
-const handlePageChange = async (pageNum) => {
-  console.log('CLICK,,,,')
-  // url 변경 --> query 파트만 변경되므로 컴포넌트가 다시 마운트되지 않음
-  // watch를 통해 cr이 변경됨을 감지하여 페이지 로드해야 함
-  router.push({
-    query: { page: pageNum, amount: pageRequest.amount }
-  })
-}
-
-// pageRequest의 값 변경된 경우 호출
-watch(cr, async (newValue) => {
-  console.log('WATCH', cr.query.page)
-  pageRequest.page = parseInt(cr.query.page)
-  pageRequest.amount = parseInt(cr.query.amount)
-  await load(pageRequest)
-})
-
-const load = async (query) => {
-  try {
-    page.value = await getList(query)
-    console.log(page.value)
-  } catch {}
-}
-
-load(pageRequest)
-</script>
-
 <template>
-  <div>
-    <h1 class="mb-3"><i class="fa-solid fa-paste"></i> 게시글 목록</h1>
+  <div class="board-list">
+    <!-- Search Bar -->
+    <search-bar v-model="keyword" @search="searchBoards" />
 
-    <div class="mt-5 text-end">(총 {{ page.totalCount }}건)</div>
-
-    <table class="table table-striped">
+    <!-- Board List -->
+    <table class="table">
       <thead>
         <tr>
-          <th style="width: 60px">No</th>
+          <th>번호</th>
           <th>제목</th>
-          <th style="width: 100px">작성자</th>
-          <th style="width: 120px">작성일</th>
+          <th>내용</th>
+          <th>작성자</th>
+          <th>작성일</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="article in articles" :key="article.no">
-          <td>{{ article.boardNo }}</td>
+        <tr v-for="(board, index) in list" :key="board.boardNo">
+          <td>{{ (pageNum - 1) * amount + (index + 1) }}</td>
           <td>
-            <!-- <router-link
+            <router-link
               :to="{
                 name: 'board/detail',
-                params: { no: article.boardNo },
-                query: cr.query
+                params: { boardNo: board.boardNo }
               }"
-            > -->
-            {{ article.title }}
-            <!-- </router-link> -->
+            >
+              {{ board.title }}
+            </router-link>
           </td>
-          <td>{{ article.userID }}</td>
-          <td>{{ moment(article.regDate).format('YYYY-MM-DD') }}</td>
+          <td>{{ board.content }}</td>
+          <td>{{ board.userID }}</td>
+          <td>{{ moment(board.regDate).format('YYYY-MM-DD') }}</td>
         </tr>
+        <router-link :to="{ name: 'board/create' }" class="btn btn-primary"
+          ><i class="fa-solid fa-pen-to-square"></i> 글 작성</router-link
+        >
       </tbody>
     </table>
 
-    <div class="my-5 d-flex">
-      <div class="flex-grow-1 text-center">
-        <!-- 페이지 네이션 -->
-        <vue-awesome-paginate
-          :total-items="page.totalCount"
-          :items-per-page="pageRequest.amount"
-          :max-pages-shown="5"
-          :show-ending-buttons="true"
-          v-model="pageRequest.page"
-          @click="handlePageChange"
-        >
-          <template #first-page-button><i class="fa-solid fa-backward-fast"></i></template>
-          <template #prev-button><i class="fa-solid fa-caret-left"></i></template>
-          <template #next-button><i class="fa-solid fa-caret-right"></i></template>
-          <template #last-page-button><i class="fa-solid fa-forward-fast"></i></template>
-        </vue-awesome-paginate>
-      </div>
-      <div>
-        <!-- <router-link :to="{ name: 'board/create', query: cr.query }" class="btn btn-primary"
-          ><i class="fa-solid fa-pen-to-square"></i> 글 작성</router-link
-        > -->
-      </div>
-    </div>
+    <!-- Pagination -->
+    <pagination :current-page="pageNum" :totalPages="totalPage" @page-change="changePage" />
   </div>
 </template>
+
+<script setup>
+import { ref, watch, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { getList } from '@/api/boardApi'
+import Pagination from '@/components/common/PaginationComp.vue'
+import SearchBar from '@/components/common/SearchBar.vue'
+import moment from 'moment'
+
+const list = ref([])
+const pageNum = ref(1)
+const totalPage = ref(0)
+const category = ref('content')
+const keyword = ref('')
+const amount = ref(10)
+const router = useRouter()
+const route = useRoute()
+
+const loadBoards = async () => {
+  try {
+    console.log('현재 페이지:', pageNum.value, '검색어:', keyword.value)
+    const data = await getList(pageNum.value, category.value, keyword.value)
+    console.log('내부에서 호출: ', data)
+    list.value = data.list || [] // 정책 데이터 초기화
+    totalPage.value = data.totalPage || 0 // 총 페이지 수 초기화
+    pageNum.value = data.pageNum || 1 // 현재 페이지 초기화
+    amount.value = data.amount || 10 // 한 페이지에 몇개?
+  } catch (error) {
+    console.error('Error loading boards:', error)
+  }
+}
+
+const searchBoards = async (searchTerm) => {
+  console.log('검색어: ', searchTerm)
+  keyword.value = searchTerm // 검색어 설정
+  pageNum.value = 1 // 첫 페이지로 설정
+  await router.push({
+    path: '/board',
+    query: { keyword: keyword.value, page: pageNum.value }
+  })
+  await loadBoards()
+}
+
+const changePage = async (page) => {
+  console.log('부모 페이지: ', page)
+  pageNum.value = page // 현재 페이지 업데이트
+  await router.push({
+    path: '/board',
+    query: { keyword: keyword.value, page: pageNum.value }
+  })
+  await loadBoards()
+}
+
+onMounted(() => {
+  keyword.value = route.query?.keyword || ''
+  pageNum.value = parseInt(route.query?.page) || 1
+  loadBoards()
+})
+
+watch(
+  () => route.query,
+  () => {
+    if (route.query) {
+      keyword.value = route.query.keyword || ''
+      pageNum.value = parseInt(route.query.page) || 1
+      loadBoards()
+    }
+  },
+  { immediate: true }
+)
+</script>
