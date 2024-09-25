@@ -19,6 +19,31 @@
     </div>
 
     <button @click="goBack" class="btn btn-secondary">뒤로 가기</button>
+
+    <!-- 댓글 리스트 -->
+    <div class="comments-section">
+      <h3>댓글</h3>
+      <div v-if="comments && comments.length">
+        <ul>
+          <li v-for="comment in comments" :key="comment.commentNo">
+            <p>
+              <strong>댓글 작성자{{ comment.userId }}</strong
+              >: {{ comment.commentText }}
+            </p>
+            <p class="comment-date">{{ comment.regDate }}</p>
+          </li>
+        </ul>
+      </div>
+      <div v-else>
+        <p>댓글이 없습니다.</p>
+      </div>
+
+      <div class="comment-form">
+        <h4>댓글 작성</h4>
+        <textarea v-model="commentText" placeholder="댓글을 입력하세요..." rows="3"></textarea>
+        <button @click="submitComment" class="btn btn-primary">댓글 작성</button>
+      </div>
+    </div>
   </div>
   <div v-else>
     <p>게시물을 로드하는 중입니다...</p>
@@ -28,10 +53,12 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { get, deleteBoard, deleteAttachment } from '@/api/boardApi'
+import { get, deleteBoard, deleteAttachment, getComments, createComment } from '@/api/boardApi'
 import { useAuthStore } from '@/stores/authStore'
 
 const board = ref(null)
+const comments = ref([])
+const commentText = ref('')
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore() // 인증 스토어 가져오기
@@ -44,6 +71,40 @@ const loadBoardDetail = async () => {
     board.value = response
   } catch (error) {
     console.error('게시물 상세 정보 로드 실패: ', error)
+  }
+}
+
+const loadComments = async () => {
+  const boardNo = route.params.boardNo // 게시물 번호
+  console.log('댓글 뽑기전 boardNo: ', boardNo)
+  try {
+    const response = await getComments(boardNo)
+    comments.value = response.data // 댓글 리스트 상태에 저장
+  } catch (error) {
+    console.error('댓글을 가져오는 데 실패했습니다.', error)
+  }
+}
+const submitComment = async () => {
+  if (!commentText.value) {
+    alert('댓글 내용을 입력하세요.')
+    return
+  }
+
+  const boardNo = route.params.boardNo
+  const commentData = {
+    userId: authStore.userInfo.kakaoId, // 현재 로그인된 userId
+    boardNo: boardNo, // 현재 게시글 번호
+    commentText: commentText.value // 댓글 내용
+  }
+
+  try {
+    await createComment(commentData) // 댓글 작성 API 호출
+    alert('댓글이 작성되었습니다.')
+    commentText.value = '' // 입력 필드 초기화
+    await loadComments() // 댓글 리스트 다시 로드
+  } catch (error) {
+    console.error('댓글 작성 실패:', error)
+    alert('댓글 작성에 실패했습니다.')
   }
 }
 
@@ -86,6 +147,7 @@ const deleteBoardConfirm = async () => {
 
 onMounted(() => {
   loadBoardDetail()
+  loadComments()
 })
 </script>
 

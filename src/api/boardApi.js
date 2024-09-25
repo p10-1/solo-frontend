@@ -23,6 +23,29 @@ export const getList = async (pageNum, category, keyword) => {
   }
 }
 
+export const getComments = async (boardNo) => {
+  try {
+    console.log('댓글을 요청한 boardNo: ', boardNo)
+    const response = await axios.get(`${API_URL}/${boardNo}/comments`)
+    console.log('댓글 리스트: ', response.data)
+    return response
+  } catch (error) {
+    console.error('댓글을 가져오는 데 실패했습니다.', error)
+    throw error
+  }
+}
+
+export const createComment = async (commentData) => {
+  try {
+    console.log('commentData: ', commentData)
+    const response = await axios.post(`${API_URL}/comment`, commentData)
+    return response.data
+  } catch (error) {
+    console.error('댓글 작성 중 오류 발생:', error)
+    throw error
+  }
+}
+
 export const get = async (boardNo) => {
   console.log('get no: ', boardNo)
   const { data } = await axios.get(`${API_URL}/${boardNo}`)
