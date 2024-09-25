@@ -1,5 +1,6 @@
 <template>
     <div class="asset-manager">
+        <h1>자산 관리</h1><br/><br/>
         <!-- 수정하기 버튼 -->
         <button @click="isEditing = !isEditing">{{ isEditing ? '취소' : '수정하기' }}</button>
 
