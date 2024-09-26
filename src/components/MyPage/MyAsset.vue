@@ -14,6 +14,7 @@
                 <option value="유형3">유형3</option>
                 <option value="유형4">유형4</option>
             </select>
+            <button v-if="isEditing" @click="markConsumeAsNoChanges">수정내용없음</button>
         </div>
 
         <div class="asset-section" v-for="(assets, type) in assetTypes" :key="type">
@@ -57,6 +58,7 @@
                 <input v-model.number="loanAmount" type="number" placeholder="대출액 입력"
                     :disabled="loanPurpose === '대출 없음'" />
                 <input v-model.number="period" placeholder="목표 상환 기간 (개월)" :disabled="loanPurpose === '대출 없음'" />
+                <button v-if="isEditing" @click="markLoanAsNoChanges">수정내용없음</button>
             </div>
         </div>
 
@@ -65,6 +67,7 @@
         <button @click="submitAllAssets" v-if="!isEditing">자산 입력완료</button>
     </div>
 </template>
+
 <script>
 import axios from 'axios';
 
@@ -144,6 +147,7 @@ export default {
                 dataToSubmit.loanAmount = this.loanAmount || 0;
                 dataToSubmit.period = this.period || 0;
             }
+
             for (const type in this.newAssets) {
                 const totalAmount = this.newAssets[type].reduce((sum, asset) => {
                     // "해당 자산 없음"인 경우 0으로 처리
@@ -165,6 +169,7 @@ export default {
                         break;
                 }
             }
+
             try {
                 const response = await axios.post('/api/mypage/insertAsset', dataToSubmit, { withCredentials: true });
                 console.log('서버 응답:', response.data);
@@ -177,10 +182,8 @@ export default {
             }
         },
 
-        // 수정내용없음 버튼 클릭 시 해당 자산의 입력창을 비활성화
         markAssetsAsNoChanges(type) {
             this.newAssets[type].forEach(asset => {
-
                 asset.isDisabled = true; // 입력창 비활성화
                 asset.amount = null; // 금액을 null로 설정
                 asset.bank = ''; // bank를 빈 값으로 설정하여 비활성화
@@ -190,7 +193,18 @@ export default {
             console.log("수정사항 없음 후 상태:", JSON.stringify(this.newAssets, null, 2)); // 상태 확인
         },
 
-        // 은행 선택 변경 시 처리
+        markConsumeAsNoChanges() {
+            this.consumeType = null; // 소비 유형을 null로 설정
+            console.log("소비 유형 수정내용 없음:", this.consumeType);
+        },
+
+        markLoanAsNoChanges() {
+            this.loanPurpose = null; // 대출 목적을 null로 설정
+            this.loanAmount = null; // 대출액을 null로 설정
+            this.period = null; // 기간을 null로 설정
+            console.log("대출 자산 수정내용 없음:", this.loanPurpose, this.loanAmount, this.period);
+        },
+
         handleBankChange(asset) {
             if (asset.bank === '해당 자산 없음') {
                 asset.amount = 0; // '해당 자산 없음' 선택 시 amount를 0으로 설정
@@ -201,14 +215,9 @@ export default {
         },
 
         async submitUpdatedAssets() {
-            // 소비 유형 유효성 검사
-            if (!this.consumeType) {
-                alert('소비 유형을 입력해 주세요.');
-                return;
-            }
 
             const dataToSubmit = {
-                consume: this.consumeType,
+                consume: this.consumeType === '' ? null : this.consumeType,
                 cash: null,
                 stock: null,
                 property: null,
@@ -249,7 +258,6 @@ export default {
                         dataToSubmit.deposit = (totalAmount === null || this.newAssets[type].every(asset => asset.amount === null)) ? null : (totalAmount === 0 ? 0 : totalAmount);
                         break;
                 }
-
             }
 
             console.log('최종 전송할 데이터:', JSON.stringify(dataToSubmit, null, 2));
@@ -265,7 +273,6 @@ export default {
                 alert('자산 데이터 수정 실패. 다시 시도해 주세요.');
             }
         },
-
 
         resetForm() {
             // 입력 폼 초기화
