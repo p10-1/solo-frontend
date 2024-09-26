@@ -3,6 +3,11 @@
     <h2>{{ board.title }}</h2>
     <p><strong>작성자:</strong> {{ board.userId }}</p>
     <p><strong>내용:</strong> {{ board.content }}</p>
+    <p><strong>추천수:</strong> {{ board.likes }}</p>
+    <p><strong>댓글수:</strong> {{ board.comments }}</p>
+    <p><strong>조회수:</strong> {{ board.views }}</p>
+
+    <button @click="increaseLikes" class="btn btn-success">좋아요 👍</button>
 
     <div v-if="board.attaches && board.attaches.length">
       <h4>첨부파일:</h4>
@@ -53,7 +58,14 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { get, deleteBoard, deleteAttachment, getComments, createComment } from '@/api/boardApi'
+import {
+  get,
+  deleteBoard,
+  deleteAttachment,
+  getComments,
+  createComment,
+  likeBoard
+} from '@/api/boardApi'
 import { useAuthStore } from '@/stores/authStore'
 import moment from 'moment'
 
@@ -103,6 +115,8 @@ const submitComment = async () => {
     alert('댓글이 작성되었습니다.')
     commentText.value = '' // 입력 필드 초기화
     await loadComments() // 댓글 리스트 다시 로드
+    board.value.comments += 1
+    // await loadBoardDetail()
   } catch (error) {
     console.error('댓글 작성 실패:', error)
     alert('댓글 작성에 실패했습니다.')
@@ -117,6 +131,21 @@ const isAuthor = computed(() => {
 const goBack = () => {
   router.go(-1) // 이전 페이지로 돌아가기
 }
+
+// 좋아요 증가
+const increaseLikes = async () => {
+  const boardNo = route.params.boardNo
+  console.log('boardNo: ', boardNo)
+  try {
+    await likeBoard(boardNo) // 좋아요 증가 API 호출
+    board.value.likes += 1 // 좋아요 수 증가
+    alert('좋아요를 눌렀습니다.')
+  } catch (error) {
+    console.error('좋아요 실패:', error)
+    alert('좋아요에 실패했습니다.')
+  }
+}
+
 // 수정 페이지로 이동
 const goToUpdate = () => {
   router.push({
