@@ -29,7 +29,7 @@
           </td>
           <td>{{ board.content }}</td>
           <td>{{ board.userID }}</td>
-          <td>{{ moment(board.regDate).format('YYYY-MM-DD') }}</td>
+          <td>{{ moment(board.regDate).format('YYYY-MM-DD HH:mm:ss') }}</td>
         </tr>
         <router-link :to="{ name: 'board/create' }" class="btn btn-primary"
           ><i class="fa-solid fa-pen-to-square"></i> 글 작성</router-link

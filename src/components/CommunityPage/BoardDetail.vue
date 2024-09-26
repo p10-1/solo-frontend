@@ -30,7 +30,7 @@
               <strong>댓글 작성자{{ comment.userId }}</strong
               >: {{ comment.commentText }}
             </p>
-            <p class="comment-date">{{ comment.regDate }}</p>
+            <p class="comment-date">{{ moment(comment.regDate).format('YYYY-MM-DD HH:mm:ss') }}</p>
           </li>
         </ul>
       </div>
@@ -55,6 +55,7 @@ import { onMounted, ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { get, deleteBoard, deleteAttachment, getComments, createComment } from '@/api/boardApi'
 import { useAuthStore } from '@/stores/authStore'
+import moment from 'moment'
 
 const board = ref(null)
 const comments = ref([])
