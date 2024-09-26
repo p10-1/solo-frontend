@@ -57,7 +57,7 @@ export const create = async (article) => {
   const formData = new FormData()
 
   formData.append('title', article.title)
-  formData.append('userID', article.userID)
+  formData.append('userId', article.userId)
   formData.append('content', article.content)
 
   if (article.files) {
@@ -76,7 +76,7 @@ export const update = async (article) => {
 
   formData.append('boardNo', article.boardNo)
   formData.append('title', article.title)
-  formData.append('userID', article.userID)
+  formData.append('userId', article.userId)
   formData.append('content', article.content)
 
   if (article.files && article.files.length > 0) {
@@ -95,8 +95,8 @@ export const update = async (article) => {
   }
 }
 
-export const deleteBoard = async (no) => {
-  const { data } = await axios.delete(`${API_URL}/${no}`)
+export const deleteBoard = async (boardNo) => {
+  const { data } = await axios.delete(`${API_URL}/${boardNo}`)
   console.log('BOARD DELETE: ', data)
   return data
 }

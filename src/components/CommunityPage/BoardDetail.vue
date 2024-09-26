@@ -1,7 +1,7 @@
 <template>
   <div class="board-detail" v-if="board">
     <h2>{{ board.title }}</h2>
-    <p><strong>작성자:</strong> {{ board.userID }}</p>
+    <p><strong>작성자:</strong> {{ board.userId }}</p>
     <p><strong>내용:</strong> {{ board.content }}</p>
 
     <div v-if="board.attaches && board.attaches.length">
@@ -93,7 +93,7 @@ const submitComment = async () => {
 
   const boardNo = route.params.boardNo
   const commentData = {
-    userId: authStore.userInfo.kakaoId, // 현재 로그인된 userId
+    userId: authStore.userInfo.userId, // 현재 로그인된 userId
     boardNo: boardNo, // 현재 게시글 번호
     commentText: commentText.value // 댓글 내용
   }
@@ -111,7 +111,7 @@ const submitComment = async () => {
 
 // 현재 사용자가 작성자인지 확인
 const isAuthor = computed(() => {
-  return authStore.userInfo && authStore.userInfo.kakaoId === board.value?.userID
+  return authStore.userInfo && authStore.userInfo.userId === board.value?.userId
 })
 
 const goBack = () => {

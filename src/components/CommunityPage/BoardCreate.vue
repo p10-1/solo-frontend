@@ -57,14 +57,14 @@ export default {
     const article = ref({
       title: '',
       content: '',
-      userID: '', // Will be set by the authenticated user
+      userId: '', // Will be set by the authenticated user
       files: []
     })
     const authStore = useAuthStore() // Get the authentication store
     const router = useRouter()
 
     // Set the userID based on the logged-in user
-    article.value.userID = authStore.userInfo ? authStore.userInfo.kakaoId : ''
+    article.value.userId = authStore.userInfo ? authStore.userInfo.userId : ''
     const handleFileUpload = (event) => {
       article.value.files = Array.from(event.target.files)
     }
