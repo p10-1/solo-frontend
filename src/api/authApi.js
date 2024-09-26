@@ -25,11 +25,11 @@ export const handleLoginCallback = (code) => {
   return axios.get(`${API_URL}/login/callback?code=${code}`, { withCredentials: true })
 }
 
-export const registerFirstUser = (name, birthDate) => {
-  console.log('registerFirstUser까진 들어옴', name, birthDate)
+export const registerFirstUser = (name, birthdate) => {
+  console.log('registerFirstUser까진 들어옴', name, birthdate)
   return axios.post(
     `${API_URL}/firstUser`,
-    { name, birthDate },
+    { name, birthdate },
     {
       withCredentials: true
     }
