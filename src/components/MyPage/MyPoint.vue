@@ -1,20 +1,18 @@
 <template>
   <div class="point-management">
-    <h1>포인트 관리</h1>
+    <h1>포인트 관리</h1><br /><br />
 
-    <!-- 현재 포인트 표시 -->
     <div class="current-points">
       <h3>현재 포인트: {{ points }} P</h3>
     </div>
 
-    <!-- 포인트 출금 -->
     <div class="withdraw-section">
       <h3>포인트 출금하기</h3>
       <input v-model.number="withdrawAmount" type="number" placeholder="출금할 포인트" />
-      <button @click="withdrawPoints">출금</button>
+      <button @click="withdrawPoints">포인트 출금하기</button>
     </div>
 
-    <!-- 출금 내역 -->
+    <!-- 출금 내역 
     <div class="history-section">
       <h3>포인트 출금 내역</h3>
       <ul>
@@ -22,9 +20,9 @@
           {{ withdrawal.date }} - {{ withdrawal.amount }} P 출금
         </li>
       </ul>
-    </div>
+    </div> -->
 
-    <!-- 적립 내역 -->
+    <!-- 적립 내역 
     <div class="history-section">
       <h3>포인트 적립 내역</h3>
       <ul>
@@ -32,40 +30,71 @@
           {{ deposit.date }} - {{ deposit.amount }} P 적립
         </li>
       </ul>
-    </div>
+    </div> -->
   </div>
 </template>
-
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      points: 10000, // 현재 보유 포인트
-      withdrawAmount: 0, // 출금할 포인트 양
-      withdrawalHistory: [], // 출금 내역
-      depositHistory: [
-        { date: '2024-09-01', amount: 5000 },
-        { date: '2024-08-20', amount: 3000 },
-        { date: '2024-08-10', amount: 2000 }
-      ] // 적립 내역 (예시 데이터)
-    }
+      points: 0,
+      withdrawAmount: 0,
+    };
+  },
+  mounted() {
+    this.fetchPoints();
   },
   methods: {
-    // 포인트 출금 함수
-    withdrawPoints() {
-      if (this.withdrawAmount > 0 && this.withdrawAmount <= this.points) {
-        this.points -= this.withdrawAmount // 포인트 차감
-        this.withdrawalHistory.push({
-          date: new Date().toLocaleDateString(),
-          amount: this.withdrawAmount
-        }) // 출금 내역 저장
-        this.withdrawAmount = 0 // 입력 필드 초기화
-      } else {
-        alert('출금할 수 없는 금액입니다.')
+    async fetchPoints() {
+      try {
+        const response = await fetch('/api/mypage/points');
+        if (response.ok) {
+          const point = await response.json();
+          this.points = point;
+        } else {
+          console.error('Error:', response.statusText);
+          alert('회원 정보를 찾을 수 없습니다.');
+        }
+      } catch (error) {
+        console.error('포인트 조회 오류:', error);
       }
-    }
-  }
-}
+    },
+
+    async withdrawPoints() {
+      if (this.withdrawAmount > 0 && this.withdrawAmount <= this.points) {
+        try {
+          // 전송객체 생성
+          const requestData = {
+            point: this.withdrawAmount, 
+            
+          };
+          const response = await axios.post('/api/mypage/withdraw',
+            requestData,
+            {
+              withCredentials: true
+            });
+
+          if (response.status === 200) {
+            this.points -= this.withdrawAmount; 
+            this.withdrawAmount = 0; 
+            alert('포인트 출금이 성공적으로 완료되었습니다.');
+          } else {
+            alert('출금 실패');
+          }
+        } catch (error) {
+          console.error('출금 오류:', error);
+          alert('출금 중 오류가 발생했습니다.');
+        }
+      } else {
+        alert('출금할 수 없는 금액입니다.');
+      }
+    },
+
+
+  },
+};
 </script>
 
 <style scoped>
