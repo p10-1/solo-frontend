@@ -107,3 +107,12 @@ load(pageRequest)
     </div>
   </div>
 </template>
+
+<script setup>
+defineProps({
+  posts: Array
+})
+
+defineEmits(['post-click'])
+</script>
+

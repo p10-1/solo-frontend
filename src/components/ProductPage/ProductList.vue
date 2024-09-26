@@ -22,7 +22,7 @@
 <script>
 import { fetchProducts } from '@/api/productApi'
 import ProductItem from './ProductItem.vue'
-import Pagination from '@/components/common/Pagination.vue'
+import Pagination from '@/components/common/PaginationComp.vue'
 import SearchBar from '@/components/common/SearchBar.vue'
 
 export default {

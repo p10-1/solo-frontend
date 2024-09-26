@@ -18,7 +18,7 @@
 <script>
 import { fetchPolicies } from '@/api/policyApi'
 import PolicyItem from '@/components/PolicyPage/PolicyItem.vue'
-import Pagination from '@/components/common/Pagination.vue'
+import Pagination from '@/components/common/PaginationComp.vue'
 import SearchBar from '@/components/common/SearchBar.vue'
 
 export default {
