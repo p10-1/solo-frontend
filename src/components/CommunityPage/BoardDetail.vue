@@ -1,55 +1,80 @@
 <template>
-  <div class="board-detail" v-if="board">
-    <h2>{{ board.title }}</h2>
-    <p><strong>작성자:</strong> {{ board.userId }}</p>
-    <p><strong>내용:</strong> {{ board.content }}</p>
-    <p><strong>추천수:</strong> {{ board.likes }}</p>
-    <p><strong>댓글수:</strong> {{ board.comments }}</p>
-    <p><strong>조회수:</strong> {{ board.views }}</p>
+  <div class="container mt-5" v-if="board">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h2 class="card-title">{{ board.title }}</h2>
+        <p class="card-text">
+          <strong>작성자:</strong> <span class="badge bg-secondary">{{ board.userId }}</span>
+          <strong> 작성일:</strong>
+          <span class="text-muted">{{ moment(board.regDate).format('YYYY-MM-DD HH:mm:ss') }}</span>
+        </p>
+        <div class="post-content mb-3">
+          <p>{{ board.content }}</p>
+        </div>
+        <div class="post-stats mb-3">
+          <p>
+            <strong>추천수:</strong> <span class="badge bg-success">{{ board.likes }}</span>
+            <strong> 댓글수:</strong> <span class="badge bg-info">{{ board.comments }}</span>
+            <strong> 조회수:</strong> <span class="badge bg-warning">{{ board.views }}</span>
+          </p>
+        </div>
 
-    <button @click="increaseLikes" class="btn btn-success">좋아요 👍</button>
+        <button @click="increaseLikes" class="btn btn-success me-2">좋아요 👍</button>
 
-    <div v-if="board.attaches && board.attaches.length">
-      <h4>첨부파일:</h4>
-      <ul>
-        <li v-for="attach in board.attaches" :key="attach.attachmentNo">
-          <a :href="`${attach.path}/${attach.filename}`" target="_blank">{{ attach.filename }}</a>
-        </li>
-      </ul>
+        <div v-if="board.attaches && board.attaches.length" class="mt-3">
+          <h4>첨부파일:</h4>
+          <ul class="list-group">
+            <li v-for="attach in board.attaches" :key="attach.attachmentNo" class="list-group-item">
+              <a :href="`${attach.path}/${attach.filename}`" target="_blank" class="link-primary">{{
+                attach.filename
+              }}</a>
+            </li>
+          </ul>
+        </div>
+
+        <div v-if="isAuthor" class="mt-3">
+          <button @click="goToUpdate" class="btn btn-primary me-2">수정하기</button>
+          <button @click="deleteBoardConfirm" class="btn btn-danger">삭제하기</button>
+        </div>
+
+        <button @click="goBack" class="btn btn-secondary mt-3">뒤로 가기</button>
+      </div>
     </div>
-
-    <div v-if="isAuthor">
-      <button @click="goToUpdate" class="btn btn-primary">수정하기</button>
-      <button @click="deleteBoardConfirm" class="btn btn-danger">삭제하기</button>
-    </div>
-
-    <button @click="goBack" class="btn btn-secondary">뒤로 가기</button>
 
     <!-- 댓글 리스트 -->
-    <div class="comments-section">
+    <div class="comments-section mt-4">
       <h3>댓글</h3>
       <div v-if="comments && comments.length">
-        <ul>
-          <li v-for="comment in comments" :key="comment.commentNo">
+        <ul class="list-group">
+          <li v-for="comment in comments" :key="comment.commentNo" class="list-group-item">
             <p>
-              <strong>댓글 작성자{{ comment.userId }}</strong
-              >: {{ comment.commentText }}
+              <span class="badge bg-light text-dark">{{ comment.userId }}</span
+              >:
+              <strong>{{ comment.commentText }}</strong>
             </p>
-            <p class="comment-date">{{ moment(comment.regDate).format('YYYY-MM-DD HH:mm:ss') }}</p>
+            <p class="text-muted">
+              {{ moment(comment.regDate).format('YYYY-MM-DD HH:mm:ss') }}
+            </p>
           </li>
         </ul>
       </div>
       <div v-else>
-        <p>댓글이 없습니다.</p>
+        <p class="text-muted">댓글이 없습니다.</p>
       </div>
 
-      <div class="comment-form">
+      <div class="comment-form mt-4">
         <h4>댓글 작성</h4>
-        <textarea v-model="commentText" placeholder="댓글을 입력하세요..." rows="3"></textarea>
+        <textarea
+          v-model="commentText"
+          placeholder="댓글을 입력하세요..."
+          rows="3"
+          class="form-control mb-2"
+        ></textarea>
         <button @click="submitComment" class="btn btn-primary">댓글 작성</button>
       </div>
     </div>
   </div>
+
   <div v-else>
     <p>게시물을 로드하는 중입니다...</p>
   </div>
@@ -97,6 +122,7 @@ const loadComments = async () => {
     console.error('댓글을 가져오는 데 실패했습니다.', error)
   }
 }
+
 const submitComment = async () => {
   if (!commentText.value) {
     alert('댓글 내용을 입력하세요.')
@@ -135,7 +161,6 @@ const goBack = () => {
 // 좋아요 증가
 const increaseLikes = async () => {
   const boardNo = route.params.boardNo
-  console.log('boardNo: ', boardNo)
   try {
     await likeBoard(boardNo) // 좋아요 증가 API 호출
     board.value.likes += 1 // 좋아요 수 증가
@@ -154,6 +179,7 @@ const goToUpdate = () => {
     query: route.query
   })
 }
+
 const deleteBoardConfirm = async () => {
   if (confirm('이 게시물을 삭제하시겠습니까?')) {
     try {
@@ -180,14 +206,3 @@ onMounted(() => {
   loadComments()
 })
 </script>
-
-<style scoped>
-.board-detail {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-h2 {
-  margin-bottom: 1rem;
-}
-</style>
