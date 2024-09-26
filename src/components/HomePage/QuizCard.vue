@@ -1,21 +1,17 @@
 <template>
-  <div class="quiz-container">
-    <h2>퀴즈 목록</h2>
-    <ul v-if="quizzes.length">
-      <li v-for="quiz in quizzes" :key="quiz.quizNo" class="quiz-item">
-        <h3 class="quiz-question">{{ quiz.question }}</h3>
-        <ul class="options">
-          <li
-            v-for="(option, index) in [quiz.optionA, quiz.optionB, quiz.optionC, quiz.optionD]"
-            :key="index"
-            class="option-item"
-          >
-            {{ option }}
-          </li>
-        </ul>
-      </li>
-    </ul>
-    <p v-else>퀴즈를 불러오는 중입니다...</p>
+  <div class="quiz-card">
+    <h2>{{ quiz.question }}</h2>
+
+    <div class="options">
+      <button v-for="(option, index) in options" :key="index" @click="selectOption(option)">
+        {{ option }}
+      </button>
+    </div>
+
+    <div v-if="isAnswered">
+      <p v-if="isCorrect" class="correct">Correct Answer!</p>
+      <p v-else class="incorrect">Wrong Answer! Correct answer is: {{ quiz.correctOption }}</p>
+    </div>
   </div>
 </template>
 
@@ -23,82 +19,65 @@
 import axios from 'axios'
 
 export default {
+  name: 'QuizCard',
   data() {
     return {
-      quizzes: []
+      quiz: {}, // 퀴즈 데이터를 저장
+      selectedOption: null, // 사용자가 선택한 옵션
+      isAnswered: false, // 퀴즈에 대한 응답 여부
+      isCorrect: false // 정답 여부
+    }
+  },
+  computed: {
+    // 옵션 배열을 만들어주는 computed 속성
+    options() {
+      return [this.quiz.optionA, this.quiz.optionB, this.quiz.optionC, this.quiz.optionD]
+    }
+  },
+  methods: {
+    // 옵션 선택 시 호출되는 메서드
+    selectOption(option) {
+      this.selectedOption = option
+      this.isAnswered = true
+      this.isCorrect = option === this.quiz.correctOption // 정답 여부 확인
+    },
+    // 퀴즈 데이터를 백엔드에서 가져옴
+    fetchQuiz() {
+      axios
+        .get('http://localhost:9000/api/quiz/list') // API 경로 조정 필요
+        .then((response) => {
+          this.quiz = response.data[0] // 첫 번째 퀴즈를 가져옴 (실제 로직에 맞게 변경 가능)
+        })
+        .catch((error) => {
+          console.error('Error fetching quiz data:', error)
+        })
     }
   },
   mounted() {
-    axios
-      .get('http://localhost:9000/api/quizzes')
-      .then((response) => {
-        this.quizzes = response.data
-      })
-      .catch((error) => {
-        console.error('퀴즈 데이터를 가져오는 중 오류 발생:', error)
-      })
+    this.fetchQuiz() // 컴포넌트가 로드되었을 때 퀴즈 데이터를 가져옴
   }
 }
 </script>
 
 <style scoped>
-.quiz-container {
+.quiz-card {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin: 20px;
+  max-width: 400px;
+}
+
+.options button {
+  display: block;
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 10px 0;
 }
 
-.quiz-container h2 {
-  text-align: center;
-  color: #2c3e50;
-  margin-bottom: 30px;
+.correct {
+  color: green;
 }
 
-.quiz-item {
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  margin-bottom: 20px;
-  transition: transform 0.2s ease-in-out;
-}
-
-.quiz-item:hover {
-  transform: translateY(-5px);
-}
-
-.quiz-question {
-  font-size: 1.2em;
-  color: #333333;
-  margin-bottom: 15px;
-}
-
-.options {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.option-item {
-  padding: 10px;
-  background-color: #f1f1f1;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
-}
-
-.option-item:hover {
-  background-color: #dce775;
-}
-
-p {
-  text-align: center;
-  color: #888888;
-  font-size: 1em;
+.incorrect {
+  color: red;
 }
 </style>
