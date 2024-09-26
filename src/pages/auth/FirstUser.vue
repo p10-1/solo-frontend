@@ -7,8 +7,8 @@
         <input type="text" v-model="name" required />
       </div>
       <div>
-        <label for="birthDate">생년월일:</label>
-        <input type="date" v-model="birthDate" required />
+        <label for="birthdate">생년월일:</label>
+        <input type="date" v-model="birthdate" required />
       </div>
       <button type="submit">제출</button>
     </form>
@@ -22,14 +22,14 @@ export default {
   data() {
     return {
       name: '',
-      birthDate: ''
+      birthdate: ''
     }
   },
   methods: {
     async registerUser() {
       try {
-        console.log('등록 정보:', this.name, this.birthDate) // 정보 확인
-        const result = await registerFirstUser(this.name, this.birthDate)
+        console.log('등록 정보:', this.name, this.birthdate) // 정보 확인
+        const result = await registerFirstUser(this.name, this.birthdate)
         // 사용자 등록 후 처리
         const userInfo = result.data // 사용자 정보를 응답에서 가져옵니다.
         // Pinia 스토어에 사용자 정보 저장

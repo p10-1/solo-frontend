@@ -1,15 +1,28 @@
 <template>
+  <div>
+    <h1>게시글 목록 페이지</h1>
+    <BoardList />
+  </div>
+</template>
+
+<script setup>
+import BoardList from '@/components/CommunityPage/BoardList.vue'
+</script>
+
+<style scoped>
+/* 필요에 따라 스타일을 추가하세요 */
+</style>
+
+<!-- <template>
   <div class="community-page">
     <h1 class="mb-4">커뮤니티</h1>
 
     <SearchBar @search="handleSearch" v-if="!showWriteForm && !showPostDetail" />
-
-    <PostList
+    <BoardList
       :posts="posts"
       @post-click="openPostDetail"
       v-if="!showWriteForm && !showPostDetail"
     />
-
     <div
       class="d-flex justify-content-between align-items-center mt-4"
       v-if="!showWriteForm && !showPostDetail"
@@ -24,20 +37,18 @@
     </div>
 
     <WriteForm v-if="showWriteForm" @submit="handleSubmit" @cancel="showWriteForm = false" />
-
-    <PostDetail v-if="showPostDetail" :post="selectedPost" @back="showPostDetail = false" />
+    <BoardDetail v-if="showPostDetail" :post="selectedPost" @back="showPostDetail = false" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import SearchBar from '@/components/common/SearchBar.vue'
-import PostList from '@/components/CommunityPage/PostList.vue'
 import Pagination from '@/components/common/Pagination.vue'
 import WriteButton from '@/components/CommunityPage/WriteButton.vue'
 import WriteForm from '@/components/CommunityPage/WriteForm.vue'
-import PostDetail from '@/components/CommunityPage/PostDetail.vue'
-import { getPosts, getPostDetail, createPost, updatePost, deletePost } from '@/api/boardApi'
+import BoardDetail from '@/components/CommunityPage/BoardDetail.vue'
+import BoardList from '@/components/CommunityPage/BoardList.vue'
 
 const currentPage = ref(1)
 const totalPages = ref(1)
@@ -126,3 +137,11 @@ const handleDeletePost = async (boardNo) => {
 }
 
 </script>
+
+<style scoped>
+.community-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+</style> -->
