@@ -127,7 +127,7 @@ export default {
             }
 
             const dataToSubmit = {
-                consume: this.consumeType === '' ? null : this.consumeType,
+                consume: this.consumeType,
                 cash: 0,
                 stock: 0,
                 property: 0,
@@ -217,7 +217,7 @@ export default {
         async submitUpdatedAssets() {
 
             const dataToSubmit = {
-                consume: this.consumeType,
+                consume: this.consumeType === '' ? null : this.consumeType,
                 cash: null,
                 stock: null,
                 property: null,
