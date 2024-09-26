@@ -2,7 +2,6 @@
   <div class="asset-ratio-chart">
     <h3>자산 비율</h3>
     <div class="chart-container">
-      <!-- 차트 컨테이너 추가 -->
       <canvas id="assetRatio"></canvas>
     </div>
   </div>
