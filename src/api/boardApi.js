@@ -4,15 +4,16 @@ const API_URL = 'http://localhost:9000/api/board'
 const DEFAULT_AMOUNT = 10
 const headers = { 'Content-Type': 'multipart/form-data' }
 
-export const getList = async (pageNum, category, keyword) => {
+export const getList = async (pageNum, category, keyword, sortBy) => {
   try {
-    console.log('API 요청 파라미터:', pageNum, category, keyword)
+    console.log('API 요청 파라미터:', pageNum, category, keyword, sortBy)
     const response = await axios.get(API_URL, {
       params: {
-        page: pageNum, // 이렇게 수정
-        category, // 이렇게 수정
-        keyword, // 이렇게 수정
-        amount: DEFAULT_AMOUNT // 추가 파라미터
+        page: pageNum,
+        amount: DEFAULT_AMOUNT,
+        category,
+        keyword,
+        sort: sortBy
       }
     })
     console.log('BOARD GET LIST: ', response.data)
@@ -105,4 +106,21 @@ export const deleteAttachment = async (no) => {
   const { data } = await axios.delete(`${API_URL}/deleteAttachment/${no}`)
   console.log('ATTACHMENT DELETE: ', data)
   return data
+}
+
+export const likeBoard = async (boardNo, userId) => {
+  try {
+    console.log('api 안에서: ', boardNo, userId)
+    const response = await axios.get(`${API_URL}/like`, {
+      params: {
+        boardNo: boardNo,
+        userId: userId
+      }
+    })
+    console.log(response.data)
+    return response
+  } catch (error) {
+    console.error('좋아요을 가져오는 데 실패했습니다.', error)
+    throw error
+  }
 }
