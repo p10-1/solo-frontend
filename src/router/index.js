@@ -12,6 +12,7 @@ import Policy from '../pages/policy/PolicyPage.vue'
 import FirstUser from '@/pages/auth/FirstUser.vue'
 import Product from '@/pages/product/ProductPage.vue'
 import boardRoutes from './board'
+import NewsDetail from '@/components/NewsPage/NewsDetail.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -59,6 +60,12 @@ const router = createRouter({
       path: '/news',
       name: 'news',
       component: News
+    },
+    {
+      path: '/news/detail/:newsNo',
+      name: 'news/detail',
+      component: NewsDetail,
+      props: true
     },
     {
       path: '/policy',

@@ -1,63 +1,76 @@
 <template>
   <div class="news-list">
-    <div v-for="news in newsItems" :key="news.id" class="news-item">
-      <div class="news-header" @click="toggleNewsDetail(news.id)">
-        <span class="news-id">{{ news.id }}</span>
-        <span class="news-title">{{ news.title }}</span>
-        <span class="news-date">{{ news.date }}</span>
-      </div>
-      <NewsDetail v-if="expandedNewsId === news.id" :news="news" @close="expandedNewsId = null" />
-    </div>
+    <!-- Search Bar -->
+    <!-- <search-bar v-model="keyword" @search="searchBoards" /> -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th>제목</th>
+          <th>출처</th>
+          <th>발행일</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(news, index) in newsList" :key="news.no">
+          <td>{{ index + 1 }}</td> <!-- 번호 -->
+          <td>
+            <router-link :to="{ name: 'news/detail', params: { newsNo: news.no } }">
+              {{ news.title }}
+            </router-link>
+          </td>
+          <td>{{ news.author }}</td> <!-- 출처 -->
+          <td>{{ news.pubDate }}</td> <!-- 발행일 -->
+        </tr>
+      </tbody>
+    </table>
+    <p v-if="newsList.length === 0">뉴스가 없습니다.</p>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import NewsDetail from '@/components/NewsPage/NewsDetail.vue'
+<script>
+import { fetchNews } from '@/api/newsAPI'; // fetchNews 함수의 경로를 수정하세요
 
-const props = defineProps({
-  newsItems: Array
-})
-
-const expandedNewsId = ref(null)
-
-const toggleNewsDetail = (newsId) => {
-  if (expandedNewsId.value === newsId) {
-    expandedNewsId.value = null
-  } else {
-    expandedNewsId.value = newsId
-  }
-}
+export default {
+  data() {
+    return {
+      newsList: [],
+    };
+  },
+  created() {
+    this.loadNews();
+  },
+  methods: {
+    async loadNews() {
+      try {
+        const data = await fetchNews();
+        this.newsList = data; // 가져온 데이터를 newsList에 저장
+      } catch (error) {
+        console.error('뉴스를 로드하는 데 실패했습니다:', error);
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
-.news-item {
-  border-bottom: 1px solid #eee;
-  padding: 10px 0;
+.table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.news-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
 }
 
-.news-header:hover {
+.table th {
+  background-color: #f2f2f2;
+}
+
+.table tr:hover {
   background-color: #f5f5f5;
-}
-
-.news-id {
-  flex: 0 0 50px;
-}
-
-.news-title {
-  flex: 1;
-  padding: 0 10px;
-}
-
-.news-date {
-  flex: 0 0 100px;
-  text-align: right;
 }
 </style>
