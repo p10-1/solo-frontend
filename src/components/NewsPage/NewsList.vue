@@ -10,11 +10,11 @@
       </thead>
       <tbody>
         <tr v-for="(news, index) in newsList" :key="news.no">
-          <td>{{ index + 1 }}</td> <!-- 번호 -->
+          <td>{{ index + 1 }}</td> 
           <td>
             <a :href="news.link" target="_blank">{{ news.title }}</a> <!-- 제목 클릭 시 링크로 이동 -->
           </td>
-          <td>{{ news.pubDate }}</td> <!-- 발행일 -->
+          <td>{{ formatDate(news.pubDate) }}</td> <!-- 날짜 포맷팅 함수 호출 -->
         </tr>
       </tbody>
     </table>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { fetchNews } from '@/api/newsAPI'; // fetchNews 함수의 경로를 수정하세요
+import { fetchNews } from '@/api/newsAPI'; 
 
 export default {
   data() {
@@ -42,6 +42,10 @@ export default {
       } catch (error) {
         console.error('뉴스를 로드하는 데 실패했습니다:', error);
       }
+    },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 반환
     },
   },
 };
