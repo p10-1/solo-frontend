@@ -1,33 +1,35 @@
 <template>
   <div class="total-asset">
-    <h2>{{ formattedAmount }}원입니다</h2>
+    <h2>총 자산: {{ formattedTotalAmount }}원</h2>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
 
-// props 정의: 총 자산 금액
 const props = defineProps({
-  totalAmount: Number
+  totalAmount: {
+    type: Number,
+    required: true
+  }
 })
 
-// 금액 포맷팅
-const formattedAmount = computed(() => {
+const formattedTotalAmount = computed(() => {
   return props.totalAmount.toLocaleString()
 })
 </script>
 
 <style scoped>
 .total-asset {
-  background-color: #ffeeba;
-  padding: 15px;
-  border-radius: 10px;
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 8px;
   text-align: center;
 }
 
 h2 {
   margin: 0;
   font-size: 1.5em;
+  color: #333;
 }
 </style>
