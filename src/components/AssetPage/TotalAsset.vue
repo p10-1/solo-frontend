@@ -1,6 +1,6 @@
 <template>
   <div class="total-asset">
-    <h2>KB님의 총 자산은 {{ formattedAmount }}원입니다</h2>
+    <h2>{{ formattedAmount }}원입니다</h2>
   </div>
 </template>
 

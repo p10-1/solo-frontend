@@ -1,6 +1,5 @@
 <template>
   <div class="asset-ratio-chart">
-    <h3>자산 비율 차트</h3>
     <!-- Chart.js를 사용하여 도넛 차트를 그릴 캔버스 -->
     <canvas ref="chartCanvas"></canvas>
   </div>
