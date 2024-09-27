@@ -72,10 +72,10 @@ export default {
     const submitForm = async () => {
       try {
         await create(article.value)
-        alert('Board post created successfully!')
+        alert('글이 성공적으로 작성되었습니다')
         router.push('/board')
       } catch (error) {
-        console.error('Failed to create board post:', error)
+        console.error('글 작성에 실패했습니다:', error)
       }
     }
 
