@@ -108,7 +108,19 @@ export const deleteAttachment = async (no) => {
   return data
 }
 
-export const likeBoard = async (boardNo) => {
-  const response = await axios.post(`${API_URL}/like/${boardNo}`)
-  return response
+export const likeBoard = async (boardNo, userId) => {
+  try {
+    console.log('api 안에서: ', boardNo, userId)
+    const response = await axios.get(`${API_URL}/like`, {
+      params: {
+        boardNo: boardNo,
+        userId: userId
+      }
+    })
+    console.log(response.data)
+    return response
+  } catch (error) {
+    console.error('좋아요을 가져오는 데 실패했습니다.', error)
+    throw error
+  }
 }

@@ -161,10 +161,15 @@ const goBack = () => {
 // 좋아요 증가
 const increaseLikes = async () => {
   const boardNo = route.params.boardNo
+  const userId = authStore.userInfo.userId
   try {
-    await likeBoard(boardNo) // 좋아요 증가 API 호출
-    board.value.likes += 1 // 좋아요 수 증가
-    alert('좋아요를 눌렀습니다.')
+    const response = await likeBoard(boardNo, userId) // 좋아요 증가 API 호출
+    if (response.data == 'success') {
+      board.value.likes += 1 // 좋아요 수 증가
+      // alert('좋아요를 눌렀습니다')
+    } else {
+      alert('이미 좋아요를 눌렀습니다')
+    }
   } catch (error) {
     console.error('좋아요 실패:', error)
     alert('좋아요에 실패했습니다.')
