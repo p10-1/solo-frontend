@@ -8,12 +8,12 @@ import config from '@/config'
   </div>
 </template>
 <style scoped>
-.jumbotron {
+/* .jumbotron {
   background-image: url('@/assets/images/background.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   color: green;
   padding: 2rem;
-}
+} */
 </style>

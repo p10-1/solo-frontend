@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import api from '@/api'
-
-const BASE_URL = '/api/board'
-=======
 import axios from 'axios'
 
 const API_URL = 'http://localhost:9000/api/board'
@@ -111,4 +106,3 @@ export const deleteAttachment = async (no) => {
   console.log('ATTACHMENT DELETE: ', data)
   return data
 }
->>>>>>> dev
