@@ -1,18 +1,16 @@
 <template>
   <div class="asset-ratio-chart">
-    <h3>자산 비율</h3>
-    <div class="chart-container">
-      <canvas id="assetRatio"></canvas>
-    </div>
+    <h3>자산 비율 차트</h3>
+    <!-- Chart.js를 사용하여 도넛 차트를 그릴 캔버스 -->
+    <canvas ref="chartCanvas"></canvas>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { Chart, registerables } from 'chart.js'
+import { ref, onMounted, watch } from 'vue'
+import Chart from 'chart.js/auto'
 
-Chart.register(...registerables)
-
+// props 정의: 차트에 표시할 데이터
 const props = defineProps({
   data: {
     type: Array,
@@ -20,37 +18,64 @@ const props = defineProps({
   }
 })
 
-onMounted(() => {
-  const ctx = document.getElementById('assetRatio').getContext('2d')
-  new Chart(ctx, {
-    type: 'pie',
+// 차트 캔버스에 대한 참조
+const chartCanvas = ref(null)
+// 차트 인스턴스를 저장할 변수
+let chart = null
+
+// 차트 생성 함수
+const createChart = () => {
+  if (!chartCanvas.value || !props.data || props.data.length === 0) return
+
+  const ctx = chartCanvas.value.getContext('2d')
+  chart = new Chart(ctx, {
+    type: 'doughnut',
     data: {
-      labels: props.data.map((d) => d.name),
+      labels: props.data.map((item) => item.name),
       datasets: [
         {
-          data: props.data.map((d) => d.value),
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+          data: props.data.map((item) => item.value),
+          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
         }
       ]
     },
     options: {
-      responsive: true, // 반응형 차트
-      maintainAspectRatio: false // 비율 유지 여부
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      }
     }
   })
-})
+}
+
+// 컴포넌트가 마운트되면 차트 생성
+onMounted(createChart)
+
+// data prop이 변경될 때마다 차트 업데이트
+watch(
+  () => props.data,
+  (newData) => {
+    if (chart) {
+      chart.destroy()
+    }
+    if (newData && newData.length > 0) {
+      createChart()
+    }
+  },
+  { deep: true }
+)
 </script>
 
 <style scoped>
 .asset-ratio-chart {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
 }
 
-.chart-container {
-  width: 400px; /* 원하는 너비 */
-  height: 400px; /* 원하는 높이 */
-  position: relative;
+h3 {
+  text-align: center;
+  margin-bottom: 15px;
 }
 </style>

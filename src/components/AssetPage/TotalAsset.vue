@@ -1,24 +1,33 @@
 <template>
   <div class="total-asset">
-    <h2>KB님의 총 자산은 {{ totalAmount.toLocaleString() }}원입니다</h2>
+    <h2>KB님의 총 자산은 {{ formattedAmount }}원입니다</h2>
   </div>
 </template>
 
 <script setup>
-defineProps({
-  totalAmount: {
-    type: Number,
-    required: true
-  }
+import { computed } from 'vue'
+
+// props 정의: 총 자산 금액
+const props = defineProps({
+  totalAmount: Number
+})
+
+// 금액 포맷팅
+const formattedAmount = computed(() => {
+  return props.totalAmount.toLocaleString()
 })
 </script>
 
 <style scoped>
 .total-asset {
+  background-color: #ffeeba;
+  padding: 15px;
+  border-radius: 10px;
   text-align: center;
-  background-color: #fff9e6;
-  padding: 20px;
+}
+
+h2 {
+  margin: 0;
   font-size: 1.5em;
-  border-radius: 8px;
 }
 </style>
