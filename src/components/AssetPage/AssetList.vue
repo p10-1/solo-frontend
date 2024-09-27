@@ -17,6 +17,8 @@
 </template>
 
 <script>
+// 일부 수정 준영님의 코드를 참고 함!
+
 import { ref, computed, onMounted } from 'vue'
 import { fetchAssetData } from '@/api/assetApi'
 import TotalAsset from '@/components/AssetPage/TotalAsset.vue'
@@ -25,6 +27,8 @@ import AssetRatioChart from '@/components/AssetPage/AssetRatioChart.vue'
 import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
 import AssetTypeButtons from '@/components/AssetPage/AssetTypeButtons.vue'
 import AssetComparison from '@/components/AssetPage/AssetComparison.vue'
+
+// 일부 수정 준영님의 코드를 참고 함!
 
 export default {
   components: {
@@ -58,6 +62,7 @@ export default {
         { name: '부동산', value: assetData.value.property || 0 }
       ].filter((item) => item.value > 0)
     })
+    // 일부 수정 준영님의 코드를 참고 함!
 
     const loadAssetData = async () => {
       try {
