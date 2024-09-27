@@ -1,13 +1,10 @@
 <template>
   <div class="news-list">
-    <!-- Search Bar -->
-    <!-- <search-bar v-model="keyword" @search="searchBoards" /> -->
     <table class="table">
       <thead>
         <tr>
           <th>번호</th>
           <th>제목</th>
-          <th>출처</th>
           <th>발행일</th>
         </tr>
       </thead>
@@ -15,11 +12,8 @@
         <tr v-for="(news, index) in newsList" :key="news.no">
           <td>{{ index + 1 }}</td> <!-- 번호 -->
           <td>
-            <router-link :to="{ name: 'news/detail', params: { newsNo: news.no } }">
-              {{ news.title }}
-            </router-link>
+            <a :href="news.link" target="_blank">{{ news.title }}</a> <!-- 제목 클릭 시 링크로 이동 -->
           </td>
-          <td>{{ news.author }}</td> <!-- 출처 -->
           <td>{{ news.pubDate }}</td> <!-- 발행일 -->
         </tr>
       </tbody>
