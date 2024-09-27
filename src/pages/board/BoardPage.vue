@@ -42,7 +42,7 @@ import BoardList from '@/components/CommunityPage/BoardList.vue'
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import SearchBar from '@/components/common/SearchBar.vue'
 import Pagination from '@/components/common/Pagination.vue'
 import WriteButton from '@/components/CommunityPage/WriteButton.vue'
@@ -51,65 +51,82 @@ import BoardDetail from '@/components/CommunityPage/BoardDetail.vue'
 import BoardList from '@/components/CommunityPage/BoardList.vue'
 
 const currentPage = ref(1)
-const totalPages = ref(10)
+const totalPages = ref(1)
 const showWriteForm = ref(false)
 const showPostDetail = ref(false)
 const selectedPost = ref(null)
+const posts = ref([])
 
-const posts = ref([
-  {
-    id: 1,
-    title: '인기글 1번의 제목',
-    author: 'KB',
-    date: '6일전',
-    views: 123,
-    comments: 12,
-    likes: 12,
-    content: '인기글 1번의 내용...'
-  },
-  {
-    id: 2,
-    title: '인기글 2번의 제목',
-    author: '윤재',
-    date: '4일전',
-    views: 100,
-    comments: 8,
-    likes: 15,
-    content: '인기글 2번의 내용...'
+onMounted(async () => {
+  await fetchPosts()
+})
+
+const fetchPosts = async () => {
+  try {
+    const response = await getPosts(currentPage.value)
+    posts.value = response.list
+    totalPages.value = response.totalPage
+  } catch (error) {
+    console.error('Failed to fetch posts:', error)
   }
-  // ... 기타 게시글
-])
-
-const handleSearch = (searchTerm) => {
-  console.log('Searching for:', searchTerm)
-  // 여기에 검색 로직을 구현하세요
 }
 
-const prevPage = () => {
-  if (currentPage.value > 1) currentPage.value--
-  // 페이지 변경 시 데이터를 새로 불러오는 로직을 여기에 추가하세요
+const handleSearch = async (searchTerm) => {
+  // Implement search functionality
 }
 
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) currentPage.value++
-  // 페이지 변경 시 데이터를 새로 불러오는 로직을 여기에 추가하세요
+const changePage = async (page) => {
+  currentPage.value = page
+  await fetchPosts()
 }
 
-const handleSubmit = (postData) => {
-  posts.value.unshift({
-    id: posts.value.length + 1,
-    ...postData,
-    date: 'now',
-    views: 0,
-    comments: 0,
-    likes: 0
-  })
-  showWriteForm.value = false
+const handleSubmit = async (postData) => {
+  try {
+    await createPost(postData)
+    await fetchPosts()
+    showWriteForm.value = false
+  } catch (error) {
+    console.error('Failed to create post:', error)
+  }
 }
 
-const openPostDetail = (post) => {
-  selectedPost.value = post
-  showPostDetail.value = true
+const openPostDetail = async (post) => {
+  try {
+    selectedPost.value = await getPostDetail(post.no)
+    showPostDetail.value = true
+  } catch (error) {
+    console.error('Failed to fetch post detail:', error)
+  }
+}
+
+const handleEdit = async (updatedPost) => {
+  try {
+    await updatePost(updatedPost.no, updatedPost)
+    await fetchPosts()
+    showPostDetail.value = false
+  } catch (error) {
+    console.error('Failed to update post:', error)
+  }
+}
+
+const handleDelete = async (postNo) => {
+  try {
+    await deletePost(postNo)
+    await fetchPosts()
+    showPostDetail.value = false
+  } catch (error) {
+    console.error('Failed to delete post:', error)
+  }
+}
+
+const handleDeleteAttachment = async (attachmentNo) => {
+  try {
+    await deleteAttachment(attachmentNo)
+    // Refresh the post details
+    selectedPost.value = await getPostDetail(selectedPost.value.no)
+  } catch (error) {
+    console.error('Failed to delete attachment:', error)
+  }
 }
 </script>
 

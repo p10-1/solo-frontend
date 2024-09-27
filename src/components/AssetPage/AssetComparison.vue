@@ -1,47 +1,63 @@
 <template>
   <div class="asset-comparison">
-    <h3>자산 비교</h3>
-    <canvas id="assetComparison"></canvas>
+    <!-- 선택된 자산 유형 제목 표시 -->
+    <h3>{{ assetTypeTitle }} 비교</h3>
+    <div class="comparison-chart">
+      <!-- 평균 자산 바 -->
+      <div class="bar average" :style="{ width: `${averagePercentage}%` }">
+        <span>평균: {{ averageAmount.toLocaleString() }}원</span>
+      </div>
+      <!-- 사용자 자산 바 -->
+      <div class="bar user" :style="{ width: `${userPercentage}%` }">
+        <span>나: {{ userAmount.toLocaleString() }}원</span>
+      </div>
+    </div>
+    <!-- 비교 레이블 -->
+    <div class="comparison-labels">
+      <div>평균: {{ averagePercentage }}%</div>
+      <div>나: {{ userPercentage }}%</div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { Chart } from 'chart.js'
+import { computed } from 'vue'
 
+// props 정의
 const props = defineProps({
-  comparisonData: {
-    type: Object,
-    required: true
-  }
+  assetType: String,
+  assetData: Object
 })
 
-onMounted(() => {
-  const ctx = document.getElementById('assetComparison').getContext('2d')
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['평균', '나'], // x축 레이블
-      datasets: [
-        {
-          label: '자산 비교', // 여기서 label을 추가
-          data: [props.comparisonData.average, props.comparisonData.user],
-          backgroundColor: ['#4caf50', '#FF6384']
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false // 비율을 유지하지 않고 부모 크기에 맞추기
-    }
-  })
+// 자산 유형에 따른 제목 계산
+const assetTypeTitle = computed(() => {
+  const titles = {
+    cash: '현금자산',
+    deposit: '예적금',
+    stock: '주식',
+    property: '부동산'
+  }
+  return titles[props.assetType] || '자산'
 })
+
+// 사용자 자산 금액 계산
+const userAmount = computed(() => props.assetData[props.assetType] || 0)
+
+// 평균 자산 금액 계산 (임시로 사용자 금액의 80%로 설정)
+const averageAmount = computed(() => {
+  return userAmount.value * 0.8
+})
+
+// 총 자산 금액 계산
+const total = computed(() => userAmount.value + averageAmount.value)
+
+// 사용자 자산 비율 계산
+const userPercentage = computed(() => ((userAmount.value / total.value) * 100).toFixed(2))
+
+// 평균 자산 비율 계산
+const averagePercentage = computed(() => ((averageAmount.value / total.value) * 100).toFixed(2))
 </script>
 
 <style scoped>
-.asset-comparison {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-}
+/* 스타일 정의는 여기에 추가 */
 </style>
