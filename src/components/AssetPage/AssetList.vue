@@ -17,7 +17,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { assetApi } from '@/api/assetApi'
+import { getAssetData } from '@/api/assetApi'
 import TotalAsset from '@/components/AssetPage/TotalAsset.vue'
 import AssetValueList from '@/components/AssetPage/AssetValueList.vue'
 import AssetRatioChart from '@/components/AssetPage/AssetRatioChart.vue'
@@ -51,7 +51,9 @@ const assetRatioData = computed(() => {
 const fetchAssetData = async () => {
   try {
     loading.value = true
-    assetData.value = await assetApi.getAssetData()
+    console.log("호출전");
+    // assetData.value = await assetApi.getAssetData()
+    assetData.value = await getAssetData()
   } catch (err) {
     console.error('Failed to fetch asset data:', err)
     error.value = 'Failed to load asset data. Please try again later.'
