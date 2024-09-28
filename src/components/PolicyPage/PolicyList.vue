@@ -16,6 +16,8 @@
 </template>
 
 <script>
+//src/components/Policy/PolicyList.vue
+
 import { fetchPolicies } from '@/api/policyApi'
 import PolicyItem from '@/components/PolicyPage/PolicyItem.vue'
 import Pagination from '@/components/common/PaginationComp.vue'
