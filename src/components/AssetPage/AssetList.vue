@@ -20,11 +20,7 @@
 // 일부 수정 준영님의 코드를 참고 함!
 
 import { ref, computed, onMounted } from 'vue'
-<<<<<<< HEAD
-import { getAssetData } from '@/api/assetApi'
-=======
 import { fetchAssetData } from '@/api/assetApi'
->>>>>>> dev
 import TotalAsset from '@/components/AssetPage/TotalAsset.vue'
 import AssetValueList from '@/components/AssetPage/AssetValueList.vue'
 import AssetRatioChart from '@/components/AssetPage/AssetRatioChart.vue'
@@ -55,19 +51,6 @@ export default {
       return (cash || 0) + (deposit || 0) + (stock || 0) + (property || 0)
     })
 
-<<<<<<< HEAD
-const fetchAssetData = async () => {
-  try {
-    loading.value = true
-    console.log("호출전");
-    // assetData.value = await assetApi.getAssetData()
-    assetData.value = await getAssetData()
-  } catch (err) {
-    console.error('Failed to fetch asset data:', err)
-    error.value = 'Failed to load asset data. Please try again later.'
-  } finally {
-    loading.value = false
-=======
     const assetRatioData = computed(() => {
       if (!assetData.value) return []
       const total = totalAsset.value
@@ -108,7 +91,6 @@ const fetchAssetData = async () => {
       selectedAssetType,
       selectAssetType
     }
->>>>>>> dev
   }
 }
 </script>
