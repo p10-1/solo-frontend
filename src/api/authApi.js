@@ -35,3 +35,12 @@ export const registerFirstUser = (name, birthdate) => {
     }
   )
 }
+
+export const checkUsername = (nickName) => {
+  console.log('checkUsername: ', nickName)
+  return axios.get(`${API_URL}/checkUser`, {
+    params: {
+      nickName
+    }
+  })
+}
