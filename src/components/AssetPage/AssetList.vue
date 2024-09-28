@@ -1,5 +1,6 @@
 <template>
   <div class="asset-list">
+    <h1>자산 정보</h1>
     <div v-if="loading" class="loading">Loading...</div>
     <div v-else-if="error" class="error">{{ error }}</div>
     <template v-else-if="assetData">
@@ -15,9 +16,11 @@
   </div>
 </template>
 
-<script setup>
+<script>
+// 일부 수정 준영님의 코드를 참고 함!
+
 import { ref, computed, onMounted } from 'vue'
-import { assetApi } from '@/api/assetApi'
+import { fetchAssetData } from '@/api/assetApi'
 import TotalAsset from '@/components/AssetPage/TotalAsset.vue'
 import AssetValueList from '@/components/AssetPage/AssetValueList.vue'
 import AssetRatioChart from '@/components/AssetPage/AssetRatioChart.vue'
@@ -25,46 +28,71 @@ import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
 import AssetTypeButtons from '@/components/AssetPage/AssetTypeButtons.vue'
 import AssetComparison from '@/components/AssetPage/AssetComparison.vue'
 
-const loading = ref(true)
-const error = ref(null)
-const assetData = ref(null)
-const selectedAssetType = ref('cash')
+// 일부 수정 준영님의 코드를 참고 함!
 
-const totalAsset = computed(() => {
-  if (!assetData.value) return 0
-  const { cash, deposit, stock, property } = assetData.value
-  return (cash || 0) + (deposit || 0) + (stock || 0) + (property || 0)
-})
+export default {
+  components: {
+    TotalAsset,
+    AssetValueList,
+    AssetRatioChart,
+    LoanInfo,
+    AssetTypeButtons,
+    AssetComparison
+  },
+  setup() {
+    const loading = ref(true)
+    const error = ref(null)
+    const assetData = ref(null)
+    const selectedAssetType = ref('cash')
 
-const assetRatioData = computed(() => {
-  if (!assetData.value) return []
-  const total = totalAsset.value
-  if (total === 0) return []
-  return [
-    { name: '현금자산', value: assetData.value.cash || 0 },
-    { name: '예적금', value: assetData.value.deposit || 0 },
-    { name: '주식', value: assetData.value.stock || 0 },
-    { name: '부동산', value: assetData.value.property || 0 }
-  ].filter((item) => item.value > 0)
-})
+    const totalAsset = computed(() => {
+      if (!assetData.value) return 0
+      const { cash, deposit, stock, property } = assetData.value
+      return (cash || 0) + (deposit || 0) + (stock || 0) + (property || 0)
+    })
 
-const fetchAssetData = async () => {
-  try {
-    loading.value = true
-    assetData.value = await assetApi.getAssetData()
-  } catch (err) {
-    console.error('Failed to fetch asset data:', err)
-    error.value = 'Failed to load asset data. Please try again later.'
-  } finally {
-    loading.value = false
+    const assetRatioData = computed(() => {
+      if (!assetData.value) return []
+      const total = totalAsset.value
+      if (total === 0) return []
+      return [
+        { name: '현금자산', value: assetData.value.cash || 0 },
+        { name: '예적금', value: assetData.value.deposit || 0 },
+        { name: '주식', value: assetData.value.stock || 0 },
+        { name: '부동산', value: assetData.value.property || 0 }
+      ].filter((item) => item.value > 0)
+    })
+    // 일부 수정 준영님의 코드를 참고 함!
+
+    const loadAssetData = async () => {
+      try {
+        loading.value = true
+        assetData.value = await fetchAssetData()
+      } catch (err) {
+        console.error('Failed to fetch asset data:', err)
+        error.value = 'Failed to load asset data. Please try again later.'
+      } finally {
+        loading.value = false
+      }
+    }
+
+    const selectAssetType = (type) => {
+      selectedAssetType.value = type
+    }
+
+    onMounted(loadAssetData)
+
+    return {
+      loading,
+      error,
+      assetData,
+      totalAsset,
+      assetRatioData,
+      selectedAssetType,
+      selectAssetType
+    }
   }
 }
-
-const selectAssetType = (type) => {
-  selectedAssetType.value = type
-}
-
-onMounted(fetchAssetData)
 </script>
 
 <style scoped>
