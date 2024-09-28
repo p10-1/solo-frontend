@@ -1,11 +1,12 @@
 <template>
   <div>
-    <h1>게시글 목록 페이지</h1>
+    <BoardBest />
     <BoardList />
   </div>
 </template>
 
 <script setup>
+import BoardBest from '@/components/CommunityPage/BoardBest.vue'
 import BoardList from '@/components/CommunityPage/BoardList.vue'
 </script>
 

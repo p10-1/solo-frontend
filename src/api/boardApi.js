@@ -24,6 +24,16 @@ export const getList = async (pageNum, category, keyword, sortBy) => {
   }
 }
 
+export const getBest = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/best`)
+    return response.data
+  } catch (error) {
+    console.error('인기글을 가져오는 데 실패했습니다.', error)
+    throw error
+  }
+}
+
 export const getComments = async (boardNo) => {
   try {
     console.log('댓글을 요청한 boardNo: ', boardNo)
