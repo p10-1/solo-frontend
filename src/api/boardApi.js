@@ -58,7 +58,7 @@ export const create = async (article) => {
   const formData = new FormData()
 
   formData.append('title', article.title)
-  formData.append('userId', article.userId)
+  formData.append('userName', article.userName)
   formData.append('content', article.content)
 
   if (article.files) {
@@ -77,7 +77,7 @@ export const update = async (article) => {
 
   formData.append('boardNo', article.boardNo)
   formData.append('title', article.title)
-  formData.append('userId', article.userId)
+  formData.append('userName', article.userName)
   formData.append('content', article.content)
 
   if (article.files && article.files.length > 0) {
@@ -113,13 +113,13 @@ export const deleteAttachment = async (no) => {
   return data
 }
 
-export const likeBoard = async (boardNo, userId) => {
+export const likeBoard = async (boardNo, userName) => {
   try {
-    console.log('api 안에서: ', boardNo, userId)
+    console.log('api 안에서: ', boardNo, userName)
     const response = await axios.get(`${API_URL}/like`, {
       params: {
         boardNo: boardNo,
-        userId: userId
+        userName: userName
       }
     })
     return response

@@ -4,7 +4,7 @@
       <div class="card-body">
         <h2 class="card-title">{{ board.title }}</h2>
         <p class="card-text">
-          <strong>작성자:</strong> <span class="badge bg-secondary">{{ board.userId }}</span>
+          <strong>작성자:</strong> <span class="badge bg-secondary">{{ board.userName }}</span>
           <strong> 작성일:</strong>
           <span class="text-muted">{{ moment(board.regDate).format('YYYY-MM-DD HH:mm:ss') }}</span>
         </p>
@@ -54,7 +54,7 @@
         <ul class="list-group">
           <li v-for="comment in comments" :key="comment.commentNo" class="list-group-item">
             <p>
-              <span class="badge bg-light text-dark">{{ comment.userId }}</span
+              <span class="badge bg-light text-dark">{{ comment.userName }}</span
               >:
               <strong>{{ comment.commentText }}</strong>
             </p>
@@ -137,7 +137,7 @@ const submitComment = async () => {
 
   const boardNo = route.params.boardNo
   const commentData = {
-    userId: authStore.userInfo.userId, // 현재 로그인된 userId
+    userName: authStore.userInfo.userName, // 현재 로그인된 userName
     boardNo: boardNo, // 현재 게시글 번호
     commentText: commentText.value // 댓글 내용
   }
@@ -157,7 +157,7 @@ const submitComment = async () => {
 
 // 현재 사용자가 작성자인지 확인
 const isAuthor = computed(() => {
-  return authStore.userInfo && authStore.userInfo.userId === board.value?.userId
+  return authStore.userInfo && authStore.userInfo.userName === board.value?.userName
 })
 
 const goBack = () => {
@@ -167,9 +167,9 @@ const goBack = () => {
 // 좋아요 증가
 const increaseLikes = async () => {
   const boardNo = route.params.boardNo
-  const userId = authStore.userInfo.userId
+  const userName = authStore.userInfo.userName
   try {
-    const response = await likeBoard(boardNo, userId) // 좋아요 증가 API 호출
+    const response = await likeBoard(boardNo, userName) // 좋아요 증가 API 호출
     if (response.data == 'success') {
       board.value.likes += 1 // 좋아요 수 증가
       // alert('좋아요를 눌렀습니다')

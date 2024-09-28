@@ -4,7 +4,7 @@
       <select v-model="category">
         <option value="title">제목</option>
         <option value="content">내용</option>
-        <option value="userId">작성자</option>
+        <option value="userName">작성자</option>
       </select>
       <search-bar v-model="keyword" @search="searchBoards" />
 
@@ -41,7 +41,7 @@
               {{ board.title }}
             </router-link>
           </td>
-          <td>{{ board.userId }}</td>
+          <td>{{ board.userName }}</td>
           <td>{{ moment(board.regDate).format('YYYY-MM-DD HH:mm') }}</td>
           <td>
             <i class="fa-solid fa-eye"></i> {{ board.views }}&nbsp;&nbsp;<i
