@@ -10,6 +10,23 @@
         </p>
         <div class="post-content mb-3">
           <p>{{ board.content }}</p>
+          <div v-if="board.attaches && board.attaches.length" class="mt-3">
+            <ul class="list-group">
+              <li
+                v-for="attach in board.attaches"
+                :key="attach.attachmentNo"
+                class="list-group-item"
+              >
+                <img
+                  v-if="attach.filename.endsWith('.jpg') || attach.filename.endsWith('.png')"
+                  :src="`http://localhost:9000/api/board/download/${attach.attachmentNo}`"
+                  alt="첨부파일 미리보기"
+                  class="img-thumbnail mt-2"
+                  style="max-width: 100%; height: auto"
+                />
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="post-stats mb-3">
           <p>
@@ -20,17 +37,6 @@
         </div>
 
         <button @click="increaseLikes" class="btn btn-success me-2">좋아요 👍</button>
-
-        <div v-if="board.attaches && board.attaches.length" class="mt-3">
-          <h4>첨부파일:</h4>
-          <ul class="list-group">
-            <li v-for="attach in board.attaches" :key="attach.attachmentNo" class="list-group-item">
-              <a :href="`${attach.path}/${attach.filename}`" target="_blank" class="link-primary">{{
-                attach.filename
-              }}</a>
-            </li>
-          </ul>
-        </div>
 
         <div v-if="isAuthor" class="mt-3">
           <button @click="goToUpdate" class="btn btn-primary me-2">수정하기</button>
@@ -211,3 +217,11 @@ onMounted(() => {
   loadComments()
 })
 </script>
+
+<style>
+.responsive-img {
+  max-width: 100%; /* 최대 너비를 100%로 설정 */
+  height: auto; /* 비율을 유지하며 자동으로 높이 조절 */
+  cursor: pointer; /* 클릭 가능하게 표시 */
+}
+</style>

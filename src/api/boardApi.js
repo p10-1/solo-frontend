@@ -102,6 +102,11 @@ export const deleteBoard = async (boardNo) => {
   return data
 }
 
+export const downloadAttachment = async (no) => {
+  const response = await axios.get(`${API_URL}/download/${no}`)
+  return response
+}
+
 export const deleteAttachment = async (no) => {
   const { data } = await axios.delete(`${API_URL}/deleteAttachment/${no}`)
   console.log('ATTACHMENT DELETE: ', data)
@@ -117,7 +122,6 @@ export const likeBoard = async (boardNo, userId) => {
         userId: userId
       }
     })
-    console.log(response.data)
     return response
   } catch (error) {
     console.error('좋아요을 가져오는 데 실패했습니다.', error)
