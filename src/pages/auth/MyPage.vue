@@ -11,12 +11,11 @@
     <!-- 중간 컴포넌트 (MyType) -->
     <div class="middle-section">
       <MyAsset />
-      <!-- <MyType /> -->
     </div>
 
     <!-- 하단 컴포넌트 (MyAsset) -->
     <div class="bottom-section">
-      <AssetEdit/>
+      <!-- <AssetEdit/> -->
       
     </div>
   </div>
@@ -28,7 +27,7 @@ import MyPoint from '@/components/MyPage/MyPoint.vue'
 // import MyGrade from '@/components/MyPage/MyGrade.vue'
 // import MyType from '@/components/MyPage/MyType.vue'
 import MyAsset from '@/components/MyPage/MyAsset.vue'
-import AssetEdit from '@/components/MyPage/AssetEdit.vue';
+// import AssetEdit from '@/components/MyPage/AssetEdit.vue';
 
 export default {
   name: 'App',
@@ -37,7 +36,7 @@ export default {
     //MyGrade,
     // MyType,
     MyAsset,
-    AssetEdit
+    // AssetEdit
   }
 }
 </script>

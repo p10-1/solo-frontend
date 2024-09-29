@@ -81,35 +81,35 @@ export default {
                 const stockAccounts = JSON.parse(response.data.stockAccount || "[]");
                 const stockAmounts = JSON.parse(response.data.stock || "[]");
 
-                // 현금 자산 데이터 정리
+                // 자산데이터 정리 : 현금자산
                 this.assetTypes.cash = cashBanks.map((bank, index) => ({
                     bank,
                     accountNumber: cashAccounts[index] || '',
-                    amount: cashAmounts[index] ? parseInt(cashAmounts[index], 10) : 0
+                    amount: cashAmounts[index] ? parseInt(cashAmounts[index], 10) : 0 // 정수로 변환
                 }));
 
-                // 예적금 자산 데이터 정리
+                // 예적금
                 this.assetTypes.deposit = depositBanks.map((bank, index) => ({
                     bank,
                     accountNumber: depositAccounts[index] || '',
                     amount: depositAmounts[index] ? parseInt(depositAmounts[index], 10) : 0
                 }));
 
-                // 부동산 자산 데이터 정리
+                // 부동산
                 this.assetTypes.property = propertyBanks.map((bank, index) => ({
                     bank,
                     accountNumber: propertyAccounts[index] || '',
                     amount: propertyAmounts[index] ? parseInt(propertyAmounts[index], 10) : 0
                 }));
 
-                // 주식 자산 데이터 정리
+                // 주식 
                 this.assetTypes.stock = stockBanks.map((bank, index) => ({
                     bank,
                     accountNumber: stockAccounts[index] || '',
                     amount: stockAmounts[index] ? parseInt(stockAmounts[index], 10) : 0
                 }));
 
-                // 대출 관련 정보 정리
+                // 대출 
                 this.loanDetails = {
                     loanPurpose: response.data.loanPurpose || '',
                     loanAmount: response.data.loanAmount || 0,
@@ -132,12 +132,13 @@ export default {
                 property: '부동산 자산',
                 stock: '증권 자산'
             };
-            return assetTypeNames[type] || type; // 기본값으로 타입 이름 반환
+            return assetTypeNames[type] || type; // 자산 타입 한글이름으로 매핑
         },
         toggleEditMode() {
             if (this.editMode) {
-                // 수정된 데이터 형식으로 변환
+                // 입력받은 데이터를 테이블 구조에 맞게 변환하는 과정
                 const updatedData = {
+                    // JSON형식으로 변환
                     cash: JSON.stringify(this.assetTypes.cash.map(asset => asset.amount)),
                     cashAccount: JSON.stringify(this.assetTypes.cash.map(asset => asset.accountNumber)),
                     cashBank: JSON.stringify(this.assetTypes.cash.map(asset => asset.bank)),
@@ -153,9 +154,9 @@ export default {
                     loanAmount: this.loanDetails.loanAmount,
                     loanPurpose: this.loanDetails.loanPurpose,
                     period: this.loanDetails.period,
-                    interest: this.loanDetails.interest,
-                    updateDate: Date.now(), // 현재 시간으로 업데이트
-                    userId: "3711364352" // 예시로 사용자 ID 추가
+                    interest: this.loanDetails.interest
+                    // updateDate: Date.now(), // 현재 시간으로 업데이트
+                    // userId: "3711364352" // 예시로 사용자 ID 추가
                 };
 
                 // 전송할 데이터 로그 출력
