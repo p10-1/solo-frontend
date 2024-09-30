@@ -24,6 +24,16 @@ export const getList = async (pageNum, category, keyword, sortBy) => {
   }
 }
 
+export const getBest = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/best`)
+    return response.data
+  } catch (error) {
+    console.error('인기글을 가져오는 데 실패했습니다.', error)
+    throw error
+  }
+}
+
 export const getComments = async (boardNo) => {
   try {
     console.log('댓글을 요청한 boardNo: ', boardNo)
@@ -58,7 +68,7 @@ export const create = async (article) => {
   const formData = new FormData()
 
   formData.append('title', article.title)
-  formData.append('userId', article.userId)
+  formData.append('userName', article.userName)
   formData.append('content', article.content)
 
   if (article.files) {
@@ -77,7 +87,7 @@ export const update = async (article) => {
 
   formData.append('boardNo', article.boardNo)
   formData.append('title', article.title)
-  formData.append('userId', article.userId)
+  formData.append('userName', article.userName)
   formData.append('content', article.content)
 
   if (article.files && article.files.length > 0) {
@@ -102,22 +112,26 @@ export const deleteBoard = async (boardNo) => {
   return data
 }
 
+export const downloadAttachment = async (no) => {
+  const response = await axios.get(`${API_URL}/download/${no}`)
+  return response
+}
+
 export const deleteAttachment = async (no) => {
   const { data } = await axios.delete(`${API_URL}/deleteAttachment/${no}`)
   console.log('ATTACHMENT DELETE: ', data)
   return data
 }
 
-export const likeBoard = async (boardNo, userId) => {
+export const likeBoard = async (boardNo, userName) => {
   try {
-    console.log('api 안에서: ', boardNo, userId)
+    console.log('api 안에서: ', boardNo, userName)
     const response = await axios.get(`${API_URL}/like`, {
       params: {
         boardNo: boardNo,
-        userId: userId
+        userName: userName
       }
     })
-    console.log(response.data)
     return response
   } catch (error) {
     console.error('좋아요을 가져오는 데 실패했습니다.', error)
