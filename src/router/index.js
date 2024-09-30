@@ -12,7 +12,6 @@ import Policy from '../pages/policy/PolicyPage.vue'
 import FirstUser from '@/pages/auth/FirstUser.vue'
 import Product from '@/pages/product/ProductPage.vue'
 import boardRoutes from './board'
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -26,21 +25,6 @@ const router = createRouter({
       name: 'FirstUser',
       component: FirstUser // 새 사용자 등록 페이지 컴포넌트
     },
-    // {
-    //   path: '/join',
-    //   name: 'join',
-    //   component: Join
-    // },
-    // {
-    //   path: '/login',
-    //   name: 'login',
-    //   component: Login
-    // },
-    // {
-    //   path: '/logout',
-    //   name: 'logout',
-    //   component: Logout
-    // },
     {
       path: '/board',
       name: 'board',
@@ -61,12 +45,6 @@ const router = createRouter({
       name: 'news',
       component: News
     },
-    // {
-    //   path: '/news/detail/:newsNo',
-    //   name: 'news/detail',
-    //   component: NewsDetail,
-    //   props: true
-    // },
     {
       path: '/policy',
       name: 'policy',
