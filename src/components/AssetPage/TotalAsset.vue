@@ -1,11 +1,12 @@
 <template>
   <div class="total-asset">
-    <h2>총 자산: {{ formattedTotalAmount }}원</h2>
+    <h2>{{ userName }}님의 총 자산: {{ formattedTotalAmount }}원</h2>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
 
 const props = defineProps({
   totalAmount: {
@@ -13,6 +14,8 @@ const props = defineProps({
     required: true
   }
 })
+const authStore = useAuthStore()
+const userName = computed(() => authStore.username)
 
 const formattedTotalAmount = computed(() => {
   return props.totalAmount.toLocaleString()

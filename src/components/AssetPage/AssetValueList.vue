@@ -2,15 +2,15 @@
   <div class="asset-value-list">
     <h3>자산 비율</h3>
     <ul class="asset-types">
-      <li v-for="(asset, key) in assetDetails" :key="key" class="asset-type">
-        <strong>{{ assetNames[key] }}:</strong> {{ formatNumber(asset.total) }}원 ({{
-          calculatePercentage(asset.total)
-        }}%)
-        <ul class="asset-details">
+      <li v-for="asset in assetDetails" :key="asset.name" class="asset-type">
+        <strong>{{ assetNames[asset.name] }} : </strong>
+        <span class="asset-amount">{{ formatNumber(asset.total) }}원</span>
+        <span class="asset-percentage">({{ calculatePercentage(asset.total) }}%)</span>
+        <!-- <ul class="asset-details">
           <li v-for="(detail, index) in asset.details" :key="index">
             {{ detail.bank }} - {{ detail.account }}: {{ formatNumber(detail.value) }}원
           </li>
-        </ul>
+        </ul> -->
       </li>
     </ul>
   </div>

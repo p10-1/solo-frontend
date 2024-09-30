@@ -11,14 +11,11 @@
       </div>
       <AssetTypeButtons :selectedType="selectedAssetType" @select-type="selectAssetType" />
       <AssetComparison
-        v-if="processedData"
+        v-if="processedData.comparisonData"
         :assetType="selectedAssetType"
         :comparisonData="processedData.comparisonData"
       />
-      <TimeComparison
-        :assetType="selectedAssetType"
-        :timeData="processedData.timeComparisonData[selectedAssetType]"
-      />
+      <TimeComparison :assetType="selectedAssetType" :assetData="rawAssetData" />
       <LoanInfo :loanData="processedData.loanData" />
       <Recommendation
         :assetType="selectedAssetType"
@@ -27,7 +24,6 @@
     </template>
   </div>
 </template>
-
 <script>
 // 일부 수정 준영님의 코드를 참고 함!
 
@@ -70,33 +66,42 @@ export default {
       }
     }
 
-    const processedData = computed(() => {
-      if (!rawAssetData.value) return null
-
-      const data = rawAssetData.value
-      const assetTypes = ['cash', 'deposit', 'stock', 'property']
-
-      const processedAssetData = {}
+    const processAssetData = (data, assetTypes) => {
+      const processed = {}
       assetTypes.forEach((type) => {
-        processedAssetData[type] = {
+        processed[type] = {
           values: parseJsonArray(data[type]),
           banks: parseJsonArray(data[type + 'Bank']),
           accounts: parseJsonArray(data[type + 'Account'])
         }
       })
+      return processed
+    }
 
-      const totalAsset = assetTypes.reduce(
-        (total, type) =>
-          total + processedAssetData[type].values.reduce((sum, val) => sum + Number(val), 0),
+    const calculateTotal = (assetData, assetTypes) =>
+      assetTypes.reduce(
+        (total, type) => total + assetData[type].values.reduce((sum, val) => sum + Number(val), 0),
         0
       )
 
+    const processedData = computed(() => {
+      if (!rawAssetData.value || rawAssetData.value.length === 0) return null
+
+      const assetTypes = ['cash', 'deposit', 'stock', 'property']
+      const currentData = rawAssetData.value[0]
+      const previousData = rawAssetData.value[1] || currentData
+
+      const currentAssetData = processAssetData(currentData, assetTypes)
+      const previousAssetData = processAssetData(previousData, assetTypes)
+
+      const totalAsset = calculateTotal(currentAssetData, assetTypes)
+
       const assetDetails = assetTypes.map((type) => ({
         name: type,
-        total: processedAssetData[type].values.reduce((sum, val) => sum + Number(val), 0),
-        details: processedAssetData[type].values.map((value, index) => ({
-          bank: processedAssetData[type].banks[index],
-          account: processedAssetData[type].accounts[index],
+        total: currentAssetData[type].values.reduce((sum, val) => sum + Number(val), 0),
+        details: currentAssetData[type].values.map((value, index) => ({
+          bank: currentAssetData[type].banks[index],
+          account: currentAssetData[type].accounts[index],
           value: Number(value)
         }))
       }))
@@ -106,18 +111,24 @@ export default {
         value: asset.total
       }))
 
-      // Implement comparison, time comparison, and recommendation logic here
       const comparisonData = {}
       const timeComparisonData = {}
       assetTypes.forEach((type) => {
-        const total = processedAssetData[type].values.reduce((sum, val) => sum + Number(val), 0)
+        const currentTotal = currentAssetData[type].values.reduce(
+          (sum, val) => sum + Number(val),
+          0
+        )
+        const previousTotal = previousAssetData[type].values.reduce(
+          (sum, val) => sum + Number(val),
+          0
+        )
         comparisonData[type] = {
-          average: total * 0.9, // This is a placeholder. Replace with actual average calculation.
-          user: total
+          average: currentTotal * 0.9, // This is a placeholder. Replace with actual average calculation.
+          user: currentTotal
         }
         timeComparisonData[type] = {
-          previousMonth: total * 0.95, // This is a placeholder. Replace with actual previous month data.
-          currentMonth: total
+          previousMonth: previousTotal,
+          currentMonth: currentTotal
         }
       })
 
@@ -128,14 +139,13 @@ export default {
         comparisonData,
         timeComparisonData,
         loanData: {
-          amount: Number(data.loanAmount),
-          purpose: data.loanPurpose,
-          period: Number(data.period),
-          interest: Number(data.interest)
+          amount: Number(currentData.loanAmount),
+          purpose: currentData.loanPurpose,
+          period: Number(currentData.period),
+          interest: Number(currentData.interest)
         },
         recommendationData: {
-          consume: data.consume
-          // Add more recommendation data as needed
+          consume: currentData.consume
         }
       }
     })
@@ -163,7 +173,8 @@ export default {
       error,
       processedData,
       selectedAssetType,
-      selectAssetType
+      selectAssetType,
+      rawAssetData
     }
   }
 }
