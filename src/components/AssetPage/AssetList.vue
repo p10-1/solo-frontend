@@ -72,6 +72,7 @@ export default {
 
     const loadAssetData = async () => {
       try {
+        
         loading.value = true
         assetData.value = await fetchAssetData()
       } catch (err) {
