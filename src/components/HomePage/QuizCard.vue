@@ -1,76 +1,69 @@
 <template>
-  <div class="financial-quiz">
-    <div class="quiz-question">
-      <h3>금융 퀴즈</h3>
-      <p>{{ currentQuestion.text }}</p>
+  <div class="container mt-5">
+    <div class="card" @click="openModal">
+      <!-- 카드 클릭 시 모달 열기 -->
+      <div class="card-body">
+        <h1 class="card-title">오늘의 금융 퀴즈</h1>
+        <div v-if="description">
+          <p><strong>설명:</strong> {{ description }}</p>
+        </div>
+        <div v-else>
+          <p>퀴즈를 불러오는 중입니다...</p>
+        </div>
+      </div>
     </div>
-    <div class="quiz-options">
-      <button @click="submitAnswer(true)" class="option-button correct">확인</button>
-      <button @click="submitAnswer(false)" class="option-button incorrect">아니요</button>
-    </div>
+
+    <!-- 퀴즈 모달 컴포넌트 -->
+    <QuizModal
+      v-if="isModalVisible"
+      :answer="answer"
+      :description="description"
+      @close="isModalVisible = false"
+    />
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      currentQuestion: {
-        id: 1,
-        text: 'IPO를 올해하며 1년에 최대 900만원까지 공제받을 수 있나요?'
-      }
-    }
-  },
-  methods: {
-    submitAnswer(answer) {
-      // 여기서 answer를 기반으로 로직 처리
-      console.log(`Answer submitted: ${answer}`)
-      // 실제 앱에서는 여기서 결과 페이지로 넘어가거나 추가 질문을 로드할 수 있습니다.
-    }
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router' // Vue Router 가져오기
+import { useAuthStore } from '@/stores/authStore' // authStore 가져오기
+import { makeQuiz } from '@/api/quizApi'
+import QuizModal from './QuizModal.vue' // 퀴즈 모달 컴포넌트 임포트
+
+// 상태 변수 정의
+const answer = ref('')
+const description = ref('')
+const isModalVisible = ref(false) // 모달 표시 상태
+const router = useRouter() // router 인스턴스 가져오기
+const authStore = useAuthStore() // authStore 인스턴스 가져오기
+
+// 컴포넌트가 생성될 때 퀴즈 데이터를 불러옴
+onMounted(async () => {
+  try {
+    const quizData = await makeQuiz()
+    console.log(quizData)
+    answer.value = quizData.term
+    description.value = quizData.description
+    console.log('answer: ', answer.value, 'description: ', description.value)
+  } catch (error) {
+    console.error('퀴즈를 불러오는 데 실패했습니다.', error)
+  }
+})
+
+// 모달 열기 함수
+const openModal = () => {
+  // 로그인 상태 확인
+  if (authStore.isLoggedIn) {
+    isModalVisible.value = true // 모달 표시
+  } else {
+    router.push('/login') // 로그인 페이지로 이동
   }
 }
 </script>
 
 <style scoped>
-.financial-quiz {
-  max-width: 300px;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #ccc;
+.card {
   border-radius: 8px;
-  background: #f9f9f9;
-  text-align: center;
-}
-
-.quiz-question h3 {
-  margin: 0;
-  color: #333;
-}
-
-.quiz-question p {
-  color: #555;
-}
-
-.quiz-options {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
-}
-
-.option-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.correct {
-  background-color: #4caf50; /* Green */
-}
-
-.incorrect {
-  background-color: #f44336; /* Red */
+  cursor: pointer; /* 클릭 가능하게 표시 */
 }
 </style>
