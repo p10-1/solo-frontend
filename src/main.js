@@ -1,5 +1,11 @@
-//import './assets/main.css'
+// import './assets/main.css'
 import 'bootstrap/dist/css/bootstrap.css'
+// import 'vue-awesome-paginate/dist/style.css'
+
+// default css
+import '@/assets/css/fonts.css'
+import '@/assets/css/base.css'
+import '@/assets/css/main.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

@@ -4,12 +4,12 @@ import NavBar from './NavBar.vue'
 import Footer from './Footer.vue'
 </script>
 <template>
-  <div class="container">
-    <Header />
-    <NavBar />
-    <div class="content my-5 px-3">
+  <Header />
+  <NavBar />
+  <div class="section">
+    <div class="container section">
       <slot></slot>
     </div>
-    <Footer />
   </div>
+  <Footer />
 </template>

@@ -6,7 +6,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <ul class="navbar-nav">
+  <ul class="navbar-nav mx-auto">
     <MenuItem v-for="menu in menus" :menu="menu" :key="menu.id" />
   </ul>
 </template>

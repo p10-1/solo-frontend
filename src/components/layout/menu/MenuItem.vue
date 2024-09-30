@@ -4,11 +4,16 @@ const props = defineProps({
 })
 </script>
 <template>
-  <li class="nav-item">
-    <router-link class="nav-link" :to="menu.url">
-      <i :class="menu.icon"></i>
+  <li class="dropdown dropdown-full nav-item">
+    <router-link class="nav-link font-color-white" :to="menu.url">
+      <!-- <i :class="menu.icon"></i> -->
       {{ menu.title }}
+      <label class="px-dropdown-toggle mob-menu"></label>
     </router-link>
   </li>
 </template>
-<style></style>
+<style>
+.font-color-white {
+  color: #fff;
+}
+</style>

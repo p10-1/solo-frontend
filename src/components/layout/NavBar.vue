@@ -10,14 +10,29 @@ let navClass = computed(() =>
 const toggleNavShow = () => (state.isNavShow = !state.isNavShow)
 </script>
 <template>
-  <nav class="navbar navbar-expand-sm custom-navbar navbar-dark">
-    <div class="container-fluid">
-      <router-link class="navbar-brand" to="/">
-        <i class="fa-solid fa-house"></i>
-        홈
-      </router-link>
+  <nav class="navbar navbar-transparent navbar-expand-lg fixed-top">
+    <div class="container">
+      <div class="navbar-translate">
+        <router-link class="navbar-brand" to="/">
+          <!-- <i class="fa-solid fa-house"></i> -->
+          <!-- 모바일 화면 로고 -->
+          <image class="logo-dark logo-white" src="" alt="logo 이미지" />
+          <!-- PC 화면 로고 -->
+          <image class="logo-light" src="" alt="logo 이미지" />
+        </router-link>
+      </div>
+
+      <!-- PC 메뉴 -->
+      <div :class="navClass" id="collapsibleNavbar">
+        <!-- 추후 작업 예정 -->
+        <MenuGroup :menus="config.menus" />
+      </div>
+      <!-- 오른쪽 로그인 -->
+      <AccountMenuGroup />
+
+      <!-- 모바일 메뉴 버튼 -->
       <button
-        class="navbar-toggler"
+        class="navbar-toggler collapsedr"
         type="button"
         data-bs-toggle="collapse"
         data-bs-target="#collapsibleNavbar"
@@ -25,16 +40,6 @@ const toggleNavShow = () => (state.isNavShow = !state.isNavShow)
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div :class="navClass" id="collapsibleNavbar">
-        <!-- 추후 작업 예정 -->
-        <MenuGroup :menus="config.menus" />
-        <AccountMenuGroup />
-      </div>
     </div>
   </nav>
 </template>
-<style>
-.custom-navbar {
-  background-color: #4caf50; /* Replace this with your desired color */
-}
-</style>
