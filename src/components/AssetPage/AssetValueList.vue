@@ -1,12 +1,16 @@
 <template>
   <div class="asset-value-list">
     <h3>자산 비율</h3>
-    <ul>
-      <!-- 각 자산 유형에 대한 정보 표시 -->
-      <li v-for="(value, key) in assetValues" :key="key">
-        <span class="asset-type">{{ assetNames[key] }}:</span>
-        <span class="asset-value">{{ formatNumber(value) }}원</span>
-        <span class="asset-percentage">({{ calculatePercentage(value) }}%)</span>
+    <ul class="asset-types">
+      <li v-for="(asset, key) in assetDetails" :key="key" class="asset-type">
+        <strong>{{ assetNames[key] }}:</strong> {{ formatNumber(asset.total) }}원 ({{
+          calculatePercentage(asset.total)
+        }}%)
+        <ul class="asset-details">
+          <li v-for="(detail, index) in asset.details" :key="index">
+            {{ detail.bank }} - {{ detail.account }}: {{ formatNumber(detail.value) }}원
+          </li>
+        </ul>
       </li>
     </ul>
   </div>
@@ -15,15 +19,13 @@
 <script setup>
 import { computed } from 'vue'
 
-// props 정의: 자산 데이터
 const props = defineProps({
-  assetData: {
+  assetDetails: {
     type: Object,
     required: true
   }
 })
 
-// 자산 유형 이름 매핑
 const assetNames = {
   cash: '현금자산',
   deposit: '예적금',
@@ -31,27 +33,14 @@ const assetNames = {
   property: '부동산'
 }
 
-// 자산 값 계산
-const assetValues = computed(() => {
-  return {
-    cash: props.assetData.cash || 0,
-    deposit: props.assetData.deposit || 0,
-    stock: props.assetData.stock || 0,
-    property: props.assetData.property || 0
-  }
-})
-
-// 총 자산 계산
 const totalAsset = computed(() => {
-  return Object.values(assetValues.value).reduce((sum, value) => sum + value, 0)
+  return Object.values(props.assetDetails).reduce((sum, asset) => sum + asset.total, 0)
 })
 
-// 숫자 포맷 함수
 const formatNumber = (num) => {
   return num.toLocaleString()
 }
 
-// 퍼센티지 계산 함수
 const calculatePercentage = (value) => {
   if (totalAsset.value === 0) return '0.00'
   return ((value / totalAsset.value) * 100).toFixed(2)
@@ -59,5 +48,28 @@ const calculatePercentage = (value) => {
 </script>
 
 <style scoped>
-/* 스타일 정의 */
+.asset-value-list {
+  margin-top: 20px;
+}
+
+.asset-types {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.asset-type {
+  margin-bottom: 15px;
+  font-size: 1.1em;
+}
+
+.asset-details {
+  list-style-type: none;
+  padding-left: 20px;
+  margin-top: 5px;
+  font-size: 0.9em;
+}
+
+.asset-details li {
+  margin-bottom: 3px;
+}
 </style>

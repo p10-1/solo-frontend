@@ -14,7 +14,7 @@ const props = defineProps({
     type: String,
     required: true
   },
-  assetData: {
+  timeData: {
     type: Object,
     required: true
   }
@@ -28,10 +28,11 @@ const createChart = () => {
     chartInstance.destroy()
   }
 
+  if (!chartRef.value || !props.timeData) return
+
   const ctx = chartRef.value.getContext('2d')
 
-  const thisMonth = props.assetData[props.assetType] || 0
-  const lastMonth = thisMonth * 0.95 // 예시: 저번 달은 이번 달의 95%라고 가정
+  const { previousMonth, currentMonth } = props.timeData
 
   chartInstance = new Chart(ctx, {
     type: 'bar',
@@ -40,7 +41,7 @@ const createChart = () => {
       datasets: [
         {
           label: `${props.assetType} 자산 가치`,
-          data: [lastMonth, thisMonth],
+          data: [previousMonth, currentMonth],
           backgroundColor: ['#4caf50', '#2196f3']
         }
       ]
@@ -58,7 +59,7 @@ const createChart = () => {
 
 onMounted(createChart)
 
-watch([() => props.assetType, () => props.assetData], createChart)
+watch([() => props.assetType, () => props.timeData], createChart, { deep: true })
 
 onBeforeUnmount(() => {
   if (chartInstance) {
@@ -72,5 +73,6 @@ onBeforeUnmount(() => {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
+  margin-top: 20px;
 }
 </style>
