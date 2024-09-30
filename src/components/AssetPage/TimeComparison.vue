@@ -3,7 +3,7 @@
     <h2>{{ assetTypeNames[assetType] }} 추세 분석</h2>
     <canvas ref="chartRef"></canvas>
     <div v-if="trendData.length > 0" class="trend-summary">
-      <p>최근 {{ trendData.length }}개월 추세:</p>
+      <p>최근 {{ trendData.length + 1 }}개월 추세:</p>
       <p :class="trendDirection">
         {{ trendDirection === 'increase' ? '상승' : '하락' }} 추세 (변화율: {{ trendPercentage }}%)
       </p>

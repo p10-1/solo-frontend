@@ -9,10 +9,10 @@
         <span>나: {{ userAmount.toLocaleString() }}원</span>
       </div>
     </div>
-    <div class="comparison-labels">
+    <!-- <div class="comparison-labels">
       <div>평균: {{ averagePercentage }}%</div>
       <div>나: {{ userPercentage }}%</div>
-    </div>
+    </div> -->
   </div>
 </template>
 
