@@ -9,9 +9,11 @@
         <AssetValueList :assetData="assetData" />
         <AssetRatioChart :data="assetRatioData" />
       </div>
-      <LoanInfo :loanAmount="assetData.loanAmount" />
       <AssetTypeButtons :selectedType="selectedAssetType" @select-type="selectAssetType" />
       <AssetComparison :assetType="selectedAssetType" :assetData="assetData" />
+      <TimeComparison :assetType="selectedAssetType" :assetData="assetData" />
+      <LoanInfo :loanAmount="assetData.loanAmount" />
+      <Recommendation :assetType="selectedAssetType" :assetData="assetData" />
     </template>
   </div>
 </template>
@@ -27,6 +29,8 @@ import AssetRatioChart from '@/components/AssetPage/AssetRatioChart.vue'
 import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
 import AssetTypeButtons from '@/components/AssetPage/AssetTypeButtons.vue'
 import AssetComparison from '@/components/AssetPage/AssetComparison.vue'
+import Recommendation from '@/components/AssetPage/Recommendation.vue'
+import TimeComparison from '@/components/AssetPage/TimeComparison.vue'
 
 // 일부 수정 준영님의 코드를 참고 함!
 
@@ -37,7 +41,9 @@ export default {
     AssetRatioChart,
     LoanInfo,
     AssetTypeButtons,
-    AssetComparison
+    AssetComparison,
+    Recommendation,
+    TimeComparison
   },
   setup() {
     const loading = ref(true)
