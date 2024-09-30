@@ -57,18 +57,18 @@ export default {
     const article = ref({
       title: '',
       content: '',
-      userId: '', // Will be set by the authenticated user
+      userName: '', // Will be set by the authenticated user
       files: []
     })
     const authStore = useAuthStore() // Get the authentication store
     const router = useRouter()
 
     // Set the userID based on the logged-in user
-    article.value.userId = authStore.userInfo ? authStore.userInfo.userId : ''
+    article.value.userName = authStore.userInfo ? authStore.userInfo.userName : ''
     const handleFileUpload = (event) => {
       article.value.files = Array.from(event.target.files)
     }
-
+    console.log(article)
     const submitForm = async () => {
       try {
         await create(article.value)
