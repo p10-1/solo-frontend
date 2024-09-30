@@ -87,7 +87,7 @@ export default {
                     accountNumber: cashAccounts[index] || '',
                     amount: cashAmounts[index] ? parseInt(cashAmounts[index], 10) : 0 // 정수로 변환
                 }));
-
+                    
                 // 예적금
                 this.assetTypes.deposit = depositBanks.map((bank, index) => ({
                     bank,
@@ -155,8 +155,6 @@ export default {
                     loanPurpose: this.loanDetails.loanPurpose,
                     period: this.loanDetails.period,
                     interest: this.loanDetails.interest
-                    // updateDate: Date.now(), // 현재 시간으로 업데이트
-                    // userId: "3711364352" // 예시로 사용자 ID 추가
                 };
 
                 // 전송할 데이터 로그 출력
