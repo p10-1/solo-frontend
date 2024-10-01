@@ -62,6 +62,13 @@ const selectedAssetType = ref('cash') // 선택된 자산 타입 기본값은 'c
 
 // 자산 데이터 및 평균 데이터를 API로부터 로드하는 함수
 
+const fieldMapping = {
+  cash: { bank: 'cashBank', account: 'cashAccount', value: 'cash' },
+  deposit: { bank: 'depositBank', account: 'depositAccount', value: 'deposit' },
+  stock: { bank: 'stockBank', account: 'stockAccount', value: 'stock' },
+  insurance: { bank: 'insuranceCompany', account: 'insuranceName', value: 'insurance' }
+}
+
 const loadData = async () => {
   try {
     loading.value = true
@@ -87,18 +94,23 @@ const parseJsonArray = (jsonString) => {
 }
 
 // 자산 데이터를 처리하여 필요한 형태로 변환하는 함수
+
+//따로 함수 처리 ㅎ
+
 const processAssetData = (data, assetTypes) => {
   const processed = {}
   assetTypes.forEach((type) => {
-    processed[type] = {
-      values: parseJsonArray(data[type]),
-      banks: parseJsonArray(data[type + 'Bank']),
-      accounts: parseJsonArray(data[type + 'Account'])
+    const mapping = fieldMapping[type]
+    if (mapping) {
+      processed[type] = {
+        values: parseJsonArray(data[mapping.value]), // 자산 값
+        banks: parseJsonArray(data[mapping.bank]), // 은행/회사
+        accounts: parseJsonArray(data[mapping.account]) // 계좌/이름
+      }
     }
   })
   return processed
 }
-
 // 처리된 자산 데이터를 계산하고 반환하는 computed 함수
 const processedData = computed(() => {
   if (!rawAssetData.value || rawAssetData.value.length === 0) return null
@@ -106,7 +118,7 @@ const processedData = computed(() => {
   const currentData = rawAssetData.value[0]
   const previousData = rawAssetData.value[1] || currentData
 
-  const assetTypes = ['cash', 'deposit', 'stock', 'property']
+  const assetTypes = ['cash', 'deposit', 'stock', 'insurance']
 
   const currentAssetData = processAssetData(currentData, assetTypes)
   const previousAssetData = processAssetData(previousData, assetTypes)

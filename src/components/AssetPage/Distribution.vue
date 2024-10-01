@@ -41,7 +41,7 @@ const assetNames = {
   cash: '현금자산',
   deposit: '예적금',
   stock: '주식',
-  property: '부동산'
+  insurance: '보험'
 }
 
 // 자산 색상 매핑
@@ -49,7 +49,7 @@ const assetColors = {
   cash: '#FF6384',
   deposit: '#36A2EB',
   stock: '#FFCE56',
-  property: '#4BC0C0'
+  insurance: '#4BC0C0'
 }
 
 // 총 자산 금액 계산

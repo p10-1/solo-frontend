@@ -44,7 +44,7 @@ const assetTypeNames = {
   cash: '현금자산',
   deposit: '예적금',
   stock: '주식',
-  property: '부동산'
+  insurance: '보험'
 }
 
 const parseJsonArray = (jsonString) => {

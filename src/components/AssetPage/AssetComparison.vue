@@ -15,8 +15,11 @@
     </div>
   </div>
 </template>
+
 <script setup>
+
 //src/components/AssetPage/AssetComparison.vue
+
 import { computed } from 'vue'
 import ChartComponent from '@/components/common/ChartComponent.vue'
 
@@ -40,7 +43,7 @@ const assetTypeTitle = computed(() => {
     cash: '현금자산',
     deposit: '예적금',
     stock: '주식',
-    property: '부동산'
+    insurance: '보험'
   }
   return titles[props.assetType] || '자산'
 })

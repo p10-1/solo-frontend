@@ -29,7 +29,7 @@ const assetTypes = ref([
   { name: '현금자산', value: 'cash' },
   { name: '예적금', value: 'deposit' },
   { name: '주식', value: 'stock' },
-  { name: '부동산', value: 'property' }
+  { name: '보험', value: 'insurance' }
 ])
 
 // 타입 선택 함수

@@ -45,13 +45,13 @@ const isDataAvailable = computed(() => {
 const recommendedProduct = computed(() => {
   if (!isDataAvailable.value) return '데이터 없음'
 
-  const { cash, deposit, stock, property } = props.recommendationData
-  const total = (cash || 0) + (deposit || 0) + (stock || 0) + (property || 0)
+  const { cash, deposit, stock, insurance } = props.recommendationData
+  const total = (cash || 0) + (deposit || 0) + (stock || 0) + (insurance || 0)
 
   if (total === 0) return '자산 정보 없음'
 
   if ((stock || 0) / total > 0.5) return '주식형 펀드'
-  if ((property || 0) / total > 0.7) return '리츠 (REITs)'
+  if ((insurance || 0) / total > 0.7) return '리츠 (REITs)'
   if (((cash || 0) + (deposit || 0)) / total > 0.6) return '고금리 예금 상품'
   return '분산 투자 ETF'
 })
@@ -68,7 +68,7 @@ const recommendedPolicy = computed(() => {
       return '계단식 예금으로 유동성 확보'
     case 'stock':
       return '장기 투자 및 정기적 리밸런싱'
-    case 'property':
+    case 'insurance':
       return '임대 수익 최적화 및 세금 계획'
     default:
       return '자산 배분 전략 수립'

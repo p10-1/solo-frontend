@@ -31,7 +31,7 @@ const formattedAssetData = computed(() => ({
   현금자산: formatCurrency(props.assetData.cash || 0),
   예금: formatCurrency(props.assetData.deposit || 0),
   주식: formatCurrency(props.assetData.stock || 0),
-  부동산: formatCurrency(props.assetData.property || 0),
+  보험: formatCurrency(props.assetData.insurance || 0),
   '소비 유형': props.assetData.consume || 'N/A',
   '대출 금액': formatCurrency(props.assetData.loanAmount || 0),
   '대출 목적': props.assetData.loanPurpose || 'N/A',
