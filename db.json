@@ -1,0 +1,250 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "user1",
+      "password": "hashed_password_1",
+      "email": "user1@example.com",
+      "roles": [
+        "user"
+      ]
+    },
+    {
+      "id": "2",
+      "username": "user2",
+      "password": "hashed_password_2",
+      "email": "user2@example.com",
+      "roles": [
+        "user"
+      ]
+    },
+    {
+      "id": "dd22",
+      "username": "dsf",
+      "password": "sdf"
+    },
+    {
+      "id": "ab1a",
+      "username": "simpson",
+      "password": "1234"
+    },
+    {
+      "id": "213123",
+      "username": "user1",
+      "password": "1234",
+      "email": "user1@example.com",
+      "roles": [
+        "user"
+      ]
+    },
+    {
+      "id": "d7cc",
+      "username": "sim",
+      "password": "1234"
+    }
+  ],
+  "assets": {
+    "totalAmount": 13460000,
+    "assetData": [
+      {
+        "name": "현금자산",
+        "value": 38
+      },
+      {
+        "name": "예금",
+        "value": 25
+      },
+      {
+        "name": "주식",
+        "value": 23
+      },
+      {
+        "name": "기타",
+        "value": 14
+      },
+      {
+        "name": "부동산",
+        "value": 20
+      },
+      {
+        "name": "채권",
+        "value": 12
+      },
+      {
+        "name": "가상화폐",
+        "value": 18
+      }
+    ],
+    "loanAmount": -150000000,
+    "payment": -2050,
+    "comparisonData": {
+      "average": 50,
+      "user": 55
+    }
+  },
+  "policies": [
+    {
+      "id": "1",
+      "title": "추천 정책 1",
+      "description": "청년 일자리 지원 정책입니다.",
+      "category": "주거",
+      "date": "2024-09-01",
+      "popularity": 100
+    },
+    {
+      "id": "2",
+      "title": "추천 정책 2",
+      "description": "중소기업을 위한 지원 정책입니다.",
+      "category": "교육",
+      "date": "2024-08-15",
+      "popularity": 80
+    },
+    {
+      "id": "3",
+      "title": "추천 정책 3",
+      "description": "주거 안정화를 위한 정책입니다.",
+      "category": "복지",
+      "date": "2024-09-10",
+      "popularity": 120
+    },
+    {
+      "id": "4",
+      "title": "추천 정책 4",
+      "description": "기술 창업 지원을 위한 정책입니다.",
+      "category": "일자리",
+      "date": "2024-08-20",
+      "popularity": 90
+    },
+    {
+      "id": "5",
+      "title": "추천 정책 5",
+      "description": "청년을 위한 금융 지원 정책입니다.",
+      "category": "금융",
+      "date": "2024-07-22",
+      "popularity": 95
+    },
+    {
+      "id": "6",
+      "title": "추천 정책 6",
+      "description": "농업 및 어업 종사자를 위한 지원 정책입니다.",
+      "category": "복지",
+      "date": "2024-06-30",
+      "popularity": 105
+    },
+    {
+      "id": "7",
+      "title": "추천 정책 7",
+      "description": "국가 재정 건전성을 위한 경제 정책입니다.",
+      "category": "경제",
+      "date": "2024-08-01",
+      "popularity": 85
+    },
+    {
+      "id": "8",
+      "title": "추천 정책 8",
+      "description": "환경 보호를 위한 정책입니다.",
+      "category": "환경",
+      "date": "2024-07-10",
+      "popularity": 110
+    }
+  ],
+  "board": [
+    {
+      "id": "1",
+      "title": "2024년 청년 주거 지원 정책 총정리",
+      "content": "2024년 청년들을 위한 주거 지원 정책이 크게 확대되었습니다...",
+      "author": "KB_청년",
+      "date": "2024-03-15T10:00:00Z",
+      "views": 1523,
+      "likes": 223,
+      "comments": [
+        {
+          "id": "1",
+          "author": "미래를_준비하는_청년",
+          "content": "정말 유용한 정보네요...",
+          "date": "2024-03-15T11:30:00Z"
+        },
+        {
+          "id": "2",
+          "author": "부동산전문가",
+          "content": "주거급여 지원 대상 확대는 좋은 변화입니다...",
+          "date": "2024-03-15T13:45:00Z"
+        },
+        {
+          "id": "1726918625531",
+          "author": "Current User",
+          "content": "좋아요\n",
+          "date": "2024-09-21T11:37:05.531Z"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "청년 재테크 시작하기: 적금부터 주식까지",
+      "content": "많은 청년들이 재테크의 필요성은 알지만 어디서부터 시작해야 할지 모르는 경우가 많습니다...",
+      "author": "윤재_파이낸셜",
+      "date": "2024-03-18T09:00:00Z",
+      "views": 982,
+      "likes": 156,
+      "comments": []
+    },
+    {
+      "id": "3",
+      "title": "2024 상반기 취업 시장 동향",
+      "content": "2024년 상반기 취업 시장의 주요 동향을 분석해보았습니다...",
+      "author": "취업정보통",
+      "date": "2024-03-20T14:00:00Z",
+      "views": 750,
+      "likes": 97,
+      "comments": []
+    },
+    {
+      "id": "4",
+      "title": "월급 관리의 기술: 비상금 만들기",
+      "content": "갑작스러운 지출에 대비하기 위한 비상금 만들기 방법을 소개합니다...",
+      "author": "머니_매니저",
+      "date": "2024-03-22T11:00:00Z",
+      "views": 543,
+      "likes": 87,
+      "comments": []
+    },
+    {
+      "id": "5",
+      "title": "ㄴㅇㄹㄴ",
+      "content": "ㄴㅇㄹㄴㅇㄹ",
+      "tags": [
+        "ㅇㄴㄴㅇㄹ"
+      ],
+      "date": "2024-09-21T11:37:18.778Z",
+      "author": "Current User"
+    },
+    {
+      "id": 6,
+      "title": "ㄴㅇㄹ",
+      "content": "ㅇㄴㄹㅇ",
+      "tags": [
+        "ㅇㄴㄹㄴㅇ"
+      ],
+      "date": "2024-09-23T00:29:42.062Z",
+      "author": "Current User"
+    }
+  ],
+  "financial_news": [
+    {
+      "id": "10",
+      "title": "주식시장 호황, 투자자들의 관심 급증",
+      "date": "2024-03-15",
+      "content": "최근 주식시장이 호황을 맞이하면서 투자자들의 관심이 급증하고 있습니다...",
+      "category": "주식",
+      "popular": true
+    },
+    {
+      "id": "9",
+      "title": "가상화폐 시장 동향: 비트코인 가격 상승세",
+      "date": "2024-03-14",
+      "content": "비트코인 가격이 최근 상승세를 보이며 가상화폐 시장의 활기를 되찾고 있습니다...",
+      "category": "가상화폐",
+      "popular": false
+    }
+  ]
+}

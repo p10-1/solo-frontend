@@ -15,7 +15,7 @@
     </ul>
 
     <!-- Pagination 컴포넌트 사용 -->
-    <Pagination :pageNum="pageNum" :totalPages="totalPage" @page-change="changePage" />
+    <Pagination :currentPage="pageNum" :totalPages="totalPage" @page-change="changePage" />
   </div>
 </template>
 

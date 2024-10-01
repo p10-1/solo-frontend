@@ -3,14 +3,11 @@ defineProps({ username: String })
 </script>
 <template>
   <li class="nav-item">
-    <router-link class="nav-link font-color-white" to="/mypage">
+    <router-link class="nav-link" to="/mypage">
       <!-- <i class="fa-solid fa-user"></i> -->
       {{ username }}
     </router-link>
   </li>
 </template>
-<style>
-.font-color-white {
-  color: #fff;
-}
-</style>
+
+<style></style>

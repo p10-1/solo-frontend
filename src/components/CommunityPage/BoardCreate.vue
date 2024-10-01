@@ -57,25 +57,25 @@ export default {
     const article = ref({
       title: '',
       content: '',
-      userId: '', // Will be set by the authenticated user
+      userName: '', // Will be set by the authenticated user
       files: []
     })
     const authStore = useAuthStore() // Get the authentication store
     const router = useRouter()
 
     // Set the userID based on the logged-in user
-    article.value.userId = authStore.userInfo ? authStore.userInfo.userId : ''
+    article.value.userName = authStore.userInfo ? authStore.userInfo.userName : ''
     const handleFileUpload = (event) => {
       article.value.files = Array.from(event.target.files)
     }
-
+    console.log(article)
     const submitForm = async () => {
       try {
         await create(article.value)
-        alert('Board post created successfully!')
+        alert('글이 성공적으로 작성되었습니다')
         router.push('/board')
       } catch (error) {
-        console.error('Failed to create board post:', error)
+        console.error('글 작성에 실패했습니다:', error)
       }
     }
 

@@ -4,21 +4,32 @@ const API_URL = 'http://localhost:9000/api/board'
 const DEFAULT_AMOUNT = 10
 const headers = { 'Content-Type': 'multipart/form-data' }
 
-export const getList = async (pageNum, category, keyword) => {
+export const getList = async (pageNum, category, keyword, sortBy) => {
   try {
-    console.log('API 요청 파라미터:', pageNum, category, keyword)
+    console.log('API 요청 파라미터:', pageNum, category, keyword, sortBy)
     const response = await axios.get(API_URL, {
       params: {
-        page: pageNum, // 이렇게 수정
-        category, // 이렇게 수정
-        keyword, // 이렇게 수정
-        amount: DEFAULT_AMOUNT // 추가 파라미터
+        page: pageNum,
+        amount: DEFAULT_AMOUNT,
+        category,
+        keyword,
+        sort: sortBy
       }
     })
     console.log('BOARD GET LIST: ', response.data)
     return response.data
   } catch (error) {
     console.error('게시판을 가져오는 데 실패했습니다:', error)
+    throw error
+  }
+}
+
+export const getBest = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/best`)
+    return response.data
+  } catch (error) {
+    console.error('인기글을 가져오는 데 실패했습니다.', error)
     throw error
   }
 }
@@ -57,7 +68,7 @@ export const create = async (article) => {
   const formData = new FormData()
 
   formData.append('title', article.title)
-  formData.append('userId', article.userId)
+  formData.append('userName', article.userName)
   formData.append('content', article.content)
 
   if (article.files) {
@@ -76,7 +87,7 @@ export const update = async (article) => {
 
   formData.append('boardNo', article.boardNo)
   formData.append('title', article.title)
-  formData.append('userId', article.userId)
+  formData.append('userName', article.userName)
   formData.append('content', article.content)
 
   if (article.files && article.files.length > 0) {
@@ -101,8 +112,29 @@ export const deleteBoard = async (boardNo) => {
   return data
 }
 
+export const downloadAttachment = async (no) => {
+  const response = await axios.get(`${API_URL}/download/${no}`)
+  return response
+}
+
 export const deleteAttachment = async (no) => {
   const { data } = await axios.delete(`${API_URL}/deleteAttachment/${no}`)
   console.log('ATTACHMENT DELETE: ', data)
   return data
+}
+
+export const likeBoard = async (boardNo, userName) => {
+  try {
+    console.log('api 안에서: ', boardNo, userName)
+    const response = await axios.get(`${API_URL}/like`, {
+      params: {
+        boardNo: boardNo,
+        userName: userName
+      }
+    })
+    return response
+  } catch (error) {
+    console.error('좋아요을 가져오는 데 실패했습니다.', error)
+    throw error
+  }
 }

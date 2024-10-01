@@ -11,11 +11,13 @@
     </ul>
 
     <!-- Pagination 컴포넌트 사용 -->
-    <Pagination :pageNum="pageNum" :totalPages="totalPage" @page-change="changePage" />
+    <Pagination :currentPage="pageNum" :totalPages="totalPage" @page-change="changePage" />
   </div>
 </template>
 
 <script>
+//src/components/Policy/PolicyList.vue
+
 import { fetchPolicies } from '@/api/policyApi'
 import PolicyItem from '@/components/PolicyPage/PolicyItem.vue'
 import Pagination from '@/components/common/PaginationComp.vue'

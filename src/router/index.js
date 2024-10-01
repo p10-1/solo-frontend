@@ -25,21 +25,6 @@ const router = createRouter({
       name: 'FirstUser',
       component: FirstUser // 새 사용자 등록 페이지 컴포넌트
     },
-    // {
-    //   path: '/join',
-    //   name: 'join',
-    //   component: Join
-    // },
-    // {
-    //   path: '/login',
-    //   name: 'login',
-    //   component: Login
-    // },
-    // {
-    //   path: '/logout',
-    //   name: 'logout',
-    //   component: Logout
-    // },
     {
       path: '/board',
       name: 'board',

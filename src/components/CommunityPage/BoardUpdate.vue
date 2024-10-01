@@ -88,7 +88,7 @@ const back = () => {
 const reset = () => {
   article.boardNo = orgArticle.value.boardNo
   article.title = orgArticle.value.title
-  article.userId = orgArticle.value.userId
+  article.userName = orgArticle.value.userName
   article.content = orgArticle.value.content
 }
 
