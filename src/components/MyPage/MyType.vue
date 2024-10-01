@@ -1,6 +1,6 @@
 <template>
   <div class="my-type">
-    <h3>나의 자산 관리 유형은 어디?</h3>
+    <h3>나의 자산 관리 유형은 어디?</h3><br/>
     <div v-if="selectedType">
       {{ nickName }}님의 자산 타입은 {{ selectedType }} 입니다.
     </div>

@@ -1,38 +1,28 @@
 <template>
-  <div class="point-management">
-    <h1>포인트 관리</h1><br /><br />
+  <div class="container mt-5 point-management">
+    <h3 class="text-center">포인트 관리</h3>
+    <br />
 
     <div class="current-points">
-      <h3>현재 포인트: {{ points }} P</h3>
+      현재 포인트: {{ points }} P
     </div>
 
-    <div class="withdraw-section">
-      <h3>포인트 출금하기</h3>
-      <input v-model.number="withdrawAmount" type="number" placeholder="출금할 포인트" />
-      <button @click="withdrawPoints">포인트 출금하기</button>
+    <div class="withdraw-section mt-4">
+      포인트 출금하기
+      <div class="form-group">
+        <div class="d-flex">
+          <select v-model="selectedAccount" class="form-control mr-2" id="accountSelect">
+            <option value="" disabled>내 계좌 선택</option>
+            <option v-for="(account, index) in accounts" :key="index" :value="account">{{ account }}</option>
+          </select>
+          <input v-model.number="withdrawAmount" type="number" class="form-control" placeholder="출금할 포인트" />
+          <button @click="withdrawPoints" class="btn btn-success ml-2">출금</button>
+        </div>
+      </div>
     </div>
-
-    <!-- 출금 내역 
-    <div class="history-section">
-      <h3>포인트 출금 내역</h3>
-      <ul>
-        <li v-for="(withdrawal, index) in withdrawalHistory" :key="index">
-          {{ withdrawal.date }} - {{ withdrawal.amount }} P 출금
-        </li>
-      </ul>
-    </div> -->
-
-    <!-- 적립 내역 
-    <div class="history-section">
-      <h3>포인트 적립 내역</h3>
-      <ul>
-        <li v-for="(deposit, index) in depositHistory" :key="index">
-          {{ deposit.date }} - {{ deposit.amount }} P 적립
-        </li>
-      </ul>
-    </div> -->
   </div>
 </template>
+
 <script>
 import axios from 'axios';
 
@@ -41,10 +31,13 @@ export default {
     return {
       points: 0,
       withdrawAmount: 0,
+      selectedAccount: '', // 계좌 선택 변수
+      accounts: [] // 계좌 목록을 저장할 배열
     };
   },
   mounted() {
     this.fetchPoints();
+    this.getBank(); // getBank 요청 추가
   },
   methods: {
     async fetchPoints() {
@@ -61,24 +54,36 @@ export default {
         console.error('포인트 조회 오류:', error);
       }
     },
-
+    async getBank() {
+      try {
+        const response = await axios.get('/api/mypage/getBank');
+        if (response.status === 200) {
+          // 문자열로 반환된 JSON을 파싱하여 배열로 변환
+          const data = JSON.parse(response.data[0]); // 첫 번째 요소를 파싱
+          this.accounts = data; // accounts에 할당
+          console.log('계좌 목록:', this.accounts);
+        } else {
+          console.error('Error:', response.statusText);
+        }
+      } catch (error) {
+        console.error('계좌 조회 오류:', error);
+      }
+    },
     async withdrawPoints() {
-      if (this.withdrawAmount > 0 && this.withdrawAmount <= this.points) {
+      if (this.withdrawAmount > 0 && this.withdrawAmount <= this.points && this.selectedAccount) {
         try {
-          // 전송객체 생성
           const requestData = {
-            point: this.withdrawAmount, 
-            
+            point: this.withdrawAmount,
+            account: this.selectedAccount, // 선택된 계좌 추가
           };
-          const response = await axios.post('/api/mypage/withdraw',
-            requestData,
-            {
-              withCredentials: true
-            });
+          const response = await axios.post('/api/mypage/withdraw', requestData, {
+            withCredentials: true,
+          });
 
           if (response.status === 200) {
-            this.points -= this.withdrawAmount; 
-            this.withdrawAmount = 0; 
+            this.points -= this.withdrawAmount;
+            this.withdrawAmount = 0;
+            this.selectedAccount = ''; // 출금 후 계좌 선택 초기화
             alert('포인트 출금이 성공적으로 완료되었습니다.');
           } else {
             alert('출금 실패');
@@ -88,23 +93,20 @@ export default {
           alert('출금 중 오류가 발생했습니다.');
         }
       } else {
-        alert('출금할 수 없는 금액입니다.');
+        alert('출금할 수 없는 금액이거나 계좌를 선택하지 않았습니다.');
       }
-    },
-
-
-  },
+    }
+  }
 };
 </script>
 
 <style scoped>
 .point-management {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  text-align: center;
   background-color: #f0f0f0;
   border-radius: 10px;
+  padding: 20px;
+  max-width: 400px; /* 최대 너비를 400px로 설정 */
+  margin: auto; /* 중앙 정렬 */
 }
 
 h1,
@@ -113,23 +115,11 @@ h3 {
 }
 
 input {
-  width: 80%;
-  padding: 10px;
-  margin-bottom: 10px;
-  font-size: 16px;
+  width: 100%;
 }
 
 button {
-  padding: 10px 20px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  cursor: pointer;
   font-size: 16px;
-}
-
-button:hover {
-  background-color: #45a049;
 }
 
 ul {
