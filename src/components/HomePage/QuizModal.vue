@@ -7,10 +7,8 @@
     @click.self="$emit('close')"
   >
     <div class="modal-dialog modal-lg" role="document">
-      <!-- modal-lg 클래스를 사용하여 더 큰 모달 -->
       <div class="modal-content">
         <div class="modal-header bg-primary text-white">
-          <!-- 배경색과 텍스트 색 변경 -->
           <h5 class="modal-title">퀴즈</h5>
           <button type="button" class="close" @click="$emit('close')">
             <span>&times;</span>
@@ -51,28 +49,24 @@ const isCorrect = ref(null)
 const removeAllSpaces = (str) => str.replace(/\s+/g, '')
 
 const checkAnswer = () => {
-  const cleanedUserAnswer = removeAllSpaces(userAnswer.value) // 사용자 입력의 모든 공백 제거
-  const cleanedCorrectAnswer = removeAllSpaces(props.answer) // 정답의 모든 공백 제거
+  const cleanedUserAnswer = removeAllSpaces(userAnswer.value)
+  const cleanedCorrectAnswer = removeAllSpaces(props.answer)
 
-  console.log('사용자의 입력:', cleanedUserAnswer)
-  console.log('정답:', cleanedCorrectAnswer)
-
-  // 정답 확인
   isCorrect.value = cleanedUserAnswer === cleanedCorrectAnswer
 }
 </script>
 
 <style scoped>
 .modal.fade.show {
-  display: block; /* 모달을 보여줍니다 */
+  display: block;
 }
 
 .modal-dialog {
-  max-width: 800px; /* 더 큰 모달 너비 */
+  max-width: 800px;
 }
 
 .modal-header {
-  background-color: #007bff; /* 부트스트랩의 primary 색상 */
+  background-color: #007bff;
 }
 
 .modal-title {
@@ -89,6 +83,6 @@ const checkAnswer = () => {
 }
 
 input {
-  border-radius: 5px; /* 입력 필드의 모서리 둥글게 */
+  border-radius: 5px;
 }
 </style>

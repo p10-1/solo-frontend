@@ -13,7 +13,6 @@
       </div>
     </div>
 
-    <!-- 퀴즈 모달 컴포넌트 -->
     <QuizModal
       v-if="isModalVisible"
       :answer="answer"
@@ -25,19 +24,17 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router' // Vue Router 가져오기
-import { useAuthStore } from '@/stores/authStore' // authStore 가져오기
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
 import { makeQuiz } from '@/api/quizApi'
-import QuizModal from './QuizModal.vue' // 퀴즈 모달 컴포넌트 임포트
+import QuizModal from './QuizModal.vue'
 
-// 상태 변수 정의
 const answer = ref('')
 const description = ref('')
-const isModalVisible = ref(false) // 모달 표시 상태
-const router = useRouter() // router 인스턴스 가져오기
-const authStore = useAuthStore() // authStore 인스턴스 가져오기
+const isModalVisible = ref(false)
+const router = useRouter()
+const authStore = useAuthStore()
 
-// 컴포넌트가 생성될 때 퀴즈 데이터를 불러옴
 onMounted(async () => {
   try {
     const quizData = await makeQuiz()
@@ -50,13 +47,11 @@ onMounted(async () => {
   }
 })
 
-// 모달 열기 함수
 const openModal = () => {
-  // 로그인 상태 확인
   if (authStore.isLoggedIn) {
-    isModalVisible.value = true // 모달 표시
+    isModalVisible.value = true
   } else {
-    router.push('/login') // 로그인 페이지로 이동
+    router.push('/login')
   }
 }
 </script>
@@ -64,6 +59,6 @@ const openModal = () => {
 <style scoped>
 .card {
   border-radius: 8px;
-  cursor: pointer; /* 클릭 가능하게 표시 */
+  cursor: pointer;
 }
 </style>

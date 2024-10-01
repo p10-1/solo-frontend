@@ -35,7 +35,7 @@
       </tbody>
     </table>
     <div class="alert alert-info mt-3">
-      * 인기 글은 조회수, 댓글 수, 좋아요 수를 기준으로 선정되었습니다.
+      * 인기 글은 저번 달 조회수, 댓글 수, 좋아요 수를 기준으로 선정되었습니다.
     </div>
   </div>
 </template>

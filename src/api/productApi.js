@@ -29,3 +29,13 @@ export const fetchProducts = async (currentPage, keyword) => {
     throw error // 에러를 다시 던져서 호출하는 곳에서 처리할 수 있게 함
   }
 }
+
+export const fetchOption = async (optionId) => {
+  try {
+    const response = await axios.get(`${API_URL}/option/${optionId}`)
+    return response.data
+  } catch (error) {
+    console.error('옵션 정보를 가져오는 데 실패했습니다:', error)
+    throw error
+  }
+}
