@@ -190,7 +190,6 @@ onBeforeUnmount(() => {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  margin-top: 20px;
 }
 
 .time-comparison__title {
@@ -201,8 +200,7 @@ onBeforeUnmount(() => {
 }
 
 .time-comparison__chart-container {
-  width: 100%;
-  height: 400px;
+  height: 300px;
   margin-bottom: 20px;
 }
 
@@ -242,7 +240,7 @@ onBeforeUnmount(() => {
 
 @media (max-width: 768px) {
   .time-comparison__chart-container {
-    height: 300px;
+    height: 250px;
   }
 
   .time-comparison__title {

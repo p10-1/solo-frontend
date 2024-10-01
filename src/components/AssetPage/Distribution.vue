@@ -7,7 +7,7 @@
     </p>
     <div class="asset-distribution__content">
       <div class="asset-distribution__chart">
-        <canvas ref="chartCanvas"></canvas>
+        <ChartComponent type="doughnut" :data="chartData" :options="chartOptions" height="400px" />
         <!-- 차트 렌더링 -->
       </div>
       <div class="asset-distribution__list">
@@ -37,7 +37,7 @@
 //src/components/AssetPage/Distribution.vue
 
 import { ref, computed, onMounted, watch } from 'vue'
-import Chart from 'chart.js/auto'
+import ChartComponent from '@/components/common/ChartComponent.vue'
 
 const props = defineProps({
   assetDetails: {
@@ -99,55 +99,34 @@ const getAssetColor = (assetName) => {
 }
 
 // 차트 생성 함수
-const createChart = () => {
-  if (!chartCanvas.value || sortedAssetDetails.value.length === 0) return
+const chartData = computed(() => ({
+  labels: sortedAssetDetails.value.map((asset) => assetNames[asset.name]),
+  datasets: [
+    {
+      data: sortedAssetDetails.value.map((asset) => asset.total),
+      backgroundColor: sortedAssetDetails.value.map((asset) => getAssetColor(asset.name))
+    }
+  ]
+}))
 
-  const ctx = chartCanvas.value.getContext('2d') // 차트를 그릴 컨텍스트 얻기
-  chart = new Chart(ctx, {
-    type: 'doughnut', // 도넛형 차트 설정
-    data: {
-      labels: sortedAssetDetails.value.map((asset) => assetNames[asset.name]), // 라벨 설정
-      datasets: [
-        {
-          data: sortedAssetDetails.value.map((asset) => asset.total), // 자산 금액 설정
-          backgroundColor: sortedAssetDetails.value.map((asset) => getAssetColor(asset.name)) // 자산 색상 설정
-        }
-      ]
+const chartOptions = computed(() => ({
+  responsive: true,
+  plugins: {
+    legend: {
+      display: false
     },
-    options: {
-      responsive: true, // 반응형 차트
-      plugins: {
-        legend: {
-          display: false // 범례 숨김
-        },
-        tooltip: {
-          callbacks: {
-            label: function (context) {
-              const label = context.label || ''
-              const value = context.parsed
-              const percentage = calculatePercentage(value)
-              return `${label}: ${formatNumber(value)}원 (${percentage}%)` // 툴팁에 자산 정보 표시
-            }
-          }
+    tooltip: {
+      callbacks: {
+        label: function (context) {
+          const label = context.label || ''
+          const value = context.parsed
+          const percentage = calculatePercentage(value)
+          return `${label}: ${formatNumber(value)}원 (${percentage}%)`
         }
       }
     }
-  })
-}
-
-onMounted(createChart) // 컴포넌트가 마운트될 때 차트 생성
-
-// 자산 정보가 변경되면 차트 다시 생성
-watch(
-  () => props.assetDetails,
-  () => {
-    if (chart) {
-      chart.destroy()
-    }
-    createChart()
-  },
-  { deep: true }
-)
+  }
+}))
 </script>
 
 <style scoped>

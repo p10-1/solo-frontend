@@ -1,23 +1,17 @@
 <template>
   <div class="loan-info">
     <h3>대출 정보</h3>
-    <!-- 대출 정보를 표시하는 영역 -->
-
-    <p>대출 금액: {{ formatCurrency(loanData.amount) }}원</p>
-    <p>대출 목적: {{ loanData.purpose }}</p>
-    <p>대출 기간: {{ loanData.period }}개월</p>
-    <p>이자율: {{ loanData.interest }}%</p>
-    <p>월 상환금: {{ formatCurrency(monthlyPayment) }}원</p>
-    <p>총 상환금: {{ formatCurrency(totalPayment) }}원</p>
+    <div v-for="(value, key) in formattedLoanInfo" :key="key" class="loan-item">
+      <span class="loan-label">{{ key }}:</span>
+      <span class="loan-value">{{ value }}</span>
+    </div>
   </div>
 </template>
 
 <script setup>
 //src/components/AssetPage/LoanInfo.vue
 
-import { defineProps, computed } from 'vue'
-
-// 부모 컴포넌트로부터 대출 데이터를 props로 받음
+import { computed } from 'vue'
 
 const props = defineProps({
   loanData: {
@@ -32,21 +26,30 @@ const props = defineProps({
   }
 })
 
-// 월 상환금 계산 (원리금 균등상환 방식)
-const monthlyPayment = computed(() => {
-  const r = props.loanData.interest / 100 / 12
-  const n = props.loanData.period
-  const P = props.loanData.amount
-  return (P * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1)
-})
+const formatCurrency = (value) => {
+  return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value)
+}
 
-// 총 상환금 계산
+const calculateMonthlyPayment = (amount, interest, period) => {
+  const r = interest / 100 / 12
+  const n = period
+  return (amount * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1)
+}
+
+const monthlyPayment = computed(() =>
+  calculateMonthlyPayment(props.loanData.amount, props.loanData.interest, props.loanData.period)
+)
+
 const totalPayment = computed(() => monthlyPayment.value * props.loanData.period)
 
-// 숫자를 통화 형식으로 변환하는 함수
-const formatCurrency = (value) => {
-  return new Intl.NumberFormat('ko-KR').format(Math.round(value))
-}
+const formattedLoanInfo = computed(() => ({
+  '대출 금액': formatCurrency(props.loanData.amount),
+  '대출 목적': props.loanData.purpose,
+  '대출 기간': `${props.loanData.period}개월`,
+  이자율: `${props.loanData.interest}%`,
+  '월 상환금': formatCurrency(monthlyPayment.value),
+  '총 상환금': formatCurrency(totalPayment.value)
+}))
 </script>
 
 <style scoped>
@@ -62,8 +65,18 @@ h3 {
   color: #333;
 }
 
-p {
+.loan-item {
   margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.loan-label {
+  font-weight: bold;
   color: #555;
+}
+
+.loan-value {
+  color: #007bff;
 }
 </style>
