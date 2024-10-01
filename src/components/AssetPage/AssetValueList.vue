@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="asset-value-list">
     <h3>자산 비율</h3>
     <ul class="asset-types">
@@ -6,11 +6,6 @@
         <strong>{{ assetNames[asset.name] }} : </strong>
         <span class="asset-amount">{{ formatNumber(asset.total) }}원</span>
         <span class="asset-percentage">({{ calculatePercentage(asset.total) }}%)</span>
-        <!-- <ul class="asset-details">
-          <li v-for="(detail, index) in asset.details" :key="index">
-            {{ detail.bank }} - {{ detail.account }}: {{ formatNumber(detail.value) }}원
-          </li>
-        </ul> -->
       </li>
     </ul>
   </div>
@@ -72,4 +67,4 @@ const calculatePercentage = (value) => {
 .asset-details li {
   margin-bottom: 3px;
 }
-</style>
+</style> -->
