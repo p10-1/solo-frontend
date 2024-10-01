@@ -39,3 +39,14 @@ export const fetchOption = async (optionId) => {
     throw error
   }
 }
+
+export const getRecommend = async (period) => {
+  try {
+    const response = await axios.get(`${API_URL}/recommend/${period}`)
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error('추천 상품을 가져오는 데 실패했습니다:', error)
+    throw error
+  }
+}

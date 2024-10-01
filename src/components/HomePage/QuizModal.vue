@@ -29,6 +29,7 @@
         </div>
         <div v-if="isCorrect !== null" class="modal-body">
           <p class="mt-2"><strong>정답:</strong> {{ isCorrect ? '맞았습니다!' : '틀렸습니다.' }}</p>
+          <p class="mt-2">{{ isPoint }}</p>
         </div>
       </div>
     </div>
@@ -37,6 +38,8 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
+import { submitAnswer } from '@/api/quizApi'
 
 const props = defineProps({
   answer: String,
@@ -45,14 +48,26 @@ const props = defineProps({
 
 const userAnswer = ref('')
 const isCorrect = ref(null)
-
+const isPoint = ref(null)
 const removeAllSpaces = (str) => str.replace(/\s+/g, '')
+const authStore = useAuthStore()
 
-const checkAnswer = () => {
+const checkAnswer = async () => {
   const cleanedUserAnswer = removeAllSpaces(userAnswer.value)
   const cleanedCorrectAnswer = removeAllSpaces(props.answer)
 
   isCorrect.value = cleanedUserAnswer === cleanedCorrectAnswer
+
+  // 정답을 맞춘 경우 백엔드에 데이터 전송
+  if (isCorrect.value) {
+    try {
+      console.log(authStore.userInfo.userId)
+      const response = await submitAnswer(authStore.userInfo.userId)
+      isPoint.value = response
+    } catch (error) {
+      console.error('정답 제출 실패:', error)
+    }
+  }
 }
 </script>
 
