@@ -14,3 +14,14 @@ export const fetchAssetData = async () => {
     throw error
   }
 }
+// 새로 추가된 함수
+export const fetchAssetAverages = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/average`, { withCredentials: true })
+    console.log('fetch asset averages: ', response.data)
+    return response.data
+  } catch (error) {
+    console.error('평균 자산 데이터를 가져오는 데 실패했습니다:', error)
+    throw error
+  }
+}

@@ -28,7 +28,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { fetchAssetData } from '@/api/assetApi'
+import { fetchAssetData, fetchAssetAverages } from '@/api/assetApi'
 import TotalAsset from '@/components/AssetPage/TotalAsset.vue'
 import Distribution from '@/components/AssetPage/Distribution.vue'
 import AssetTypeButtons from '@/components/AssetPage/AssetTypeButtons.vue'
@@ -40,7 +40,22 @@ import Recommendation from '@/components/AssetPage/Recommendation.vue'
 const loading = ref(true)
 const error = ref(null)
 const rawAssetData = ref(null)
+const assetAverages = ref(null)
+
 const selectedAssetType = ref('cash')
+const loadData = async () => {
+  try {
+    loading.value = true
+    const [assetData, averages] = await Promise.all([fetchAssetData(), fetchAssetAverages()])
+    rawAssetData.value = assetData
+    assetAverages.value = averages
+  } catch (err) {
+    console.error('Failed to fetch data:', err)
+    error.value = 'Failed to load data. Please try again later.'
+  } finally {
+    loading.value = false
+  }
+}
 
 const parseJsonArray = (jsonString) => {
   try {
@@ -49,6 +64,18 @@ const parseJsonArray = (jsonString) => {
     console.error('Failed to parse JSON string:', jsonString)
     return []
   }
+}
+// processAssetData 함수 추가
+const processAssetData = (data, assetTypes) => {
+  const processed = {}
+  assetTypes.forEach((type) => {
+    processed[type] = {
+      values: parseJsonArray(data[type]),
+      banks: parseJsonArray(data[type + 'Bank']),
+      accounts: parseJsonArray(data[type + 'Account'])
+    }
+  })
+  return processed
 }
 
 const processedData = computed(() => {
@@ -59,20 +86,8 @@ const processedData = computed(() => {
 
   const assetTypes = ['cash', 'deposit', 'stock', 'property']
 
-  const processAssetData = (data) => {
-    const processed = {}
-    assetTypes.forEach((type) => {
-      processed[type] = {
-        values: parseJsonArray(data[type]),
-        banks: parseJsonArray(data[type + 'Bank']),
-        accounts: parseJsonArray(data[type + 'Account'])
-      }
-    })
-    return processed
-  }
-
-  const currentAssetData = processAssetData(currentData)
-  const previousAssetData = processAssetData(previousData)
+  const currentAssetData = processAssetData(currentData, assetTypes)
+  const previousAssetData = processAssetData(previousData, assetTypes)
 
   const calculateTotal = (assetData) =>
     assetTypes.reduce(
@@ -100,7 +115,7 @@ const processedData = computed(() => {
     const currentTotal = currentAssetData[type].values.reduce((sum, val) => sum + Number(val), 0)
     const previousTotal = previousAssetData[type].values.reduce((sum, val) => sum + Number(val), 0)
     comparisonData[type] = {
-      average: currentTotal * 0.9, // This is a placeholder. Replace with actual average calculation.
+      average: assetAverages.value ? assetAverages.value[type] : 0,
       user: currentTotal
     }
     timeComparisonData[type] = {
@@ -126,23 +141,11 @@ const processedData = computed(() => {
   }
 })
 
-const loadAssetData = async () => {
-  try {
-    loading.value = true
-    rawAssetData.value = await fetchAssetData()
-  } catch (err) {
-    console.error('Failed to fetch asset data:', err)
-    error.value = 'Failed to load asset data. Please try again later.'
-  } finally {
-    loading.value = false
-  }
-}
-
 const selectAssetType = (type) => {
   selectedAssetType.value = type
 }
 
-onMounted(loadAssetData)
+onMounted(loadData)
 </script>
 
 <style scoped>

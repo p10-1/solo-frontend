@@ -1,14 +1,10 @@
 <template>
   <div class="asset-comparison">
-    <h2 class="asset-comparison__title">자산 비교</h2>
-    <p class="asset-comparison__subtitle">내 자산 상위 몇 %인지 확인해보세요!</p>
-
-    <div v-if="currentComparisonData" class="asset-comparison__content">
-      <canvas ref="chartRef"></canvas>
-      <p class="asset-comparison__result">
-        {{ comparisonResult }}
-      </p>
-    </div>
+    <h3>{{ assetTypeTitle }} 비교</h3>
+    <canvas ref="chartRef"></canvas>
+    <p class="comparison-result">
+      {{ comparisonResult }}
+    </p>
   </div>
 </template>
 
@@ -47,13 +43,19 @@ const currentComparisonData = computed(
 const userAmount = computed(() => currentComparisonData.value.user)
 const averageAmount = computed(() => currentComparisonData.value.average)
 
+const total = computed(() => userAmount.value + averageAmount.value)
+const userPercentage = computed(() => ((userAmount.value / total.value) * 100).toFixed(2))
+const averagePercentage = computed(() => ((averageAmount.value / total.value) * 100).toFixed(2))
+
 const comparisonResult = computed(() => {
-  if (userAmount.value > averageAmount.value) {
-    return `내 ${assetTypeTitle.value}이 평균보다 ${formatCurrency(userAmount.value - averageAmount.value)} 더 많아요!`
-  } else if (userAmount.value < averageAmount.value) {
-    return `내 ${assetTypeTitle.value}이 평균보다 ${formatCurrency(averageAmount.value - userAmount.value)} 적어요!`
+  const difference = userAmount.value - averageAmount.value
+  const percentDifference = (difference / averageAmount.value) * 100
+  if (difference > 0) {
+    return `당신의 ${assetTypeTitle.value}은 평균보다 ${percentDifference.toFixed(2)}% 많습니다.`
+  } else if (difference < 0) {
+    return `당신의 ${assetTypeTitle.value}은 평균보다 ${Math.abs(percentDifference).toFixed(2)}% 적습니다.`
   } else {
-    return `내 ${assetTypeTitle.value}이 평균과 같아요!`
+    return `당신의 ${assetTypeTitle.value}은 평균과 같습니다.`
   }
 })
 
