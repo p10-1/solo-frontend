@@ -1,33 +1,20 @@
 <template>
   <div class="asset-distribution">
     <h2 class="asset-distribution__title">자산 비중</h2>
-    <!-- 자산의 최고 비율 표시 -->
     <p v-if="highestAssetType" class="asset-distribution__highlight">
       보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
     </p>
     <div class="asset-distribution__content">
       <div class="asset-distribution__chart">
-        <ChartComponent type="doughnut" :data="chartData" :options="chartOptions" height="400px" />
-        <!-- 차트 렌더링 -->
+        <ChartComponent type="doughnut" :data="chartData" :options="chartOptions" />
       </div>
-      <div class="asset-distribution__list">
-        <ul class="asset-types">
-          <li v-for="asset in sortedAssetDetails" :key="asset.name" class="asset-type">
-            <!-- 자산 색상 표시 -->
-            <span
-              class="asset-color"
-              :style="{ backgroundColor: getAssetColor(asset.name) }"
-            ></span>
-
-            <strong>{{ assetNames[asset.name] }} </strong>
-            <!-- 자산명 -->
-            <span class="asset-percentage">{{ calculatePercentage(asset.total) }}% </span>
-            <!-- 자산 비율 -->
-
-            <span class="asset-amount">{{ formatNumber(asset.total) }}원</span>
-            <!-- 자산 금액 -->
-          </li>
-        </ul>
+      <div class="asset-distribution__legend">
+        <div v-for="asset in sortedAssetDetails" :key="asset.name" class="asset-type">
+          <span class="asset-color" :style="{ backgroundColor: getAssetColor(asset.name) }"></span>
+          <span class="asset-name">{{ assetNames[asset.name] }}</span>
+          <span class="asset-percentage">{{ calculatePercentage(asset.total) }}%</span>
+          <span class="asset-amount">{{ formatNumber(asset.total) }}원</span>
+        </div>
       </div>
     </div>
   </div>
@@ -111,15 +98,18 @@ const chartData = computed(() => ({
 
 const chartOptions = computed(() => ({
   responsive: true,
+  maintainAspectRatio: false,
+  cutout: '60%',
   plugins: {
     legend: {
       display: false
     },
     tooltip: {
+      enabled: true,
       callbacks: {
         label: function (context) {
           const label = context.label || ''
-          const value = context.parsed
+          const value = context.raw
           const percentage = calculatePercentage(value)
           return `${label}: ${formatNumber(value)}원 (${percentage}%)`
         }
@@ -133,82 +123,85 @@ const chartOptions = computed(() => ({
 .asset-distribution {
   background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .asset-distribution__title {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: #333;
-  margin-bottom: 10px;
-  text-align: center;
+  margin-bottom: 5px;
 }
 
 .asset-distribution__highlight {
-  font-size: 1.1rem;
-  color: #4a4a4a;
-  text-align: center;
-  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 15px;
 }
 
 .asset-distribution__content {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-start;
 }
 
-.asset-distribution__chart {
+.asset-distribution__chart-container {
   width: 50%;
-  max-width: 400px;
+  max-width: 300px;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
 }
 
-.asset-distribution__list {
+.asset-distribution__legend {
   width: 45%;
-}
-
-.asset-types {
-  list-style-type: none;
-  padding-left: 0;
 }
 
 .asset-type {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
-  font-size: 1rem;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
 }
 
 .asset-color {
-  width: 20px;
-  height: 20px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  margin-right: 10px;
-}
-
-.asset-amount {
-  margin-left: 10px;
-  font-weight: bold;
+  margin-right: 8px;
 }
 
 .asset-percentage {
-  margin-left: 5px;
+  font-weight: bold;
+  margin-right: 8px;
+  min-width: 40px;
+}
+
+.asset-name {
+  flex: 1;
+  margin-right: 8px;
+}
+
+.asset-amount {
+  font-size: 0.8rem;
   color: #666;
 }
 
 @media (max-width: 768px) {
   .asset-distribution__content {
     flex-direction: column;
-    align-items: center;
   }
 
-  .asset-distribution__chart,
-  .asset-distribution__list {
+  .asset-distribution__chart-container,
+  .asset-distribution__legend {
     width: 100%;
+    max-width: none;
   }
 
-  .asset-distribution__list {
-    margin-top: 20px;
+  .asset-distribution__chart-container {
+    height: 250px;
+    margin-bottom: 20px;
   }
 }
 </style>
