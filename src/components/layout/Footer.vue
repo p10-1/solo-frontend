@@ -21,11 +21,3 @@
     </div>
   </div>
 </template>
-<style>
-.footer {
-  background-color: #2c2c2c;
-  padding: 30rem 10rem;
-}
-.footer .list > li {
-}
-</style>

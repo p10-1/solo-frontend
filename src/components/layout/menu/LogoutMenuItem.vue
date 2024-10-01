@@ -1,8 +1,5 @@
 <template>
-  <a href="#" class="nav-link" @click.prevent="logout">
-    <i class="fa-solid fa-right-from-bracket"></i>
-    로그아웃
-  </a>
+  <a href="#" class="" @click.prevent="logout"> 로그아웃 </a>
 </template>
 
 <script setup>

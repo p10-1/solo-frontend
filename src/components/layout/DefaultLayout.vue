@@ -7,7 +7,7 @@ import Footer from './Footer.vue'
   <Header />
   <NavBar />
   <div class="section">
-    <div class="container section">
+    <div class="container">
       <slot></slot>
     </div>
   </div>

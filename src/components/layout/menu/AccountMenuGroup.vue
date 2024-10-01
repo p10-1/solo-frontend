@@ -13,7 +13,7 @@ const username = computed(() => authStore.username)
 </script>
 
 <template>
-  <ul class="nav flex-nowrap align-items-center header-right">
+  <ul class="login-Box">
     <template v-if="isLogin">
       <AccountMenuItem :username="username" />
       <LogoutMenuItem />

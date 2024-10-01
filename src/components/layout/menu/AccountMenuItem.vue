@@ -2,8 +2,8 @@
 defineProps({ username: String })
 </script>
 <template>
-  <li class="nav-item">
-    <router-link class="nav-link" to="/mypage">
+  <li class="nav-list">
+    <router-link class="" to="/mypage">
       <!-- <i class="fa-solid fa-user"></i> -->
       {{ username }}
     </router-link>
