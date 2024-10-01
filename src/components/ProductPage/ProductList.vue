@@ -1,10 +1,9 @@
 <template>
-  <div>
+  <div class="infinite-scroll">
     <h1>예적금 상품 목록</h1>
     <div class="search-bar">
       <!-- SearchBar 컴포넌트 사용 -->
       <SearchBar v-model="keyword" @search="searchProducts" />
-      <!-- <button @click="viewAllPolicies" class="btn btn-secondary">전체보기</button> -->
     </div>
     <ul>
       <ProductItem
@@ -14,82 +13,93 @@
       />
     </ul>
 
-    <!-- Pagination 컴포넌트 사용 -->
-    <Pagination :currentPage="pageNum" :totalPages="totalPage" @page-change="changePage" />
+    <!-- 로딩 상태 표시 -->
+    <div v-if="loading" class="loading">로딩 중...</div>
+    <div v-if="noMoreData" class="no-more">더 이상 데이터가 없습니다.</div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { fetchProducts } from '@/api/productApi'
 import ProductItem from './ProductItem.vue'
-import Pagination from '@/components/common/PaginationComp.vue'
 import SearchBar from '@/components/common/SearchBar.vue'
 
-export default {
-  components: {
-    ProductItem,
-    Pagination,
-    SearchBar
-  },
-  data() {
-    return {
-      list: [],
-      pageNum: 1,
-      totalPage: 0,
-      keyword: '',
-      amount: 10
+const list = ref([])
+const pageNum = ref(1)
+const totalPage = ref(0)
+const keyword = ref('')
+const loading = ref(false)
+const noMoreData = ref(false)
+
+const route = useRoute()
+const router = useRouter()
+
+const loadProducts = async () => {
+  if (loading.value || noMoreData.value) return
+  loading.value = true
+
+  setTimeout(async () => {
+    try {
+      const data = await fetchProducts(pageNum.value, keyword.value)
+      if (data.list.length > 0) {
+        list.value = [...list.value, ...data.list]
+        totalPage.value = data.totalPage
+        pageNum.value++
+      } else {
+        noMoreData.value = true
+      }
+    } catch (error) {
+      console.error('데이터를 불러오는 중 오류 발생', error)
+    } finally {
+      loading.value = false
     }
-  },
-  methods: {
-    async loadProducts() {
-      console.log('현재 페이지:', this.pageNum, '검색어:', this.keyword)
-      const data = await fetchProducts(this.pageNum, this.keyword)
-      console.log('내부에서 호출: ', data)
-      this.list = data.list || [] // 정책 데이터 초기화
-      this.totalPage = data.totalPage || 0 // 총 페이지 수 초기화
-      this.pageNum = data.pageNum || 1 // 현재 페이지 초기화
-    },
-    async searchProducts(searchTerm) {
-      console.log('검색어: ', searchTerm)
-      this.keyword = searchTerm // 검색어 설정
-      this.currentPage = 1 // 첫 페이지로 설정
-      this.$router.push({
-        path: '/product',
-        query: { keyword: this.keyword, page: this.pageNum }
-      })
-      await this.loadProducts() // 정책 데이터 가져오기
-    },
-    async changePage(page) {
-      console.log('부모 페이지: ', page)
-      this.pageNum = page // 현재 페이지 업데이트
-      this.$router.push({
-        path: '/product',
-        query: { keyword: this.keyword, page: this.pageNum }
-      })
-      await this.loadProducts() // 새로운 페이지의 정책 데이터를 가져옴
-    }
-  },
-  mounted() {
-    // 쿼리 파라미터에서 검색어와 페이지 정보를 읽어옴
-    const query = this.$route.query
-    this.keyword = query.keyword || ''
-    this.pageNum = parseInt(query.page) || 1
-    this.loadProducts()
-  },
-  watch: {
-    // 쿼리 파라미터가 변경될 때마다 loadPolicies를 호출
-    '$route.query': {
-      handler() {
-        this.keyword = this.$route.query.keyword || ''
-        this.pageNum = parseInt(this.$route.query.page) || 1
-        this.loadProducts()
-      },
-      immediate: true // 컴포넌트가 마운트될 때도 호출
-    }
+  }, 500)
+}
+
+const searchProducts = async (searchTerm) => {
+  keyword.value = searchTerm
+  pageNum.value = 1
+  list.value = []
+  noMoreData.value = false
+  router.push({
+    path: '/product',
+    query: { keyword: keyword.value, page: pageNum.value }
+  })
+  await loadProducts()
+}
+
+const handleScroll = () => {
+  const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10
+  if (scrollBottom && !loading.value) {
+    loadProducts()
   }
 }
+
+onMounted(() => {
+  keyword.value = route.query.keyword || ''
+  pageNum.value = parseInt(route.query.page) || 1
+
+  loadProducts()
+
+  window.addEventListener('scroll', handleScroll)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <style scoped>
-/* 스타일링 추가 */
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: gray;
+}
+.no-more {
+  text-align: center;
+  padding: 20px;
+  color: gray;
+}
 </style>

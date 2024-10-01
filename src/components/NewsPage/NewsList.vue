@@ -1,5 +1,15 @@
 <template>
-  <div class="news-list" @scroll="handleScroll">
+  <div class="infinite-scroll">
+    <div class="category-filter">
+      <label for="category-select">카테고리 선택:</label>
+      <select id="category-select" v-model="selectedCategory" @change="resetFilter">
+        <option value="">전체</option>
+        <option value="경제">경제</option>
+        <option value="부동산">부동산</option>
+        <option value="증권">증권</option>
+      </select>
+    </div>
+
     <table class="table">
       <thead>
         <tr>
@@ -10,8 +20,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(news, index) in displayedNews" :key="news.no">
-          <td>{{ index + 1 }}</td> 
+        <tr v-for="(news, index) in filteredNewsList" :key="news.no">
+          <td>{{ index + 1 }}</td>
           <td>{{ news.category }}</td>
           <td>
             <a :href="news.link" target="_blank">{{ news.title }}</a>
@@ -20,62 +30,73 @@
         </tr>
       </tbody>
     </table>
-    <p v-if="displayedNews.length === 0">뉴스가 없습니다.</p>
-    <p v-if="loading">로딩 중...</p> <!-- 로딩 중 표시 -->
+
+    <div v-if="loading" class="loading">로딩 중...</div>
+    <div v-if="noMoreData" class="no-more">더 이상 데이터가 없습니다.</div>
   </div>
 </template>
 
 <script>
-import { fetchNews } from '@/api/newsAPI'; 
+import { getNews, getNewsBycategory } from '@/api/newsAPI'; 
 
 export default {
+  name: 'NewsList',
   data() {
     return {
-      allNews: [], // 전체 뉴스 데이터를 저장
-      displayedNews: [], // 현재 표시할 뉴스 데이터
-      itemsPerPage: 20, // 한 번에 표시할 뉴스 개수
-      currentPage: 0, // 현재 페이지
-      loading: false, // 로딩 상태
+      newsList: [],
+      currentPage: 1,
+      loading: false,
+      noMoreData: false,
+      selectedCategory: '',
     };
   },
-  created() {
-    this.loadNews();
+  computed: {
+    filteredNewsList() {
+      return this.newsList.filter(news => {
+        const newsCategory = news.category.trim();
+        const selectedCategory = this.selectedCategory.trim();
+        return selectedCategory === '' || newsCategory === selectedCategory;
+      });
+    },
   },
   methods: {
     async loadNews() {
+      if (this.loading || this.noMoreData) return; // 로딩 중이거나 더 이상 데이터가 없으면 실행하지 않음
+      this.loading = true; // 로딩 상태 시작
+
+      // 0.5초의 로딩 지연 추가
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       try {
-        const data = await fetchNews();
-        this.allNews = data; // 가져온 전체 데이터를 저장
-        this.loadMoreNews(); // 초기 데이터 로드
+        let data;
+        if (this.selectedCategory) {
+          data = await getNewsBycategory(this.currentPage, this.selectedCategory);
+        } else {
+          data = await getNews(this.currentPage);
+        }
+        
+        if (data.list && data.list.length > 0) {
+          this.newsList = [...this.newsList, ...data.list]; 
+          this.currentPage++; // 페이지 수 증가
+        } else {
+          this.noMoreData = true; 
+        }
       } catch (error) {
-        console.error('뉴스를 로드하는 데 실패했습니다:', error);
+        console.error('뉴스를 불러오는 중 오류 발생', error);
+      } finally {
+        this.loading = false; 
       }
     },
-    loadMoreNews() {
-      const start = this.currentPage * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-
-      // 로딩 상태 설정
-      this.loading = true;
-
-      // 0.5초 후에 추가 데이터 로드
-      setTimeout(() => {
-        // 데이터가 남아있을 때만 추가
-        if (start < this.allNews.length) {
-          this.displayedNews = this.displayedNews.concat(this.allNews.slice(start, end)); // 뉴스 추가
-          this.currentPage++; // 페이지 증가
-        }
-        this.loading = false; // 로딩 상태 해제
-      }, 500); // 500ms 대기
+    resetFilter() {
+      this.currentPage = 1; 
+      this.newsList = []; 
+      this.noMoreData = false; 
+      this.loadNews(); 
     },
     handleScroll() {
-      const scrollable = this.$el;
-      // 스크롤 위치 확인
-      if (scrollable.scrollTop + scrollable.clientHeight >= scrollable.scrollHeight - 10) {
-        // 로딩 중이 아니고, 아직 불러올 뉴스가 남아있을 경우
-        if (!this.loading && this.displayedNews.length < this.allNews.length) {
-          this.loadMoreNews();
-        }
+      const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10;
+      if (scrollBottom && !this.loading) {
+        this.loadNews(); // 추가 데이터 로드
       }
     },
     formatDate(dateString) {
@@ -83,34 +104,44 @@ export default {
       return date.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 반환
     },
   },
+  mounted() {
+    this.loadNews(); 
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll); 
+  },
 };
 </script>
 
-
 <style scoped>
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: gray;
+}
+.no-more {
+  text-align: center;
+  padding: 20px;
+  color: gray;
+}
 .table {
   width: 100%;
   border-collapse: collapse;
 }
-
 .table th,
 .table td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
 }
-
 .table th {
   background-color: #f2f2f2;
 }
-
 .table tr:hover {
   background-color: #f5f5f5;
 }
-
-/* 추가된 스타일 */
-.news-list {
-  height: 400px; /* 원하는 높이 지정 */
-  overflow-y: auto; /* 스크롤 가능 */
+.category-filter {
+  margin-bottom: 20px;
 }
 </style>
