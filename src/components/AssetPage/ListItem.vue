@@ -18,6 +18,8 @@
 </template>
 
 <script setup>
+//src/components/AssetPage/ListItem.vue
+
 import { defineProps } from 'vue'
 
 const props = defineProps({

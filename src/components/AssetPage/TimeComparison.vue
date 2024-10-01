@@ -2,8 +2,10 @@
   <div class="time-comparison">
     <h2 class="time-comparison__title">{{ assetTypeNames[assetType] }} 월별 비교</h2>
     <div class="time-comparison__chart-container">
+      <!-- 차트 렌더링을 위한 캔버스 -->
       <canvas ref="chartRef"></canvas>
     </div>
+    <!-- 자산 변동 요약 정보 -->
     <div v-if="processedData.length > 0" class="time-comparison__summary">
       <p class="time-comparison__summary-text">최근 {{ processedData.length }}개월 변화:</p>
       <p :class="['time-comparison__trend', trendDirection]">
@@ -15,8 +17,12 @@
 </template>
 
 <script setup>
+//src/components/AssetPage/TimeComparison.vue
+
 import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import Chart from 'chart.js/auto'
+
+// 부모 컴포넌트로부터 자산 타입과 데이터를 props로 받음
 
 const props = defineProps({
   assetType: {
@@ -31,6 +37,8 @@ const props = defineProps({
 
 const chartRef = ref(null)
 let chartInstance = null
+
+// 자산 타입 이름 매핑
 
 const assetTypeNames = {
   cash: '현금자산',
@@ -47,6 +55,7 @@ const parseJsonArray = (jsonString) => {
     return []
   }
 }
+// 자산 데이터를 처리하여 월별 변동 데이터로 변환
 
 const processedData = computed(() => {
   if (!props.assetData || props.assetData.length === 0) return []
@@ -97,26 +106,22 @@ const trendPercentage = computed(() => {
   return (((lastValue - firstValue) / firstValue) * 100).toFixed(2)
 })
 
+// 차트 생성 함수
 const createChart = () => {
   if (chartInstance) {
-    chartInstance.destroy()
+    chartInstance.destroy() // 기존 차트가 있으면 제거
   }
 
   if (!chartRef.value || processedData.value.length === 0) return
 
   const ctx = chartRef.value.getContext('2d')
 
+  // 라인 차트 생성
   chartInstance = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: processedData.value.map((data, index) =>
-        index === processedData.value.length - 1
-          ? data.date.toLocaleDateString('ko-KR', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric'
-            })
-          : data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short' })
+      labels: processedData.value.map((data) =>
+        data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short' })
       ),
       datasets: [
         {
@@ -167,14 +172,14 @@ const createChart = () => {
     }
   })
 }
+onMounted(createChart) // 컴포넌트가 마운트되면 차트 생성
 
-onMounted(createChart)
-
+// 자산 타입 또는 데이터가 변경될 때 차트 다시 생성
 watch([() => props.assetType, () => props.assetData], createChart, { deep: true })
 
 onBeforeUnmount(() => {
   if (chartInstance) {
-    chartInstance.destroy()
+    chartInstance.destroy() // 컴포넌트가 언마운트되면 차트 제거
   }
 })
 </script>

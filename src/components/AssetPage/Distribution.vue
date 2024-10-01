@@ -1,25 +1,31 @@
 <template>
   <div class="asset-distribution">
     <h2 class="asset-distribution__title">자산 비중</h2>
+    <!-- 자산의 최고 비율 표시 -->
     <p v-if="highestAssetType" class="asset-distribution__highlight">
       보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
     </p>
     <div class="asset-distribution__content">
       <div class="asset-distribution__chart">
         <canvas ref="chartCanvas"></canvas>
+        <!-- 차트 렌더링 -->
       </div>
       <div class="asset-distribution__list">
         <ul class="asset-types">
           <li v-for="asset in sortedAssetDetails" :key="asset.name" class="asset-type">
+            <!-- 자산 색상 표시 -->
             <span
               class="asset-color"
               :style="{ backgroundColor: getAssetColor(asset.name) }"
             ></span>
 
             <strong>{{ assetNames[asset.name] }} </strong>
+            <!-- 자산명 -->
             <span class="asset-percentage">{{ calculatePercentage(asset.total) }}% </span>
+            <!-- 자산 비율 -->
 
             <span class="asset-amount">{{ formatNumber(asset.total) }}원</span>
+            <!-- 자산 금액 -->
           </li>
         </ul>
       </div>
@@ -28,6 +34,8 @@
 </template>
 
 <script setup>
+//src/components/AssetPage/Distribution.vue
+
 import { ref, computed, onMounted, watch } from 'vue'
 import Chart from 'chart.js/auto'
 
@@ -38,9 +46,10 @@ const props = defineProps({
   }
 })
 
-const chartCanvas = ref(null)
-let chart = null
+const chartCanvas = ref(null) // 차트를 렌더링할 캔버스 참조
+let chart = null // 차트 인스턴스
 
+// 자산 이름 매핑
 const assetNames = {
   cash: '현금자산',
   deposit: '예적금',
@@ -48,6 +57,7 @@ const assetNames = {
   property: '부동산'
 }
 
+// 자산 색상 매핑
 const assetColors = {
   cash: '#FF6384',
   deposit: '#36A2EB',
@@ -55,53 +65,60 @@ const assetColors = {
   property: '#4BC0C0'
 }
 
+// 총 자산 금액 계산
 const totalAsset = computed(() => {
   return Object.values(props.assetDetails).reduce((sum, asset) => sum + asset.total, 0)
 })
 
+// 자산을 금액 순으로 정렬
 const sortedAssetDetails = computed(() => {
   return Object.entries(props.assetDetails)
     .map(([name, details]) => ({ name, ...details }))
     .sort((a, b) => b.total - a.total)
 })
 
+// 자산이 가장 많은 타입 계산
 const highestAssetType = computed(() => {
   return sortedAssetDetails.value[0]?.name
 })
 
+// 숫자를 포맷하는 함수
 const formatNumber = (num) => {
   return num.toLocaleString()
 }
 
+// 자산의 비율 계산
 const calculatePercentage = (value) => {
   if (totalAsset.value === 0) return '0.00'
   return ((value / totalAsset.value) * 100).toFixed(2)
 }
 
+// 자산별 색상 반환
 const getAssetColor = (assetName) => {
-  return assetColors[assetName] || '#9966FF' // 기본 색상
+  return assetColors[assetName] || '#9966FF'
 }
 
+// 차트 생성 함수
 const createChart = () => {
   if (!chartCanvas.value || sortedAssetDetails.value.length === 0) return
 
-  const ctx = chartCanvas.value.getContext('2d')
+  const ctx = chartCanvas.value.getContext('2d') // 차트를 그릴 컨텍스트 얻기
   chart = new Chart(ctx, {
-    type: 'doughnut',
+    type: 'doughnut', // 도넛형 차트 설정
     data: {
-      labels: sortedAssetDetails.value.map((asset) => assetNames[asset.name]),
+      labels: sortedAssetDetails.value.map((asset) => assetNames[asset.name]), // 라벨 설정
       datasets: [
         {
-          data: sortedAssetDetails.value.map((asset) => asset.total),
-          backgroundColor: sortedAssetDetails.value.map((asset) => getAssetColor(asset.name))
+          data: sortedAssetDetails.value.map((asset) => asset.total), // 자산 금액 설정
+          backgroundColor: sortedAssetDetails.value.map((asset) => getAssetColor(asset.name)) // 자산 색상 설정
         }
       ]
     },
     options: {
-      responsive: true,
+      responsive: true, // 반응형 차트
       plugins: {
         legend: {
-          display: false
+          display: false // 범례 숨김
         },
         tooltip: {
           callbacks: {
@@ -109,7 +126,7 @@ const createChart = () => {
               const label = context.label || ''
               const value = context.parsed
               const percentage = calculatePercentage(value)
-              return `${label}: ${formatNumber(value)}원 (${percentage}%)`
+              return `${label}: ${formatNumber(value)}원 (${percentage}%)` // 툴팁에 자산 정보 표시
             }
           }
         }
@@ -118,8 +135,9 @@ const createChart = () => {
   })
 }
 
-onMounted(createChart)
+onMounted(createChart) // 컴포넌트가 마운트될 때 차트 생성
 
+// 자산 정보가 변경되면 차트 다시 생성
 watch(
   () => props.assetDetails,
   () => {

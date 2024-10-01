@@ -1,6 +1,8 @@
 <template>
   <div class="loan-info">
     <h3>대출 정보</h3>
+    <!-- 대출 정보를 표시하는 영역 -->
+
     <p>대출 금액: {{ formatCurrency(loanData.amount) }}원</p>
     <p>대출 목적: {{ loanData.purpose }}</p>
     <p>대출 기간: {{ loanData.period }}개월</p>
@@ -11,7 +13,11 @@
 </template>
 
 <script setup>
+//src/components/AssetPage/LoanInfo.vue
+
 import { defineProps, computed } from 'vue'
+
+// 부모 컴포넌트로부터 대출 데이터를 props로 받음
 
 const props = defineProps({
   loanData: {
