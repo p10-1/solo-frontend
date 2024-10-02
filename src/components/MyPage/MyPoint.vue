@@ -10,13 +10,15 @@
     <div class="withdraw-section mt-4">
       포인트 출금하기
       <div class="form-group">
-        <div class="d-flex">
-          <select v-model="selectedAccount" class="form-control mr-2" id="accountSelect">
-            <option value="" disabled>내 계좌 선택</option>
-            <option v-for="(account, index) in accounts" :key="index" :value="account">{{ account }}</option>
+        <div class="d-flex align-items-center">
+          <select v-model="selectedAccountIndex" class="form-control mr-2 account-select" id="accountSelect">
+            <option value="">내 계좌 선택</option> <!-- disabled 속성 제거 -->
+            <option v-for="(account, index) in accounts" :key="index" :value="index">{{ account }}</option>
           </select>
-          <input v-model.number="withdrawAmount" type="number" class="form-control" placeholder="출금할 포인트" />
-          <button @click="withdrawPoints" class="btn btn-success ml-2">출금</button>
+          <span class="common-label">계좌로</span> <!-- 공통 클래스 사용 -->
+          <input v-model.number="withdrawAmount" type="number" class="form-control ml-2 amount-input" placeholder="출금할 포인트" />
+          <span class="common-label">원</span> <!-- 공통 클래스 사용 -->
+          <button @click="withdrawPoints" class="btn btn-success ml-2">입금</button>
         </div>
       </div>
     </div>
@@ -31,7 +33,7 @@ export default {
     return {
       points: 0,
       withdrawAmount: 0,
-      selectedAccount: '', // 계좌 선택 변수
+      selectedAccountIndex: null, // 계좌 선택 변수 (인덱스)
       accounts: [] // 계좌 목록을 저장할 배열
     };
   },
@@ -58,7 +60,6 @@ export default {
       try {
         const response = await axios.get('/api/mypage/getBank');
         if (response.status === 200) {
-          // 문자열로 반환된 JSON을 파싱하여 배열로 변환
           const data = JSON.parse(response.data[0]); // 첫 번째 요소를 파싱
           this.accounts = data; // accounts에 할당
           console.log('계좌 목록:', this.accounts);
@@ -70,11 +71,11 @@ export default {
       }
     },
     async withdrawPoints() {
-      if (this.withdrawAmount > 0 && this.withdrawAmount <= this.points && this.selectedAccount) {
+      if (this.withdrawAmount > 0 && this.withdrawAmount <= this.points && this.selectedAccountIndex !== null) {
         try {
           const requestData = {
             point: this.withdrawAmount,
-            account: this.selectedAccount, // 선택된 계좌 추가
+            accountIndex: this.selectedAccountIndex, // 선택된 계좌의 인덱스 추가
           };
           const response = await axios.post('/api/mypage/withdraw', requestData, {
             withCredentials: true,
@@ -83,7 +84,7 @@ export default {
           if (response.status === 200) {
             this.points -= this.withdrawAmount;
             this.withdrawAmount = 0;
-            this.selectedAccount = ''; // 출금 후 계좌 선택 초기화
+            this.selectedAccountIndex = null; // 출금 후 계좌 선택 초기화
             alert('포인트 출금이 성공적으로 완료되었습니다.');
           } else {
             alert('출금 실패');
@@ -102,10 +103,10 @@ export default {
 
 <style scoped>
 .point-management {
-  background-color: #f0f0f0;
+  background-color: #e0e0e0; /* 더 연한 배경색으로 변경 */
   border-radius: 10px;
   padding: 20px;
-  max-width: 400px; /* 최대 너비를 400px로 설정 */
+  max-width: 500px; /* 최대 너비를 500px로 설정 */
   margin: auto; /* 중앙 정렬 */
 }
 
@@ -114,8 +115,17 @@ h3 {
   color: #333;
 }
 
-input {
-  width: 100%;
+.account-select {
+  width: 120px; /* 셀렉트 박스 너비 조정 */
+}
+
+.amount-input {
+  width: 150px; /* 인풋 폼 너비 조정 */
+}
+
+.common-label {
+  margin: 0 10px; /* "계좌로" 및 "원" 텍스트와 셀렉트/인풋 사이의 간격 조정 */
+  font-weight: bold; /* 텍스트를 두껍게 */
 }
 
 button {
