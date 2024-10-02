@@ -17,7 +17,7 @@ export const useAuthStore = defineStore('auth', {
   },
   getters: {
     isLoggedIn: (state) => !!state.userInfo,
-    username: (state) => (state.userInfo ? state.userInfo.nickName : '')
+    username: (state) => (state.userInfo ? state.userInfo.userName : '')
     // userID: (state) => (state.userInfo ? state.userInfo.kakaoId : '')
   }
 })

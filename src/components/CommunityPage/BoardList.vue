@@ -32,7 +32,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="board in list" :key="board.boardNo">
+        <tr
+          v-for="(board, index) in list"
+          :key="board.boardNo"
+          :class="{ 'top-post': pageNum === 1 && index < 5 }"
+        >
           <td>{{ board.boardNo }}</td>
           <td>
             <router-link
@@ -42,9 +46,9 @@
               }"
             >
               {{ board.title }}
-              <span v-if="bestlist.includes(board.boardNo)">
+              <!-- <span v-if="bestlist.includes(board.boardNo)">
                 <i class="fa-solid fa-star" style="color: gold"></i>
-              </span>
+              </span> -->
             </router-link>
           </td>
           <td>
@@ -172,5 +176,29 @@ watch(
 
 .table th {
   text-align: left;
+}
+
+.board-list .top-post {
+  background-color: #ffeb3b !important;
+  border-left: 5px solid #f57f17;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.top-post:hover {
+  transform: scale(1.02);
+  background-color: #e8f5e9;
+}
+
+.table th,
+.table td {
+  padding: 12px 15px;
+}
+
+.table td {
+  vertical-align: middle;
+  word-break: break-word;
 }
 </style>

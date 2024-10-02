@@ -4,8 +4,7 @@
 
     <!-- 상단 두 개 컴포넌트를 좌우로 배치 -->
     <div class="top-section">
-        <MyPoint />
-    
+      <MyPoint />
     </div>
 
     <!-- 중간 컴포넌트 (MyType) -->
@@ -16,7 +15,9 @@
     <!-- 하단 컴포넌트 (MyAsset) -->
     <div class="bottom-section">
       <!-- <AssetEdit/> -->
-      
+    </div>
+    <div>
+      <MyBoard />
     </div>
   </div>
 </template>
@@ -27,6 +28,7 @@ import MyPoint from '@/components/MyPage/MyPoint.vue'
 // import MyGrade from '@/components/MyPage/MyGrade.vue'
 // import MyType from '@/components/MyPage/MyType.vue'
 import MyAsset from '@/components/MyPage/MyAsset.vue'
+import MyBoard from '@/components/MyPage/MyBoard.vue'
 // import AssetEdit from '@/components/MyPage/AssetEdit.vue';
 
 export default {
@@ -36,6 +38,7 @@ export default {
     //MyGrade,
     // MyType,
     MyAsset,
+    MyBoard
     // AssetEdit
   }
 }
