@@ -79,6 +79,7 @@ const loadData = async () => {
   try {
     loading.value = true
     const [assetData, averages] = await Promise.all([fetchAssetData(), fetchAssetAverages()])
+    console.log('Received asset data:', assetData)
     rawAssetData.value = assetData
     assetAverages.value = averages
   } catch (err) {
@@ -119,9 +120,22 @@ const processAssetData = (data, assetTypes) => {
 }
 // 처리된 자산 데이터를 계산하고 반환하는 computed 함수
 const processedData = computed(() => {
-  if (!rawAssetData.value || rawAssetData.value.length === 0) return null
+  if (!rawAssetData.value || rawAssetData.value.length === 0) {
+    return {
+      totalAsset: 0,
+      assetDetails: {
+        cash: { total: 0, details: [] },
+        deposit: { total: 0, details: [] },
+        stock: { total: 0, details: [] },
+        insurance: { total: 0, details: [] }
+      },
+      comparisonData: {},
+      timeComparisonData: {},
+      loanData: { amount: 0, purpose: '', period: 0, interest: 0 }
+    }
+  }
 
-  const currentData = rawAssetData.value[0]
+  const currentData = rawAssetData.value[0] || {}
   const previousData = rawAssetData.value[1] || currentData
 
   const assetTypes = ['cash', 'deposit', 'stock', 'insurance']
@@ -131,7 +145,8 @@ const processedData = computed(() => {
 
   const calculateTotal = (assetData) =>
     assetTypes.reduce(
-      (total, type) => total + assetData[type].values.reduce((sum, val) => sum + Number(val), 0),
+      (total, type) =>
+        total + (assetData[type]?.values?.reduce((sum, val) => sum + Number(val), 0) || 0),
       0
     )
 
@@ -174,7 +189,7 @@ const processedData = computed(() => {
       purpose: currentData.loanPurpose,
       period: Number(currentData.period),
       interest: Number(currentData.interest)
-    },
+    }
     // recommendationData: {
     //   consume: currentData.consume
     // }
