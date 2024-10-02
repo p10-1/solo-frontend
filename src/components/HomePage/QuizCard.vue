@@ -1,23 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <div class="financial-quiz">
-    <div class="title-box">
-      <h2 class="title">금융 퀴즈</h2>
-      <span>10-02일</span>
-    </div>
-    <div class="quiz-question">
-      <p class="text">{{ currentQuestion.text }}</p>
-      <div class="quiz-options margin-top-1rem">
-        <button @click="submitAnswer(true)" class="option-button correct">그렇다</button>
-        <button @click="submitAnswer(false)" class="option-button incorrect">아니다</button>
-      </div>
-    </div>
-    <div class="quiz-submit">
-      <div>
-        <div><b>정답</b>입니다!</div>
-        <div>point 10점</div>
-        <p>정답에 대한 설명 설명</p>
-=======
   <div class="container mt-5">
     <div class="card" @click="openModal">
       <div class="card-body">
@@ -28,7 +9,6 @@
         <div v-else>
           <p>퀴즈를 불러오는 중입니다...</p>
         </div>
->>>>>>> dev
       </div>
     </div>
 
@@ -78,19 +58,14 @@ const openModal = () => {
 </script>
 
 <style scoped>
-<<<<<<< HEAD
 /* .financial-quiz {
   max-width: 300px;
   margin: auto;
   padding: 20px;
   border: 1px solid #ccc;
-=======
-.card {
->>>>>>> dev
   border-radius: 8px;
   cursor: pointer;
 }
-<<<<<<< HEAD
 
 .correct {
   background-color: #4caf50; /* Green
@@ -99,6 +74,4 @@ const openModal = () => {
 .incorrect {
   background-color: #f44336; /* Red
 } */
-=======
->>>>>>> dev
 </style>
