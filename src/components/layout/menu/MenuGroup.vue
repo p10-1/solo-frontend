@@ -10,8 +10,4 @@ const props = defineProps({
     <MenuItem v-for="menu in menus" :menu="menu" :key="menu.id" />
   </ul>
 </template>
-<style>
-.navbar-nav {
-  background-color: #000;
-}
-</style>
+<style></style>

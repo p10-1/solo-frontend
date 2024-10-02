@@ -6,10 +6,8 @@ import Footer from './Footer.vue'
 <template>
   <Header />
   <NavBar />
-  <div class="section">
-    <div class="container">
-      <slot></slot>
-    </div>
-  </div>
+  <section class="container min-height-container">
+    <slot></slot>
+  </section>
   <Footer />
 </template>

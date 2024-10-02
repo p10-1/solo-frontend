@@ -1,6 +1,11 @@
 .navigation {
-  background-color: #73ca00;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* background-color: #73ca00; */
   border-bottom: 1px solid #eeeeee;
+  background-color: #fff;
 }
 
 .logo-box {

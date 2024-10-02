@@ -1,7 +1,7 @@
 <template>
-  <div class="user-points">
+  <div class="user-points margin-bottom-1rem">
     <span class="label">적립 포인트</span>
-    <span class="points">{{ points }}P</span>
+    <span class="text-accent">{{ points }}P</span>
   </div>
 </template>
 
@@ -15,20 +15,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.user-points {
-  display: flex;
-  align-items: center;
-  font-size: 18px;
-  color: #333;
-}
-
-.label {
-  margin-right: 10px;
-}
-
-.points {
-  color: #007bff; /* Bootstrap primary blue */
-  font-weight: bold;
-}
-</style>
+<style scoped></style>

@@ -1,12 +1,22 @@
 <template>
   <div class="financial-quiz">
-    <div class="quiz-question">
-      <h3>금융 퀴즈</h3>
-      <p>{{ currentQuestion.text }}</p>
+    <div class="title-box">
+      <h2 class="title">금융 퀴즈</h2>
+      <span>10-02일</span>
     </div>
-    <div class="quiz-options">
-      <button @click="submitAnswer(true)" class="option-button correct">확인</button>
-      <button @click="submitAnswer(false)" class="option-button incorrect">아니요</button>
+    <div class="quiz-question">
+      <p class="text">{{ currentQuestion.text }}</p>
+      <div class="quiz-options margin-top-1rem">
+        <button @click="submitAnswer(true)" class="option-button correct">그렇다</button>
+        <button @click="submitAnswer(false)" class="option-button incorrect">아니다</button>
+      </div>
+    </div>
+    <div class="quiz-submit">
+      <div>
+        <div><b>정답</b>입니다!</div>
+        <div>point 10점</div>
+        <p>정답에 대한 설명 설명</p>
+      </div>
     </div>
   </div>
 </template>
@@ -32,7 +42,7 @@ export default {
 </script>
 
 <style scoped>
-.financial-quiz {
+/* .financial-quiz {
   max-width: 300px;
   margin: auto;
   padding: 20px;
@@ -67,10 +77,10 @@ export default {
 }
 
 .correct {
-  background-color: #4caf50; /* Green */
-}
+  background-color: #4caf50; /* Green
+ }
 
 .incorrect {
-  background-color: #f44336; /* Red */
-}
+  background-color: #f44336; /* Red
+} */
 </style>

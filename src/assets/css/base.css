@@ -104,6 +104,7 @@ section {
 }
 body {
   line-height: 1;
+  box-sizing: border-box;
 }
 ol,
 ul {
@@ -163,25 +164,146 @@ body {
   max-width: 1180px;
   margin: 0 auto;
   /* 위치 보기 */
-  background-color: #9a0000;
 }
 
-.button-main {
-  display: inline-block;
-  min-width: 110px;
-  background-color: #fee500;
-  height: 50px;
-  line-height: 50px;
+.min-height-container {
+  height: 100vh;
+  margin-top: 95px;
+  padding: 5rem 0;
+}
+
+.text-align-center {
   text-align: center;
-  border-radius: 4px;
-  font-size: 18px;
-  font-weight: 500;
-  color: #484848;
-  cursor: pointer;
-  transition: all 0.6s;
 }
 
-.button-main:hover {
-  background-color: #f8d648;
-  font-weight: 700;
+.empty {
+  min-height: 220px;
+  line-height: 220px;
+  padding: 1rem;
+  background-color: #f1f1f1;
+}
+
+/* title css */
+h2.title {
+  font-size: 2em;
+  font-weight: 600;
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+}
+
+h3.title {
+  font-size: 1.4em;
+  line-height: 1.4em;
+  font-weight: 600;
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+}
+
+h4.title {
+  font-size: 1.4em;
+  line-height: 1.4em;
+  font-weight: 600;
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+}
+
+p.text {
+  line-height: 1.61em;
+  font-weight: 300;
+  font-size: 1.2em;
+  letter-spacing: -0.8px;
+  line-height: 1.7rem;
+  word-break: keep-all;
+}
+
+.text-accent {
+  font-weight: bold;
+  color: #5f7dff;
+}
+
+.text-align-left {
+  text-align: center;
+}
+
+.text-align-left {
+  text-align: left;
+}
+
+/* label type css */
+.label-type-green {
+  display: inline-block;
+  background-color: #4ca542;
+  height: 35px;
+  line-height: 35px;
+  min-width: 120px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  color: #fff;
+}
+
+.label-type-blue {
+  display: inline-block;
+  background-color: #4991c2;
+  height: 35px;
+  line-height: 35px;
+  min-width: 120px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  color: #fff;
+}
+
+.label-type-purple {
+  display: inline-block;
+  background-color: #9040d1;
+  height: 35px;
+  line-height: 35px;
+  min-width: 120px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  color: #fff;
+}
+
+.label-type-red {
+  display: inline-block;
+  background-color: #d34659;
+  height: 35px;
+  line-height: 35px;
+  min-width: 120px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  color: #fff;
+}
+
+/* margin css */
+.margin-top-1rem {
+  margin-top: 1rem;
+}
+
+.margin-left-1rem {
+  margin-left: 1rem;
+}
+
+.margin-right-1rem {
+  margin-right: 1rem;
+}
+
+.margin-bottom-1rem {
+  margin-bottom: 1rem;
+}
+
+/* text css */
+.font-weight-bold {
+  font-weight: bold;
+}
+
+.width100 {
+  width: 100%;
 }
