@@ -11,13 +11,13 @@
       포인트 출금하기
       <div class="form-group">
         <div class="d-flex align-items-center">
-          <select v-model="selectedAccountIndex" class="form-control mr-2 account-select" id="accountSelect">
+          <select v-model="AccountIndex" class="form-control mr-2 account-select" id="accountSelect">
             <option value="" disabled selected>내 계좌 선택</option> <!-- 비활성화 및 기본값 설정 -->
             <option v-for="(account, index) in accounts" :key="index" :value="index">{{ account }}</option>
           </select>
-          <span class="common-label">계좌로</span> <!-- 공통 클래스 사용 -->
+          <span class="common-label">계좌로</span>
           <input v-model.number="withdrawAmount" type="number" class="form-control ml-2 amount-input" placeholder="출금할 포인트" />
-          <span class="common-label">원</span> <!-- 공통 클래스 사용 -->
+          <span class="common-label">원</span>
           <button @click="withdrawPoints" class="btn btn-success ml-2">입금</button>
         </div>
       </div>
@@ -33,7 +33,7 @@ export default {
     return {
       points: 0,
       withdrawAmount: 0,
-      selectedAccountIndex: '', // 빈 문자열로 초기화
+      AccountIndex: '', // 변수명 변경
       accounts: [] // 계좌 목록을 저장할 배열
     };
   },
@@ -71,12 +71,14 @@ export default {
       }
     },
     async withdrawPoints() {
-      if (this.withdrawAmount > 0 && this.withdrawAmount <= this.points && this.selectedAccountIndex !== '') {
+      if (this.withdrawAmount > 0 && this.withdrawAmount <= this.points && this.AccountIndex !== '') {
         try {
           const requestData = {
             point: this.withdrawAmount,
-            accountIndex: this.selectedAccountIndex, // 선택된 계좌의 인덱스 추가
+            accountIndex: this.AccountIndex, // 변수명 변경
           };
+
+          console.log('출금 요청 데이터:', requestData);
           const response = await axios.post('/api/mypage/withdraw', requestData, {
             withCredentials: true,
           });
@@ -84,7 +86,7 @@ export default {
           if (response.status === 200) {
             this.points -= this.withdrawAmount;
             this.withdrawAmount = 0;
-            this.selectedAccountIndex = ''; // 출금 후 계좌 선택 초기화
+            this.AccountIndex = ''; // 출금 후 계좌 선택 초기화
             alert('포인트 출금이 성공적으로 완료되었습니다.');
           } else {
             alert('출금 실패');
