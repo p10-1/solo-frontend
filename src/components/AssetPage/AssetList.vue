@@ -29,10 +29,16 @@
         <div class="asset-list__section asset-list__loan">
           <LoanInfo :loanData="processedData.loanData" />
         </div>
-        <div class="asset-list__section asset-list__recommendation">
+        <!-- <div class="asset-list__section asset-list__recommendation">
           <Recommendation
             :assetType="selectedAssetType"
             :recommendationData="processedData.recommendationData"
+          />
+        </div> -->
+        <div class="asset-list__section asset-list__recommendation">
+          <Recommendation
+            :assetType="selectedAssetType"
+            :assetDetails="processedData.assetDetails"
           />
         </div>
       </div>
@@ -169,9 +175,9 @@ const processedData = computed(() => {
       period: Number(currentData.period),
       interest: Number(currentData.interest)
     },
-    recommendationData: {
-      consume: currentData.consume
-    }
+    // recommendationData: {
+    //   consume: currentData.consume
+    // }
   }
 })
 
