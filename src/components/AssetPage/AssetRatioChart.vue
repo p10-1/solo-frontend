@@ -1,6 +1,5 @@
-<template>
+<!-- <template>
   <div class="asset-ratio-chart">
-    <!-- Chart.js를 사용하여 도넛 차트를 그릴 캔버스 -->
     <canvas ref="chartCanvas"></canvas>
   </div>
 </template>
@@ -77,4 +76,4 @@ h3 {
   text-align: center;
   margin-bottom: 15px;
 }
-</style>
+</style> -->

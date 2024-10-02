@@ -1,6 +1,5 @@
 <template>
   <div class="asset-page">
-    <h1>자산 정보</h1>
     <AssetList />
   </div>
 </template>

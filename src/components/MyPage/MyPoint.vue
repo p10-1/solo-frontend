@@ -1,38 +1,30 @@
 <template>
-  <div class="point-management">
-    <h1>포인트 관리</h1><br /><br />
+  <div class="container mt-5 point-management">
+    <h3 class="text-center">포인트 관리</h3>
+    <br />
 
     <div class="current-points">
-      <h3>현재 포인트: {{ points }} P</h3>
+      현재 포인트: {{ points }} P
     </div>
 
-    <div class="withdraw-section">
-      <h3>포인트 출금하기</h3>
-      <input v-model.number="withdrawAmount" type="number" placeholder="출금할 포인트" />
-      <button @click="withdrawPoints">포인트 출금하기</button>
+    <div class="withdraw-section mt-4">
+      포인트 출금하기
+      <div class="form-group">
+        <div class="d-flex align-items-center">
+          <select v-model="selectedAccountIndex" class="form-control mr-2 account-select" id="accountSelect">
+            <option value="">내 계좌 선택</option> <!-- disabled 속성 제거 -->
+            <option v-for="(account, index) in accounts" :key="index" :value="index">{{ account }}</option>
+          </select>
+          <span class="common-label">계좌로</span> <!-- 공통 클래스 사용 -->
+          <input v-model.number="withdrawAmount" type="number" class="form-control ml-2 amount-input" placeholder="출금할 포인트" />
+          <span class="common-label">원</span> <!-- 공통 클래스 사용 -->
+          <button @click="withdrawPoints" class="btn btn-success ml-2">입금</button>
+        </div>
+      </div>
     </div>
-
-    <!-- 출금 내역 
-    <div class="history-section">
-      <h3>포인트 출금 내역</h3>
-      <ul>
-        <li v-for="(withdrawal, index) in withdrawalHistory" :key="index">
-          {{ withdrawal.date }} - {{ withdrawal.amount }} P 출금
-        </li>
-      </ul>
-    </div> -->
-
-    <!-- 적립 내역 
-    <div class="history-section">
-      <h3>포인트 적립 내역</h3>
-      <ul>
-        <li v-for="(deposit, index) in depositHistory" :key="index">
-          {{ deposit.date }} - {{ deposit.amount }} P 적립
-        </li>
-      </ul>
-    </div> -->
   </div>
 </template>
+
 <script>
 import axios from 'axios';
 
@@ -41,10 +33,13 @@ export default {
     return {
       points: 0,
       withdrawAmount: 0,
+      selectedAccountIndex: null, // 계좌 선택 변수 (인덱스)
+      accounts: [] // 계좌 목록을 저장할 배열
     };
   },
   mounted() {
     this.fetchPoints();
+    this.getBank(); // getBank 요청 추가
   },
   methods: {
     async fetchPoints() {
@@ -61,24 +56,35 @@ export default {
         console.error('포인트 조회 오류:', error);
       }
     },
-
+    async getBank() {
+      try {
+        const response = await axios.get('/api/mypage/getBank');
+        if (response.status === 200) {
+          const data = JSON.parse(response.data[0]); // 첫 번째 요소를 파싱
+          this.accounts = data; // accounts에 할당
+          console.log('계좌 목록:', this.accounts);
+        } else {
+          console.error('Error:', response.statusText);
+        }
+      } catch (error) {
+        console.error('계좌 조회 오류:', error);
+      }
+    },
     async withdrawPoints() {
-      if (this.withdrawAmount > 0 && this.withdrawAmount <= this.points) {
+      if (this.withdrawAmount > 0 && this.withdrawAmount <= this.points && this.selectedAccountIndex !== null) {
         try {
-          // 전송객체 생성
           const requestData = {
-            point: this.withdrawAmount, 
-            
+            point: this.withdrawAmount,
+            accountIndex: this.selectedAccountIndex, // 선택된 계좌의 인덱스 추가
           };
-          const response = await axios.post('/api/mypage/withdraw',
-            requestData,
-            {
-              withCredentials: true
-            });
+          const response = await axios.post('/api/mypage/withdraw', requestData, {
+            withCredentials: true,
+          });
 
           if (response.status === 200) {
-            this.points -= this.withdrawAmount; 
-            this.withdrawAmount = 0; 
+            this.points -= this.withdrawAmount;
+            this.withdrawAmount = 0;
+            this.selectedAccountIndex = null; // 출금 후 계좌 선택 초기화
             alert('포인트 출금이 성공적으로 완료되었습니다.');
           } else {
             alert('출금 실패');
@@ -88,23 +94,20 @@ export default {
           alert('출금 중 오류가 발생했습니다.');
         }
       } else {
-        alert('출금할 수 없는 금액입니다.');
+        alert('출금할 수 없는 금액이거나 계좌를 선택하지 않았습니다.');
       }
-    },
-
-
-  },
+    }
+  }
 };
 </script>
 
 <style scoped>
 .point-management {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  text-align: center;
-  background-color: #f0f0f0;
+  background-color: #e0e0e0; /* 더 연한 배경색으로 변경 */
   border-radius: 10px;
+  padding: 20px;
+  max-width: 500px; /* 최대 너비를 500px로 설정 */
+  margin: auto; /* 중앙 정렬 */
 }
 
 h1,
@@ -112,24 +115,21 @@ h3 {
   color: #333;
 }
 
-input {
-  width: 80%;
-  padding: 10px;
-  margin-bottom: 10px;
-  font-size: 16px;
+.account-select {
+  width: 120px; /* 셀렉트 박스 너비 조정 */
+}
+
+.amount-input {
+  width: 150px; /* 인풋 폼 너비 조정 */
+}
+
+.common-label {
+  margin: 0 10px; /* "계좌로" 및 "원" 텍스트와 셀렉트/인풋 사이의 간격 조정 */
+  font-weight: bold; /* 텍스트를 두껍게 */
 }
 
 button {
-  padding: 10px 20px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  cursor: pointer;
   font-size: 16px;
-}
-
-button:hover {
-  background-color: #45a049;
 }
 
 ul {

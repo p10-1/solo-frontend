@@ -1,11 +1,13 @@
 <template>
   <div class="mypage-page">
-    <h1>나의 계정 관리</h1>
+    <!-- <h1>나의 계정 관리</h1> -->
 
     <!-- 상단 두 개 컴포넌트를 좌우로 배치 -->
     <div class="top-section">
       <MyPoint />
+      <MyType />
     </div>
+    <br /><br />
 
     <!-- 중간 컴포넌트 (MyType) -->
     <div class="middle-section">
@@ -25,8 +27,7 @@
 <script>
 // 컴포넌트 임포트
 import MyPoint from '@/components/MyPage/MyPoint.vue'
-// import MyGrade from '@/components/MyPage/MyGrade.vue'
-// import MyType from '@/components/MyPage/MyType.vue'
+import MyType from '@/components/MyPage/MyType.vue'
 import MyAsset from '@/components/MyPage/MyAsset.vue'
 import MyBoard from '@/components/MyPage/MyBoard.vue'
 // import AssetEdit from '@/components/MyPage/AssetEdit.vue';
@@ -35,8 +36,7 @@ export default {
   name: 'App',
   components: {
     MyPoint,
-    //MyGrade,
-    // MyType,
+    MyType,
     MyAsset,
     MyBoard
     // AssetEdit
