@@ -12,7 +12,7 @@
       <div class="form-group">
         <div class="d-flex align-items-center">
           <select v-model="selectedAccountIndex" class="form-control mr-2 account-select" id="accountSelect">
-            <option value="">내 계좌 선택</option> <!-- disabled 속성 제거 -->
+            <option value="" disabled selected>내 계좌 선택</option> <!-- 비활성화 및 기본값 설정 -->
             <option v-for="(account, index) in accounts" :key="index" :value="index">{{ account }}</option>
           </select>
           <span class="common-label">계좌로</span> <!-- 공통 클래스 사용 -->
@@ -33,7 +33,7 @@ export default {
     return {
       points: 0,
       withdrawAmount: 0,
-      selectedAccountIndex: null, // 계좌 선택 변수 (인덱스)
+      selectedAccountIndex: '', // 빈 문자열로 초기화
       accounts: [] // 계좌 목록을 저장할 배열
     };
   },
@@ -71,7 +71,7 @@ export default {
       }
     },
     async withdrawPoints() {
-      if (this.withdrawAmount > 0 && this.withdrawAmount <= this.points && this.selectedAccountIndex !== null) {
+      if (this.withdrawAmount > 0 && this.withdrawAmount <= this.points && this.selectedAccountIndex !== '') {
         try {
           const requestData = {
             point: this.withdrawAmount,
@@ -84,7 +84,7 @@ export default {
           if (response.status === 200) {
             this.points -= this.withdrawAmount;
             this.withdrawAmount = 0;
-            this.selectedAccountIndex = null; // 출금 후 계좌 선택 초기화
+            this.selectedAccountIndex = ''; // 출금 후 계좌 선택 초기화
             alert('포인트 출금이 성공적으로 완료되었습니다.');
           } else {
             alert('출금 실패');
