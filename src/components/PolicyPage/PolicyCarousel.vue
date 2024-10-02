@@ -1,78 +1,114 @@
 <template>
-  <div class="policy-carousel">
-    <h2>추천 정책</h2>
-    <div class="carousel-content">
-      <div v-for="policy in visiblePolicies" :key="policy.id" class="carousel-item">
-        <h3>{{ policy.title }}</h3>
-        <p>{{ policy.description }}</p>
-        <button class="apply-button">신청</button>
+  <div id="policyCarousel" class="carousel slide">
+    <div class="carousel-inner" @click="handleCardClick">
+      <div
+        class="carousel-item"
+        v-for="(policy, index) in policies"
+        :key="policy.bizId"
+        :class="{ active: index === currentIndex }"
+      >
+        <div class="d-flex justify-content-center">
+          <div class="policy-card">
+            <h3>청년 정책 알아보기</h3>
+            <h5 class="policy-title">{{ policy.polyBizSjnm }}</h5>
+            <p class="policy-description">{{ policy.polyItcnCn }}</p>
+            <!-- 버튼 클릭 시 /policy 로 이동 -->
+            <button class="btn btn-primary btn-sm mt-3" @click.stop="goToPolicy">
+              더 알아보기
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-
-    <!-- 화살표 -->
-    <button class="carousel-arrow left" @click="prevSlide" :disabled="currentIndex === 0">←</button>
-    <button
-      class="carousel-arrow right"
-      @click="nextSlide"
-      :disabled="currentIndex >= policies.length - 4"
-    >
-      →
-    </button>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { recommendPolicies } from '@/api/policyApi'
 
-const props = defineProps({
-  policies: {
-    type: Array,
-    required: true
-  }
-})
-
+const router = useRouter()
+const policies = ref([])
 const currentIndex = ref(0)
 
-const visiblePolicies = computed(() => {
-  return props.policies.slice(currentIndex.value, currentIndex.value + 4)
-})
+const fetchPolicies = async () => {
+  try {
+    policies.value = await recommendPolicies()
+  } catch (error) {
+    console.error('정책을 가져오는 데 실패했습니다:', error)
+  }
+}
 
-const prevSlide = () => {
-  if (currentIndex.value > 0) currentIndex.value--
+// "/policy"로 이동하는 함수
+const goToPolicy = () => {
+  router.push('/policy')
+}
+
+// 왼쪽 클릭하면 이전 슬라이드, 오른쪽 클릭하면 다음 슬라이드
+const handleCardClick = (event) => {
+  const cardWidth = event.currentTarget.clientWidth
+  const clickPosition = event.offsetX
+
+  if (clickPosition < cardWidth / 2) {
+    prevSlide() // 왼쪽 클릭: 이전 슬라이드
+  } else {
+    nextSlide() // 오른쪽 클릭: 다음 슬라이드
+  }
 }
 
 const nextSlide = () => {
-  if (currentIndex.value < props.policies.length - 4) currentIndex.value++
+  currentIndex.value = (currentIndex.value + 1) % policies.value.length
 }
+
+const prevSlide = () => {
+  currentIndex.value = (currentIndex.value - 1 + policies.value.length) % policies.value.length
+}
+
+let slideInterval
+const startAutoSlide = () => {
+  slideInterval = setInterval(nextSlide, 3000)
+}
+
+onMounted(() => {
+  fetchPolicies()
+  startAutoSlide()
+})
+
+onUnmounted(() => {
+  clearInterval(slideInterval)
+})
 </script>
 
 <style scoped>
-.policy-carousel {
-  margin-bottom: 30px; /* 추천 정책 아래에 여백 추가 */
-}
-
-.carousel-content {
-  display: flex;
-  justify-content: space-between; /* 카드들이 옆으로 나열되도록 조정 */
-}
-
-.carousel-item {
-  background-color: #fff;
-  border: 1px solid #ddd;
+.policy-card {
+  width: 500px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  margin: 0 10px;
-  border-radius: 8px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
-.apply-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: black;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.policy-card:hover {
+  transform: scale(1.05);
+}
+
+.policy-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #333;
+}
+
+.policy-description {
+  font-size: 1rem;
+  color: #555;
+}
+
+button.btn-sm {
+  font-size: 0.875rem;
+  padding: 5px 10px;
 }
 </style>

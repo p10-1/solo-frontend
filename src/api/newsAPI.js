@@ -1,22 +1,42 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const API_URL = 'http://localhost:9000/api/news' // 환경 변수 사용
-// const DEFAULT_AMOUNT = 10 // 기본 요청 수
+const API_URL = 'http://localhost:9000/api/news';
 
-// 뉴스 목록을 가져오는 함수
-export const fetchNews = async () => {
+
+
+ // 전체 뉴스를 가져오는 함수
+export const getNews = async (currentPage) => {
   try {
-    const response = await axios.get(`${API_URL}/fetch`);
-      // params: {
-      //   page: currentPage,
-      //   amount: DEFAULT_AMOUNT,
-      //   keyword: keyword
-      // }
+    const response = await axios.get(`${API_URL}/getNews`, {
+      params: {
+        page: currentPage,
+        amount: 20
+      }
+    });
 
-    console.log('Fetched News: ', response.data)
-    return response.data // API 응답 데이터를 반환
+    console.log('Fetched News: ', response.data);
+    return response.data; 
   } catch (error) {
-    console.error('뉴스를 가져오는 데 실패했습니다:', error)
-    throw error // 에러를 다시 던져서 호출하는 곳에서 처리할 수 있게 함
+    console.error('뉴스를 가져오는 데 실패했습니다:', error);
+    throw error;
+  }
+}
+
+// 카테고리별로 가져오는 함수
+export const getNewsBycategory = async (currentPage, category) => {
+  try {
+    const response = await axios.get(`${API_URL}/getNewsBycategory`, {
+      params: {
+        page: currentPage,
+        amount: 20,
+        category: category, // 카테고리 파라미터 추가
+      }
+    });
+
+    console.log('Fetched News: ', response.data);
+    return response.data; 
+  } catch (error) {
+    console.error('뉴스를 가져오는 데 실패했습니다:', error);
+    throw error; 
   }
 }
