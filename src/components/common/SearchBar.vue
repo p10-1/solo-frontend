@@ -2,11 +2,11 @@
   <div class="search-bar mb-4">
     <input
       v-model="searchTerm"
-      :placeholder="placeholder"
+      :placeholder="props.placeholder"
       class="form-control"
       @keyup.enter="emitSearch"
     />
-    <button @click="emitSearch" class="btn btn-primary ml-2">{{ buttonText }}</button>
+    <button @click="emitSearch" class="btn btn-primary ml-2">{{ props.buttonText }}</button>
   </div>
 </template>
 
