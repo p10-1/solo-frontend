@@ -138,3 +138,19 @@ export const likeBoard = async (boardNo, userName) => {
     throw error
   }
 }
+
+export const myBoard = async (userName) => {
+  try {
+    console.log(userName)
+    const response = await axios.get(`${API_URL}/mine`, {
+      params: {
+        userName: userName
+      }
+    })
+    console.log('resp:', response.data)
+    return response.data
+  } catch (error) {
+    console.error('내 게시물을 가져오는 데 실패했습니다.', error)
+    throw error
+  }
+}
