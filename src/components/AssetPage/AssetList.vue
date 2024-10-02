@@ -29,17 +29,8 @@
         <div class="asset-list__section asset-list__loan">
           <LoanInfo :loanData="processedData.loanData" />
         </div>
-        <!-- <div class="asset-list__section asset-list__recommendation">
-          <Recommendation
-            :assetType="selectedAssetType"
-            :recommendationData="processedData.recommendationData"
-          />
-        </div> -->
-        <div class="asset-list__section asset-list__recommendation">
-          <Recommendation
-            :assetType="selectedAssetType"
-            :assetDetails="processedData.assetDetails"
-          />
+        <div class="asset-list__section asset-list__recommended-products">
+          <Recommendation :loanPeriod="processedData.loanData.period" />
         </div>
       </div>
     </template>
@@ -273,5 +264,8 @@ onMounted(loadData)
   .asset-list__chart {
     width: 100%;
   }
+}
+.asset-list__recommended-products {
+  grid-column: 1 / -1;
 }
 </style>
