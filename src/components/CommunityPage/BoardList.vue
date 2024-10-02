@@ -42,7 +42,7 @@
               }"
             >
               {{ board.title }}
-              <span v-if="bestlist.map((item) => item.boardNo).includes(board.boardNo)">
+              <span v-if="bestlist.includes(board.boardNo)">
                 <i class="fa-solid fa-star" style="color: gold"></i>
               </span>
             </router-link>
@@ -62,7 +62,6 @@
       </tbody>
     </table>
 
-    <!-- Pagination -->
     <pagination :currentPage="pageNum" :totalPages="totalPage" @page-change="changePage" />
   </div>
 </template>
@@ -101,6 +100,7 @@ const loadBoards = async () => {
 const getBests = async () => {
   try {
     bestlist.value = await getBest()
+    console.log('best:', bestlist.value)
   } catch (error) {
     console.error('인기 글을 가져오는 데 실패했습니다.')
   }
