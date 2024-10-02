@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { getNews, getNewsBycategory } from '@/api/newsAPI'; 
+import { getNews, getNewsBycategory } from '@/api/newsApi'
 
 export default {
   name: 'NewsList',
@@ -47,71 +47,71 @@ export default {
       currentPage: 1,
       loading: false,
       noMoreData: false,
-      selectedCategory: '',
-    };
+      selectedCategory: ''
+    }
   },
   computed: {
     filteredNewsList() {
-      return this.newsList.filter(news => {
-        const newsCategory = news.category.trim();
-        const selectedCategory = this.selectedCategory.trim();
-        return selectedCategory === '' || newsCategory === selectedCategory;
-      });
-    },
+      return this.newsList.filter((news) => {
+        const newsCategory = news.category.trim()
+        const selectedCategory = this.selectedCategory.trim()
+        return selectedCategory === '' || newsCategory === selectedCategory
+      })
+    }
   },
   methods: {
     async loadNews() {
-      if (this.loading || this.noMoreData) return; // 로딩 중이거나 더 이상 데이터가 없으면 실행하지 않음
-      this.loading = true; // 로딩 상태 시작
+      if (this.loading || this.noMoreData) return // 로딩 중이거나 더 이상 데이터가 없으면 실행하지 않음
+      this.loading = true // 로딩 상태 시작
 
       // 0.5초의 로딩 지연 추가
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500))
 
       try {
-        let data;
+        let data
         if (this.selectedCategory) {
-          data = await getNewsBycategory(this.currentPage, this.selectedCategory);
+          data = await getNewsBycategory(this.currentPage, this.selectedCategory)
         } else {
-          data = await getNews(this.currentPage);
+          data = await getNews(this.currentPage)
         }
-        
+        console.log('data:' + data)
         if (data.list && data.list.length > 0) {
-          this.newsList = [...this.newsList, ...data.list]; 
-          this.currentPage++; // 페이지 수 증가
+          this.newsList = [...this.newsList, ...data.list]
+          this.currentPage++ // 페이지 수 증가
         } else {
-          this.noMoreData = true; 
+          this.noMoreData = true
         }
       } catch (error) {
-        console.error('뉴스를 불러오는 중 오류 발생', error);
+        console.error('뉴스를 불러오는 중 오류 발생', error)
       } finally {
-        this.loading = false; 
+        this.loading = false
       }
     },
     resetFilter() {
-      this.currentPage = 1; 
-      this.newsList = []; 
-      this.noMoreData = false; 
-      this.loadNews(); 
+      this.currentPage = 1
+      this.newsList = []
+      this.noMoreData = false
+      this.loadNews()
     },
     handleScroll() {
-      const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10;
+      const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10
       if (scrollBottom && !this.loading) {
-        this.loadNews(); // 추가 데이터 로드
+        this.loadNews() // 추가 데이터 로드
       }
     },
     formatDate(dateString) {
-      const date = new Date(dateString);
-      return date.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 반환
-    },
+      const date = new Date(dateString)
+      return date.toISOString().split('T')[0] // YYYY-MM-DD 형식으로 반환
+    }
   },
   mounted() {
-    this.loadNews(); 
-    window.addEventListener('scroll', this.handleScroll);
+    this.loadNews()
+    window.addEventListener('scroll', this.handleScroll)
   },
   beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll); 
-  },
-};
+    window.removeEventListener('scroll', this.handleScroll)
+  }
+}
 </script>
 
 <style scoped>
