@@ -3,7 +3,7 @@
   font-family: 'Noto Sans KR';
 }
 
-@font-face {
+/* @font-face {
   font-display: block;
   font-family: bootstrap-icons;
   src:
@@ -11,4 +11,4 @@
       format('woff2'),
     url(../vendor/bootstrap/icon/fonts/bootstrap-icons.woff?1fa40e8900654d2863d011707b9fb6f2)
       format('woff');
-}
+} */

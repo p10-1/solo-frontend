@@ -1,5 +1,7 @@
 /* 전체 초기화 css */
+/* 부트스트랩의 reset과 충돌하는 부분은 주석 처리 */
 
+/* 
 html,
 body,
 div,
@@ -88,6 +90,7 @@ video {
   font: inherit;
   vertical-align: baseline;
 }
+*/
 
 article,
 aside,
@@ -102,14 +105,17 @@ nav,
 section {
   display: block;
 }
+
 body {
   line-height: 1;
   box-sizing: border-box;
 }
+
 ol,
 ul {
   list-style: none;
 }
+
 button {
   background: inherit;
   border: none;
@@ -119,22 +125,25 @@ button {
   overflow: visible;
   cursor: pointer;
 }
+
 blockquote,
 q {
   quotes: none;
 }
+
 blockquote:before,
 blockquote:after,
 q:before,
 q:after {
   content: '';
-  content: none;
 }
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
+/* a 태그는 부트스트랩의 스타일을 따름 */
 a {
   text-decoration: none;
   color: #333;
@@ -147,33 +156,32 @@ body {
 }
 
 /* 공통 CSS */
+/* 부트스트랩의 flex 및 float 클래스를 대체 */
+/*
 .layout-flex {
   display: flex;
   flex-wrap: wrap;
 }
-
 .layout-Flex-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
 .layout-Inline-Flex {
   display: inline-flex;
 }
-
 .layout-Flex-Item {
   display: flex;
 }
-
 .layout-float-left {
   float: left;
 }
-
 .layout-float-right {
   float: right;
 }
+*/
 
+/* 부트스트랩의 grid system 사용 */
 .container {
   max-width: 1180px;
   margin: 0 auto;
@@ -220,7 +228,6 @@ body {
 h1.title {
   font-size: 40px;
   font-weight: 300;
-  text-decoration: none;
   color: #333;
   box-sizing: border-box;
   line-height: 1;
@@ -271,17 +278,15 @@ p.text {
 }
 
 .text-align-left {
-  text-align: center;
-}
-
-.text-align-left {
   text-align: left;
 }
 
 /* label type css */
-.label-type-green {
+.label-type-green,
+.label-type-blue,
+.label-type-purple,
+.label-type-red {
   display: inline-block;
-  background-color: #4ca542;
   height: 35px;
   line-height: 35px;
   min-width: 120px;
@@ -290,45 +295,22 @@ p.text {
   font-weight: 500;
   letter-spacing: -0.8px;
   color: #fff;
+}
+
+.label-type-green {
+  background-color: #4ca542;
 }
 
 .label-type-blue {
-  display: inline-block;
   background-color: #4991c2;
-  height: 35px;
-  line-height: 35px;
-  min-width: 120px;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: -0.8px;
-  color: #fff;
 }
 
 .label-type-purple {
-  display: inline-block;
   background-color: #9040d1;
-  height: 35px;
-  line-height: 35px;
-  min-width: 120px;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: -0.8px;
-  color: #fff;
 }
 
 .label-type-red {
-  display: inline-block;
   background-color: #d34659;
-  height: 35px;
-  line-height: 35px;
-  min-width: 120px;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: -0.8px;
-  color: #fff;
 }
 
 /* margin css */

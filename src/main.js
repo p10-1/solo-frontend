@@ -1,6 +1,6 @@
 // import './assets/main.css'
-// import 'bootstrap/dist/css/bootstrap.css'
-// import 'vue-awesome-paginate/dist/style.css'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'vue-awesome-paginate/dist/style.css'
 
 // default css
 import '@/assets/css/fonts.css'
