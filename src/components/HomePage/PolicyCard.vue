@@ -1,13 +1,17 @@
 <template>
   <div class="policy-card-container">
-    <div class="policy-card" v-for="policy in policies" :key="policy.id">
-      <div class="policy-details">
-        <h3>{{ policy.title }}</h3>
-        <p>{{ policy.summary }}</p>
+    <div class="title-box">
+      <h1 class="title">추천 <b>정책</b></h1>
+      <span>더보기</span>
+    </div>
+    <div class="policy-list layout-flex">
+      <div class="policy-card" v-for="policy in policies" :key="policy.id">
+        <h3 class="title">{{ policy.title }}</h3>
+        <p class="content margin-bottom">{{ policy.summary }}</p>
+        <router-link :to="policy.detailPage">
+          <span class="button-main"><i></i>자세히 보기</span>
+        </router-link>
       </div>
-      <router-link :to="policy.detailPage">
-        <span class="arrow">→</span>
-      </router-link>
     </div>
   </div>
 </template>
@@ -42,7 +46,56 @@ export default {
 </script>
 
 <style scoped>
-.policy-card-container {
+.policy-list {
+  justify-content: space-between;
+  margin: 40px 0 20px;
+}
+.policy-card {
+  border: 1px solid #eee;
+  width: calc(32.5% - 10px);
+  gap: 0 20px;
+  color: #222;
+  padding: 24px 0 52px;
+}
+
+.policy-card h3.title {
+  padding: 0;
+  margin: 12px 0;
+  font-size: 24px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.policy-card p.content {
+  font-weight: 400;
+  color: #666;
+  font-size: 18px;
+  margin-top: 16px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  height: 100px;
+  line-height: 24px;
+  letter-spacing: -0.7px;
+}
+
+.margin-bottom {
+  margin-bottom: 2rem;
+}
+
+.button-main {
+  width: 100%;
+  border-radius: 0;
+  height: 45px;
+  line-height: 45px;
+}
+
+/* .policy-card-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -80,7 +133,8 @@ export default {
 .arrow {
   font-size: 24px;
   color: #007bff; /* Bootstrap primary blue */
+/* 
   padding: 20px;
   text-align: right;
-}
+} */
 </style>

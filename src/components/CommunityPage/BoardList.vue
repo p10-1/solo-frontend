@@ -1,14 +1,18 @@
 <template>
   <div class="board-list">
+    <h2 class="title">커뮤니티</h2>
     <div class="search-section">
-      <select v-model="category">
-        <option value="title">제목</option>
-        <option value="content">내용</option>
-        <option value="userName">작성자</option>
-      </select>
+      <div class="select-form">
+        <select v-model="category">
+          <option value="title">제목</option>
+          <option value="content">내용</option>
+          <option value="userName">작성자</option>
+        </select>
+      </div>
       <search-bar v-model="keyword" @search="searchBoards" />
-
-      <!-- 정렬 기준 선택 -->
+    </div>
+    <!-- 정렬 기준 선택 -->
+    <div class="select-form">
       <select v-model="sortBy" @change="loadBoards">
         <option value="latest">최신순</option>
         <option value="likes">좋아요순</option>
@@ -22,11 +26,16 @@
     </div>
     <!-- Board List -->
     <table class="table">
+      <colgroup>
+        <col width="8%" />
+        <col width="72%" />
+        <col width="10%" />
+        <col width="20%" />
+      </colgroup>
       <thead>
         <tr>
           <th>번호</th>
           <th>제목</th>
-          <th></th>
           <th>작성자</th>
           <th>작성일</th>
         </tr>
@@ -38,7 +47,7 @@
           :class="{ 'top-post': pageNum === 1 && index < 5 }"
         >
           <td>{{ board.boardNo }}</td>
-          <td>
+          <td class="text-align-left link">
             <router-link
               :to="{
                 name: 'board/detail',
@@ -49,28 +58,54 @@
               <!-- <span v-if="bestlist.includes(board.boardNo)">
                 <i class="fa-solid fa-star" style="color: gold"></i>
               </span> -->
+              <ul class="board-ex-info">
+                <li><i class="fa-solid fa-eye"></i> {{ board.views }}&nbsp;&nbsp;</li>
+                <li><i class="fa-solid fa-comment"></i> {{ board.comments }}&nbsp;&nbsp;</li>
+                <li><i class="fa-solid fa-thumbs-up"></i> {{ board.likes }}</li>
+              </ul>
             </router-link>
           </td>
-          <td>
-            <i class="fa-solid fa-eye"></i> {{ board.views }}&nbsp;&nbsp;<i
-              class="fa-solid fa-comment"
-            ></i>
-            {{ board.comments }}&nbsp;&nbsp;<i class="fa-solid fa-thumbs-up"></i> {{ board.likes }}
-          </td>
-          <td>{{ board.userName }}</td>
-          <td>{{ moment(board.regDate).format('YYYY-MM-DD HH:mm') }}</td>
+          <td class="bold">{{ board.userName }}</td>
+          <td class="date">{{ moment(board.regDate).format('YYYY-MM-DD HH:mm') }}</td>
         </tr>
-        <router-link :to="{ name: 'board/create' }" class="btn btn-primary">
-          <i class="fa-solid fa-pen-to-square"></i> 글 작성
-        </router-link>
       </tbody>
     </table>
+    <div class="button-box">
+      <router-link :to="{ name: 'board/create' }" class="button-main btn btn-primary">
+        <i class="fa-solid fa-pen-to-square"></i> 글 작성
+      </router-link>
+    </div>
 
     <pagination :currentPage="pageNum" :totalPages="totalPage" @page-change="changePage" />
   </div>
 </template>
 
-<style></style>
+<style scope>
+.search-section {
+  text-align: center;
+}
+
+.select-form {
+  display: inline-block;
+}
+
+.board-list {
+  position: relative;
+}
+.button-box {
+  position: absolute;
+  margin-top: 2.5rem;
+  right: 0;
+}
+
+.board-ex-info li {
+  margin-top: 10px;
+  display: inline-block;
+  margin-right: 7px;
+  font-size: 15px;
+  color: #b4b4b4;
+}
+</style>
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
@@ -181,9 +216,9 @@ watch(
 }
 
 .board-list .top-post {
-  background-color: #ffeb3b !important;
-  border-left: 5px solid #f57f17;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f7f6f0 !important;
+  /* border-left: 5px solid #f57f17;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
   transition:
     transform 0.3s ease,
     background-color 0.3s ease;

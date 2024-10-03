@@ -7,7 +7,7 @@
 }
 
 .main-left-box .main-asset-box {
-  padding: 4rem 1rem 1rem;
+  padding: 2rem 1rem 1rem;
   border: 1px solid #eee;
   border-radius: 5px;
 }
@@ -41,7 +41,7 @@
 /* graph list info css */
 .asset-graph-list {
   margin: 0.5rem 0;
-  padding: 1rem;
+  padding: 10px;
   border: 2px solid #eee;
   border-radius: 8px;
 }
@@ -83,60 +83,8 @@
   background-color: #eb4a64;
 }
 
+/* 포인트 */
 .point-priview {
 }
 
 /* 퀴즈 */
-.financial-quiz {
-  position: relative;
-  min-height: 200px;
-}
-
-.financial-quiz .quiz-submit {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #f7f5ff;
-}
-
-.financial-quiz .quiz-submit > div {
-  padding: 50px 10px 10px 0;
-  padding-left: 130px;
-}
-
-.financial-quiz .title-box {
-  overflow: hidden;
-}
-
-.financial-quiz .title-box h2 {
-  float: left;
-}
-
-.financial-quiz .title-box span {
-  float: right;
-}
-
-.quiz-question {
-}
-.quiz-question p {
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-  font-weight: 500;
-  letter-spacing: -0.8px;
-  line-height: 1.7rem;
-  word-break: keep-all;
-}
-
-.quiz-options {
-  overflow: hidden;
-  text-align: center;
-}
-
-.quiz-options .option-button {
-  display: inline-block;
-  border-radius: 5px;
-  width: 50%;
-  cursor: pointer;
-}

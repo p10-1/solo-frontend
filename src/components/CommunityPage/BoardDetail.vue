@@ -2,13 +2,23 @@
   <div class="container mt-5" v-if="board">
     <div class="card mb-4">
       <div class="card-body">
-        <h2 class="card-title">{{ board.title }}</h2>
-        <p class="card-text">
-          <strong>작성자:</strong> <span class="badge bg-secondary">{{ board.userName }}</span>
-          <strong> 작성일:</strong>
-          <span class="text-muted">{{ moment(board.regDate).format('YYYY-MM-DD HH:mm:ss') }}</span>
-        </p>
-        <div class="post-content mb-3">
+        <h2 class="title card-title">{{ board.title }}</h2>
+        <div class="box">
+          <dl class="card-text">
+            <dt>작성자:</dt>
+            <dd class="badge bg-secondary">{{ board.userName }}</dd>
+            <dt>작성일:</dt>
+            <dd class="text-muted">{{ moment(board.regDate).format('YYYY-MM-DD HH:mm:ss') }}</dd>
+          </dl>
+          <div class="post-stats mb-3">
+            <p>
+              <strong>추천수: </strong> <span class="badge bg-success">{{ board.likes }}</span>
+              <strong> 댓글수: </strong> <span class="badge bg-info">{{ board.comments }}</span>
+              <strong> 조회수: </strong> <span class="badge bg-warning">{{ board.views }}</span>
+            </p>
+          </div>
+        </div>
+        <div class="post-content margin-top-1rem mb-3">
           <p>{{ board.content }}</p>
           <div v-if="board.attaches && board.attaches.length" class="mt-3">
             <ul class="list-group">
@@ -28,34 +38,27 @@
             </ul>
           </div>
         </div>
-        <div class="post-stats mb-3">
-          <p>
-            <strong>추천수:</strong> <span class="badge bg-success">{{ board.likes }}</span>
-            <strong> 댓글수:</strong> <span class="badge bg-info">{{ board.comments }}</span>
-            <strong> 조회수:</strong> <span class="badge bg-warning">{{ board.views }}</span>
-          </p>
+        <div class="button-box">
+          <button @click="increaseLikes" class="button-sub btn btn-success me-2">좋아요 👍</button>
+          <div v-if="isAuthor" class="mt-3">
+            <button @click="goToUpdate" class="button-sub btn btn-primary me-2">수정하기</button>
+            <button @click="deleteBoardConfirm" class="button-sub margin-left-1rem btn btn-danger">
+              삭제하기
+            </button>
+          </div>
+          <button @click="goBack" class="button-sub btn btn-secondary mt-3">뒤로 가기</button>
         </div>
-
-        <button @click="increaseLikes" class="btn btn-success me-2">좋아요 👍</button>
-
-        <div v-if="isAuthor" class="mt-3">
-          <button @click="goToUpdate" class="btn btn-primary me-2">수정하기</button>
-          <button @click="deleteBoardConfirm" class="btn btn-danger">삭제하기</button>
-        </div>
-
-        <button @click="goBack" class="btn btn-secondary mt-3">뒤로 가기</button>
       </div>
     </div>
 
     <!-- 댓글 리스트 -->
     <div class="comments-section mt-4">
-      <h3>댓글</h3>
+      <h2 class="title">댓글</h2>
       <div v-if="comments && comments.length">
         <ul class="list-group">
           <li v-for="comment in comments" :key="comment.commentNo" class="list-group-item">
-            <p>
-              <span class="badge bg-light text-dark">{{ comment.userName }}</span
-              >:
+            <p class="margin-bottom">
+              <span class="badge bg-light text-dark">{{ comment.userName }}</span>
               <strong>{{ comment.commentText }}</strong>
             </p>
             <p class="text-muted">
@@ -69,14 +72,16 @@
       </div>
 
       <div class="comment-form mt-4">
-        <h4>댓글 작성</h4>
-        <textarea
-          v-model="commentText"
-          placeholder="댓글을 입력하세요..."
-          rows="3"
-          class="form-control mb-2"
-        ></textarea>
-        <button @click="submitComment" class="btn btn-primary">댓글 작성</button>
+        <h4 class="title">댓글 작성</h4>
+        <div class="flex">
+          <textarea
+            v-model="commentText"
+            placeholder="댓글을 입력하세요..."
+            rows="3"
+            class="form-control mb-2"
+          ></textarea>
+          <button @click="submitComment" class="button-main btn btn-primary">댓글 작성</button>
+        </div>
       </div>
     </div>
   </div>
@@ -219,9 +224,124 @@ onMounted(() => {
 </script>
 
 <style>
+.card-title {
+  font-size: 36px;
+  font-weight: 700;
+  word-break: keep-all;
+  margin-bottom: 24px;
+}
+
+dl.card-text {
+  position: relative;
+}
+
+dl.card-text dt {
+  display: inline-block;
+  font-size: 18px;
+  letter-spacing: -1px;
+}
+
+dl.card-text dd {
+  display: inline-block;
+  font-size: 18px;
+  margin-left: 5px;
+  margin-right: 20px;
+  font-weight: 600;
+}
+
+.box {
+  position: relative;
+}
+
+.post-stats {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 18px;
+}
+
+.card .post-content {
+  min-height: 200px;
+  padding: 80px 20px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
 .responsive-img {
   max-width: 100%; /* 최대 너비를 100%로 설정 */
   height: auto; /* 비율을 유지하며 자동으로 높이 조절 */
   cursor: pointer; /* 클릭 가능하게 표시 */
+}
+
+.card .button-box {
+  position: relative;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.comment-form {
+  margin-top: 3rem;
+}
+
+.comment-form h4 {
+  margin-bottom: 1rem;
+}
+
+textarea {
+  width: 100%;
+  min-height: 4rem;
+  font-size: 17px;
+  padding: 0.7rem;
+}
+
+.flex {
+  display: flex;
+  gap: 10px;
+}
+
+.comments-section .button-main {
+  border-color: #fee500;
+  width: 180px;
+  height: 6rem;
+}
+
+.comments-section .list-group li {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-top: 1px dashed #eee;
+}
+
+.comments-section .list-group li:first-child {
+  border-top: none;
+}
+
+.comments-section .list-group li p {
+  font-size: 18px;
+}
+
+.comments-section .list-group li p span.badge {
+  display: inline-block;
+  height: 20px;
+  line-height: 19px;
+  padding: 0 10px;
+  border: 1px solid #4567ad;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+  color: #4567ad;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.comments-section .list-group li p.margin-bottom {
+  margin-bottom: 8px;
+}
+
+.comments-section .list-group li p.text-muted {
+  font-size: 13px;
 }
 </style>

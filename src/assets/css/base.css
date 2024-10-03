@@ -110,6 +110,15 @@ ol,
 ul {
   list-style: none;
 }
+button {
+  background: inherit;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  overflow: visible;
+  cursor: pointer;
+}
 blockquote,
 q {
   quotes: none;
@@ -138,6 +147,11 @@ body {
 }
 
 /* 공통 CSS */
+.layout-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .layout-Flex-row {
   display: flex;
   justify-content: space-between;
@@ -167,36 +181,71 @@ body {
 }
 
 .min-height-container {
-  height: 100vh;
+  /* height: 100vh; */
   margin-top: 95px;
-  padding: 5rem 0;
+  padding: 3.5rem 0;
 }
 
 .text-align-center {
   text-align: center;
 }
 
-.empty {
-  min-height: 220px;
-  line-height: 220px;
-  padding: 1rem;
-  background-color: #f1f1f1;
+/* title css */
+.title-box {
+  position: relative;
 }
 
-/* title css */
+.title-box span {
+  position: absolute;
+  right: 0;
+  top: 70%;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 25px;
+  border: 1px solid #eee;
+  cursor: pointer;
+}
+
+.title-box b {
+  color: #5f7dff;
+}
+
+.title-box span:hover {
+  font-weight: bold;
+  color: #222;
+  background-color: #fee500;
+  border-color: #fee500;
+}
+
+h1.title {
+  font-size: 40px;
+  font-weight: 300;
+  text-decoration: none;
+  color: #333;
+  box-sizing: border-box;
+  line-height: 1;
+  letter-spacing: -1.5px;
+  padding-top: 4rem;
+  margin-bottom: 1.2rem;
+}
+
 h2.title {
-  font-size: 2em;
-  font-weight: 600;
-  letter-spacing: -1px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  line-height: 1;
+  font-size: 32px;
+  letter-spacing: -1.5px;
+  color: #222;
+  padding: 10px 0 20px 0;
+  border-bottom: 2px solid #222;
 }
 
 h3.title {
-  font-size: 1.4em;
-  line-height: 1.4em;
-  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 7px;
+  padding: 0 30px 22px 30px;
   letter-spacing: -1px;
-  margin-bottom: 30px;
+  font-size: 26px;
+  color: #222;
 }
 
 h4.title {

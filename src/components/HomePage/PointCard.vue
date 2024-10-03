@@ -1,5 +1,5 @@
 <template>
-  <div class="user-points margin-bottom-1rem">
+  <div class="user-points">
     <span class="label">적립 포인트</span>
     <span class="text-accent">{{ points }}P</span>
   </div>
@@ -15,4 +15,37 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.user-points {
+  position: relative;
+  padding: 20px 0;
+}
+
+.user-points span {
+  display: inline-block;
+  margin-top: -10px;
+  font-size: 22px;
+  color: #222;
+  letter-spacing: -1px;
+}
+
+.user-points span.text-accent {
+  position: absolute;
+  top: 15px;
+  right: 0;
+  margin-top: -10px;
+  font-size: 32px;
+  color: #222;
+  font-weight: bold;
+  letter-spacing: -1px;
+}
+
+.user-points span.text-accent::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  width: 100%;
+  height: 8px;
+  background-color: rgba(255, 230, 0, 0.712);
+}
+</style>

@@ -1,12 +1,12 @@
 <template>
   <div class="container mt-5">
-    <div class="card" @click="openModal">
+    <div class="quiz-card card" @click="openModal">
       <div class="card-body">
-        <h1 class="card-title">오늘의 금융 퀴즈</h1>
-        <div v-if="description">
+        <h2 class="title">오늘의 금융 퀴즈</h2>
+        <div class="content" v-if="description">
           <p><strong>설명:</strong> {{ description }}</p>
         </div>
-        <div v-else>
+        <div class="quiz-loading" v-else>
           <p>퀴즈를 불러오는 중입니다...</p>
         </div>
       </div>
@@ -58,6 +58,10 @@ const openModal = () => {
 </script>
 
 <style scoped>
+.quiz-card {
+  margin-top: 2rem;
+}
+
 /* .financial-quiz {
   max-width: 300px;
   margin: auto;
