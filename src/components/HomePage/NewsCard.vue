@@ -1,55 +1,130 @@
 <template>
-  <div class="popular-news">
-    <h3>인기 뉴스</h3>
-    <ul>
-      <li v-for="news in newsList" :key="news.id">
-        {{ news.title }}
-        <span class="date">{{ news.date }}</span>
-      </li>
-    </ul>
-    <router-link to="/newsPage">더보기 →</router-link>
+  <div id="newsCarousel" class="d-flex justify-content-between">
+    <template v-if="newsList.length > 0">
+      <div
+        v-for="(categoryItem, categoryIndex) in newsList"
+        :key="categoryIndex"
+        class="news-card"
+      >
+        <h3>{{ categoryItem.category }}의 뉴스</h3>
+        <div class="news-item">
+          <h5 class="news-title">{{ categoryItem.newsItems[categoryItem.currentNewsIndex].title }}</h5>
+          <p class="news-description">{{ categoryItem.newsItems[categoryItem.currentNewsIndex].link }}</p>
+          <button class="btn btn-primary btn-sm mt-3" @click.stop="goToNews">
+            더 알아보기
+          </button>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+          <button class="btn btn-secondary btn-sm" @click.prevent="prevNews(categoryIndex)">이전</button>
+          <button class="btn btn-secondary btn-sm" @click.prevent="nextNews(categoryIndex)">다음</button>
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      <div>뉴스가 없습니다.</div>
+    </template>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      newsList: [
-        { id: 1, title: '나의 새로운 투자 전략', date: '2024.09.20' },
-        { id: 2, title: '주가 하락으로 인한 손실 보상', date: '2024.09.17' },
-        { id: 3, title: '신규 IPO에 대한 빠른 분석', date: '2024.09.15' }
-      ]
-    }
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { recommendNews } from '@/api/newsAPI'
+
+const router = useRouter()
+const newsList = ref([]) 
+let autoSlideIntervals = [] // 각 카테고리별 자동 슬라이드 타이머
+
+// 뉴스 데이터를 가져오는 함수
+const fetchNews = async () => {
+  try {
+    const response = await recommendNews(); 
+    newsList.value = Object.entries(response).map(([category, news]) => ({
+      category,
+      newsItems: Array.isArray(news) ? news : [news], 
+      currentNewsIndex: 0 
+    }));
+    console.log('Fetched News:', newsList.value); // 가져온 뉴스 리스트를 콘솔에 출력
+  } catch (error) {
+    console.error('뉴스를 가져오는 데 실패했습니다:', error);
   }
+};
+
+// 뉴스 페이지로 이동하는 함수
+const goToNews = () => {
+  router.push('/news') // 뉴스 페이지로 이동
 }
+
+// 다음 뉴스로 이동하는 함수
+const nextNews = (categoryIndex) => {
+  const category = newsList.value[categoryIndex];
+  category.currentNewsIndex = (category.currentNewsIndex + 1) % category.newsItems.length; // 다음 뉴스로 순환
+}
+
+// 이전 뉴스로 이동하는 함수
+const prevNews = (categoryIndex) => {
+  const category = newsList.value[categoryIndex];
+  category.currentNewsIndex = (category.currentNewsIndex - 1 + category.newsItems.length) % category.newsItems.length; // 이전 뉴스로 순환
+}
+
+// 자동으로 다음 뉴스로 넘어가는 함수
+const startAutoSlide = () => {
+  autoSlideIntervals = newsList.value.map((_, index) => {
+    return setInterval(() => {
+      nextNews(index); // 각 카테고리의 뉴스 인덱스를 증가시킴
+    }, 3000); // 3초마다 자동으로 다음 뉴스로 넘어감
+  });
+}
+
+onMounted(() => {
+  fetchNews();
+  startAutoSlide();
+})
+
+onUnmounted(() => {
+  autoSlideIntervals.forEach(interval => clearInterval(interval)); // 타이머 정리
+})
+
 </script>
 
 <style scoped>
-.popular-news h3 {
-  font-size: 1.2em;
+#newsCarousel {
+  display: flex;
+  justify-content: space-between;
+}
+
+.news-card {
+  width: 30%; 
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.news-item {
+  margin: 10px 0; 
+}
+
+.news-card:hover {
+  transform: scale(1.05);
+}
+
+.news-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 10px 0;
   color: #333;
 }
 
-.popular-news ul {
-  list-style: none;
-  padding: 0;
+.news-description {
+  font-size: 0.9rem;
+  color: #777; 
 }
 
-.popular-news li {
-  margin-bottom: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.popular-news .date {
-  font-size: 0.8em;
-  color: #666;
-}
-
-.router-link {
-  margin-top: 10px;
-  display: inline-block;
+button.btn-sm {
+  font-size: 0.875rem;
+  padding: 5px 10px;
 }
 </style>

@@ -15,14 +15,14 @@
 <script>
 import QuizCard from '@/components/HomePage/QuizCard.vue'
 import PolicyCard from '@/components/HomePage/PolicyCard.vue'
-import PointCard from '@/components/HomePage/PointCard.vue'
+// import PointCard from '@/components/HomePage/PointCard.vue'
 import NewsCard from '@/components/HomePage/NewsCard.vue'
 import PolicyCarousel from '@/components/PolicyPage/PolicyCarousel.vue'
 export default {
   components: {
     QuizCard,
     PolicyCard,
-    PointCard,
+    //PointCard
     NewsCard,
     PolicyCarousel
   }

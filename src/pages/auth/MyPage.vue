@@ -1,80 +1,71 @@
-<template>
-  <div class="mypage-page">
-    <!-- <h1>나의 계정 관리</h1> -->
+  <template>
+    <div class="mypage-page">
+      <div class="top-section">
+        <MyType />
+      </div>
+      <br /><br />
 
-    <!-- 상단 두 개 컴포넌트를 좌우로 배치 -->
-    <div class="top-section">
-      <MyPoint />
-      <MyType />
+      <div class="middle-section">
+        <MyAsset />
+      </div>
+
+      <!-- 하단 컴포넌트 (MyPoint, MyBoard) -->
+      <div class="bottom-section">
+        <div class="bottom-components">
+          <MyPoint />
+          <MyBoard />
+        </div>
+      </div>
     </div>
-    <br /><br />
+  </template>
 
-    <!-- 중간 컴포넌트 (MyType) -->
-    <div class="middle-section">
-      <MyAsset />
-    </div>
+  <script>
+  // 컴포넌트 임포트
+  import MyPoint from '@/components/MyPage/MyPoint.vue'
+  import MyType from '@/components/MyPage/MyType.vue'
+  import MyAsset from '@/components/MyPage/MyAsset.vue'
+  import MyBoard from '@/components/MyPage/MyBoard.vue'
 
-    <!-- 하단 컴포넌트 (MyAsset) -->
-    <div class="bottom-section">
-      <!-- <AssetEdit/> -->
-    </div>
-    <div>
-      <MyBoard />
-    </div>
-  </div>
-</template>
-
-<script>
-// 컴포넌트 임포트
-import MyPoint from '@/components/MyPage/MyPoint.vue'
-import MyType from '@/components/MyPage/MyType.vue'
-import MyAsset from '@/components/MyPage/MyAsset.vue'
-import MyBoard from '@/components/MyPage/MyBoard.vue'
-// import AssetEdit from '@/components/MyPage/AssetEdit.vue';
-
-export default {
-  name: 'App',
-  components: {
-    MyPoint,
-    MyType,
-    MyAsset,
-    MyBoard
-    // AssetEdit
+  export default {
+    name: 'App',
+    components: {
+      MyPoint,
+      MyType,
+      MyAsset,
+      MyBoard
+    }
   }
-}
-</script>
+  </script>
 
-<style scoped>
-#app {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
-  text-align: center;
-}
+  <style scoped>
+  #app {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+  }
 
-h1 {
-  margin-bottom: 30px;
-}
+  h1 {
+    margin-bottom: 30px;
+  }
 
-/* 상단 좌우 컴포넌트 배치 */
-.top-section {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 30px;
-}
+  /* 상단 섹션 (MyType) */
+  .top-section {
+    margin-bottom: 30px; /* 아래 여백 추가 */
+  }
 
-.left,
-.right {
-  width: 50%;
-}
+  /* 중간 섹션 (MyType) */
+  .middle-section {
+    margin-bottom: 50px;
+  }
 
-/* 중간 섹션 (MyType) */
-.middle-section {
-  margin-bottom: 50px;
-}
+  /* 하단 섹션 (MyPoint, MyBoard) */
+  .bottom-section {
+    margin-bottom: 50px;
+  }
 
-/* 하단 섹션 (MyAsset) */
-.bottom-section {
-  margin-bottom: 50px;
-}
-</style>
+  .bottom-components {
+    display: flex; /* Flexbox 사용 */
+    justify-content: space-between; /* 좌우로 배치 */
+  }
+  </style>
