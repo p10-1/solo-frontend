@@ -6,7 +6,7 @@
         <div v-if="description" class="quiz-description">
           <p><strong>설명:</strong> {{ description }}</p>
         </div>
-        <div v-else>
+        <div class="quiz-loading" v-else>
           <p>퀴즈를 불러오는 중입니다...</p>
         </div>
       </div>

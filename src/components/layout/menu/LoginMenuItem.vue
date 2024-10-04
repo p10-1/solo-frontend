@@ -1,6 +1,5 @@
 <template>
-  <a href="#" class="nav-link" @click.prevent="login">
-    <i class="fa-solid fa-right-from-bracket"></i>
+  <a href="#" class="button-main" @click.prevent="login">
     {{ isProcessing ? '로그인 중...' : '로그인' }}
   </a>
 </template>
