@@ -97,12 +97,10 @@ export default {
                     interest: response.data.interest || 0
                 };
 
-                alert('자산 불러오기 완료!');
                 this.loaded = true;
 
             } catch (error) {
                 console.error('자산 불러오기 실패:', error);
-                alert('자산 불러오기 실패. 다시 시도해 주세요.');
             }
         },
 
@@ -162,7 +160,7 @@ export default {
 
         async updateData(data) {
             try {
-                await axios.post('/api/mypage/updateData', data, { withCredentials: true });
+                await axios.post('/api/mypage/updateAsset', data, { withCredentials: true });
                 alert('자산 및 대출 정보가 업데이트되었습니다.');
             } catch (error) {
                 console.error('업데이트 실패:', error);

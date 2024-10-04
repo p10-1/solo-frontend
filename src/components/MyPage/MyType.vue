@@ -86,10 +86,10 @@ export default {
       console.log('자산:', type.title);
       try {
         const response = await axios.post('/api/mypage/updateType', {
-          selectedType: type.title,
+          selectedType: type.title
         });
         console.log('서버 응답:', response.data);
-        alert('유형이 성공적으로 업데이트되었습니다.');
+        alert(response.data);
       } catch (error) {
         console.error('업데이트 실패:', error);
         alert('업데이트 실패. 다시 시도해 주세요.');
