@@ -1,107 +1,108 @@
 <template>
-  <div class="board-card">
-    <h3>커뮤니티</h3>
-    <ul>
-      <li v-for="post in posts" :key="post.id" class="post-item">
-        <div class="post-meta">
-          <img :src="post.avatarUrl" :alt="post.author" class="avatar" />
-          <span class="author">{{ post.author }}</span>
-          <span class="timestamp">{{ post.timestamp }}</span>
-        </div>
-        <h4 class="post-title">{{ post.title }}</h4>
-        <div class="post-comments">
-          <span class="comments-count">{{ post.commentsCount }}</span> 댓글
-        </div>
-      </li>
-    </ul>
-    <router-link to="/board">더보기 →</router-link>
+  <div class="best-posts-container">
+    <div class="header">
+      <h2>인기 글</h2>
+      <button class="more-button" @click="goToBoard">더보기</button>
+    </div>
+    <table class="table table-lg">
+      <thead>
+        <tr>
+          <th>제목</th>
+          <th>작성자</th>
+          <th>작성 날짜</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(post, index) in bestPosts" :key="index">
+          <td class="truncate">{{ post.title }}</td>
+          <td class="truncate">{{ post.userName }}</td>
+          <td>{{ formatDate(post.regDate) }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      posts: [
-        {
-          id: 1,
-          title: '최근 자산관리를 위한 팁 공유해주세요!',
-          author: '사용자1',
-          avatarUrl: 'avatar1.png',
-          timestamp: '15분 전',
-          commentsCount: 5
-        },
-        {
-          id: 2,
-          title: '자산관리 최적화하는 방법',
-          author: '사용자2',
-          avatarUrl: 'avatar2.png',
-          timestamp: '2시간 전',
-          commentsCount: 2
-        },
-        {
-          id: 3,
-          title: '적금 상품 추천 받고 싶어요',
-          author: '사용자3',
-          avatarUrl: 'avatar3.png',
-          timestamp: '12시간 전',
-          commentsCount: 12
-        }
-      ]
-    }
+<script setup>
+import { ref, onMounted } from 'vue'
+import { getBest } from '@/api/boardApi'
+import { useRouter } from 'vue-router'
+import moment from 'moment'
+
+const bestPosts = ref([])
+const router = useRouter()
+
+// 인기글 불러오기
+const loadBestPosts = async () => {
+  try {
+    bestPosts.value = await getBest()
+  } catch (error) {
+    console.error('인기글을 불러오는 데 실패했습니다.', error)
   }
 }
+
+// 날짜 포맷팅 (월.일 형식)
+const formatDate = (date) => {
+  return moment(date).format('MM.DD')
+}
+
+// '/board'로 이동
+const goToBoard = () => {
+  router.push('/board')
+}
+
+// 컴포넌트가 로드될 때 인기글 가져오기
+onMounted(() => {
+  loadBestPosts()
+})
 </script>
 
 <style scoped>
-.board-card {
-  width: 300px;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+.best-posts-container {
+  margin: 20px 0;
+  width: 100%;
+  max-width: 400px; /* 테이블 크기 확장 */
 }
 
-.board-card h3 {
-  margin-top: 0;
-}
-
-.post-item {
-  margin-bottom: 20px;
-}
-
-.post-meta {
+.header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 15px;
 }
 
-.avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  margin-right: 10px;
+h2 {
+  font-size: 1.3rem; /* 제목 크기 확장 */
 }
 
-.author,
-.timestamp {
-  margin-right: 10px;
-  font-size: 14px;
-  color: #666;
+.table {
+  width: 100%;
+  font-size: 0.8rem; /* 테이블 글자 크기 확장 */
 }
 
-.post-title {
-  font-size: 16px;
-  color: #333;
+.table th,
+.table td {
+  padding: 10px; /* 셀 패딩 조정 */
+  text-align: left; /* 좌측 정렬 */
 }
 
-.post-comments {
-  font-size: 14px;
-  color: #888;
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px; /* 텍스트 너비 확장 */
 }
 
-.comments-count {
-  font-weight: bold;
-  color: #333;
+.more-button {
+  padding: 8px 12px; /* 버튼 크기 확장 */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.more-button:hover {
+  background-color: #0056b3;
 }
 </style>

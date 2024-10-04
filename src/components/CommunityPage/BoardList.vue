@@ -46,9 +46,6 @@
               }"
             >
               {{ board.title }}
-              <!-- <span v-if="bestlist.includes(board.boardNo)">
-                <i class="fa-solid fa-star" style="color: gold"></i>
-              </span> -->
             </router-link>
           </td>
           <td>
@@ -73,13 +70,12 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getList, getBest } from '@/api/boardApi'
+import { getList } from '@/api/boardApi'
 import Pagination from '@/components/common/PaginationComp.vue'
 import SearchBar from '@/components/common/SearchBar.vue'
 import moment from 'moment'
 
 const list = ref([])
-const bestlist = ref([])
 const pageNum = ref(1)
 const totalPage = ref(0)
 const category = ref('')
@@ -98,15 +94,6 @@ const loadBoards = async () => {
     amount.value = data.amount || 10
   } catch (error) {
     console.error('Error loading boards:', error)
-  }
-}
-
-const getBests = async () => {
-  try {
-    bestlist.value = await getBest()
-    console.log('best:', bestlist.value)
-  } catch (error) {
-    console.error('인기 글을 가져오는 데 실패했습니다.')
   }
 }
 
@@ -145,7 +132,6 @@ onMounted(() => {
   pageNum.value = parseInt(route.query?.page) || 1
   sortBy.value = route.query?.sortBy || 'latest'
   loadBoards()
-  getBests()
 })
 
 watch(

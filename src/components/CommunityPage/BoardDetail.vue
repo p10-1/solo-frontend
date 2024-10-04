@@ -111,7 +111,6 @@ const loadBoardDetail = async () => {
   const boardNo = route.params.boardNo // URL 파라미터에서 게시물 번호 가져오기
   try {
     const response = await get(boardNo)
-    console.log('Detail: ', response)
     board.value = response
   } catch (error) {
     console.error('게시물 상세 정보 로드 실패: ', error)

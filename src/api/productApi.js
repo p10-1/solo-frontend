@@ -40,9 +40,13 @@ export const fetchOption = async (optionId) => {
   }
 }
 
-export const getRecommend = async (period) => {
+export const getRecommend = async (userId) => {
   try {
-    const response = await axios.get(`${API_URL}/recommend/${period}`)
+    const response = await axios.get(`${API_URL}/recommend/`, {
+      params: {
+        userId: userId
+      }
+    })
     console.log(response.data)
     return response.data
   } catch (error) {

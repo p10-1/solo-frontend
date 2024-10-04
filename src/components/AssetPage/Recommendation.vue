@@ -19,16 +19,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import { getRecommend, fetchOption } from '@/api/productApi'
+import { useAuthStore } from '@/stores/authStore'
 
-const props = defineProps({
-  loanPeriod: {
-    type: Number,
-    required: true
-  }
-})
-
+const authStore = useAuthStore()
 const recommendedProducts = ref([])
 const loading = ref(false)
 const error = ref(null)
@@ -37,7 +32,7 @@ const fetchRecommendedProducts = async () => {
   loading.value = true
   error.value = null
   try {
-    const products = await getRecommend(props.loanPeriod)
+    const products = await getRecommend(authStore.userInfo.userId)
     recommendedProducts.value = await Promise.all(
       products.map(async (product) => {
         const options = await fetchOption(product.finPrdtCd)
@@ -54,7 +49,7 @@ const fetchRecommendedProducts = async () => {
 
 onMounted(fetchRecommendedProducts)
 
-watch(() => props.loanPeriod, fetchRecommendedProducts)
+// watch(() => props.loanPeriod, fetchRecommendedProducts)
 </script>
 
 <style scoped>

@@ -1,9 +1,9 @@
 <template>
-  <div class="container mt-5">
-    <div class="card" @click="openModal">
-      <div class="card-body">
+  <div class="quiz-container mt-5">
+    <div class="quiz-card card" @click="openModal">
+      <div class="card-body text-center">
         <h1 class="card-title">오늘의 금융 퀴즈</h1>
-        <div v-if="description">
+        <div v-if="description" class="quiz-description">
           <p><strong>설명:</strong> {{ description }}</p>
         </div>
         <div v-else>
@@ -58,8 +58,42 @@ const openModal = () => {
 </script>
 
 <style scoped>
-.card {
-  border-radius: 8px;
+.quiz-container {
+  display: flex;
+  justify-content: center;
+}
+
+.quiz-card {
+  max-width: 400px; /* 가로 크기 조정 */
+  width: 100%;
+  border: 2px solid #007bff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
   cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  background-color: #f9f9f9;
+}
+
+.quiz-card:hover {
+  transform: translateY(-5px); /* 호버 시 살짝 올라가는 효과 */
+}
+
+.card-title {
+  font-size: 1.8rem; /* 제목 크기 */
+  color: #007bff; /* 퀴즈 느낌 살리기 위해 파란색 적용 */
+  margin-bottom: 20px;
+}
+
+.quiz-description {
+  font-size: 1rem;
+  color: #333;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.card-body {
+  padding: 20px;
 }
 </style>
