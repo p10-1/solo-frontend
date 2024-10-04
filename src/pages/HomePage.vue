@@ -5,7 +5,6 @@
     <div class="left">
       <QuizCard />
       <BoardCard />
-      <PointCard />
       <NewsCard />
       <PolicyCard />
       <ProductCard />
@@ -15,9 +14,8 @@
 
 <script>
 import QuizCard from '@/components/HomePage/QuizCard.vue'
-import PointCard from '@/components/HomePage/PointCard.vue'
-import NewsCard from '@/components/HomePage/NewsCard.vue'
 import PolicyCard from '@/components/HomePage/PolicyCard.vue'
+import NewsCard from '@/components/HomePage/NewsCard.vue'
 import BoardCard from '@/components/HomePage/BoardCard.vue'
 import ProductCard from '@/components/HomePage/ProductCard.vue'
 export default {
@@ -25,7 +23,6 @@ export default {
     QuizCard,
     BoardCard,
     PolicyCard,
-    PointCard,
     NewsCard,
     ProductCard
   }
