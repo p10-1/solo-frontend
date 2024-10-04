@@ -36,82 +36,84 @@
   </div>
 </template>
 
-<script>
-import { getNews, getNewsBycategory } from '@/api/newsApi'
+<script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue'; 
+import { getNews, getNewsBycategory } from '@/api/newsApi';
+import { useRoute } from 'vue-router';
 
-export default {
-  name: 'NewsList',
-  data() {
-    return {
-      newsList: [],
-      currentPage: 1,
-      loading: false,
-      noMoreData: false,
-      selectedCategory: ''
-    }
-  },
-  computed: {
-    filteredNewsList() {
-      return this.newsList.filter((news) => {
-        const newsCategory = news.category.trim()
-        const selectedCategory = this.selectedCategory.trim()
-        return selectedCategory === '' || newsCategory === selectedCategory
-      })
-    }
-  },
-  methods: {
-    async loadNews() {
-      if (this.loading || this.noMoreData) return // 로딩 중이거나 더 이상 데이터가 없으면 실행하지 않음
-      this.loading = true // 로딩 상태 시작
+const newsList = ref([]);
+const currentPage = ref(1);
+const loading = ref(false);
+const noMoreData = ref(false);
+const selectedCategory = ref('');
 
-      // 0.5초의 로딩 지연 추가
-      await new Promise((resolve) => setTimeout(resolve, 500))
+// 카테고리 쿼리 파라미터로 설정
+const route = useRoute();
+selectedCategory.value = route.query.category || '';
 
-      try {
-        let data
-        if (this.selectedCategory) {
-          data = await getNewsBycategory(this.currentPage, this.selectedCategory)
-        } else {
-          data = await getNews(this.currentPage)
-        }
-        console.log('data:' + data)
-        if (data.list && data.list.length > 0) {
-          this.newsList = [...this.newsList, ...data.list]
-          this.currentPage++ // 페이지 수 증가
-        } else {
-          this.noMoreData = true
-        }
-      } catch (error) {
-        console.error('뉴스를 불러오는 중 오류 발생', error)
-      } finally {
-        this.loading = false
-      }
-    },
-    resetFilter() {
-      this.currentPage = 1
-      this.newsList = []
-      this.noMoreData = false
-      this.loadNews()
-    },
-    handleScroll() {
-      const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10
-      if (scrollBottom && !this.loading) {
-        this.loadNews() // 추가 데이터 로드
-      }
-    },
-    formatDate(dateString) {
-      const date = new Date(dateString)
-      return date.toISOString().split('T')[0] // YYYY-MM-DD 형식으로 반환
+// 필터링된 뉴스 리스트
+const filteredNewsList = computed(() => {
+  return newsList.value.filter((news) => {
+    const newsCategory = news.category.trim();
+    const selected = selectedCategory.value.trim();
+    return selected === '' || newsCategory === selected;
+  });
+});
+
+// 뉴스 로드 함수
+const loadNews = async () => {
+  if (loading.value || noMoreData.value) return;
+  loading.value = true;
+
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  try {
+    let data;
+    if (selectedCategory.value) {
+      data = await getNewsBycategory(currentPage.value, selectedCategory.value);
+    } else {
+      data = await getNews(currentPage.value);
     }
-  },
-  mounted() {
-    this.loadNews()
-    window.addEventListener('scroll', this.handleScroll)
-  },
-  beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll)
+    if (data.list && data.list.length > 0) {
+      newsList.value = [...newsList.value, ...data.list];
+      currentPage.value++;
+    } else {
+      noMoreData.value = true;
+    }
+  } catch (error) {
+    console.error('뉴스를 불러오는 중 오류 발생', error);
+  } finally {
+    loading.value = false;
   }
-}
+};
+
+const resetFilter = () => {
+  currentPage.value = 1;
+  newsList.value = [];
+  noMoreData.value = false;
+  loadNews();
+};
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 반환
+};
+
+onMounted(() => {
+  loadNews();
+  window.addEventListener('scroll', handleScroll);
+});
+
+const handleScroll = () => {
+  const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10;
+  if (scrollBottom && !loading.value) {
+    loadNews(); // 추가 데이터 로드
+  }
+};
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 </script>
 
 <style scoped>
