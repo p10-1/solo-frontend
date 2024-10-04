@@ -1,0 +1,14 @@
+@import url('//fonts.googleapis.com/earlyaccess/notosanskr.css');
+* {
+  font-family: 'Noto Sans KR';
+}
+
+/* @font-face {
+  font-display: block;
+  font-family: bootstrap-icons;
+  src:
+    url(../vendor/bootstrap/icon/fonts/bootstrap-icons.woff2?1fa40e8900654d2863d011707b9fb6f2)
+      format('woff2'),
+    url(../vendor/bootstrap/icon/fonts/bootstrap-icons.woff?1fa40e8900654d2863d011707b9fb6f2)
+      format('woff');
+} */
