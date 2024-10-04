@@ -1,48 +1,42 @@
 <template>
   <div class="slider-container">
     <div class="slider" :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
-      <div v-for="(policy, index) in policies" :key="index" class="slider-card" @click="goToPolicy">
-        <h3>청년 정책 알아보기</h3>
-        <h5 class="policy-title">{{ policy.polyBizSjnm }}</h5>
-        <p class="policy-description">{{ policy.polyItcnCn }}</p>
-        <button class="btn btn-primary btn-sm mt-3" @click.stop="goToPolicy">더 알아보기</button>
+      <div v-for="(product, index) in products" :key="index" class="slider-card">
+        <h3>{{ product.finPrdtNm }}</h3>
+        <p>{{ product.korCoNm }}</p>
+        <p>{{ product.mtrtInt }}</p>
       </div>
     </div>
     <!-- 첫 번째 아이템에서는 좌측 버튼을 비활성화 -->
     <button @click="prevSlide" class="prev-btn" :disabled="currentIndex === 0">‹</button>
     <!-- 마지막 아이템에서는 우측 버튼을 비활성화 -->
-    <button @click="nextSlide" class="next-btn" :disabled="currentIndex === policies.length - 1">
+    <button @click="nextSlide" class="next-btn" :disabled="currentIndex === products.length - 1">
       ›
     </button>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { recommendPolicies } from '@/api/policyApi'
+import { ref, onMounted } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
+import { getRecommend } from '@/api/productApi.js'
 
-const router = useRouter()
-const policies = ref([])
+const products = ref([])
 const currentIndex = ref(0)
+const authStore = useAuthStore()
 
-const fetchPolicies = async () => {
+const fetchRecommendProducts = async () => {
   try {
-    policies.value = await recommendPolicies()
+    products.value = await getRecommend(authStore.userInfo.userId)
+    console.log(products.value)
   } catch (error) {
-    console.error('정책을 가져오는 데 실패했습니다:', error)
+    console.error('추천 상품을 가져오는 데 실패했습니다:', error)
   }
 }
 
-const goToPolicy = () => {
-  router.push('/policy')
-}
-
 const nextSlide = () => {
-  if (currentIndex.value < policies.value.length - 1) {
+  if (currentIndex.value < products.value.length - 1) {
     currentIndex.value++
-  } else {
-    currentIndex.value = 0
   }
 }
 
@@ -52,18 +46,8 @@ const prevSlide = () => {
   }
 }
 
-let slideInterval
-const startAutoSlide = () => {
-  slideInterval = setInterval(nextSlide, 3000)
-}
-
 onMounted(() => {
-  fetchPolicies()
-  startAutoSlide()
-})
-
-onUnmounted(() => {
-  clearInterval(slideInterval)
+  fetchRecommendProducts()
 })
 </script>
 
@@ -76,7 +60,6 @@ onUnmounted(() => {
 }
 
 .slider {
-  background-color: white;
   display: flex;
   transition: transform 0.5s ease;
 }
@@ -88,21 +71,6 @@ onUnmounted(() => {
   padding: 30px; /* 패딩을 더 줘서 여유롭게 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
-}
-
-.policy-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin: 10px 0;
-  color: #333;
-}
-
-.policy-description {
-  font-size: 1rem;
-  color: #555;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .prev-btn,

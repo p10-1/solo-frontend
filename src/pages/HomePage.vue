@@ -4,27 +4,30 @@
   <div class="top-section">
     <div class="left">
       <QuizCard />
-      <PolicyCard />
+      <BoardCard />
       <PointCard />
       <NewsCard />
-      <PolicyCarousel />
+      <PolicyCard />
+      <ProductCard />
     </div>
   </div>
 </template>
 
 <script>
 import QuizCard from '@/components/HomePage/QuizCard.vue'
-import PolicyCard from '@/components/HomePage/PolicyCard.vue'
 import PointCard from '@/components/HomePage/PointCard.vue'
 import NewsCard from '@/components/HomePage/NewsCard.vue'
-import PolicyCarousel from '@/components/PolicyPage/PolicyCarousel.vue'
+import PolicyCard from '@/components/HomePage/PolicyCard.vue'
+import BoardCard from '@/components/HomePage/BoardCard.vue'
+import ProductCard from '@/components/HomePage/ProductCard.vue'
 export default {
   components: {
     QuizCard,
+    BoardCard,
     PolicyCard,
     PointCard,
     NewsCard,
-    PolicyCarousel
+    ProductCard
   }
 }
 </script>
