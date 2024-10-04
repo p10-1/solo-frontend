@@ -1,0 +1,65 @@
+.table {
+  width: 100%;
+  border-top: 1px solid #222;
+  border-spacing: 0;
+  border-collapse: collapse;
+  box-sizing: border-box;
+}
+
+.table thead th {
+  height: 40px;
+  padding: 0 20px;
+  border-bottom: 1px solid #ddd;
+  background: #f7f7f7;
+  color: #222;
+  text-align: center !important;
+  vertical-align: middle;
+}
+
+.board-list .top-post {
+  border-left: 0 !important;
+  box-shadow: none !important;
+}
+
+.table tbody tr:hover {
+  background-color: #fafafa;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.table tbody td {
+  height: 45px;
+  padding: 0 20px;
+  line-height: 25px;
+  border-bottom: 1px solid #ddd;
+  letter-spacing: -0.02em;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table tbody td.text-align-left {
+  text-align: left;
+}
+
+.table tbody td.link {
+  width: 470px;
+  padding-right: 18px;
+  font-size: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -o-text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: left;
+  color: #222;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.date {
+  font-size: 15px;
+}
+
+/* 페이지 네이션 */
+.pagination {
+}

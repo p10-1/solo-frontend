@@ -1,25 +1,10 @@
 <template>
-  <div class="policy-card">
-    <h2 class="policy-title">{{ policy.polyBizSjnm }}</h2>
-    <p class="policy-description">{{ policy.polyItcnCn }}</p>
-
-    <div class="policy-link">
-      <template v-if="policy.rqutUrla && policy.rqutUrla !== '-' && policy.rqutUrla !== 'null'">
-        <a :href="policy.rqutUrla" target="_blank">{{ policy.rqutUrla }}</a>
-      </template>
-      <template v-else>
-        <span>링크 없음</span>
-      </template>
+  <a :href="policy.rqutUrla" target="_blank" class="policy-link-wrapper">
+    <div class="policy-card">
+      <h2 class="policy-title">{{ policy.polyBizSjnm }}</h2>
+      <p class="policy-description">{{ policy.polyItcnCn }}</p>
     </div>
-
-    <button class="toggle-button" @click="toggleSporCn">
-      {{ showSporCn ? '상세 숨기기' : '상세 보기' }}
-    </button>
-
-    <div v-if="showSporCn" class="policy-details">
-      <p>상세 정보: {{ policy.sporCn }}</p>
-    </div>
-  </div>
+  </a>
 </template>
 
 <script>
@@ -44,47 +29,39 @@ export default {
 </script>
 
 <style scoped>
+.policy-link-wrapper {
+  text-decoration: none; /* 링크 자체에 밑줄 제거 */
+}
+
 .policy-card {
-  border: 1px solid #ddd; /* 카드 테두리 */
-  border-radius: 8px; /* 둥근 모서리 */
-  padding: 16px; /* 패딩 */
-  margin: 16px; /* 카드 간격 */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-  transition: transform 0.2s; /* 호버 효과 */
+  display: block;
+  background-color: #fbf5ef;
+  width: 600px;
+  color: black;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .policy-card:hover {
-  transform: scale(1.05); /* 호버 시 확대 효과 */
+  transform: translateY(-5px);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.35);
 }
 
-.policy-title {
-  font-size: 1.5em; /* 정책 제목 크기 */
-  margin-bottom: 8px; /* 아래 여백 */
-}
-
+.policy-title,
 .policy-description {
-  margin-bottom: 8px; /* 아래 여백 */
+  text-align: center;
+  text-decoration: none; /* 텍스트 내부에도 링크 밑줄 제거 */
+  color: inherit; /* 링크 색상 상속 */
 }
 
-.policy-link {
-  margin-bottom: 8px; /* 아래 여백 */
-}
-
-.toggle-button {
-  background-color: #007bff; /* 버튼 배경 색상 */
-  color: white; /* 버튼 글자 색상 */
-  border: none; /* 테두리 없음 */
-  border-radius: 4px; /* 둥근 모서리 */
-  padding: 8px 12px; /* 패딩 */
-  cursor: pointer; /* 커서 포인터 */
-}
-
-.toggle-button:hover {
-  background-color: #0056b3; /* 호버 시 버튼 배경 색상 */
-}
-
-.policy-details {
-  margin-top: 12px; /* 위 여백 */
-  color: #666; /* 상세 정보 색상 */
+@media (max-width: 768px) {
+  .policy-card {
+    width: 100%;
+  }
 }
 </style>

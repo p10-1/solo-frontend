@@ -60,10 +60,9 @@ export default {
       userName: '', // Will be set by the authenticated user
       files: []
     })
-    const authStore = useAuthStore() // Get the authentication store
+    const authStore = useAuthStore()
     const router = useRouter()
 
-    // Set the userID based on the logged-in user
     article.value.userName = authStore.userInfo ? authStore.userInfo.userName : ''
     const handleFileUpload = (event) => {
       article.value.files = Array.from(event.target.files)

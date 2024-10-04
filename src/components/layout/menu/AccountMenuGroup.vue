@@ -13,13 +13,20 @@ const username = computed(() => authStore.username)
 </script>
 
 <template>
-  <ul class="navbar-nav ms-auto">
-    <template v-if="isLogin">
-      <AccountMenuItem :username="username" />
-      <LogoutMenuItem />
-    </template>
-    <template v-else>
-      <LoginMenuItem />
-    </template>
-  </ul>
+  <div class="login-wrapper">
+    <ul class="login-box">
+      <template v-if="isLogin">
+        <AccountMenuItem :username="username" />
+        <LogoutMenuItem />
+      </template>
+      <template v-else>
+        <LoginMenuItem />
+      </template>
+    </ul>
+  </div>
 </template>
+<style scoped>
+.login-wrapper {
+  position: relative;
+}
+</style>
