@@ -12,7 +12,7 @@
       <div class="form-group">
         <div class="d-flex align-items-center">
           <select v-model="accountIndex" class="form-control mr-2 account-select" id="accountSelect">
-            <option value="" disabled selected>내 계좌 선택</option> <!-- 비활성화 및 기본값 설정 -->
+            <option value="" disabled selected>내 계좌 선택</option>
             <option v-for="(account, index) in accounts" :key="index" :value="index">{{ account }}</option>
           </select>
           <span class="common-label">계좌로</span>
@@ -26,97 +26,70 @@
   </div>
 </template>
 
-<script>
-import axios from 'axios';
+<script setup>
+import { ref, onMounted, defineEmits } from 'vue';
+import { fetchPoints, pointsToCash, getBank } from '@/api/mypageApi'; // API import
 
-export default {
-  data() {
-    return {
-      points: 0,
-      withdrawAmount: 0,
-      accountIndex: '',
-      accounts: [] 
-    };
-  },
-  mounted() {
-    this.fetchPoints();
-    this.getBank(); 
-  },
-  methods: {
-    async fetchPoints() {
-      try {
-        const response = await fetch('/api/mypage/points');
-        if (response.ok) {
-          const point = await response.json();
-          this.points = point;
-        } else {
-          console.error('Error:', response.statusText);
-          alert('회원 정보를 찾을 수 없습니다.');
-        }
-      } catch (error) {
-        console.error('포인트 조회 오류:', error);
-      }
-    },
-    async getBank() {
-      try {
-        const response = await axios.get('/api/mypage/getBank');
-        if (response.status === 200) {
-          const data = JSON.parse(response.data[0]); // 첫 번째 요소를 파싱
-          this.accounts = data; // accounts에 할당
-          console.log('계좌 목록:', this.accounts);
-        } else {
-          console.error('Error:', response.statusText);
-        }
-      } catch (error) {
-        console.error('계좌 조회 오류:', error);
-      }
-    },
-    async withdrawPoints() {
-      if (this.withdrawAmount > 0 && this.withdrawAmount <= this.points && this.accountIndex !== '') {
-        try {
-          const requestData = {
-            point: this.withdrawAmount
-          };
+// 이벤트 정의
+const emit = defineEmits(['update']); // 부모에게 'update' 이벤트를 발생시킬 수 있도록 정의
 
-          console.log('출금 요청 데이터:', requestData);
-          const response = await axios.post(`/api/mypage/withdraw?idx=${this.accountIndex}`, requestData, {
-            withCredentials: true,
-          });
+const points = ref(0);
+const withdrawAmount = ref(0);
+const accountIndex = ref('');
+const accounts = ref([]);
 
-          if (response.status === 200) {
-            this.points -= this.withdrawAmount;
-            this.withdrawAmount = 0;
-            this.accountIndex = ''; // 출금 후 계좌 선택 초기화
-            alert('포인트 출금이 성공적으로 완료되었습니다.');
-          } else {
-            alert('출금 실패');
-          }
-        } catch (error) {
-          console.error('출금 오류:', error);
-          alert('출금 중 오류가 발생했습니다.');
-        }
-      } else {
-        alert('출금할 수 없는 금액이거나 계좌를 선택하지 않았습니다.');
-      }
-
-
-
-
-    }
+const loadPoints = async () => {
+  try {
+    points.value = await fetchPoints(); // 포인트 조회 API 호출
+  } catch (error) {
+    alert('포인트 조회 중 오류가 발생했습니다.');
   }
 };
+
+const loadBank = async () => {
+  try {
+    const data = await getBank(); // 은행 정보 조회 API 호출
+    accounts.value = JSON.parse(data[0]);
+  } catch (error) {
+    console.error('계좌 조회 오류:', error);
+  }
+};
+
+const withdrawPoints = async () => {
+  if (withdrawAmount.value > 0 && withdrawAmount.value <= points.value && accountIndex.value !== '') {
+    try {
+      await pointsToCash(accountIndex.value, withdrawAmount.value); // 포인트 출금 API 호출
+      points.value -= withdrawAmount.value;
+      withdrawAmount.value = 0;
+      accountIndex.value = '';
+      alert('포인트 출금이 성공적으로 완료되었습니다.');
+
+      // 부모에게 업데이트 이벤트 발생
+      emit('update'); // 부모에게 'update' 이벤트를 발생시킴
+    } catch (error) {
+      console.error('출금 오류:', error);
+      alert('출금 중 오류가 발생했습니다.');
+    }
+  } else {
+    alert('출금할 수 없는 금액이거나 계좌를 선택하지 않았습니다.');
+  }
+};
+
+onMounted(() => {
+  loadPoints();
+  loadBank();
+});
 </script>
+
+
 
 <style scoped>
 .point-management {
   background-color: #e0e0e0;
-  /* 더 연한 배경색으로 변경 */
   border-radius: 10px;
   padding: 20px;
   max-width: 500px;
-  /* 최대 너비를 500px로 설정 */
   margin: auto;
-  /* 중앙 정렬 */
 }
 
 h1,
@@ -126,19 +99,15 @@ h3 {
 
 .account-select {
   width: 120px;
-  /* 셀렉트 박스 너비 조정 */
 }
 
 .amount-input {
   width: 150px;
-  /* 인풋 폼 너비 조정 */
 }
 
 .common-label {
   margin: 0 10px;
-  /* "계좌로" 및 "원" 텍스트와 셀렉트/인풋 사이의 간격 조정 */
   font-weight: bold;
-  /* 텍스트를 두껍게 */
 }
 
 button {

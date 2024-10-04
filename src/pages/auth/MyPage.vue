@@ -9,32 +9,28 @@
       <MyAsset />
     </div>
 
-    <!-- 하단 컴포넌트 (MyPoint, MyBoard) -->
     <div class="bottom-section">
       <div class="bottom-components">
-        <MyPoint />
+        <MyPoint @update="handleUpdate" />
         <MyBoard />
       </div>
     </div>
   </div>
 </template>
 
-<script>
-// 컴포넌트 임포트
+<script setup>
 import MyPoint from '@/components/MyPage/MyPoint.vue'
 import MyType from '@/components/MyPage/MyType.vue'
 import MyAsset from '@/components/MyPage/MyAsset.vue'
 import MyBoard from '@/components/MyPage/MyBoard.vue'
 
-export default {
-  name: 'App',
-  components: {
-    MyPoint,
-    MyType,
-    MyAsset,
-    MyBoard
-  }
-}
+const handleUpdate = () => {
+  refreshPage();
+};
+
+const refreshPage = () => {
+  window.location.reload(); // 페이지 새로 고침
+};
 </script>
 
 <style scoped>
@@ -51,7 +47,7 @@ h1 {
 
 /* 상단 섹션 (MyType) */
 .top-section {
-  margin-bottom: 30px; /* 아래 여백 추가 */
+  margin-bottom: 30px; 
 }
 
 /* 중간 섹션 (MyType) */
@@ -65,7 +61,7 @@ h1 {
 }
 
 .bottom-components {
-  display: flex; /* Flexbox 사용 */
-  justify-content: space-between; /* 좌우로 배치 */
+  display: flex; 
+  justify-content: space-between; 
 }
 </style>
