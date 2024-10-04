@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 // 이게 각각의 page를 가져오는 것
 import Home from '../pages/HomePage.vue'
-import NotFound from '@/pages/NotFound.vue'
+// import NotFound from '@/pages/NotFound.vue'
 import Board from '../pages/board/BoardPage.vue'
 import Asset from '../pages/asset/AssetPage.vue'
 import MyPage from '../pages/auth/MyPage.vue'

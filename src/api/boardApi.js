@@ -126,7 +126,6 @@ export const deleteAttachment = async (no) => {
 
 export const likeBoard = async (boardNo, userName) => {
   try {
-    console.log('api 안에서: ', boardNo, userName)
     const response = await axios.get(`${API_URL}/like`, {
       params: {
         boardNo: boardNo,
@@ -142,7 +141,6 @@ export const likeBoard = async (boardNo, userName) => {
 
 export const myBoard = async (userName) => {
   try {
-    console.log(userName)
     const response = await axios.get(`${API_URL}/mine`, {
       params: {
         userName: userName
