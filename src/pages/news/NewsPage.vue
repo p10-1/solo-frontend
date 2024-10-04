@@ -25,4 +25,4 @@ import NewsList from '@/components/NewsPage/NewsList.vue'
 import { ref } from 'vue'
 import SearchBar from '@/components/common/SearchBar.vue'
 import NewsList from '@/components/NewsPage/NewsList.vue'
-</script>
+</script>  -->
