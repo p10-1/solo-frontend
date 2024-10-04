@@ -5,11 +5,9 @@
       <!-- SearchBar 컴포넌트 사용 -->
       <SearchBar v-model="keyword" @search="searchPolicies" />
     </div>
-    <ul>
-      <!-- 정책 항목을 표시 -->
+    <div class="policy-list">
       <PolicyItem v-for="policy in list" :key="policy.bizId" :policy="policy" />
-    </ul>
-
+    </div>
     <!-- 로딩 상태 표시 -->
     <div v-if="loading" class="loading">로딩 중...</div>
     <div v-if="noMoreData" class="no-more">더 이상 데이터가 없습니다.</div>
@@ -72,9 +70,7 @@ const handleScroll = () => {
 onMounted(() => {
   keyword.value = route.query.keyword || ''
   pageNum.value = parseInt(route.query.page) || 1
-
   loadPolicies()
-
   window.addEventListener('scroll', handleScroll)
 })
 
@@ -93,5 +89,15 @@ onBeforeUnmount(() => {
   text-align: center;
   padding: 20px;
   color: gray;
+}
+.policy-list {
+  display: flex; /* Flexbox를 사용하여 수평 정렬 */
+  flex-wrap: wrap; /* 여러 줄로 감싸기 */
+  justify-content: space-between; /* 항목 간의 간격을 동일하게 설정 */
+}
+
+.policy-list > * {
+  width: calc(50% - 16px); /* 각 항목의 너비를 50%로 설정하고 간격을 고려 */
+  margin-bottom: 20px; /* 아래 여백 추가 */
 }
 </style>

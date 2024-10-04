@@ -1,7 +1,5 @@
 <template>
   <div class="policy-page">
-    <!-- 추천 정책 Carousel -->
-    <!-- <PolicyCarousel :policies="recommendedPolicies" /> -->
     <PolicyList />
   </div>
 </template>
@@ -13,7 +11,6 @@ import PolicyList from '@/components/PolicyPage/PolicyList.vue'
 export default {
   components: {
     PolicyList
-    // PolicyCarousel
   }
 }
 </script>
