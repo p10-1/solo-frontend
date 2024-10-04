@@ -3,8 +3,16 @@
     <div class="slider">
       <div class="slider-card" v-for="(categoryItem, categoryIndex) in newsList" :key="categoryIndex">
         <div @click="goToNews(categoryItem.category)" class="card-content">
-          <h3>오늘의 {{ categoryItem.category }} 뉴스</h3>
-          <h5 class="news-title">{{ categoryItem.newsItems[categoryItem.currentNewsIndex].title }}</h5>
+          <div class="text-content">
+            <h3 class="news-category">오늘의 {{ categoryItem.category }} 뉴스</h3>
+            <h5 class="news-title">{{ categoryItem.newsItems[categoryItem.currentNewsIndex].title }}</h5>
+          </div>
+          <img 
+            v-if="categoryItem.newsItems[categoryItem.currentNewsIndex].imageUrl" 
+            :src="categoryItem.newsItems[categoryItem.currentNewsIndex].imageUrl" 
+            alt="뉴스 이미지" 
+            class="news-image img-fluid" 
+          />
         </div>
         <div class="button-wrapper">
           <button 
@@ -41,7 +49,10 @@ const fetchNews = async () => {
     const response = await recommendNews(); 
     newsList.value = Object.entries(response).map(([category, news]) => ({
       category,
-      newsItems: Array.isArray(news) ? news : [news], 
+      newsItems: Array.isArray(news) ? news.map(item => ({
+        ...item,
+        imageUrl: item.imageUrl // imageUrl 추가
+      })) : [{ ...news, imageUrl: news.imageUrl }], 
       currentNewsIndex: 0 
     }));
   } catch (error) {
@@ -108,26 +119,43 @@ onUnmounted(() => {
   width: 33.33%; /* 카드의 넓이를 3분의 1로 설정 */
   background-color: #f9f9f9;
   border: 1px solid #ddd;
-  padding: 20px;
+  padding: 10px; /* 패딩 조정 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
   cursor: pointer;
   margin: 0 10px; /* 카드 간격 조정 */
   height: 200px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* 세로 방향으로 정렬 */
+  justify-content: space-between; /* 공간 분배 */
 }
 
 .card-content {
-  cursor: pointer;
+  display: flex;
+  justify-content: space-between; /* 텍스트와 이미지를 양쪽으로 배치 */
   flex-grow: 1;
 }
 
+.text-content {
+  flex: 0 0 60%; /* 텍스트 영역을 60%로 설정 */
+  overflow: hidden; /* 넘치는 텍스트 숨기기 */
+}
+
+.news-category {
+  font-size: 1rem; /* 카테고리 제목 크기 조정 */
+  margin: 0; /* 기본 마진 제거 */
+}
+
 .news-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin: 10px 0;
+  font-size: 0.9rem; /* 뉴스 제목 크기 조정 */
+  margin: 5px 0; /* 제목 간격 조정 */
   color: #333;
+}
+
+.news-image {
+  max-height: 100px; /* 이미지 최대 높이 조정 */
+  object-fit: contain; /* 이미지 비율 유지 */
+  margin-left: 10px; /* 제목과 이미지 간의 간격 조정 */
+  flex: 0 0 40%; /* 이미지 영역을 40%로 설정 */
 }
 
 .button-wrapper {
@@ -140,8 +168,8 @@ onUnmounted(() => {
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 5px 15px;
-  font-size: 1rem;
+  padding: 5px 10px; /* 버튼 패딩 조정 */
+  font-size: 0.9rem; /* 버튼 글자 크기 조정 */
   cursor: pointer;
   border-radius: 5px;
   margin: 0 5px; /* 버튼 간의 간격 추가 */
