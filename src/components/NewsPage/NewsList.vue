@@ -117,33 +117,102 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.loading {
-  text-align: center;
+body {
+  background-color: #f9f9f9;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
   padding: 20px;
-  color: gray;
 }
-.no-more {
-  text-align: center;
+
+.infinite-scroll {
+  max-width: 800px;
+  margin: auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  color: gray;
 }
+
+.category-filter {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.category-filter label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.category-filter select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
+
+.category-filter select:hover {
+  border-color: #aaa;
+}
+
 .table {
-  width: 100%;
+  width: 100%; /* 테이블 폭을 100%로 설정 */
+  max-width: 1000px; /* 최대 너비를 설정 */
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
+
 .table th,
 .table td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 10px;
   text-align: left;
 }
+
+.table th:first-child,
+.table td:first-child {
+  min-width: 70px; /* 번호 열의 최소 너비 */
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+  min-width: 100px; /* 카테고리 열의 최소 너비 */
+}
+
 .table th {
-  background-color: #f2f2f2;
+  background-color: #4CAF50;
+  color: white;
 }
+
 .table tr:hover {
-  background-color: #f5f5f5;
+  background-color: #f1f1f1;
 }
-.category-filter {
-  margin-bottom: 20px;
+
+.loading,
+.no-more {
+  text-align: center;
+  padding: 20px;
+  color: #555;
+  font-size: 1.2em;
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+  .infinite-scroll {
+    padding: 10px;
+  }
+
+  .table th, .table td {
+    padding: 8px;
+  }
+
+  .category-filter {
+    flex-direction: column;
+  }
+
+  .category-filter label {
+    margin-bottom: 5px;
+  }
 }
 </style>
