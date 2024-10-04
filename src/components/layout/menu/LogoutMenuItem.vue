@@ -1,8 +1,6 @@
 <template>
-  <a href="#" class="nav-link" @click.prevent="logout">
-    <i class="fa-solid fa-right-from-bracket"></i>
-    로그아웃
-  </a>
+  <a href="#" class="button-main" @click.prevent="logout"> 로그아웃 </a>
+  <!-- <router-link class="button-main" to="board/create">글쓰기</router-link> -->
 </template>
 
 <script setup>
@@ -16,3 +14,9 @@ const logout = async () => {
   sessionStorage.removeItem('userInfo')
 }
 </script>
+
+<style scope>
+.button-main {
+  margin-left: 3vw;
+}
+</style>
