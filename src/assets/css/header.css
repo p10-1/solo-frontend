@@ -1,47 +1,101 @@
+/* 초기화 css */
+ol,
+ul,
+dl {
+  margin: 0;
+  padding-left: 0;
+}
+
+/* 메뉴 */
 .navigation {
   position: fixed;
+  z-index: 10;
   top: 0;
   left: 0;
+  padding: 0 45px;
+  display: flex;
+  justify-content: space-between; /* 왼쪽과 오른쪽 끝으로 정렬 */
+  align-items: center;
   width: 100%;
   /* background-color: #73ca00; */
   border-bottom: 1px solid #eeeeee;
   background-color: #fff;
 }
 
-.logo-box {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  margin-top: -15px;
-  font-size: 30px;
+/* 스크롤시 변경될 배경색과 높이 */
+.navigation.scrolled {
+  background-color: #fff;
+  transition: background-color 0.8s ease;
+  border: 0;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.nav-box {
-  position: relative;
-  text-align: center;
+.navigation.scrolled .nav-list li a {
+  height: 70px;
+  line-height: 70px;
+  color: #222;
+}
+
+.navigation.scrolled .nav-list li a:hover::after {
+  bottom: -22px;
+  background-color: #222;
+}
+
+.navigation.scrolled .login-wrapper .button-main {
+  background-color: #222; /* 스크롤 시 버튼 색 변경 */
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.navigation.scrolled .login-wrapper > .login-box > .nav-list > a {
+  padding: 7px 0;
+}
+
+/* 끝 */
+
+.navi-icon {
+  flex: 0 1 auto;
+  margin-right: auto;
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+}
+
+.menu-box {
+  flex: 1;
+  flex-basis: auto;
+}
+
+.login-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
 }
 
 .nav-list {
-  display: inline-block;
   text-align: center;
+  margin: 0;
 }
 
 .nav-list li {
+  display: inline-block;
+  padding: 0 40px;
+}
+
+.nav-list li a {
   position: relative;
-  display: inline;
   font-size: 20px;
   font-weight: 500;
   letter-spacing: -1.5px;
-  padding: 0 40px;
   color: #484848;
   height: 95px;
   line-height: 95px;
   cursor: pointer;
+  transition: all 1.8s;
 }
 
 .nav-list li a:hover {
   font-weight: bold;
-  transition: all 1.8s;
 }
 
 .nav-list li a:hover::after {
@@ -55,13 +109,127 @@
   transition: all 1.8s;
 }
 
-.menu-box {
-  display: inline;
+.login-wrapper .login-box {
+  display: flex;
+  justify-content: space-between; /* 왼쪽과 오른쪽 끝으로 정렬 */
+  align-items: center;
 }
 
-.login-Box {
+.login-wrapper .login-box .nav-list {
+  position: relative;
+}
+
+/* 마우스 hover 시 드롭다운 메뉴 표시 */
+.login-wrapper .login-box .nav-list:hover .dropdown-menu {
+  display: block;
+  opacity: 1; /* 투명도 1로 변경 */
+  transform: translateY(0);
+}
+
+/* 기본적으로 드롭다운 메뉴 숨김 */
+.dropdown-menu {
+  display: none;
   position: absolute;
-  right: 0;
-  top: 50%;
-  margin-top: -25px;
+  background-color: white;
+  border: 1px solid #eee;
+  list-style: none;
+  margin-left: 50px;
+  padding: 0;
+  top: 100%;
+  left: -50%;
+  min-width: 230px;
+  overflow: hidden;
+  z-index: 1000;
+  /* opacity: 0; */
+  transform: translateY(-10px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-menu li {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px dashed #eee;
+  padding: 15px 20px;
+}
+
+.dropdown-menu li:first-child {
+  border-top: none;
+}
+
+.dropdown-menu li:hover {
+  background-color: #fff8db;
+  transition: all 1s;
+}
+
+.dropdown-menu li a {
+  position: relative;
+  display: block !important;
+  line-height: inherit !important;
+  color: #636363;
+  font-size: 18px;
+  height: inherit !important;
+  text-decoration: none;
+}
+
+.dropdown-menu li a:hover {
+  color: #222; /* hover 시 색상 변경 */
+  display: block;
+}
+
+.dropdown-menu li a:hover::after {
+  display: none;
+}
+
+.dropdown-menu li.logout a:hover {
+  color: #fff !important;
+  background-color: #222;
+}
+
+/* 드롭 다운 끝 */
+
+.login-wrapper > .login-box > .nav-list > a {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  padding: 20px 0;
+}
+
+/* 로그인 유저 */
+.login-wrapper .login-box .nav-list a .user-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 8px;
+}
+
+.login-wrapper .login-box .nav-list a .user-info {
+  margin-top: -6px;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}
+
+.login-wrapper .login-box .nav-list a .user-info .user-ranking {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 4px;
+  margin-bottom: 3px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #ff4c4c;
+}
+
+/* 햄버거 버튼 */
+.navbar-toggler-icon {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .navbar-toggler-icon {
+    display: block;
+  }
 }

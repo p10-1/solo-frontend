@@ -1,6 +1,7 @@
 <template>
   <div class="main-left-box text-align-center">
     <div class="main-asset-box">
+      <!-- <Distribution /> -->
       <!-- <span class="label-type-green margin-bottom-1rem">안전 추구형</span>
       <span class="label-type-blue margin-bottom-1rem">자산 분산형</span>
       <span class="label-type-red margin-bottom-1rem">위험 추구형</span>
@@ -54,6 +55,7 @@
 
 <script>
 import QuizCard from '@/components/HomePage/QuizCard.vue'
+// import Distribution from '@/components/AssetPage/Distribution.vue'
 import PolicyCard from '@/components/HomePage/PolicyCard.vue'
 import PointCard from '@/components/HomePage/PointCard.vue'
 import NewsCard from '@/components/HomePage/NewsCard.vue'
@@ -66,6 +68,7 @@ export default {
     PointCard,
     NewsCard,
     BoardList,
+    // Distribution,
     PolicyCarousel
   }
 }
