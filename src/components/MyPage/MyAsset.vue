@@ -23,23 +23,28 @@
                 </ul>
             </div>
 
-            <!-- 대출 정보 카드 -->
+            <!-- 대출 정보 제목 -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h3>대출 정보</h3>
+                    <h3>대출 자산</h3>
                 </div>
                 <div class="card-body">
-                    <div v-if="!editMode">
-                        <p><strong>대출 목적:</strong> {{ loanDetails.loanPurpose }}</p>
-                        <p><strong>대출 금액:</strong> {{ loanDetails.loanAmount ? loanDetails.loanAmount.toLocaleString() : '0' }}원</p>
-                        <p><strong>대출 기간:</strong> {{ loanDetails.period }}개월</p>
-                        <p><strong>대출 이율:</strong> {{ loanDetails.interest }}%</p>
+                    <div v-if="isLoanDetailsValid">
+                        <div v-if="!editMode">
+                            <p><strong>대출 목적:</strong> {{ loanDetails.loanPurpose }}</p>
+                            <p><strong>대출 금액:</strong> {{ loanDetails.loanAmount ? loanDetails.loanAmount.toLocaleString() : '0' }}원</p>
+                            <p><strong>대출 기간:</strong> {{ loanDetails.period }}개월</p>
+                            <p><strong>대출 이율:</strong> {{ loanDetails.interest }}%</p>
+                        </div>
+                        <div v-else>
+                            <input v-model="loanDetails.loanPurpose" class="form-control mb-2" placeholder="대출 목적" />
+                            <input v-model.number="loanDetails.loanAmount" type="number" class="form-control mb-2" placeholder="대출 금액" />
+                            <input v-model.number="loanDetails.period" type="number" class="form-control mb-2" placeholder="대출 기간" />
+                            <input v-model.number="loanDetails.interest" type="number" class="form-control" placeholder="대출 이율" />
+                        </div>
                     </div>
                     <div v-else>
-                        <input v-model="loanDetails.loanPurpose" class="form-control mb-2" placeholder="대출 목적" />
-                        <input v-model.number="loanDetails.loanAmount" type="number" class="form-control mb-2" placeholder="대출 금액" />
-                        <input v-model.number="loanDetails.period" type="number" class="form-control mb-2" placeholder="대출 기간" />
-                        <input v-model.number="loanDetails.interest" type="number" class="form-control" placeholder="대출 이율" />
+                        <!-- 대출 정보가 없을 때는 이곳을 비워두면 됩니다 -->
                     </div>
                 </div>
             </div>
@@ -52,7 +57,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { getAsset, updateAsset } from '@/api/mypageApi'; // API 호출 import
 
 export default {
     data() {
@@ -69,42 +74,62 @@ export default {
             assetTypesList: ['cash', 'deposit', 'stock', 'insurance']
         };
     },
+    computed: {
+        isLoanDetailsValid() {
+            return this.loanDetails && 
+                   this.loanDetails.loanPurpose !== null && 
+                   this.loanDetails.loanAmount !== null && 
+                   this.loanDetails.period !== null && 
+                   this.loanDetails.interest !== null;
+        }
+    },
     methods: {
         async getAsset() {
             try {
-                const response = await axios.get('/api/mypage/getAsset', { withCredentials: true });
-                console.log('자산 데이터:', response.data);
+                const responseData = await getAsset(); // API 호출
+                
+                // 데이터가 null인 경우 처리
+                if (!responseData) {
+                    alert('자산 데이터가 없습니다. 다시 시도해 주세요.');
+                    return;
+                }
 
+                console.log('자산 데이터:', responseData);
+                
                 // 자산 데이터 정리
                 this.assetTypesList.forEach(type => {
-                    this.assetTypes[type] = this.parseAssets(response.data, type);
+                    this.assetTypes[type] = this.parseAssets(responseData, type);
                 });
 
                 // 보험 데이터를 수동으로 처리
-                if (response.data.insuranceCompany && response.data.insuranceName && response.data.insurance) {
-                    this.assetTypes.insurance = JSON.parse(response.data.insuranceCompany).map((company, index) => ({
+                if (responseData.insuranceCompany && responseData.insuranceName && responseData.insurance) {
+                    this.assetTypes.insurance = JSON.parse(responseData.insuranceCompany).map((company, index) => ({
                         bank: company,
-                        accountNumber: JSON.parse(response.data.insuranceName)[index] || '',
-                        amount: parseInt(JSON.parse(response.data.insurance)[index], 10) || 0
+                        accountNumber: JSON.parse(responseData.insuranceName)[index] || '',
+                        amount: parseInt(JSON.parse(responseData.insurance)[index], 10) || 0
                     }));
                 }
 
                 // 대출 정보 정리
                 this.loanDetails = {
-                    loanPurpose: response.data.loanPurpose || '',
-                    loanAmount: response.data.loanAmount || 0,
-                    period: response.data.period || 0,
-                    interest: response.data.interest || 0
+                    loanPurpose: responseData.loanPurpose || null,
+                    loanAmount: responseData.loanAmount || null,
+                    period: responseData.period || null,
+                    interest: responseData.interest || null
                 };
 
                 this.loaded = true;
 
             } catch (error) {
-                console.error('자산 불러오기 실패:', error);
+                alert('자산 불러오기 실패. 다시 시도해 주세요.');
             }
         },
 
         parseAssets(data, type) {
+            if (!data || !data[`${type}Bank`] || !data[`${type}Account`] || !data[type]) {
+                return []; // 데이터가 없으면 빈 배열 반환
+            }
+
             const banks = JSON.parse(data[`${type}Bank`] || "[]");
             const accounts = JSON.parse(data[`${type}Account`] || "[]");
             const amounts = JSON.parse(data[type] || "[]");
@@ -126,11 +151,16 @@ export default {
             return assetTypeNames[type] || type;
         },
 
-        toggleEditMode() {
+        async toggleEditMode() {
             if (this.editMode) {
                 const updatedData = this.prepareUpdatedData();
                 console.log("전송 데이터:", updatedData);
-                this.updateData(updatedData);
+                try {
+                    await updateAsset(updatedData); // API 호출
+                    alert('자산 및 대출 정보가 업데이트되었습니다.');
+                } catch (error) {
+                    alert('업데이트 실패. 다시 시도해 주세요.');
+                }
             }
             this.editMode = !this.editMode;
         },
@@ -157,16 +187,6 @@ export default {
 
             return updatedData;
         },
-
-        async updateData(data) {
-            try {
-                await axios.post('/api/mypage/updateAsset', data, { withCredentials: true });
-                alert('자산 및 대출 정보가 업데이트되었습니다.');
-            } catch (error) {
-                console.error('업데이트 실패:', error);
-                alert('업데이트 실패. 다시 시도해 주세요.');
-            }
-        }
     }
 }
 </script>
