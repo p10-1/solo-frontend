@@ -17,7 +17,6 @@
 </template>
 
 <script setup>
-
 //src/components/AssetPage/AssetComparison.vue
 
 import { computed } from 'vue'

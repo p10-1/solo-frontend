@@ -13,10 +13,12 @@ const handleApiError = (error, message) => {
 
 export const fetchAssetData = async () => {
   try {
+    console.log('assetApi: Fetching asset data')
     const response = await axios.get(API_URL, { withCredentials: true })
     console.log('Fetched asset data:', response.data)
     return response.data
   } catch (error) {
+    console.error('assetApi: Error fetching asset data:', error)
     handleApiError(error, '자산 데이터를 가져오는 데 실패했습니다:')
   }
 }
