@@ -117,7 +117,7 @@ const submit = async () => {
 const load = async () => {
   const data = await get(boardNo)
   orgArticle.value = { ...data }
-  //   attachments.value = data.attaches
+  attachments.value = data.attaches
   reset()
 }
 

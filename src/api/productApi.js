@@ -22,7 +22,6 @@ export const fetchProducts = async (currentPage, keyword) => {
         keyword: keyword
       }
     })
-    console.log('fetch: ', response.data)
     return response.data // API 응답 데이터를 반환
   } catch (error) {
     console.error('예적금 상품을 가져오는 데 실패했습니다:', error)
@@ -47,7 +46,6 @@ export const getRecommend = async (userId) => {
         userId: userId
       }
     })
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.error('추천 상품을 가져오는 데 실패했습니다:', error)
