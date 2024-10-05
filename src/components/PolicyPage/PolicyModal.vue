@@ -31,9 +31,7 @@ export default {
   },
   computed: {
     formattedPolicyDetails() {
-      return this.policy.sporCn
-        .replace('○', '<br>○') // ○ 기호 앞에 줄바꿈 추가
-        .replace('□', '<br>□') // ~ 기호 뒤에 줄바꿈 추가
+      return this.policy.sporCn.replace('○', '<br>○').replace('□', '<br>□')
     }
   }
 }

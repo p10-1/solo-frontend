@@ -1,21 +1,31 @@
 <template>
   <div class="infinite-scroll">
     <h1>정책 목록</h1>
+
+    <div class="filter-bar">
+      <label> <input type="radio" value="0" v-model="policyType" /> 전체 </label>
+      <label> <input type="radio" value="주거" v-model="policyType" /> 주거 </label>
+      <label> <input type="radio" value="일자리" v-model="policyType" /> 일자리 </label>
+      <label> <input type="radio" value="교육" v-model="policyType" /> 교육 </label>
+      <label> <input type="radio" value="복지문화" v-model="policyType" /> 복지문화 </label>
+      <label> <input type="radio" value="참여권리" v-model="policyType" /> 참여권리 </label>
+    </div>
+
     <div class="search-bar">
-      <!-- SearchBar 컴포넌트 사용 -->
       <SearchBar v-model="keyword" @search="searchPolicies" />
     </div>
+
     <div class="policy-list">
       <PolicyItem v-for="policy in list" :key="policy.bizId" :policy="policy" />
     </div>
-    <!-- 로딩 상태 표시 -->
+
     <div v-if="loading" class="loading">로딩 중...</div>
     <div v-if="noMoreData" class="no-more">더 이상 데이터가 없습니다.</div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { fetchPolicies } from '@/api/policyApi'
 import PolicyItem from '@/components/PolicyPage/PolicyItem.vue'
@@ -27,6 +37,7 @@ const totalPage = ref(0)
 const keyword = ref('')
 const loading = ref(false)
 const noMoreData = ref(false)
+const policyType = ref('0') // 선택된 정책 유형을 저장
 
 const route = useRoute()
 
@@ -36,7 +47,7 @@ const loadPolicies = async () => {
 
   setTimeout(async () => {
     try {
-      const data = await fetchPolicies(pageNum.value, keyword.value)
+      const data = await fetchPolicies(pageNum.value, keyword.value, policyType.value) // 정책 유형 추가
       if (data.list.length > 0) {
         list.value = [...list.value, ...data.list]
         totalPage.value = data.totalPage
@@ -59,6 +70,13 @@ const searchPolicies = async (searchTerm) => {
   noMoreData.value = false
   await loadPolicies()
 }
+
+watch([policyType, keyword], async () => {
+  pageNum.value = 1
+  list.value = []
+  noMoreData.value = false
+  await loadPolicies()
+})
 
 const handleScroll = () => {
   const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10
@@ -91,13 +109,28 @@ onBeforeUnmount(() => {
   color: gray;
 }
 .policy-list {
-  display: flex; /* Flexbox를 사용하여 수평 정렬 */
-  flex-wrap: wrap; /* 여러 줄로 감싸기 */
-  justify-content: space-between; /* 항목 간의 간격을 동일하게 설정 */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .policy-list > * {
-  width: calc(50% - 16px); /* 각 항목의 너비를 50%로 설정하고 간격을 고려 */
-  margin-bottom: 20px; /* 아래 여백 추가 */
+  width: calc(50% - 16px);
+  margin-bottom: 20px;
+}
+
+.filter-bar {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.filter-bar label {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.filter-bar input[type='radio'] {
+  margin-right: 5px;
 }
 </style>

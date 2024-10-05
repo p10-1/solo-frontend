@@ -6,7 +6,6 @@ import DefaultLayout from './components/layout/DefaultLayout.vue'
 <template>
   <DefaultLayout>
     <RouterView />
-    <div id="modals"></div>
   </DefaultLayout>
 </template>
 
