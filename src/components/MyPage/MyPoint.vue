@@ -1,14 +1,16 @@
 <template>
-  <div class="container mt-5 point-management">
-    <h3 class="text-center">포인트 관리</h3>
-    <br />
+  <div class="point-management">
+    <h2 class="title">나의 <span class="text-accent">포인트</span></h2>
+    <ul class="current-points">
+      <li>보유 포인트</li>
+      <li class="points-info">
+        <span class="text-accent">{{ points }}</span>
+        P
+      </li>
+    </ul>
 
-    <div class="current-points">
-      현재 포인트: {{ points }} P
-    </div>
-
-    <div class="withdraw-section mt-4">
-      포인트 출금하기
+    <h2 class="title margin-top-1rem">포인트 <span class="text-accent">출금</span></h2>
+    <div class="withdraw-section">
       <div class="form-group">
         <div class="d-flex align-items-center">
           <select v-model="accountIndex" class="form-control mr-2 account-select" id="accountSelect">
@@ -85,45 +87,48 @@ onMounted(() => {
 
 <style scoped>
 .point-management {
-  background-color: #e0e0e0;
-  border-radius: 10px;
-  padding: 20px;
-  max-width: 500px;
-  margin: auto;
 }
 
-h1,
-h3 {
-  color: #333;
+.point-management .text-accent {
+  font-weight: 300;
+}
+
+.point-management ul.current-points {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed #eee;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+}
+
+.point-management ul.current-points li {
+  font-size: 20px;
+  letter-spacing: -1px;
+}
+
+.point-management ul.current-points li.points-info {
+  line-height: 1;
+}
+
+.point-management ul.current-points li.points-info span {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.point-management .withdraw-section {
+  font-size: 20px;
 }
 
 .account-select {
-  width: 120px;
 }
 
 .amount-input {
-  width: 150px;
 }
 
 .common-label {
   margin: 0 10px;
   font-weight: bold;
-}
-
-button {
-  font-size: 16px;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  padding: 8px;
-  background-color: #e7e7e7;
-  margin-bottom: 5px;
-  border-radius: 5px;
-  text-align: left;
+  /* 텍스트를 두껍게 */
 }
 </style>

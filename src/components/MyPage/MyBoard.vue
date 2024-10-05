@@ -1,15 +1,23 @@
 <template>
   <div class="container my-4">
-    <h2>내가 작성한 글</h2>
+    <h2 class="title">내가 작성한 글</h2>
     <div class="scroll-container">
       <table class="table table-striped">
+        <colgroup>
+          <col width="10%" />
+          <col width="50%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="10%" />
+          <col width="10%" />
+        </colgroup>
         <thead>
           <tr>
             <th>번호</th>
-            <th>제목</th>
-            <th>작성일</th>
+            <th class="text-align-left">제목</th>
             <th>좋아요</th>
             <th>댓글</th>
+            <th>작성일</th>
             <th>조회수</th>
           </tr>
         </thead>
@@ -23,12 +31,14 @@
                   params: { boardNo: board.boardNo }
                 }"
               >
-                {{ board.title }}</router-link
-              >
+                {{ board.title }}
+                {{ board.likes }}
+                {{ board.comments }}
+              </router-link>
             </td>
+            <td></td>
+            <td></td>
             <td>{{ formatDate(board.updateDate) }}</td>
-            <td>{{ board.likes }}</td>
-            <td>{{ board.comments }}</td>
             <td>{{ board.views }}</td>
           </tr>
         </tbody>
@@ -69,14 +79,20 @@ onMounted(() => {
 <style scoped>
 .scroll-container {
   max-height: 300px;
-  max-width: 700px;
-  overflow-y: auto;
+  width: 100%;
+  overflow: scroll;
   border: 1px solid #ddd;
 }
 
-.table th,
-.table td {
-  text-align: center;
+.table th {
+  height: 40px;
+  padding: 0 20px !important;
+  border-bottom: 1px solid #ddd;
+  background: #f7f7f7;
+  color: #222;
+  text-align: center !important;
   vertical-align: middle;
+}
+.table td {
 }
 </style>

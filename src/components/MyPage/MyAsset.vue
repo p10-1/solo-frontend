@@ -45,10 +45,12 @@
             </div>
         </div>
 
-        <div class="text-center">
-            <button class="btn btn-secondary" @click="toggleEditMode">{{ editMode ? '저장하기' : '수정하기' }}</button><br /><br />
-        </div>
+    <div class="text-center margin-top-1rem">
+      <button class="button-sub btn btn-secondary" @click="toggleEditMode">
+        {{ editMode ? '저장하기' : '수정하기' }}</button
+      ><br /><br />
     </div>
+  </div>
 </template>
 
 <script setup>
@@ -163,28 +165,51 @@ const prepareUpdatedData = () => {
 
 <style scoped>
 .asset-manager {
-    text-align: left;
+  text-align: left;
+}
+
+.asset-manager .title {
+  font-weight: 300;
+  line-height: 1;
+}
+
+.asset-manager .button-box {
+  display: flex;
+  position: relative;
+  margin-top: 0;
+  left: 0;
+  justify-content: center;
+}
+
+.asset-manager .button-box .button-main {
+  margin-left: 0;
+  margin-right: 10px;
 }
 
 .asset-loan-container {
-    display: block;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.asset-section {
-    margin-bottom: 40px;
+.asset-loan-container .asset-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
 }
 
 .loan-section {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 input,
 select {
-    padding: 8px;
-    margin-right: 10px;
+  padding: 8px;
+  margin-right: 10px;
 }
 
 button {
-    padding: 8px 16px;
+  padding: 8px 16px;
 }
 </style>

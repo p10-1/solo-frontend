@@ -3,7 +3,6 @@
     <div class="top-section">
       <MyType />
     </div>
-    <br /><br />
 
     <div class="middle-section">
       <MyAsset />
@@ -13,6 +12,12 @@
       <div class="bottom-components">
         <MyPoint @update="handleUpdate" />
         <MyBoard />
+        <div :style="{ width: '35%' }">
+          <MyPoint />
+        </div>
+        <div :style="{ width: '65%' }">
+          <MyBoard />
+        </div>
       </div>
     </div>
   </div>
@@ -40,28 +45,25 @@ const refreshPage = () => {
   padding: 20px;
   text-align: center;
 }
-
-h1 {
-  margin-bottom: 30px;
-}
-
 /* 상단 섹션 (MyType) */
 .top-section {
-  margin-bottom: 30px; 
+  margin-bottom: 3rem; /* 아래 여백 추가 */
 }
 
 /* 중간 섹션 (MyType) */
 .middle-section {
-  margin-bottom: 50px;
+  margin-bottom: 3rem;
 }
 
 /* 하단 섹션 (MyPoint, MyBoard) */
 .bottom-section {
-  margin-bottom: 50px;
+  margin-bottom: 3rem;
 }
 
 .bottom-components {
-  display: flex; 
-  justify-content: space-between; 
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 3rem;
 }
 </style>
