@@ -45,44 +45,42 @@
   </form>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue'
 import { create } from '@/api/boardApi'
 import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'vue-router'
 
-export default {
-  name: 'BoardCreate',
-  setup() {
-    const article = ref({
-      title: '',
-      content: '',
-      userName: '', // Will be set by the authenticated user
-      files: []
-    })
-    const authStore = useAuthStore()
-    const router = useRouter()
+// 참조 값 선언
+const article = ref({
+  title: '',
+  content: '',
+  userName: '', // 사용자 이름은 로그인된 사용자에 의해 설정됨
+  files: []
+})
 
-    article.value.userName = authStore.userInfo ? authStore.userInfo.userName : ''
-    const handleFileUpload = (event) => {
-      article.value.files = Array.from(event.target.files)
-    }
-    console.log(article)
-    const submitForm = async () => {
-      try {
-        await create(article.value)
-        alert('글이 성공적으로 작성되었습니다')
-        router.push('/board')
-      } catch (error) {
-        console.error('글 작성에 실패했습니다:', error)
-      }
-    }
+// 사용자 인증 정보 불러오기
+const authStore = useAuthStore()
 
-    return {
-      article,
-      handleFileUpload,
-      submitForm
-    }
+// Vue Router 객체
+const router = useRouter()
+
+// 사용자 이름 설정
+article.value.userName = authStore.userInfo ? authStore.userInfo.userName : ''
+
+// 파일 업로드 핸들러
+const handleFileUpload = (event) => {
+  article.value.files = Array.from(event.target.files)
+}
+
+// 폼 제출 핸들러
+const submitForm = async () => {
+  try {
+    await create(article.value)
+    alert('글이 성공적으로 작성되었습니다')
+    router.push('/board') // 글 작성 후 게시판 페이지로 이동
+  } catch (error) {
+    console.error('글 작성에 실패했습니다:', error)
   }
 }
 </script>

@@ -4,15 +4,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import PolicyList from '@/components/PolicyPage/PolicyList.vue'
-// import PolicyCarousel from '@/components/PolicyPage/PolicyCarousel.vue'
-
-export default {
-  components: {
-    PolicyList
-  }
-}
 </script>
 
 <style scoped>
