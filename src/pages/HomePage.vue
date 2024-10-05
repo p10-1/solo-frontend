@@ -16,7 +16,6 @@
     <PolicyCard />
     <ProductCard />
   </div>
-  <NewsCard />
 </template>
 
 <script>

@@ -10,26 +10,17 @@
       </select>
     </div>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th>번호</th>
-          <th>카테고리</th>
-          <th>제목</th>
-          <th>발행일</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(news, index) in filteredNewsList" :key="news.no">
-          <td>{{ index + 1 }}</td>
-          <td>{{ news.category }}</td>
-          <td>
+    <div class="news-container">
+      <div class="news-item" v-for="news in filteredNewsList" :key="news.no">
+        <div class="image-title-cell">
+          <img v-if="news.imageUrl" :src="news.imageUrl" alt="뉴스 이미지" class="news-image" />
+          <div class="title-container">
             <a :href="news.link" target="_blank">{{ news.title }}</a>
-          </td>
-          <td>{{ formatDate(news.pubDate) }}</td>
-        </tr>
-      </tbody>
-    </table>
+            <div class="pub-date">{{ formatDate(news.pubDate) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div v-if="loading" class="loading">로딩 중...</div>
     <div v-if="noMoreData" class="no-more">더 이상 데이터가 없습니다.</div>
@@ -155,37 +146,50 @@ body {
   border-color: #aaa;
 }
 
-.table {
-  width: 100%; /* 테이블 폭을 100%로 설정 */
-  max-width: 1000px; /* 최대 너비를 설정 */
-  border-collapse: collapse;
-  margin-bottom: 20px;
+.news-container {
+  display: flex;
+  flex-wrap: wrap;
 }
-
-.table th,
-.table td {
-  border: 1px solid #ddd;
+.news-item {
+  width: 48%; /* 한 줄에 두 개 표시 */
+  margin: 1%;
+  border-top: 2px solid  #647979; /* 위 테두리 설정 (굵고 어두운 색상) */
+  border-bottom: 2px solid  #647979; /* 아래 테두리 설정 (굵고 어두운 색상) */
+  border-left: none; /* 좌측 테두리 없음 */
+  border-right: none; /* 우측 테두리 없음 */
+  border-radius: 0; /* 모서리 둥글게 하지 않음 */
   padding: 10px;
-  text-align: left;
+  box-sizing: border-box;
+  height: 130px; /* 카드 높이 설정 */
+  display: flex;
+  flex-direction: column; /* 세로 방향으로 정렬 */
+  justify-content: space-between; /* 요소 간의 공간을 균등하게 배분 */
+  position: relative; /* 날짜를 절대 위치로 설정하기 위해 필요 */
 }
 
-.table th:first-child,
-.table td:first-child {
-  min-width: 70px; /* 번호 열의 최소 너비 */
+.image-title-cell {
+  display: flex;
+  align-items: center; /* 이미지와 제목을 상단 정렬 */
+  
 }
 
-.table th:nth-child(2),
-.table td:nth-child(2) {
-  min-width: 100px; /* 카테고리 열의 최소 너비 */
+.news-image {
+  width: 140px; /* 이미지 너비 설정 */
+  height: 100px; /* 이미지 높이 설정 */
+  object-fit: fill; /* 원래 비율 유지하지 않고 크기에 맞춤 */
 }
 
-.table th {
-  background-color: #4CAF50;
-  color: white;
+
+.title-container {
+  flex-grow: 1; /* 제목이 가능한 한 많은 공간을 차지하도록 함 */
 }
 
-.table tr:hover {
-  background-color: #f1f1f1;
+.pub-date {
+  font-size: 0.8em;
+  color: #555;
+  position: absolute; /* 날짜를 절대 위치로 설정 */
+  bottom: 10px; /* 하단에서 10px */
+  right: 10px; /* 우측에서 10px */
 }
 
 .loading,
@@ -201,10 +205,6 @@ body {
 @media (max-width: 600px) {
   .infinite-scroll {
     padding: 10px;
-  }
-
-  .table th, .table td {
-    padding: 8px;
   }
 
   .category-filter {
