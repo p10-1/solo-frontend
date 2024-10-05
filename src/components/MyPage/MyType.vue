@@ -1,18 +1,22 @@
 <template>
   <div class="my-type">
-    <h3>나의 자산 관리 유형은 어디?</h3><br/>
-    <div v-if="selectedType">
-      {{ nickName }}님의 자산 타입은 {{ selectedType }} 입니다.
+    <h2 class="title">나의 <span class="text-accent">자산 관리 유형</span>은 어디?</h2>
+    <br />
+    <div v-if="selectedType" class="user-type-info">
+      <span class="text-accent text-black"
+        ><i class="fa-solid fa-circle-info"></i> {{ nickName }}</span
+      >님의 자산 타입은 <span class="text-accent">"{{ selectedType }}"</span> 입니다.
     </div>
-    <div v-else>
-      자산을 선택해주세요!
+    <div v-else class="text-p">
+      <span class="text-accent"><i class="fa-solid fa-circle-check"></i> 자산 관리 유형</span>을
+      선택해주세요!
     </div>
     <br />
     <div class="button-container">
       <button
         v-for="(type, index) in assetTypes"
         :key="index"
-        :class="['btn', { 'selected': selectedType === type.title }]"
+        :class="['btn', { selected: selectedType === type.title }]"
         @click="selectType(type)"
       >
         <div class="icon">{{ type.icon }}</div>
@@ -25,8 +29,79 @@
   </div>
 </template>
 
+<style scope>
+.my-type h2.title {
+  font-weight: 300;
+}
+.my-type h2.title span.text-accent {
+  font-weight: 300;
+}
+.my-type .text-p {
+  font-size: 20px;
+  letter-spacing: -0.6px;
+}
+.my-type .text-black {
+  color: #333;
+}
+.my-type .user-type-info {
+  font-size: 18px;
+  letter-spacing: -0.5px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: var(--gray020, #f4f6fa);
+  color: var(--font-secondary, #475067);
+}
+.my-type .user-type-info .text-accent {
+  font-size: 23px;
+  font-weight: 600;
+}
+.my-type .button-container {
+  display: flex;
+  gap: 10px;
+}
+.my-type .button-container .btn {
+  padding: 1.6rem 1.4rem;
+  border-radius: 5px;
+  border: 3px solid #cacaca;
+  background-color: #fcfcfc;
+  width: 100%;
+  transition: all 0.6s;
+}
+.my-type .button-container .btn:hover {
+  background-color: #fffbec;
+  border: 3px solid #ffba62;
+}
+.my-type .button-container .btn.selected {
+  background-color: #fffbec;
+  border: 3px solid #ffba62;
+}
+.my-type .button-container .icon {
+  display: inline-block;
+  width: 35%;
+}
+.my-type .button-container .text-container {
+  display: inline-block;
+  width: 65%;
+  text-align: left;
+}
+.my-type .button-container .title {
+  line-height: 1;
+  font-size: 22px;
+  font-weight: 600;
+  color: #3d3d3d;
+  margin-bottom: 10px;
+  word-break: keep-all;
+}
+.my-type .button-container .description {
+  font-size: 15px;
+  line-height: 20px;
+  word-break: keep-all;
+  letter-spacing: -0.5px;
+}
+</style>
+
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   data() {
@@ -37,95 +112,88 @@ export default {
         {
           title: '위험 추구형',
           description: 'High Risk! High Return!',
-          icon: '⚠️',
+          icon: '⚠️'
         },
         {
           title: '자산 분산형',
           description: '분산 투자가 자산관리의 왕도!',
-          icon: '💨',
+          icon: '💨'
         },
         {
           title: '안정 추구형',
           description: 'Lisk는 싫어 안전이 좋아',
-          icon: '🌱',
+          icon: '🌱'
         },
         {
           title: '대출 우선형',
           description: '대출로 인해 더 많은 투자 기회!',
-          icon: '🏦',
-        },
-      ],
-    };
+          icon: '🏦'
+        }
+      ]
+    }
   },
   mounted() {
     // 세션 스토리지에서 userInfo 가져오기
-    const userInfo = JSON.parse(sessionStorage.getItem('userInfo')); // 객체로 변환
+    const userInfo = JSON.parse(sessionStorage.getItem('userInfo')) // 객체로 변환
 
     // nickName 설정
-    this.nickName = userInfo ? userInfo.nickName : '사용자'; // 기본값 설정
-    this.fetchUserAsset(); // 사용자 자산 가져오기
+    this.nickName = userInfo ? userInfo.nickName : '사용자' // 기본값 설정
+    this.fetchUserAsset() // 사용자 자산 가져오기
   },
   methods: {
     async fetchUserAsset() {
       try {
-        const response = await axios.get('/api/mypage/getType');
-        const userAsset = response.data;
+        const response = await axios.get('/api/mypage/getType')
+        const userAsset = response.data
 
-        console.log('사용자 자산:', userAsset); // 응답 로그 추가
+        console.log('사용자 자산:', userAsset) // 응답 로그 추가
 
-        this.selectedType = userAsset; // userAsset이 문자열이므로 그대로 할당
+        this.selectedType = userAsset // userAsset이 문자열이므로 그대로 할당
       } catch (error) {
-        console.error('사용자 자산 로드 실패:', error);
+        console.error('사용자 자산 로드 실패:', error)
       }
     },
     selectType(type) {
-      this.selectedType = type.title;
-      this.updateType(type);
+      this.selectedType = type.title
+      this.updateType(type)
     },
     async updateType(type) {
-      console.log('자산:', type.title);
+      console.log('자산:', type.title)
       try {
         const response = await axios.post('/api/mypage/updateType', {
-          selectedType: type.title,
-        });
-        console.log('서버 응답:', response.data);
-        alert('유형이 성공적으로 업데이트되었습니다.');
+          selectedType: type.title
+        })
+        console.log('서버 응답:', response.data)
+        alert('유형이 성공적으로 업데이트되었습니다.')
       } catch (error) {
-        console.error('업데이트 실패:', error);
-        alert('업데이트 실패. 다시 시도해 주세요.');
+        console.error('업데이트 실패:', error)
+        alert('업데이트 실패. 다시 시도해 주세요.')
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped>
-.button-container {
+/* .button-container {
   display: flex;
-  /* Flexbox를 사용하여 버튼을 가로로 배치 */
   justify-content: space-between;
-  /* 버튼 사이에 공간을 균등하게 배치 */
   margin-top: 20px;
 }
 
 .btn {
   border: 2px solid black;
-  /* 검정색 테두리 추가 */
   padding: 20px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s, border-color 0.3s;
-  /* 테두리 색상 변화 추가 */
+  transition:
+    background-color 0.3s,
+    border-color 0.3s;
   width: 23%;
-  /* 버튼 너비 설정 */
   text-align: left;
-  /* 텍스트 왼쪽 정렬 */
   background-color: white;
-  /* 기본 배경색 */
   display: flex;
-  /* Flexbox를 사용 */
   align-items: center;
-  /* 아이콘과 텍스트를 수직 중앙 정렬 */
 }
 
 .btn:hover {
@@ -134,26 +202,19 @@ export default {
 
 .selected {
   background-color: #007bff;
-  /* 선택된 버튼의 배경색 */
   color: white;
-  /* 선택된 버튼의 텍스트 색상 */
   border-color: #0056b3;
-  /* 선택된 상태의 테두리 색상 변경 */
 }
 
 .icon {
   font-size: 40px;
-  /* 아이콘 크기 조정 */
   margin-right: 10px;
-  /* 아이콘과 텍스트 사이의 간격 조정 */
 }
 
 .text-container {
   display: flex;
   flex-direction: column;
-  /* 세로 방향으로 배치 */
   justify-content: center;
-  /* 수직 중앙 정렬 */
 }
 
 .title {
@@ -162,5 +223,5 @@ export default {
 
 .description {
   font-size: 14px;
-}
+} */
 </style>
