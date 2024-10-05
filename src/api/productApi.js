@@ -1,6 +1,8 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:9000/api/product'
+const API_URL = '/api/product'
+const RENT_HOUSE_URL = '/finlife/finlifeapi/rentHouseLoanProductsSearch.json'
+const auth = '6928010ff912e958af75e974b7c9696f'
 const DEFAULT_AMOUNT = 10
 
 export const fetchKbProducts = async () => {
@@ -50,5 +52,23 @@ export const getRecommend = async (userId) => {
   } catch (error) {
     console.error('추천 상품을 가져오는 데 실패했습니다:', error)
     throw error
+  }
+}
+
+export const getRentHouseLoan = async (topFinGrpNo, pageNo) => {
+  try {
+    const response = await axios.get(RENT_HOUSE_URL, {
+      params: {
+        auth: auth, // 인증키
+        topFinGrpNo: topFinGrpNo,
+        pageNo: pageNo
+      }
+      // headers: {
+      //   'Content-Type': 'application/json'
+      // }
+    })
+    return response.data.result.baseList
+  } catch (error) {
+    console.error('대출 상품을 가져오는 데 오류가 발생했습니다:', error)
   }
 }
