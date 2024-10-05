@@ -1,6 +1,6 @@
 .table {
   width: 100%;
-  border-top: 1px solid #222;
+  border-top: 2px solid #222;
   border-spacing: 0;
   border-collapse: collapse;
   box-sizing: border-box;
@@ -8,12 +8,17 @@
 
 .table thead th {
   height: 40px;
-  padding: 0 20px;
+  padding: 0 20px !important;
   border-bottom: 1px solid #ddd;
   background: #f7f7f7;
   color: #222;
   text-align: center !important;
   vertical-align: middle;
+}
+
+.table thead tr th.text-align-left,
+.table tbody tr td.text-align-left {
+  text-align: left;
 }
 
 .board-list .top-post {
@@ -30,16 +35,12 @@
 
 .table tbody td {
   height: 45px;
-  padding: 0 20px;
+  padding: 10px 20px !important;
   line-height: 25px;
   border-bottom: 1px solid #ddd;
   letter-spacing: -0.02em;
   text-align: center;
-  vertical-align: middle;
-}
-
-.table tbody td.text-align-left {
-  text-align: left;
+  vertical-align: middle !important;
 }
 
 .table tbody td.link {

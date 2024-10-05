@@ -35,7 +35,7 @@
 }
 
 .footer .container {
-  padding: 2.5vw 1vw 5vw;
+  padding: 2vw 1vw 3vw;
 }
 
 .footer h1 {
@@ -43,8 +43,8 @@
 }
 
 .footer .dic {
-  margin-top: 2vw;
-  margin-bottom: 2vw;
+  margin-top: 1vw;
+  margin-bottom: 1vw;
 }
 
 .footer .dic ul li {

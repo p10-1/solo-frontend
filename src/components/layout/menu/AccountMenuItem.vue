@@ -4,12 +4,7 @@ defineProps({ username: String })
 <template>
   <li class="nav-list">
     <router-link class="" to="/mypage">
-      <div class="user-icon">
-        <img src="../../../assets/images/user-icon.png" alt="user-icon" />
-      </div>
       <div class="user-info">
-        <div class="user-ranking">대장솔로</div>
-        <br />
         <b>{{ username }}</b
         >님
         <i class="fa-solid fa-caret-down margin-left"></i>

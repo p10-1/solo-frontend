@@ -1,42 +1,6 @@
 /* 로그인 전 홈페이지 */
 
 /* 로그인 후 홈페이지 */
-.main-left-box {
-  float: left;
-  width: 65%;
-}
-
-.main-left-box .main-asset-box {
-  padding: 2rem 1rem 1rem;
-  border: 1px solid #eee;
-  border-radius: 5px;
-}
-
-.main-asset-info {
-  font-size: 1.8rem;
-  letter-spacing: -1px;
-}
-
-.main-right-box {
-  float: right;
-  width: 30%;
-}
-
-.main-center-box {
-  overflow: hidden;
-  width: 100%;
-}
-
-.main-center-box::after {
-  display: block;
-  clear: both;
-  content: '';
-}
-
-.main-asset-graph {
-  margin: 2rem 0;
-  padding: 1rem;
-}
 
 /* graph list info css */
 .asset-graph-list {
@@ -83,6 +47,4 @@
   background-color: #eb4a64;
 }
 
-/* 포인트 */
-.point-priview {
-}
+/* 홈페이지 레이아웃 10-04 */
