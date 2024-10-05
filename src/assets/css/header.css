@@ -133,14 +133,14 @@ dl {
 }
 
 /* 마우스 hover 시 드롭다운 메뉴 표시 */
-.login-wrapper .login-box .nav-list:hover .dropdown-menu {
+/* .login-wrapper .login-box .nav-list:hover .dropdown-menu {
   display: block;
-  opacity: 1; /* 투명도 1로 변경 */
+  opacity: 1;
   transform: translateY(0);
-}
+} */
 
 /* 기본적으로 드롭다운 메뉴 숨김 */
-.dropdown-menu {
+/* .dropdown-menu {
   display: none;
   position: absolute;
   background-color: white;
@@ -153,7 +153,6 @@ dl {
   min-width: 230px;
   overflow: hidden;
   z-index: 1000;
-  /* opacity: 0; */
   transform: translateY(-10px);
   transition:
     opacity 0.5s ease,
@@ -185,10 +184,10 @@ dl {
   font-size: 18px;
   height: inherit !important;
   text-decoration: none;
-}
+} */
 
-.dropdown-menu li a:hover {
-  color: #222; /* hover 시 색상 변경 */
+/* .dropdown-menu li a:hover {
+  color: #222;
   display: block;
 }
 
@@ -199,7 +198,7 @@ dl {
 .dropdown-menu li.logout a:hover {
   color: #fff !important;
   background-color: #222;
-}
+} */
 
 /* 드롭 다운 끝 */
 
@@ -211,29 +210,16 @@ dl {
 }
 
 /* 로그인 유저 */
-.login-wrapper .login-box .nav-list a .user-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-right: 8px;
-}
 
 .login-wrapper .login-box .nav-list a .user-info {
   margin-top: -6px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: -0.5px;
 }
 
-.login-wrapper .login-box .nav-list a .user-info .user-ranking {
-  display: inline-block;
-  font-size: 10px;
-  padding: 2px 4px;
-  margin-bottom: 3px;
-  font-weight: 600;
-  color: #fff;
-  background-color: #ff4c4c;
+.login-wrapper .login-box .nav-list a .user-info:hover {
+  color: #f8d648;
 }
 
 /* 햄버거 버튼 */
