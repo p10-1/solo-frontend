@@ -90,7 +90,7 @@ const startAutoSlide = () => {
         category.currentNewsIndex = 0; // 마지막 뉴스에서 첫 번째 뉴스로 돌아감
       }
     });
-  }, 3000);
+  }, 6000);
 }
 
 onMounted(() => {
@@ -152,10 +152,11 @@ onUnmounted(() => {
 }
 
 .news-image {
-  max-height: 100px; /* 이미지 최대 높이 조정 */
-  object-fit: contain; /* 이미지 비율 유지 */
+  width: 100px; /* 고정 너비 설정 */
+  height: 100px; /* 고정 높이 설정 */
+  object-fit: cover; /* 비율 유지하며 잘라내기 */
   margin-left: 10px; /* 제목과 이미지 간의 간격 조정 */
-  flex: 0 0 40%; /* 이미지 영역을 40%로 설정 */
+  flex: 0 0 40%; /* 이미지 영역을 40%로 설정 (필요에 따라 조정 가능) */
 }
 
 .button-wrapper {
