@@ -1,0 +1,342 @@
+/* 전체 초기화 css */
+/* 부트스트랩의 reset과 충돌하는 부분은 주석 처리 */
+
+/* 
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+*/
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+button {
+  background: inherit;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  overflow: visible;
+  cursor: pointer;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* a 태그는 부트스트랩의 스타일을 따름 */
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+/* 화면 최소 크기 */
+body {
+  min-height: 100vh;
+  font-size: 16px;
+}
+
+/* 공통 CSS */
+/* 부트스트랩의 flex 및 float 클래스를 대체 */
+/*
+.layout-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+.layout-Flex-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.layout-Inline-Flex {
+  display: inline-flex;
+}
+.layout-Flex-Item {
+  display: flex;
+}
+.layout-float-left {
+  float: left;
+}
+.layout-float-right {
+  float: right;
+}
+*/
+
+/* 부트스트랩의 grid system 사용 */
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0;
+  /* 위치 보기 */
+}
+
+.min-height-container {
+  min-height: 100vh;
+  margin-top: 95px;
+  padding: 3.5rem 1rem;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+/* title css */
+.title-box {
+  position: relative;
+}
+
+.title-box span {
+  position: absolute;
+  right: 0;
+  top: 70%;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 25px;
+  border: 1px solid #eee;
+  cursor: pointer;
+}
+
+.title-box b {
+  color: #5f7dff;
+}
+
+.title-box span:hover {
+  font-weight: bold;
+  color: #222;
+  background-color: #fee500;
+  border-color: #fee500;
+}
+
+h1.title {
+  font-size: 40px;
+  font-weight: 300;
+  color: #333;
+  box-sizing: border-box;
+  line-height: 1;
+  letter-spacing: -1.5px;
+  padding-top: 4rem;
+  margin-bottom: 1.2rem;
+}
+
+h2.title {
+  margin-bottom: 20px;
+  font-weight: 300;
+  line-height: 1;
+  font-size: 32px;
+  letter-spacing: -1.5px;
+  color: #222;
+  padding: 10px 0 20px 0;
+  border-bottom: 2px solid #222;
+}
+
+h3.title {
+  line-height: 1;
+  margin-bottom: 7px;
+  padding: 0 30px 22px 30px;
+  letter-spacing: -1px;
+  font-size: 26px;
+  color: #222;
+}
+
+h4.title {
+  font-size: 1.4em;
+  line-height: 1.4em;
+  font-weight: 600;
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+}
+
+p.text {
+  line-height: 1.61em;
+  font-weight: 300;
+  font-size: 1.2em;
+  letter-spacing: -0.8px;
+  line-height: 1.7rem;
+  word-break: keep-all;
+}
+
+.text-accent {
+  font-weight: bold;
+  color: #5f7dff;
+}
+
+.text-align-left {
+  text-align: left;
+}
+
+/* label type css */
+.label-type-green,
+.label-type-blue,
+.label-type-purple,
+.label-type-red {
+  display: inline-block;
+  height: 35px;
+  line-height: 35px;
+  min-width: 120px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  color: #fff;
+}
+
+.label-type-green {
+  background-color: #4ca542;
+}
+
+.label-type-blue {
+  background-color: #4991c2;
+}
+
+.label-type-purple {
+  background-color: #9040d1;
+}
+
+.label-type-red {
+  background-color: #d34659;
+}
+
+/* margin css */
+.margin-top-1rem {
+  margin-top: 1rem;
+}
+
+.margin-left-1rem {
+  margin-left: 1rem;
+}
+
+.margin-right-1rem {
+  margin-right: 1rem;
+}
+
+.margin-bottom-1rem {
+  margin-bottom: 1rem;
+}
+
+/* text css */
+.font-weight-bold {
+  font-weight: bold;
+}
+
+.width100 {
+  width: 100%;
+}

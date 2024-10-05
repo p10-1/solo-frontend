@@ -4,11 +4,10 @@ const props = defineProps({
 })
 </script>
 <template>
-  <li class="nav-item">
-    <router-link class="nav-link" :to="menu.url">
-      <i :class="menu.icon"></i>
+  <li class="">
+    <router-link class="" :to="menu.url">
+      <!-- <i :class="menu.icon"></i> -->
       {{ menu.title }}
     </router-link>
   </li>
 </template>
-<style></style>

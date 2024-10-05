@@ -2,11 +2,18 @@
   <div class="quiz-container mt-5">
     <div class="quiz-card card" @click="openModal">
       <div class="card-body text-center">
-        <h1 class="card-title">오늘의 금융 퀴즈</h1>
-        <div v-if="description" class="quiz-description">
-          <p><strong>설명:</strong> {{ description }}</p>
+        <div class="quiz-title-box">
+          <div class="decoration">
+            <i class="fa-solid fa-question"></i>
+          </div>
+          <h3 class="card-title">오늘의 금융 퀴즈</h3>
         </div>
-        <div v-else>
+        <div v-if="description" class="quiz-description">
+          <div class="hiding">
+            <p>{{ description }}</p>
+          </div>
+        </div>
+        <div class="quiz-loading" v-else>
           <p>퀴즈를 불러오는 중입니다...</p>
         </div>
       </div>
@@ -21,6 +28,7 @@
     />
   </div>
 </template>
+<style scope></style>
 
 <script setup>
 import { ref, onMounted } from 'vue'
@@ -62,38 +70,80 @@ const openModal = () => {
   display: flex;
   justify-content: center;
 }
+.card-body {
+  padding: 30px 20px 10px;
+}
 
 .quiz-card {
-  max-width: 400px; /* 가로 크기 조정 */
   width: 100%;
-  border: 2px solid #007bff;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+  background-color: #eadefb;
+  border: none;
+  border-radius: 14px;
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); */
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
-  background-color: #f9f9f9;
 }
 
 .quiz-card:hover {
   transform: translateY(-5px); /* 호버 시 살짝 올라가는 효과 */
 }
 
-.card-title {
-  font-size: 1.8rem; /* 제목 크기 */
-  color: #007bff; /* 퀴즈 느낌 살리기 위해 파란색 적용 */
-  margin-bottom: 20px;
+.quiz-title-box {
+  position: relative;
+}
+
+.quiz-title-box .decoration {
+  color: #222;
+  position: absolute;
+  top: -1.5rem;
+  transform: rotate(40deg);
+  font-size: 36px;
+  right: 3.9vw;
+}
+
+.quiz-title-box .card-title {
+  font-size: 1.25rem;
+  color: #222;
+  word-break: break-all;
+  letter-spacing: -1px;
+  font-weight: 500;
+  margin: 5px 0 15px;
 }
 
 .quiz-description {
-  font-size: 1rem;
+  position: relative;
+  min-height: 80px;
+  font-size: 1.05rem;
   color: #333;
+  word-break: keep-all;
+  line-height: 28px;
+  letter-spacing: -1px;
+  font-weight: 500;
+  margin: 10px 0;
 }
 
-.text-center {
+.quiz-description .hiding {
+  padding: 15px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(230 213 255);
+  -webkit-filter: blur(3px);
+  -moz-filter: blur(3px);
+  -o-filter: blur(3px);
+  -ms-filter: blur(3px);
+  filter: blur(3px);
+}
+
+.card-body .quiz-loading {
+  display: flex;
+  justify-content: space-around;
+}
+.card-body .quiz-loading p {
+  font-size: 18px;
+  letter-spacing: -1px;
   text-align: center;
-}
-
-.card-body {
-  padding: 20px;
+  color: #666;
 }
 </style>
