@@ -120,7 +120,7 @@ body {
   margin: auto;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   padding: 20px;
 }
 
@@ -150,43 +150,62 @@ body {
   display: flex;
   flex-wrap: wrap;
 }
+
 .news-item {
-  width: 48%; /* 한 줄에 두 개 표시 */
-  margin: 1%;
-  border-top: 2px solid  #647979; /* 위 테두리 설정 (굵고 어두운 색상) */
-  border-bottom: 2px solid  #647979; /* 아래 테두리 설정 (굵고 어두운 색상) */
+  width: 45%; /* 기본적으로 한 줄에 두 개 표시 */
+  margin: 2%;
+  border-top: 2px solid #6846F5; /* 위 테두리 설정 (굵고 어두운 색상) */
+  border-bottom: 2px solid #CFC6FD; /* 아래 테두리 설정 (굵고 어두운 색상) */
   border-left: none; /* 좌측 테두리 없음 */
   border-right: none; /* 우측 테두리 없음 */
   border-radius: 0; /* 모서리 둥글게 하지 않음 */
   padding: 10px;
   box-sizing: border-box;
-  height: 130px; /* 카드 높이 설정 */
+  height: 125px; /* 카드 높이 설정 (조정 가능) */
   display: flex;
   flex-direction: column; /* 세로 방향으로 정렬 */
   justify-content: space-between; /* 요소 간의 공간을 균등하게 배분 */
   position: relative; /* 날짜를 절대 위치로 설정하기 위해 필요 */
+  background-color: #ffffff; /* 카드 배경색 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 카드 그림자 */
+  transition: transform 0.3s, box-shadow 0.3s; /* 부드러운 변환 효과 */
+}
+
+.news-item:hover {
+  transform: translateY(-5px); /* 마우스 오버 시 카드 상승 효과 */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 강화 */
 }
 
 .image-title-cell {
   display: flex;
   align-items: center; /* 이미지와 제목을 상단 정렬 */
-  
+  height: 100px; /* 고정 높이 설정 */
 }
 
 .news-image {
-  width: 140px; /* 이미지 너비 설정 */
-  height: 100px; /* 이미지 높이 설정 */
-  object-fit: fill; /* 원래 비율 유지하지 않고 크기에 맞춤 */
+  width: 100px; /* 이미지 너비 설정 */
+  height: 80%; /* 부모의 높이에 맞춰서 100% 설정 */
+  object-fit: cover; /* 비율을 유지하면서 크기에 맞춤 (잘림) */
 }
-
 
 .title-container {
   flex-grow: 1; /* 제목이 가능한 한 많은 공간을 차지하도록 함 */
+  margin-left: 15px;
+}
+
+.title-container a {
+  font-weight: bold; /* 제목 굵게 */
+  color: #333; /* 제목 색상 */
+  text-decoration: none; /* 링크 밑줄 제거 */
+}
+
+.title-container a:hover {
+  text-decoration: underline; /* 링크에 마우스 오버 시 밑줄 추가 */
 }
 
 .pub-date {
   font-size: 0.8em;
-  color: #555;
+  color: #929191; /* 원래 색상으로 변경 */
   position: absolute; /* 날짜를 절대 위치로 설정 */
   bottom: 10px; /* 하단에서 10px */
   right: 10px; /* 우측에서 10px */
@@ -214,5 +233,12 @@ body {
   .category-filter label {
     margin-bottom: 5px;
   }
+
+  .news-item {
+    width: 100%; /* 작은 화면에서는 한 줄에 하나만 보이도록 설정 */
+    margin: 0; /* 마진 제거 */
+  }
 }
+
+
 </style>

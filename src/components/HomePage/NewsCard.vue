@@ -116,17 +116,24 @@ onUnmounted(() => {
 }
 
 .slider-card {
-  width: 33.33%; /* 카드의 넓이를 3분의 1로 설정 */
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  width: calc(33.33% - 40px); /* 카드의 넓이를 3분의 1로 설정하고 마진을 고려 */
+  background-color: #fff; /* 카드 배경색 변경 */
+  border-top: 2px solid #6846F5; /* 위 테두리 설정 */
+  border-bottom: 2px solid #CFC6FD; /* 아래 테두리 설정 */
   padding: 10px; /* 패딩 조정 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: none; /* 그림자 제거 */
   cursor: pointer;
-  margin: 0 10px; /* 카드 간격 조정 */
-  height: 200px;
+  margin: 0 20px; /* 카드 간격 조정 */
+  height: 130px; /* 카드 높이 조정 */
   display: flex;
   flex-direction: column; /* 세로 방향으로 정렬 */
   justify-content: space-between; /* 공간 분배 */
+  border-radius: 0; /* 모서리 둥글게 하지 않음 */
+  transition: transform 0.3s; /* 부드러운 변환 효과 */
+}
+
+.slider-card:hover {
+  transform: translateY(-5px); /* 마우스 오버 시 카드 상승 효과 */
 }
 
 .card-content {
@@ -143,6 +150,7 @@ onUnmounted(() => {
 .news-category {
   font-size: 1rem; /* 카테고리 제목 크기 조정 */
   margin: 0; /* 기본 마진 제거 */
+  font-weight: bold; /* 제목 굵게 */
 }
 
 .news-title {
@@ -157,11 +165,12 @@ onUnmounted(() => {
   object-fit: cover; /* 비율 유지하며 잘라내기 */
   margin-left: 10px; /* 제목과 이미지 간의 간격 조정 */
   flex: 0 0 40%; /* 이미지 영역을 40%로 설정 (필요에 따라 조정 가능) */
+  border-radius: 4px; /* 이미지 모서리 둥글게 */
 }
 
 .button-wrapper {
   display: flex;
-  justify-content: center; /* 버튼을 중앙에 배치 */
+  justify-content: space-between; /* 버튼을 좌우로 배치 */
   margin-top: 10px; /* 버튼과 카드 내용 간의 간격 조정 */
 }
 
@@ -173,7 +182,12 @@ onUnmounted(() => {
   font-size: 0.9rem; /* 버튼 글자 크기 조정 */
   cursor: pointer;
   border-radius: 5px;
-  margin: 0 5px; /* 버튼 간의 간격 추가 */
+  transition: background-color 0.3s; /* 배경색 변환 효과 */
+  width: 30px; /* 버튼 너비 설정 */
+}
+
+.btn:hover {
+  background-color: #0056b3; /* 마우스 오버 시 버튼 색상 변경 */
 }
 
 .btn:disabled {
