@@ -1,37 +1,33 @@
 <template>
-  <div class="container mt-5" v-if="board">
-    <div class="card mb-4">
-      <div class="card-body">
-        <h2 class="title card-title">{{ board.title }}</h2>
+  <div class="container" v-if="board">
+    <div class="board-detail">
+      <div>
+        <h2 class="title">{{ board.title }}</h2>
         <div class="box">
           <dl class="card-text">
             <dt>작성자:</dt>
-            <dd class="badge bg-secondary">{{ board.userName }}</dd>
+            <dd class="badge">{{ board.userName }}</dd>
             <dt>작성일:</dt>
             <dd class="text-muted">{{ moment(board.regDate).format('YYYY-MM-DD HH:mm:ss') }}</dd>
           </dl>
-          <div class="post-stats mb-3">
-            <p>
-              <strong>추천수: </strong> <span class="badge bg-success">{{ board.likes }}</span>
-              <strong> 댓글수: </strong> <span class="badge bg-info">{{ board.comments }}</span>
-              <strong> 조회수: </strong> <span class="badge bg-warning">{{ board.views }}</span>
-            </p>
-          </div>
+          <ul class="post-stats">
+            <i class="fa-solid fa-heart"></i>
+            <span class="badge">{{ board.likes }}</span>
+            <i class="fa-solid fa-comment"></i>
+            <span class="badge">{{ board.comments }}</span>
+            <i class="fa-solid fa-user"></i>
+            <span class="badge">{{ board.views }}</span>
+          </ul>
         </div>
-        <div class="post-content margin-top-1rem mb-3">
-          <p>{{ board.content }}</p>
-          <div v-if="board.attaches && board.attaches.length" class="mt-3">
-            <ul class="list-group">
-              <li
-                v-for="attach in board.attaches"
-                :key="attach.attachmentNo"
-                class="list-group-item"
-              >
+        <div class="post-content margin-top-1rem">
+          <div>{{ board.content }}</div>
+          <div v-if="board.attaches && board.attaches.length">
+            <ul>
+              <li v-for="attach in board.attaches" :key="attach.attachmentNo">
                 <img
                   v-if="attach.filename.endsWith('.jpg') || attach.filename.endsWith('.png')"
                   :src="`http://localhost:9000/api/board/download/${attach.attachmentNo}`"
                   alt="첨부파일 미리보기"
-                  class="img-thumbnail mt-2"
                   style="max-width: 100%; height: auto"
                 />
               </li>
@@ -39,48 +35,54 @@
           </div>
         </div>
         <div class="button-box">
-          <button @click="increaseLikes" class="button-sub btn btn-success me-2">좋아요 👍</button>
-          <div v-if="isAuthor" class="mt-3">
-            <button @click="goToUpdate" class="button-sub btn btn-primary me-2">수정하기</button>
-            <button @click="deleteBoardConfirm" class="button-sub margin-left-1rem btn btn-danger">
-              삭제하기
+          <button @click="increaseLikes" class="button-main">
+            <i class="fa-solid fa-heart"></i> 좋아요
+          </button>
+          <div v-if="isAuthor" class="">
+            <button @click="goToUpdate" class="button-sub">수정</button>
+            <button @click="deleteBoardConfirm" class="button-sub margin-left-1rem btn-danger">
+              삭제
             </button>
           </div>
-          <button @click="goBack" class="button-sub btn btn-secondary mt-3">뒤로 가기</button>
+          <button @click="goBack" class="button-sub"><i class="fa-solid fa-reply"></i> 뒤로</button>
         </div>
       </div>
     </div>
 
     <!-- 댓글 리스트 -->
-    <div class="comments-section mt-4">
-      <h2 class="title">댓글</h2>
+    <div class="comments-section">
+      <h2 class="title margin-top-3rem">댓글</h2>
       <div v-if="comments && comments.length">
-        <ul class="list-group">
-          <li v-for="comment in comments" :key="comment.commentNo" class="list-group-item">
-            <p class="margin-bottom">
-              <span class="badge bg-light text-dark">{{ comment.userName }}</span>
-              <strong>{{ comment.commentText }}</strong>
-            </p>
-            <p class="text-muted">
-              {{ moment(comment.regDate).format('YYYY-MM-DD HH:mm:ss') }}
-            </p>
+        <ul>
+          <li v-for="comment in comments" :key="comment.commentNo">
+            <dl>
+              <dt>
+                <span class="badge">{{ comment.userName }}</span>
+              </dt>
+              <dd>
+                {{ comment.commentText }}
+                <div class="text-muted">
+                  {{ moment(comment.regDate).format('YYYY-MM-DD HH:mm:ss') }}
+                </div>
+              </dd>
+            </dl>
           </li>
         </ul>
       </div>
-      <div v-else>
-        <p class="text-muted">댓글이 없습니다.</p>
+      <div v-else class="text-muted">
+        <div>댓글이 없습니다.</div>
       </div>
 
-      <div class="comment-form mt-4">
-        <h4 class="title">댓글 작성</h4>
+      <div class="comment-form">
+        <h2 class="title margin-top-3rem">댓글 작성</h2>
         <div class="flex">
           <textarea
             v-model="commentText"
             placeholder="댓글을 입력하세요..."
             rows="3"
-            class="form-control mb-2"
+            class="form-control"
           ></textarea>
-          <button @click="submitComment" class="button-main btn btn-primary">댓글 작성</button>
+          <button @click="submitComment" class="button-main">댓글 작성</button>
         </div>
       </div>
     </div>
@@ -248,18 +250,18 @@ dl.card-text dd {
   font-weight: 600;
 }
 
-.box {
+.board-detail .box {
   position: relative;
 }
-
 .post-stats {
   position: absolute;
   top: 0;
   right: 0;
   font-size: 18px;
+  color: #cfc6fd;
 }
 
-.card .post-content {
+.board-detail .post-content {
   min-height: 200px;
   padding: 80px 20px;
   border-top: 1px solid #ccc;
@@ -272,20 +274,57 @@ dl.card-text dd {
   cursor: pointer; /* 클릭 가능하게 표시 */
 }
 
-.card .button-box {
+.board-detail .button-box {
   position: relative;
   margin-top: 2rem;
   margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
-.comment-form {
-  margin-top: 3rem;
+/* 댓글 */
+.comments-section ul li {
+  font-size: 18px;
+  padding: 0.8rem;
+  border-top: 1px dashed #e4deff;
+}
+.comments-section ul li:first-child {
+  border-top: none;
 }
 
-.comment-form h4 {
-  margin-bottom: 1rem;
+.comments-section dt {
+  max-width: 150px;
+  display: inline-block;
+  vertical-align: top;
+  word-wrap: break-word;
+  padding: 0 1rem;
+}
+.comments-section dt span.badge {
+  height: 20px;
+  line-height: 19px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background-color: #7d64da;
+  font-size: 14px;
+  color: #fff !important;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: 600;
+  margin-right: 5px;
+}
+.comments-section dd {
+  display: inline-block;
+  margin-bottom: 0;
+  padding: 1.7rem 1.5rem;
+  background-color: #f3f3ff;
+  border-radius: 0px 28px 28px 28px;
+  width: calc(100% - 132px);
+}
+
+.comments-section .text-muted {
+  font-size: 15px;
+  margin-top: 1rem;
 }
 
 textarea {
@@ -304,43 +343,5 @@ textarea {
   border-color: #fee500;
   width: 180px;
   height: 6rem;
-}
-
-.comments-section .list-group li {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  border-top: 1px dashed #eee;
-}
-
-.comments-section .list-group li:first-child {
-  border-top: none;
-}
-
-.comments-section .list-group li p {
-  font-size: 18px;
-}
-
-.comments-section .list-group li p span.badge {
-  display: inline-block;
-  height: 20px;
-  line-height: 19px;
-  padding: 0 10px;
-  border: 1px solid #4567ad;
-  border-radius: 10px;
-  background: #fff;
-  font-size: 14px;
-  color: #4567ad;
-  vertical-align: middle;
-  text-align: center;
-  font-weight: 600;
-  margin-right: 5px;
-}
-
-.comments-section .list-group li p.margin-bottom {
-  margin-bottom: 8px;
-}
-
-.comments-section .list-group li p.text-muted {
-  font-size: 13px;
 }
 </style>

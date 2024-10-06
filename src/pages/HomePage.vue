@@ -3,12 +3,11 @@
     <div class="main-top-item item-box">여긴 그래프</div>
     <div class="main-top-item">
       <div class="item-box">
-        <PointCard />
-      </div>
-      <div class="item-box">
         <QuizCard />
       </div>
-      <BoardCard />
+      <div class="item-box">
+        <BoardCard />
+      </div>
     </div>
   </div>
   <NewsCard />
@@ -38,12 +37,20 @@ export default {
 </script>
 <style scoped>
 .main-top {
-  margin-top: -3.5rem;
-  padding-top: 28px;
-  padding-bottom: 52px;
-  background: linear-gradient(180deg, #f7fafe 63.02%, #fff);
+  margin-top: -2.25rem;
+  background: linear-gradient(180deg, #f1eeff 63.02%, #fff);
   display: flex;
   justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+}
+
+.main-top .main-top-item {
+  flex-grow: 1;
+  flex-basis: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .main-top .item-box {
@@ -54,14 +61,7 @@ export default {
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 2px 10px 0 rgba(17, 42, 128, 0.04);
-}
-
-.main-top .main-top-item {
-  flex-grow: 1;
-  flex-basis: 0;
-  margin-left: 10px;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
 }
 
 /* .layoutFlex {
@@ -84,13 +84,27 @@ export default {
   text-align: center;
 } */
 
-.layout-2 {
+.layout-2-basline {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
 }
 
-.layout-3 {
+.layout-2-center {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.layout-3-baseline {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.layout-3-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>
