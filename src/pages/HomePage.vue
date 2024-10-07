@@ -70,11 +70,11 @@ export default {
   gap: 0 40px;
 }
 
-.layoutFlex .li {
-  width: calc(100% / 2 - 20px);
+  .layoutFlex .li {
+    width: calc(100% / 2 - 20px);
 
-  overflow: hidden;
-}
+    overflow: hidden;
+  }
 
 .asset-empty {
   background-color: #485168;
