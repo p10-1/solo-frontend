@@ -12,7 +12,7 @@ export const getNews = async (currentPage) => {
       }
     })
 
-    console.log('Fetched News: ', response.data)
+    console.log('전체뉴스: ', response.data)
     return response.data
   } catch (error) {
     console.error('뉴스를 가져오는 데 실패했습니다:', error)
