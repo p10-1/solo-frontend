@@ -33,6 +33,8 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { recommendNews } from '@/api/newsAPI'
 
+//import NewsList from '../NewsPage/NewsList.vue'
+
 const router = useRouter()
 const newsList = ref([])
 let autoSlideIntervals = [] // 각 카테고리별 자동 슬라이드 타이머
@@ -92,7 +94,7 @@ onUnmounted(() => {
 <style scoped>
 .newsList {
   justify-content: space-between;
-  margin: 40px 0 20px;
+  margin: 40px 0 100px;
 }
 
 .newsList li {

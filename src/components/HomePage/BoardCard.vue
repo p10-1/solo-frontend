@@ -95,7 +95,7 @@ h2 {
 
 .more-button {
   padding: 8px 12px; /* 버튼 크기 확장 */
-  background-color: #007bff;
+  background-color: #6846f5;
   color: white;
   border: none;
   cursor: pointer;

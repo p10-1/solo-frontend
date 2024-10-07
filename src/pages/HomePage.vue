@@ -8,14 +8,11 @@
       <div class="item-box">
         <BoardCard />
       </div>
-      <div class="news-box">
-        <NewsCard />
-      </div>
     </div>
   </div>
 
   <!-- This section centers the NewsCard -->
-  <div class="news-center-container">
+  <div class="item-box">
     <NewsCard />
   </div>
 
@@ -41,7 +38,6 @@ export default {
     ProductCard
   }
 }
-// #eff5ff
 </script>
 <style scoped>
 .main-top {
