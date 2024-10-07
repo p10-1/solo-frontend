@@ -18,7 +18,7 @@
 import { ref, onMounted } from 'vue'
 import { getRentHouseLoan } from '@/api/productApi'
 
-const loans = ref([]) // 대출 상품 리스트를 저장할 반응형 변수
+const loans = ref([]) 
 const fetchLoanProducts = async () => {
   try {
     loans.value = await getRentHouseLoan('020000', 1)
@@ -27,10 +27,6 @@ const fetchLoanProducts = async () => {
   }
 }
 
-// 컴포넌트가 마운트될 때 API 호출
 onMounted(fetchLoanProducts)
 </script>
 
-<style>
-/* 스타일을 추가할 수 있습니다. */
-</style>

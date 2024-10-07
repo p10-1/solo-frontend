@@ -59,13 +59,10 @@ export const getRentHouseLoan = async (topFinGrpNo, pageNo) => {
   try {
     const response = await axios.get(RENT_HOUSE_URL, {
       params: {
-        auth: auth, // 인증키
+        auth: auth, 
         topFinGrpNo: topFinGrpNo,
         pageNo: pageNo
       }
-      // headers: {
-      //   'Content-Type': 'application/json'
-      // }
     })
     return response.data.result.baseList
   } catch (error) {
