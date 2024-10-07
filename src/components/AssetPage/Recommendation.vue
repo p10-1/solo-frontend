@@ -1,6 +1,6 @@
 <template>
   <div class="recommended-products">
-    <h2>추천 상품</h2>
+    <h2 class="title">추천 상품</h2>
     <div v-if="loading">로딩 중...</div>
     <div v-else-if="error">{{ error }}</div>
     <div v-else>

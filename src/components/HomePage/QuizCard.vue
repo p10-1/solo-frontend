@@ -1,5 +1,5 @@
 <template>
-  <div class="quiz-container mt-5">
+  <div class="quiz-container">
     <div class="quiz-card card" @click="openModal">
       <div class="card-body text-center">
         <div class="quiz-title-box">
@@ -11,6 +11,7 @@
         <div v-if="description" class="quiz-description">
           <div class="hiding">
             <p>{{ description }}</p>
+            <div class="button-main">참여하기</div>
           </div>
         </div>
         <div class="quiz-loading" v-else>
@@ -69,14 +70,15 @@ const openModal = () => {
 .quiz-container {
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 .card-body {
-  padding: 30px 20px 10px;
+  padding: 40px 20px 10px;
 }
 
 .quiz-card {
   width: 100%;
-  background-color: #eadefb;
+  background: linear-gradient(320deg, #7d64da 20.02%, #a686f3);
   border: none;
   border-radius: 14px;
   /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); */
@@ -92,48 +94,45 @@ const openModal = () => {
   position: relative;
 }
 
+.quiz-title-box .card-title {
+  font-size: 1.4rem;
+  color: #ffffff;
+  word-break: break-all;
+  letter-spacing: -1px;
+  font-weight: 500;
+  margin: 5px 0 10px;
+}
+
 .quiz-title-box .decoration {
-  color: #222;
+  color: #f7d095;
   position: absolute;
   top: -1.5rem;
+  margin-right: 90px;
   transform: rotate(40deg);
   font-size: 36px;
   right: 3.9vw;
 }
 
-.quiz-title-box .card-title {
-  font-size: 1.25rem;
-  color: #222;
-  word-break: break-all;
-  letter-spacing: -1px;
-  font-weight: 500;
-  margin: 5px 0 15px;
-}
-
 .quiz-description {
   position: relative;
+  padding: 0 2rem;
   min-height: 80px;
   font-size: 1.05rem;
-  color: #333;
+  color: #ffffff;
   word-break: keep-all;
   line-height: 28px;
   letter-spacing: -1px;
-  font-weight: 500;
-  margin: 10px 0;
+  font-weight: 400;
+  margin: 10px 0 0;
 }
 
-.quiz-description .hiding {
-  padding: 15px;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(230 213 255);
-  -webkit-filter: blur(3px);
-  -moz-filter: blur(3px);
-  -o-filter: blur(3px);
-  -ms-filter: blur(3px);
-  filter: blur(3px);
+.quiz-card .button-main {
+  margin-left: 0;
+  height: 40px;
+  background-color: #f7d095;
+  color: #222;
+  line-height: 37px;
+  margin-bottom: 1.2rem;
 }
 
 .card-body .quiz-loading {
@@ -144,6 +143,6 @@ const openModal = () => {
   font-size: 18px;
   letter-spacing: -1px;
   text-align: center;
-  color: #666;
+  color: #fff;
 }
 </style>

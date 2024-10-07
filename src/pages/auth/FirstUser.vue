@@ -21,7 +21,7 @@
                   <button
                     type="button"
                     class="btn btn-outline-primary"
-                    @click="checkuserName"
+                    @click="check"
                     :disabled="isChecking"
                   >
                     닉네임 중복 확인
@@ -56,58 +56,55 @@
   </div>
 </template>
 
-<script>
-import { registerFirstUser, checkuserName } from '@/api/authApi' // 중복 확인 API 추가
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { registerFirstUser, checkuserName } from '@/api/authApi' // API import
 import { useAuthStore } from '@/stores/authStore'
-export default {
-  data() {
-    return {
-      userName: '',
-      birthdate: '',
-      isuserNameAvailable: false,
-      isChecking: false,
-      userNameCheckMessage: ''
-    }
-  },
-  methods: {
-    async checkuserName() {
-      this.isChecking = true
-      try {
-        const result = await checkuserName(this.userName)
-        if (result.data) {
-          this.isuserNameAvailable = true
-          this.userNameCheckMessage = '사용 가능한 닉네임입니다.'
-        } else {
-          this.isuserNameAvailable = false
-          this.userNameCheckMessage = '이미 사용 중인 닉네임입니다.'
-        }
-      } catch (error) {
-        console.error('닉네임 중복 확인 중 오류가 발생했습니다:', error)
-        this.isuserNameAvailable = false
-        this.userNameCheckMessage = '오류가 발생했습니다. 다시 시도해주세요.'
-      } finally {
-        this.isChecking = false
-      }
-    },
-    async registerUser() {
-      if (!this.isuserNameAvailable) {
-        alert('닉네임 중복 확인을 해주세요.')
-        return
-      }
-      try {
-        console.log('등록 정보:', this.userName, this.birthdate)
-        const result = await registerFirstUser(this.userName, this.birthdate)
-        const userInfo = result.data
-        const authStore = useAuthStore()
-        authStore.setUserInfo(userInfo)
 
-        sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
-        console.log('등록된 사용자:', result)
-        this.$router.push('/') // 홈으로 리다이렉트
-      } catch (error) {
-        console.error('사용자 등록 중 오류가 발생했습니다:', error)
-      }
+const userName = ref('')
+const birthdate = ref('')
+const isuserNameAvailable = ref(false)
+const isChecking = ref(false)
+const userNameCheckMessage = ref('')
+const router = useRouter()
+const authStore = useAuthStore()
+
+const check = async () => {
+  isChecking.value = true
+  try {
+    const result = await checkuserName(userName.value)
+    if (result.data) {
+      isuserNameAvailable.value = true
+      userNameCheckMessage.value = '사용 가능한 닉네임입니다.'
+    } else {
+      isuserNameAvailable.value = false
+      userNameCheckMessage.value = '이미 사용 중인 닉네임입니다.'
     }
+  } catch (error) {
+    console.error('닉네임 중복 확인 중 오류가 발생했습니다:', error)
+    isuserNameAvailable.value = false
+    userNameCheckMessage.value = '오류가 발생했습니다. 다시 시도해주세요.'
+  } finally {
+    isChecking.value = false
+  }
+}
+
+const registerUser = async () => {
+  if (!isuserNameAvailable.value) {
+    alert('닉네임 중복 확인을 해주세요.')
+    return
+  }
+  try {
+    console.log('등록 정보:', userName.value, birthdate.value)
+    const result = await registerFirstUser(userName.value, birthdate.value)
+    const userInfo = result.data
+    authStore.setUserInfo(userInfo)
+    sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
+    console.log('등록된 사용자:', result)
+    router.push('/') // 홈으로 리다이렉트
+  } catch (error) {
+    console.error('사용자 등록 중 오류가 발생했습니다:', error)
   }
 }
 </script>

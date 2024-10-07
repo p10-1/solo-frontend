@@ -1,90 +1,100 @@
 <template>
-  <div class="policy-card">
-    <h2 class="policy-title">{{ policy.polyBizSjnm }}</h2>
-    <p class="policy-description">{{ policy.polyItcnCn }}</p>
+  <a :href="policy.rqutUrla" target="_blank" class="policy-card">
+    <div class="icon margin-bottom-1rem"><i class="fa-solid fa-landmark"></i></div>
+    <div class="link"><i class="fa-solid fa-link"></i></div>
+    <h3 class="title policy-title">{{ policy.polyBizSjnm }}</h3>
 
-    <div class="policy-link">
-      <template v-if="policy.rqutUrla && policy.rqutUrla !== '-' && policy.rqutUrla !== 'null'">
-        <a :href="policy.rqutUrla" target="_blank">{{ policy.rqutUrla }}</a>
-      </template>
-      <template v-else>
-        <span>링크 없음</span>
-      </template>
+    <div class="button-main" @click.stop="openModal" @click.prevent="handleLinkClick">
+      <i class="fa-solid fa-list-check"></i> 정책 미리 보기
     </div>
-
-    <button class="toggle-button" @click="toggleSporCn">
-      {{ showSporCn ? '상세 숨기기' : '상세 보기' }}
-    </button>
-
-    <div v-if="showSporCn" class="policy-details">
-      <p>상세 정보: {{ policy.sporCn }}</p>
-    </div>
-  </div>
+  </a>
+  <PolicyModal :isVisible="isModalVisible" :policy="policy" @close="isModalVisible = false" />
 </template>
 
-<script>
-export default {
-  props: {
-    policy: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      showSporCn: false // 초기값은 false로 설정
-    }
-  },
-  methods: {
-    toggleSporCn() {
-      this.showSporCn = !this.showSporCn // 클릭 시 상태 토글
-    }
+<script setup>
+import { ref } from 'vue'
+import PolicyModal from './PolicyModal.vue'
+
+defineProps({
+  policy: {
+    type: Object,
+    required: true
   }
+})
+
+const isModalVisible = ref(false)
+
+function openModal() {
+  isModalVisible.value = true
 }
 </script>
 
 <style scoped>
 .policy-card {
-  border: 1px solid #ddd; /* 카드 테두리 */
-  border-radius: 8px; /* 둥근 모서리 */
-  padding: 16px; /* 패딩 */
-  margin: 16px; /* 카드 간격 */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-  transition: transform 0.2s; /* 호버 효과 */
+  position: relative;
+  width: 100%;
+  min-height: 17rem;
+  border-radius: 25px;
+  padding: 2rem 1.7rem;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .policy-card:hover {
-  transform: scale(1.05); /* 호버 시 확대 효과 */
+  transform: translateY(-10px);
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
 }
 
-.policy-title {
-  font-size: 1.5em; /* 정책 제목 크기 */
-  margin-bottom: 8px; /* 아래 여백 */
+.policy-card:hover .title {
+  color: #6846f5;
+  font-weight: 600;
 }
 
-.policy-description {
-  margin-bottom: 8px; /* 아래 여백 */
+.policy-card:hover .link {
+  color: #a686f3;
+  transition: all 0.6s;
 }
 
-.policy-link {
-  margin-bottom: 8px; /* 아래 여백 */
+.policy-card .icon {
+  text-align: center;
+  vertical-align: baseline;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: linear-gradient(to left, #7d64da, #a686f3);
+  color: #fff;
 }
 
-.toggle-button {
-  background-color: #007bff; /* 버튼 배경 색상 */
-  color: white; /* 버튼 글자 색상 */
-  border: none; /* 테두리 없음 */
-  border-radius: 4px; /* 둥근 모서리 */
-  padding: 8px 12px; /* 패딩 */
-  cursor: pointer; /* 커서 포인터 */
+.policy-card .icon i {
+  line-height: 50px;
+  font-size: 25px;
 }
 
-.toggle-button:hover {
-  background-color: #0056b3; /* 호버 시 버튼 배경 색상 */
+.policy-card .title {
+  font-size: 1.22rem;
+  word-break: keep-all;
+  line-height: 1.6rem;
+  letter-spacing: -1px;
+  padding: 0;
 }
 
-.policy-details {
-  margin-top: 12px; /* 위 여백 */
-  color: #666; /* 상세 정보 색상 */
+.policy-card .link {
+  position: absolute;
+  top: 2rem;
+  right: 1.7rem;
+  font-size: 1.8rem;
+  color: #d3d3d3;
+}
+
+.policy-card .button-main {
+  position: absolute;
+  bottom: 2rem;
+  margin-left: 0;
+  margin-bottom: 0;
+  width: 84%;
+  font-size: 17px;
 }
 </style>
