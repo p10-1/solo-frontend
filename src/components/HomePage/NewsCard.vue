@@ -14,22 +14,6 @@
             class="news-image img-fluid" 
           />
         </div>
-        <div class="button-wrapper">
-          <button 
-            class="btn btn-secondary btn-sm" 
-            @click.prevent="prevNews(categoryIndex)" 
-            :disabled="categoryItem.currentNewsIndex === 0"
-          >
-            ‹
-          </button>
-          <button 
-            class="btn btn-secondary btn-sm" 
-            @click.prevent="nextNews(categoryIndex)" 
-            :disabled="categoryItem.currentNewsIndex === categoryItem.newsItems.length - 1"
-          >
-            ›
-          </button>
-        </div>
       </div>
     </div>
   </div>
@@ -43,7 +27,6 @@ import { recommendNews } from '@/api/newsApi'
 const router = useRouter()
 const newsList = ref([])
 
-// 뉴스 데이터를 가져오는 함수
 const fetchNews = async () => {
   try {
     const response = await recommendNews()
@@ -62,20 +45,6 @@ const fetchNews = async () => {
 
 const goToNews = (category) => { 
   router.push({ path: '/news', query: { category } });
-}
-
-const nextNews = (categoryIndex) => {
-  const category = newsList.value[categoryIndex];
-  if (category.currentNewsIndex < category.newsItems.length - 1) {
-    category.currentNewsIndex++;
-  }
-}
-
-const prevNews = (categoryIndex) => {
-  const category = newsList.value[categoryIndex];
-  if (category.currentNewsIndex > 0) {
-    category.currentNewsIndex--;
-  }
 }
 
 // 자동 슬라이드 기능
@@ -168,30 +137,5 @@ onUnmounted(() => {
   border-radius: 4px; /* 이미지 모서리 둥글게 */
 }
 
-.button-wrapper {
-  display: flex;
-  justify-content: space-between; /* 버튼을 좌우로 배치 */
-  margin-top: 10px; /* 버튼과 카드 내용 간의 간격 조정 */
-}
 
-.btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 5px 10px; /* 버튼 패딩 조정 */
-  font-size: 0.9rem; /* 버튼 글자 크기 조정 */
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s; /* 배경색 변환 효과 */
-  width: 30px; /* 버튼 너비 설정 */
-}
-
-.btn:hover {
-  background-color: #0056b3; /* 마우스 오버 시 버튼 색상 변경 */
-}
-
-.btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
 </style>

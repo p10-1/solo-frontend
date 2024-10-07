@@ -38,7 +38,6 @@ const loading = ref(false);
 const noMoreData = ref(false);
 const selectedCategory = ref('');
 
-// 카테고리 쿼리 파라미터로 설정
 const route = useRoute();
 selectedCategory.value = route.query.category || '';
 
@@ -85,10 +84,24 @@ const resetFilter = () => {
   loadNews();
 };
 
+// const formatDate = (dateString) => {
+//   const date = new Date(dateString);
+//   return date.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 반환
+// };
+
 const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 반환
+  // 공백을 'T'로 바꿔 ISO 형식으로 변환
+  const isoString = dateString.replace(' ', 'T');
+  const date = new Date(isoString + 'Z'); // UTC로 해석
+  
+  // 한국 시간으로 변환
+  return date.toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
 };
+
 
 onMounted(() => {
   loadNews();
