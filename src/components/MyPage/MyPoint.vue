@@ -53,61 +53,63 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineEmits } from 'vue';
-import { fetchPoints, pointsToCash, getBank } from '@/api/mypageApi'; // API import
+import { ref, onMounted, defineEmits } from 'vue'
+import { fetchPoints, pointsToCash, getBank } from '@/api/mypageApi' // API import
 
 // 이벤트 정의
-const emit = defineEmits(['update']); // 부모에게 'update' 이벤트를 발생시킬 수 있도록 정의
+const emit = defineEmits(['update']) // 부모에게 'update' 이벤트를 발생시킬 수 있도록 정의
 
-const points = ref(0);
-const withdrawAmount = ref(0);
-const accountIndex = ref('');
-const accounts = ref([]);
+const points = ref(0)
+const withdrawAmount = ref(0)
+const accountIndex = ref('')
+const accounts = ref([])
 
 const loadPoints = async () => {
   try {
-    points.value = await fetchPoints(); // 포인트 조회 API 호출
+    points.value = await fetchPoints() // 포인트 조회 API 호출
   } catch (error) {
-    alert('포인트 조회 중 오류가 발생했습니다.');
+    alert('포인트 조회 중 오류가 발생했습니다.')
   }
-};
+}
 
 const loadBank = async () => {
   try {
-    const data = await getBank(); // 은행 정보 조회 API 호출
-    accounts.value = JSON.parse(data[0]);
+    const data = await getBank() // 은행 정보 조회 API 호출
+    accounts.value = JSON.parse(data[0])
   } catch (error) {
-    console.error('계좌 조회 오류:', error);
+    console.error('계좌 조회 오류:', error)
   }
-};
+}
 
 const withdrawPoints = async () => {
-  if (withdrawAmount.value > 0 && withdrawAmount.value <= points.value && accountIndex.value !== '') {
+  if (
+    withdrawAmount.value > 0 &&
+    withdrawAmount.value <= points.value &&
+    accountIndex.value !== ''
+  ) {
     try {
-      await pointsToCash(accountIndex.value, withdrawAmount.value); // 포인트 출금 API 호출
-      points.value -= withdrawAmount.value;
-      withdrawAmount.value = 0;
-      accountIndex.value = '';
-      alert('포인트 출금이 성공적으로 완료되었습니다.');
+      await pointsToCash(accountIndex.value, withdrawAmount.value) // 포인트 출금 API 호출
+      points.value -= withdrawAmount.value
+      withdrawAmount.value = 0
+      accountIndex.value = ''
+      alert('포인트 출금이 성공적으로 완료되었습니다.')
 
       // 부모에게 업데이트 이벤트 발생
-      emit('update'); // 부모에게 'update' 이벤트를 발생시킴
+      emit('update') // 부모에게 'update' 이벤트를 발생시킴
     } catch (error) {
-      console.error('출금 오류:', error);
-      alert('출금 중 오류가 발생했습니다.');
+      console.error('출금 오류:', error)
+      alert('출금 중 오류가 발생했습니다.')
     }
   } else {
-    alert('출금할 수 없는 금액이거나 계좌를 선택하지 않았습니다.');
+    alert('출금할 수 없는 금액이거나 계좌를 선택하지 않았습니다.')
   }
-};
+}
 
 onMounted(() => {
-  loadPoints();
-  loadBank();
-});
+  loadPoints()
+  loadBank()
+})
 </script>
-
-
 
 <style scoped>
 .point-management {
@@ -155,17 +157,7 @@ onMounted(() => {
 }
 .point-management .form-group .title {
   position: relative;
-  padding-left: 1.4rem;
-}
-.point-management .form-group .title::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 8px;
-  width: 15px;
-  height: 2px;
-  border-radius: 10px;
-  background-color: #6846f5;
+  font-weight: 400;
 }
 
 .point-management .form-group .input-box .common-label {

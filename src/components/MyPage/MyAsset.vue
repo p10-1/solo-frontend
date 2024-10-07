@@ -8,77 +8,117 @@
     </div>
 
     <div class="my-asset-list" v-if="loaded">
-      <div class="list-item" v-for="(type, index) in assetTypesList" :key="index">
-        <h3 class="title">{{ getAssetTypeName(type) }}</h3>
-        <ul>
-          <li v-for="(asset, assetIndex) in assetTypes[type]" :key="assetIndex" class="asset-item">
-            <dl v-if="!editMode">
-              <dt>{{ asset.bank }} - {{ asset.accountNumber }}</dt>
-              <dd>{{ asset.amount ? asset.amount.toLocaleString() : '0' }}원</dd>
-            </dl>
-            <dl v-else>
-              <dt><input v-model="asset.bank" class="form-control" placeholder="은행명" /></dt>
-              <dd>
-                <input v-model="asset.accountNumber" class="form-control" placeholder="계좌 번호" />
+      <h3 class="title margin-top-2rem margin-bottom-1rem">자산</h3>
+      <div class="list-align">
+        <div class="list-item" v-for="(type, index) in assetTypesList" :key="index">
+          <h4 class="title">{{ getAssetTypeName(type) }}</h4>
+          <ul>
+            <li
+              v-for="(asset, assetIndex) in assetTypes[type]"
+              :key="assetIndex"
+              class="asset-item"
+            >
+              <dl v-if="!editMode">
+                <dt>{{ asset.bank }}</dt>
+                <dd>{{ asset.accountNumber }}</dd>
+                <dd>
+                  <span class="text-accent">{{
+                    asset.amount ? asset.amount.toLocaleString() : '0'
+                  }}</span
+                  >원
+                </dd>
+              </dl>
+              <dl v-else>
+                <dt><input v-model="asset.bank" class="form-control" placeholder="은행명" /></dt>
+                <dd>
+                  <input
+                    v-model="asset.accountNumber"
+                    class="form-control"
+                    placeholder="계좌 번호"
+                  />
+                </dd>
+                <dd>
+                  <input
+                    v-model.number="asset.amount"
+                    type="number"
+                    class="form-control"
+                    placeholder="금액"
+                  />
+                </dd>
+              </dl>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="laon-section">
+        <h3 class="title margin-top-3rem margin-bottom-1rem">대출</h3>
+        <div v-if="isLoanDetailsValid" class="my-loan-list">
+          <div v-if="!editMode">
+            <ul class="list-item">
+              <li>대출 금액</li>
+              <li>
+                {{ loanDetails.loanAmount ? loanDetails.loanAmount.toLocaleString() : '0' }}원
+              </li>
+            </ul>
+            <ul class="list-item">
+              <li>대출 목적</li>
+              <li>{{ loanDetails.loanPurpose }}</li>
+            </ul>
+            <ul class="list-item">
+              <li>대출 기간</li>
+              <li>{{ loanDetails.period }}개월</li>
+            </ul>
+            <ul class="list-item">
+              <li>대출 이율</li>
+              <li>{{ loanDetails.interest }}%</li>
+            </ul>
+          </div>
+          <div v-else>
+            <ul class="list-item">
+              <li>대출 목적</li>
+              <li>
                 <input
-                  v-model.number="asset.amount"
+                  v-model="loanDetails.loanPurpose"
+                  class="form-control"
+                  placeholder="대출 목적"
+                />
+              </li>
+            </ul>
+            <ul class="list-item">
+              <li>대출 금액</li>
+              <li>
+                <input
+                  v-model.number="loanDetails.loanAmount"
                   type="number"
                   class="form-control"
-                  placeholder="금액"
+                  placeholder="대출 금액"
                 />
-              </dd>
-            </dl>
-          </li>
-        </ul>
-      </div>
-      <div class="laon-section">
-        <h3 class="title">대출</h3>
-        <div v-if="isLoanDetailsValid">
-          <dl v-if="!editMode">
-            <dt>대출 목적</dt>
-            <dd>{{ loanDetails.loanPurpose }}</dd>
-            <dt>대출 금액</dt>
-            <dd>{{ loanDetails.loanAmount ? loanDetails.loanAmount.toLocaleString() : '0' }}원</dd>
-            <dt>대출 기간</dt>
-            <dd>{{ loanDetails.period }}개월</dd>
-            <dt>대출 이율</dt>
-            <dd>{{ loanDetails.interest }}%</dd>
-          </dl>
-          <dl v-else>
-            <dt>
-              <input
-                v-model="loanDetails.loanPurpose"
-                class="form-control"
-                placeholder="대출 목적"
-              />
-            </dt>
-            <dd>
-              <input
-                v-model.number="loanDetails.loanAmount"
-                type="number"
-                class="form-control"
-                placeholder="대출 금액"
-              />
-            </dd>
-            <dt>대출 기간</dt>
-            <dd>
-              <input
-                v-model.number="loanDetails.period"
-                type="number"
-                class="form-control"
-                placeholder="대출 기간"
-              />
-            </dd>
-            <dt>대출 이율</dt>
-            <dd>
-              <input
-                v-model.number="loanDetails.interest"
-                type="number"
-                class="form-control"
-                placeholder="대출 이율"
-              />
-            </dd>
-          </dl>
+              </li>
+            </ul>
+            <ul class="list-item">
+              <li>대출 기간</li>
+              <li>
+                <input
+                  v-model.number="loanDetails.period"
+                  type="number"
+                  class="form-control"
+                  placeholder="대출 기간"
+                />
+              </li>
+            </ul>
+            <ul class="list-item">
+              <li>대출 이율</li>
+              <li>
+                <input
+                  v-model.number="loanDetails.interest"
+                  type="number"
+                  class="form-control"
+                  placeholder="대출 이율"
+                />
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -211,36 +251,65 @@ const prepareUpdatedData = () => {
 <style scoped>
 .my-asset-manager {
 }
-.my-asset-list .list-item {
-  position: relative;
-  background-color: #fff;
-  border-radius: 27px;
-  padding: 1.4rem;
-  border: 2px solid #e4deff;
-  padding-left: 7.5rem;
-}
-.my-asset-list .list-item::before {
-  content: '';
-  position: absolute;
-  left: 1.4rem;
-  width: 5rem;
-  height: 5rem;
-  background-color: #000;
-  border-radius: 16px;
-}
-.my-asset-list .list-item h3.title {
-  margin: 8px 0;
-  padding: 0;
-  font-size: 20px;
-  letter-spacing: -1px;
-}
-.my-asset dl.asset-item {
+/* 자산 */
+.my-asset-list div.list-align {
   display: flex;
+  gap: 19px;
+  flex-wrap: wrap;
+}
+.my-asset-list h3.title {
+  padding: 0;
+  font-weight: 400;
+  position: relative;
+  color: #6846f5;
+}
+.my-asset-list .list-item {
+  width: calc(50% - 9.5px);
+  position: relative;
+  min-height: 7.8rem;
+  padding: 1.25rem 1.4rem;
+  border: 3px solid #e4deff;
+  border-radius: 24px;
+}
+.my-asset-list .list-item h4.title {
+  margin: 8px 0 12px;
+  font-weight: 400;
+  padding-top: 0;
+  padding-bottom: 8px;
+  font-size: 22px;
+  letter-spacing: -1px;
+  border-bottom: 2px solid #eee;
+}
+.my-asset-list .asset-item dl {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 5px;
+  font-size: 18px;
 }
 
-.my-asset dl.asset-item dt {
+.my-asset-list .asset-item dt {
+  font-weight: 400;
+  letter-spacing: -0.8px;
+  color: #6846f5;
 }
 
-.my-asset dl.asset-item dd {
+.my-asset-list .asset-item dl dd {
+  color: #666;
+}
+
+.my-asset-list .asset-item dl dd:nth-child(2) {
+  letter-spacing: -0.5px;
+  margin-left: 0;
+  flex-grow: 1;
+}
+
+.my-asset-list .asset-item dl dd .text-accent {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+/* 대출 */
+.my-loan-list {
 }
 </style>

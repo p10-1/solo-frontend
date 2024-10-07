@@ -109,7 +109,7 @@ onBeforeUnmount(() => {
 .policy-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 17px;
   background: linear-gradient(180deg, #f3f3ff 63.02%, #fff);
   padding: 1.5rem;

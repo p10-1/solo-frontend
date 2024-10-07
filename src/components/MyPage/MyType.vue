@@ -38,6 +38,9 @@
 .my-type .text-p {
   font-size: 20px;
   letter-spacing: -0.6px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background-color: #f3f3ff;
 }
 .my-type .text-black {
   color: #333;
@@ -48,7 +51,7 @@
   letter-spacing: -0.7px;
   padding: 12px 16px;
   border-radius: 12px;
-  background: var(--gray020, #fffbec);
+  background-color: #fffbec;
   color: var(--font-secondary, #475067);
 }
 .my-type .user-type-info i {
@@ -162,54 +165,4 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-/* .button-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.btn {
-  border: 2px solid black;
-  padding: 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition:
-    background-color 0.3s,
-    border-color 0.3s;
-  width: 23%;
-  text-align: left;
-  background-color: white;
-  display: flex;
-  align-items: center;
-}
-
-.btn:hover {
-  background-color: #f0f0f0;
-}
-
-.selected {
-  background-color: #007bff;
-  color: white;
-  border-color: #0056b3;
-}
-
-.icon {
-  font-size: 40px;
-  margin-right: 10px;
-}
-
-.text-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.title {
-  font-weight: bold;
-}
-
-.description {
-  font-size: 14px;
-} */
-</style>
+<style scoped></style>

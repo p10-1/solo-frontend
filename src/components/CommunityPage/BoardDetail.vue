@@ -294,7 +294,7 @@ dl.card-text dd {
 }
 
 .comments-section dt {
-  max-width: 150px;
+  width: 130px;
   display: inline-block;
   vertical-align: top;
   word-wrap: break-word;
@@ -319,7 +319,7 @@ dl.card-text dd {
   padding: 1.7rem 1.5rem;
   background-color: #f3f3ff;
   border-radius: 0px 28px 28px 28px;
-  width: calc(100% - 132px);
+  width: calc(100% - 130px);
 }
 
 .comments-section .text-muted {
