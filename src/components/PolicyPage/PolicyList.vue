@@ -6,17 +6,22 @@
     </div>
     <div class="filter-bar margin-top-1rem margin-bottom-1rem">
       <input type="radio" id="all" value="0" v-model="policyType" />
-      <label for="all" class="active">전체</label>
+      <label :class="{ active: policyType === '0' }" for="all">전체</label>
+
       <input type="radio" id="housing" value="주거" v-model="policyType" />
-      <label for="housing">주거</label>
+      <label :class="{ active: policyType === '주거' }" for="housing">주거</label>
+
       <input type="radio" id="job" value="일자리" v-model="policyType" />
-      <label for="job">일자리</label>
+      <label :class="{ active: policyType === '일자리' }" for="job">일자리</label>
+
       <input type="radio" id="education" value="교육" v-model="policyType" />
-      <label for="education">교육</label>
+      <label :class="{ active: policyType === '교육' }" for="education">교육</label>
+
       <input type="radio" id="welfare" value="복지문화" v-model="policyType" />
-      <label for="welfare">복지문화</label>
+      <label :class="{ active: policyType === '복지문화' }" for="welfare">복지문화</label>
+
       <input type="radio" id="rights" value="참여권리" v-model="policyType" />
-      <label for="rights">참여권리</label>
+      <label :class="{ active: policyType === '참여권리' }" for="rights">참여권리</label>
     </div>
 
     <div class="policy-list margin-top-1rem">

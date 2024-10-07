@@ -1,25 +1,19 @@
 <template>
   <div class="kb-product-card">
-    <div class="company-name">{{ product.korCoNm }}</div>
-    <h2 class="product-name">{{ product.finPrdtNm }}</h2>
-    <div class="interest-rate">{{ product.mtrtInt }}</div>
+    <div class="company-name">{{ props.product.korCoNm }}</div>
+    <h2 class="product-name">{{ props.product.finPrdtNm }}</h2>
+    <div class="interest-rate">{{ props.product.mtrtInt }}</div>
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    product: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      isHovered: true
-    }
+<script setup>
+// props 선언
+const props = defineProps({
+  product: {
+    type: Object,
+    required: true
   }
-}
+})
 </script>
 <style scoped>
 .kb-product-card {
