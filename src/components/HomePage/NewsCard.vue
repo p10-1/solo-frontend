@@ -1,17 +1,23 @@
 <template>
   <div class="slider-container">
     <div class="slider">
-      <div class="slider-card" v-for="(categoryItem, categoryIndex) in newsList" :key="categoryIndex">
+      <div
+        class="slider-card"
+        v-for="(categoryItem, categoryIndex) in newsList"
+        :key="categoryIndex"
+      >
         <div @click="goToNews(categoryItem.category)" class="card-content">
           <div class="text-content">
             <h3 class="news-category">오늘의 {{ categoryItem.category }} 뉴스</h3>
-            <h5 class="news-title">{{ categoryItem.newsItems[categoryItem.currentNewsIndex].title }}</h5>
+            <h5 class="news-title">
+              {{ categoryItem.newsItems[categoryItem.currentNewsIndex].title }}
+            </h5>
           </div>
-          <img 
-            v-if="categoryItem.newsItems[categoryItem.currentNewsIndex].imageUrl" 
-            :src="categoryItem.newsItems[categoryItem.currentNewsIndex].imageUrl" 
-            alt="뉴스 이미지" 
-            class="news-image img-fluid" 
+          <img
+            v-if="categoryItem.newsItems[categoryItem.currentNewsIndex].imageUrl"
+            :src="categoryItem.newsItems[categoryItem.currentNewsIndex].imageUrl"
+            alt="뉴스 이미지"
+            class="news-image img-fluid"
           />
         </div>
       </div>
@@ -32,19 +38,21 @@ const fetchNews = async () => {
     const response = await recommendNews()
     newsList.value = Object.entries(response).map(([category, news]) => ({
       category,
-      newsItems: Array.isArray(news) ? news.map(item => ({
-        ...item,
-        imageUrl: item.imageUrl // imageUrl 추가
-      })) : [{ ...news, imageUrl: news.imageUrl }], 
-      currentNewsIndex: 0 
-    }));
+      newsItems: Array.isArray(news)
+        ? news.map((item) => ({
+            ...item,
+            imageUrl: item.imageUrl // imageUrl 추가
+          }))
+        : [{ ...news, imageUrl: news.imageUrl }],
+      currentNewsIndex: 0
+    }))
   } catch (error) {
     console.error('뉴스를 가져오는 데 실패했습니다:', error)
   }
 }
 
-const goToNews = (category) => { 
-  router.push({ path: '/news', query: { category } });
+const goToNews = (category) => {
+  router.push({ path: '/news', query: { category } })
 }
 
 // 자동 슬라이드 기능
@@ -54,12 +62,12 @@ const startAutoSlide = () => {
   slideInterval.value = setInterval(() => {
     newsList.value.forEach((category) => {
       if (category.currentNewsIndex < category.newsItems.length - 1) {
-        category.currentNewsIndex++;
+        category.currentNewsIndex++
       } else {
-        category.currentNewsIndex = 0; // 마지막 뉴스에서 첫 번째 뉴스로 돌아감
+        category.currentNewsIndex = 0 // 마지막 뉴스에서 첫 번째 뉴스로 돌아감
       }
-    });
-  }, 6000);
+    })
+  }, 6000)
 }
 
 onMounted(() => {
@@ -68,7 +76,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  clearInterval(slideInterval.value);
+  clearInterval(slideInterval.value)
 })
 </script>
 
@@ -81,24 +89,24 @@ onUnmounted(() => {
 }
 
 .slider {
-  display: flex; 
+  display: flex;
 }
 
 .slider-card {
-  width: calc(33.33% - 40px); 
-  background-color: #fff; 
-  border-top: 2px solid #6846F5; 
-  border-bottom: 2px solid #CFC6FD; 
-  padding: 10px; 
-  box-shadow: none; 
+  width: calc(33.33% - 40px);
+  background-color: #fff;
+  border-top: 2px solid #6846f5;
+  border-bottom: 2px solid #cfc6fd;
+  padding: 10px;
+  box-shadow: none;
   cursor: pointer;
-  margin: 0 20px; 
-  height: 130px; 
+  margin: 0 20px;
+  height: 130px;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: space-between;
-  border-radius: 0; 
-  transition: transform 0.3s; 
+  border-radius: 0;
+  transition: transform 0.3s;
 }
 
 .slider-card:hover {
@@ -107,35 +115,33 @@ onUnmounted(() => {
 
 .card-content {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   flex-grow: 1;
 }
 
 .text-content {
-  flex: 0 0 60%; 
-  overflow: hidden; 
+  flex: 0 0 60%;
+  overflow: hidden;
 }
 
 .news-category {
-  font-size: 1rem; 
-  margin: 0; 
+  font-size: 1rem;
+  margin: 0;
   font-weight: bold;
 }
 
 .news-title {
-  font-size: 0.9rem; 
+  font-size: 0.9rem;
   margin: 5px 0; /* 제목 간격 조정 */
   color: #333;
 }
 
 .news-image {
-  width: 100px; 
-  height: 100px; 
+  width: 100px;
+  height: 100px;
   object-fit: cover; /* 비율 유지하며 잘라내기 */
-  margin-left: 10px; 
-  flex: 0 0 40%; 
-  border-radius: 4px; 
+  margin-left: 10px;
+  flex: 0 0 40%;
+  border-radius: 4px;
 }
-
-
 </style>

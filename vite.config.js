@@ -12,11 +12,15 @@ export default defineConfig({
     }
   },
   server: {
-    // port: 5173,
     proxy: {
       '/api': {
         target: 'http://localhost:9000',
         changeOrigin: true
+      },
+      '/finlife': {
+        target: 'https://finlife.fss.or.kr',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/finlife/, '')
       }
     }
   },
