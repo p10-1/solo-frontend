@@ -1,5 +1,4 @@
 <template>
-  <!-- <h2 class="title">자산 비중</h2> -->
   <div class="asset-distribution">
     <div class="asset-content">
       <div v-if="highestAssetType" class="asset-highlight">
@@ -8,7 +7,8 @@
       <div class="asset-chart">
         <ChartComponent type="doughnut" :data="chartData" :options="chartOptions" />
         <div class="asset-legend">
-          <div v-for="asset in sortedAssetDetails" :key="asset.name" class="asset-type">
+          <!-- Only display assets that have a non-zero total -->
+          <div v-for="asset in filteredAssetDetails" :key="asset.name" class="asset-type">
             <span
               class="asset-color"
               :style="{ backgroundColor: getAssetColor(asset.name) }"
@@ -26,7 +26,7 @@
 <script setup>
 //src/components/AssetPage/Distribution.vue
 
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed } from 'vue'
 import ChartComponent from '@/components/common/ChartComponent.vue'
 
 const props = defineProps({
@@ -35,9 +35,6 @@ const props = defineProps({
     required: true
   }
 })
-
-const chartCanvas = ref(null) // 차트를 렌더링할 캔버스 참조
-let chart = null // 차트 인스턴스
 
 // 자산 이름 매핑
 const assetNames = {
@@ -57,7 +54,11 @@ const assetColors = {
 
 // 총 자산 금액 계산
 const totalAsset = computed(() => {
-  return Object.values(props.assetDetails).reduce((sum, asset) => sum + asset.total, 0)
+  return Object.values(props.assetDetails).reduce((sum, asset) => sum + (asset.total || 0), 0) // Default to 0 if asset total is undefined
+})
+// Filter out assets with zero or undefined totals
+const filteredAssetDetails = computed(() => {
+  return sortedAssetDetails.value.filter((asset) => asset.total > 0) // Only keep assets with a total greater than 0
 })
 
 // 자산을 금액 순으로 정렬
@@ -74,15 +75,15 @@ const highestAssetType = computed(() => {
 
 // 숫자를 포맷하는 함수
 const formatNumber = (num) => {
-  if (num === undefined || num === null) {
-    return '0'
+  if (isNaN(num) || num === undefined || num === null) {
+    return '0' // Default to 0 when the value is NaN, undefined, or null
   }
   return num.toLocaleString()
 }
 
 // 자산의 비율 계산
 const calculatePercentage = (value) => {
-  if (totalAsset.value === 0) return '0.00'
+  if (totalAsset.value === 0 || isNaN(value)) return '0.00' // Avoid NaN
   return ((value / totalAsset.value) * 100).toFixed(2)
 }
 
@@ -96,7 +97,7 @@ const chartData = computed(() => ({
   labels: sortedAssetDetails.value.map((asset) => assetNames[asset.name]),
   datasets: [
     {
-      data: sortedAssetDetails.value.map((asset) => asset.total),
+      data: sortedAssetDetails.value.map((asset) => asset.total || 0), // Use 0 if asset total is undefined
       backgroundColor: sortedAssetDetails.value.map((asset) => getAssetColor(asset.name))
     }
   ]
@@ -115,7 +116,7 @@ const chartOptions = computed(() => ({
       callbacks: {
         label: function (context) {
           const label = context.label || ''
-          const value = context.raw
+          const value = context.raw || 0 // Use 0 if value is undefined
           const percentage = calculatePercentage(value)
           return `${label}: ${formatNumber(value)}원 (${percentage}%)`
         }
@@ -131,22 +132,6 @@ const chartOptions = computed(() => ({
   padding: 2rem 1.7rem;
   background-color: #fff;
   box-shadow: 0px 0px 15px rgb(221, 214, 255);
-}
-
-.asset-distribution .asset-content {
-}
-
-.asset-distribution__highlight {
-}
-
-.asset-distribution__content {
-}
-
-.asset-distribution__chart-container {
-}
-
-.asset-distribution__legend {
-  width: 45%;
 }
 
 .asset-type {
@@ -180,19 +165,12 @@ const chartOptions = computed(() => ({
 }
 
 @media (max-width: 768px) {
-  .asset-distribution__content {
-    flex-direction: column;
+  .asset-distribution {
+    padding: 1.5rem 1.2rem;
   }
 
-  .asset-distribution__chart-container,
-  .asset-distribution__legend {
-    width: 100%;
-    max-width: none;
-  }
-
-  .asset-distribution__chart-container {
-    height: 250px;
-    margin-bottom: 20px;
+  .asset-type {
+    font-size: 0.8rem;
   }
 }
 </style>

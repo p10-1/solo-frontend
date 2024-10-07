@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="asset-type-distribution">
     <h2 class="asset-type-distribution__title">자산 유형별 분포</h2>
     <div class="asset-type-distribution__content">
@@ -127,4 +127,4 @@ export default {
 .asset-percentage {
   font-weight: bold;
 }
-</style>
+</style> -->

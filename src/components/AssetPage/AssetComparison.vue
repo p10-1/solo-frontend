@@ -1,17 +1,28 @@
 <template>
   <div class="asset-comparison">
-    <h2 class="asset-comparison__title">자산 비교</h2>
+    <!-- Dynamically show the title based on selected asset type -->
+    <h2 class="asset-comparison__title">{{ selectedAssetTypeName }} 비교</h2>
+
+    <!-- Chart -->
     <div v-if="comparisonData" class="asset-comparison__chart-container">
       <ChartComponent type="bar" :data="chartData" :options="chartOptions" height="300px" />
     </div>
+
+    <!-- Asset data summary -->
     <div v-if="comparisonData" class="asset-comparison__summary">
       <p>자산 유형: {{ userType }}</p>
-      <p>내 총 자산: {{ formatCurrency(calculateTotal(userAsset)) }}</p>
-      <p>전체 평균 자산: {{ formatCurrency(calculateTotal(comparisonData.overallAverage)) }}</p>
       <p>
-        {{ userType }} 평균 자산: {{ formatCurrency(calculateTotal(comparisonData.typeAverage)) }}
+        전체 평균 {{ selectedAssetTypeName }} 자산:
+        {{ formatCurrency(comparisonData.overallAverage[selectedAssetType]) }}
       </p>
+      <p>
+        {{ userType }} 평균 {{ selectedAssetTypeName }} 자산:
+        {{ formatCurrency(comparisonData.typeAverage[selectedAssetType]) }}
+      </p>
+      <p>내 {{ selectedAssetTypeName }} 자산: {{ formatCurrency(selectedUserAsset) }}</p>
     </div>
+
+    <!-- Error message -->
     <div v-if="error" class="asset-comparison__error">
       <p>에러 발생: {{ error }}</p>
     </div>
@@ -19,10 +30,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import ChartComponent from '@/components/common/ChartComponent.vue'
 import { fetchAssetComparison } from '@/api/assetApi'
 
+// Props 정의
 const props = defineProps({
   userAsset: {
     type: Object,
@@ -31,72 +43,57 @@ const props = defineProps({
   userType: {
     type: String,
     required: true
-  }
+  },
+  selectedAssetType: {
+    type: String,
+    required: true
+  } // Pass this to dynamically adjust for selected asset type
 })
 
 const comparisonData = ref(null)
 const error = ref(null)
 
+// 자산 타입 이름 매핑
+const assetTypeNames = {
+  cash: '현금',
+  deposit: '예적금',
+  stock: '주식',
+  insurance: '보험'
+}
+
+// 자산 타입에 따른 이름 반환
+const selectedAssetTypeName = computed(() => {
+  return assetTypeNames[props.selectedAssetType] || '자산'
+})
+
+// 선택된 자산에 따른 사용자 자산 반환
+const selectedUserAsset = computed(() => {
+  return props.userAsset[props.selectedAssetType] || 1
+})
+
+// 자산 타입에 맞춰 데이터를 로드하는 함수
 const loadComparisonData = async () => {
   try {
-    console.log('AssetComparison: Fetching comparison data for type:', props.userType)
-    comparisonData.value = await fetchAssetComparison(props.userType)
-    console.log('AssetComparison: Received comparison data:', comparisonData.value)
-
-    if (!comparisonData.value || typeof comparisonData.value !== 'object') {
-      console.error('Received comparison data is invalid:', comparisonData.value)
-    }
+    const response = await fetchAssetComparison(props.userType)
+    comparisonData.value = response
   } catch (err) {
-    console.error('AssetComparison: Failed to fetch comparison data:', err)
-    error.value = err.message
+    error.value = '데이터를 불러오는 데 실패했습니다.'
   }
 }
 
 onMounted(loadComparisonData)
 
-watch(() => props.userType, loadComparisonData)
-
+// 차트 데이터 설정
 const chartData = computed(() => {
-  if (!comparisonData.value) {
-    console.error('comparisonData is null or undefined')
-    return null
-  }
+  const labels = [selectedAssetTypeName.value]
 
-  const labels = ['현금', '예금', '주식', '보험']
-  const userData = labels.map((label) => props.userAsset[label.toLowerCase()] || 0)
-  const overallAverageData = labels.map(
-    (label) => comparisonData.value.overallAverage[label.toLowerCase()] || 0
-  )
-  const typeAverageData = labels.map(
-    (label) => comparisonData.value.typeAverage[label.toLowerCase()] || 0
-  )
-
-  console.log('Labels:', labels)
-  console.log('User Data:', userData)
-  console.log('Overall Average Data:', overallAverageData)
-  console.log('Type Average Data:', typeAverageData)
-  console.log('API Response:', comparisonData.value)
-  console.log('User Asset Data:', props.userAsset)
-
-  // If data arrays are all zeros, log a warning
-  if (userData.every((value) => value === 0)) {
-    console.warn('User data is all zeros')
-  }
-  if (overallAverageData.every((value) => value === 0)) {
-    console.warn('Overall average data is all zeros')
-  }
-  if (typeAverageData.every((value) => value === 0)) {
-    console.warn(`${props.userType} average data is all zeros`)
-  }
+  const userData = [selectedUserAsset.value || 1]
+  const overallAverageData = [comparisonData.value?.overallAverage[props.selectedAssetType] || 1]
+  const typeAverageData = [comparisonData.value?.typeAverage[props.selectedAssetType] || 1]
 
   return {
     labels,
     datasets: [
-      {
-        label: '내 자산',
-        data: userData,
-        backgroundColor: 'rgba(255, 99, 132, 0.5)'
-      },
       {
         label: '전체 평균',
         data: overallAverageData,
@@ -106,11 +103,17 @@ const chartData = computed(() => {
         label: `${props.userType} 평균`,
         data: typeAverageData,
         backgroundColor: 'rgba(75, 192, 192, 0.5)'
+      },
+      {
+        label: '내 자산',
+        data: userData,
+        backgroundColor: 'rgba(255, 99, 132, 0.5)'
       }
     ]
   }
 })
 
+// 차트 옵션 설정
 const chartOptions = computed(() => ({
   responsive: true,
   scales: {
@@ -120,20 +123,10 @@ const chartOptions = computed(() => ({
         callback: (value) => formatCurrency(value)
       }
     }
-  },
-  plugins: {
-    tooltip: {
-      callbacks: {
-        label: (context) => `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`
-      }
-    }
   }
 }))
 
-const calculateTotal = (asset) => {
-  return Object.values(asset).reduce((sum, value) => sum + (value || 0), 0)
-}
-
+// 통화 형식 변환 함수
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value)
 }
@@ -165,28 +158,9 @@ const formatCurrency = (value) => {
   padding: 15px;
 }
 
-.asset-comparison__summary-text {
-  font-size: 1.1rem;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.asset-comparison__trend {
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-.asset-comparison__percentage {
-  font-size: 1rem;
-  font-weight: normal;
-}
-
-.increase {
-  color: #28a745;
-}
-
-.decrease {
-  color: #dc3545;
+.asset-comparison__error {
+  color: red;
+  text-align: center;
 }
 
 @media (max-width: 768px) {
@@ -196,15 +170,6 @@ const formatCurrency = (value) => {
 
   .asset-comparison__title {
     font-size: 1.3rem;
-  }
-
-  .asset-comparison__summary-text,
-  .asset-comparison__trend {
-    font-size: 1rem;
-  }
-
-  .asset-comparison__percentage {
-    font-size: 0.9rem;
   }
 }
 </style>
