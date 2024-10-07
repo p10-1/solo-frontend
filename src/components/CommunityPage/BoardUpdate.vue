@@ -1,5 +1,5 @@
 <template>
-  <h1><i class="fa-regular fa-pen-to-square"></i> 글 수정</h1>
+  <h2 class="title">글 수정</h2>
 
   <form @submit.prevent="submit">
     <div class="mb-3 mt-3">
@@ -50,20 +50,9 @@
     </div>
 
     <div class="my-5 text-center">
-      <button type="submit" class="btn btn-primary me-3">
-        <i class="fa-solid fa-check"></i>
-        확인
-      </button>
-
-      <button type="button" class="btn btn-primary me-3" @click="reset">
-        <i class="fa-solid fa-undo"></i>
-        취소
-      </button>
-
-      <button class="btn btn-primary" @click="back">
-        <i class="fa-solid fa-arrow-left"></i>
-        돌아가기
-      </button>
+      <button type="submit" class="button-main">확인</button>
+      <button type="button" class="button-sub margin-left-1rem" @click="reset">취소</button>
+      <button class="button-sub margin-left-1rem" @click="back">돌아가기</button>
     </div>
   </form>
 </template>

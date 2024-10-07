@@ -1,9 +1,12 @@
 <template>
   <div class="total-asset">
-    <h2>{{ userName }}님의 총 자산</h2>
+    <h3>
+      <span class="text-accent">{{ userName }}</span
+      >님의 총 자산
+    </h3>
     <div class="asset-amount">
       <span class="currency">₩</span>
-      <span class="amount">{{ animatedAmount }}</span>
+      <span class="amount">{{ animatedAmount }}원</span>
     </div>
   </div>
 </template>
@@ -57,15 +60,21 @@ watch(
 
 <style scoped>
 .total-asset {
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  border-radius: 25px;
+  padding: 2rem 1.7rem;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
+}
+.total-asset h3 {
+  font-size: 1.4rem;
+  margin: 0;
 }
 
-h2 {
-  margin: 0;
-  font-size: 1.5em;
-  color: #333;
+.total-asset .asset-amount {
+  font-size: 1.4rem;
 }
 </style>

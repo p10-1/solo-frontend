@@ -1,10 +1,11 @@
 <template>
-  <a :href="policy.rqutUrla" target="_blank" class="policy-link-wrapper">
-    <div class="policy-card">
-      <h2 class="policy-title">{{ policy.polyBizSjnm }}</h2>
-      <p class="policy-description" @click.stop="openModal" @click.prevent="handleLinkClick">
-        더 알아보기
-      </p>
+  <a :href="policy.rqutUrla" target="_blank" class="policy-card">
+    <div class="icon margin-bottom-1rem"><i class="fa-solid fa-landmark"></i></div>
+    <div class="link"><i class="fa-solid fa-link"></i></div>
+    <h3 class="title policy-title">{{ policy.polyBizSjnm }}</h3>
+
+    <div class="button-main" @click.stop="openModal" @click.prevent="handleLinkClick">
+      <i class="fa-solid fa-list-check"></i> 정책 미리 보기
     </div>
   </a>
   <PolicyModal :isVisible="isModalVisible" :policy="policy" @close="isModalVisible = false" />
@@ -29,54 +30,71 @@ function openModal() {
 </script>
 
 <style scoped>
-.policy-link-wrapper {
-  text-decoration: none; /* 링크에 밑줄 추가 */
-}
-
 .policy-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* 상하 중앙 정렬 */
-  position: relative; /* 자식 요소의 절대 위치를 허용 */
-  background-color: #fffff9;
-  width: 500px; /* 카드의 고정 너비 */
-  height: 150px; /* 카드의 고정 높이 */
-  color: black;
-  border-radius: 12px;
-  padding: 16px;
-  margin: 16px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  position: relative;
+  width: 100%;
+  min-height: 17rem;
+  border-radius: 25px;
+  padding: 2rem 1.7rem;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
   transition:
     transform 0.3s,
     box-shadow 0.3s;
 }
 
 .policy-card:hover {
-  background-color: #ffffed;
-  transform: translateY(-5px);
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.35);
+  transform: translateY(-10px);
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
 }
 
-.policy-title {
+.policy-card:hover .title {
+  color: #6846f5;
+  font-weight: 600;
+}
+
+.policy-card:hover .link {
+  color: #a686f3;
+  transition: all 0.6s;
+}
+
+.policy-card .icon {
   text-align: center;
-  font-size: 1.2em; /* title 글자 크기 */
-  font-weight: bold;
-  margin: 0; /* 기본 마진 제거 */
+  vertical-align: baseline;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: linear-gradient(to left, #7d64da, #a686f3);
+  color: #fff;
 }
 
-.policy-description {
+.policy-card .icon i {
+  line-height: 50px;
+  font-size: 25px;
+}
+
+.policy-card .title {
+  font-size: 1.22rem;
+  word-break: keep-all;
+  line-height: 1.6rem;
+  letter-spacing: -1px;
+  padding: 0;
+}
+
+.policy-card .link {
   position: absolute;
-  bottom: 16px; /* 카드의 하단에 위치 */
-  right: 16px; /* 카드의 우측에 위치 */
-  font-size: 0.75em; /* 더 작은 글씨 크기 */
-  color: #6c757d; /* 회색 글자 */
-  text-decoration: underline;
-  cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+  top: 2rem;
+  right: 1.7rem;
+  font-size: 1.8rem;
+  color: #d3d3d3;
 }
 
-@media (max-width: 768px) {
-  .policy-card {
-    width: 100%;
-  }
+.policy-card .button-main {
+  position: absolute;
+  bottom: 2rem;
+  margin-left: 0;
+  margin-bottom: 0;
+  width: 84%;
+  font-size: 17px;
 }
 </style>

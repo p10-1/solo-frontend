@@ -6,9 +6,6 @@
         <i class="fa-solid fa-circle-down"></i>
         내 자산 불러오기
       </button>
-      <button class="button-sub btn btn-secondary" @click="toggleEditMode">
-        {{ editMode ? '저장하기' : '수정하기' }}
-      </button>
     </div>
 
     <div class="asset-loan-container" v-if="loaded">
