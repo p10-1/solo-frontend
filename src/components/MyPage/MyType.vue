@@ -3,8 +3,7 @@
     <h2 class="title">나의 <span class="text-accent">자산 관리 유형</span>은 어디?</h2>
     <br />
     <div v-if="selectedType" class="user-type-info">
-      <span class="text-accent text-black"
-        ><i class="fa-solid fa-circle-info"></i> {{ nickName }}</span
+      <span class="text-accent"><i class="fa-solid fa-circle-info"></i> {{ nickName }}</span
       >님의 자산 타입은 <span class="text-accent">"{{ selectedType }}"</span> 입니다.
     </div>
     <div v-else class="text-p">
@@ -44,12 +43,16 @@
   color: #333;
 }
 .my-type .user-type-info {
-  font-size: 18px;
-  letter-spacing: -0.5px;
+  color: #555;
+  letter-spacing: -0.7px;
   padding: 12px 16px;
-  border-radius: 8px;
-  background: var(--gray020, #f4f6fa);
+  border-radius: 12px;
+  background: var(--gray020, #fffbec);
   color: var(--font-secondary, #475067);
+}
+.my-type .user-type-info i {
+  color: #f7d095;
+  margin-right: 5px;
 }
 .my-type .user-type-info .text-accent {
   font-size: 23px;
@@ -62,7 +65,7 @@
 .my-type .button-container .btn {
   padding: 1.6rem 1.4rem;
   border-radius: 5px;
-  border: 3px solid #cacaca;
+  border: 3px solid #e4deff;
   background-color: #fcfcfc;
   width: 100%;
   transition: all 0.6s;

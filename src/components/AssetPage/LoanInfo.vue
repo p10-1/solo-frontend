@@ -1,6 +1,6 @@
 <template>
+  <h2 class="title">대출 정보</h2>
   <div class="loan-info">
-    <h3>대출 정보</h3>
     <div v-for="(value, key) in formattedLoanInfo" :key="key" class="loan-item">
       <span class="loan-label">{{ key }}:</span>
       <span class="loan-value">{{ value }}</span>

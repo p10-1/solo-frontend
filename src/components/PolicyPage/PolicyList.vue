@@ -1,26 +1,38 @@
 <template>
-  <div class="infinite-scroll">
-    <h1>정책 목록</h1>
-
-    <div class="filter-bar">
-      <label> <input type="radio" value="0" v-model="policyType" /> 전체 </label>
-      <label> <input type="radio" value="주거" v-model="policyType" /> 주거 </label>
-      <label> <input type="radio" value="일자리" v-model="policyType" /> 일자리 </label>
-      <label> <input type="radio" value="교육" v-model="policyType" /> 교육 </label>
-      <label> <input type="radio" value="복지문화" v-model="policyType" /> 복지문화 </label>
-      <label> <input type="radio" value="참여권리" v-model="policyType" /> 참여권리 </label>
-    </div>
-
+  <div class="infinite-container infinite-scroll">
+    <h2 class="title">청년 <span class="text-accent font-weigth-300">추천 정책</span> 목록</h2>
     <div class="search-bar">
       <SearchBar v-model="keyword" @search="searchPolicies" />
     </div>
+    <div class="filter-bar margin-top-1rem margin-bottom-1rem">
+      <input type="radio" id="all" value="0" v-model="policyType" />
+      <label :class="{ active: policyType === '0' }" for="all">전체</label>
 
-    <div class="policy-list">
-      <PolicyItem v-for="policy in list" :key="policy.bizId" :policy="policy" />
+      <input type="radio" id="housing" value="주거" v-model="policyType" />
+      <label :class="{ active: policyType === '주거' }" for="housing">주거</label>
+
+      <input type="radio" id="job" value="일자리" v-model="policyType" />
+      <label :class="{ active: policyType === '일자리' }" for="job">일자리</label>
+
+      <input type="radio" id="education" value="교육" v-model="policyType" />
+      <label :class="{ active: policyType === '교육' }" for="education">교육</label>
+
+      <input type="radio" id="welfare" value="복지문화" v-model="policyType" />
+      <label :class="{ active: policyType === '복지문화' }" for="welfare">복지문화</label>
+
+      <input type="radio" id="rights" value="참여권리" v-model="policyType" />
+      <label :class="{ active: policyType === '참여권리' }" for="rights">참여권리</label>
     </div>
 
-    <div v-if="loading" class="loading">로딩 중...</div>
-    <div v-if="noMoreData" class="no-more">더 이상 데이터가 없습니다.</div>
+    <div class="policy-list margin-top-1rem">
+      <PolicyItem v-for="policy in list" :key="policy.bizId" :policy="policy" />
+    </div>
+    <div v-if="loading" class="loading margin-top-3rem">
+      <i class="fa-solid fa-spinner margin-bottom-1rem"></i><br />로딩 중...
+    </div>
+    <div v-if="noMoreData" class="no-more">
+      <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />정책이 더 이상 없습니다.
+    </div>
   </div>
 </template>
 
@@ -98,39 +110,20 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.loading {
-  text-align: center;
-  padding: 20px;
-  color: gray;
-}
-.no-more {
-  text-align: center;
-  padding: 20px;
-  color: gray;
-}
+/* 리스트 */
 .policy-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  gap: 17px;
+  background: linear-gradient(180deg, #f3f3ff 63.02%, #fff);
+  padding: 1.5rem;
+  min-height: 3rem;
+  border-radius: 28px 28px 0 0;
 }
 
 .policy-list > * {
-  width: calc(50% - 16px);
-  margin-bottom: 20px;
-}
-
-.filter-bar {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 20px;
-}
-
-.filter-bar label {
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.filter-bar input[type='radio'] {
-  margin-right: 5px;
+  flex: 0 0 calc(33.8% - 17px);
+  box-sizing: border-box;
 }
 </style>

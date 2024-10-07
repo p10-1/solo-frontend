@@ -1,7 +1,18 @@
 <template>
   <div class="kb-product-list">
-    <div v-if="loading" class="loading">로딩 중...</div>
-    <div v-else-if="error" class="error">{{ error }}</div>
+    <h2 class="title">
+      "<span class="text-accent">{{ authStore.userInfo.userName }}</span
+      >" 님을 위한 <span class="text-accent">KB 추천 상품</span>이에요
+      <span class="text-accent"><i class="fa-regular fa-face-smile"></i></span>
+    </h2>
+    <div v-if="loading" class="loading margin-top-3rem">
+      <i class="fa-solid fa-spinner margin-bottom-1rem"></i>
+      <br />로딩 중...
+    </div>
+    <div v-else-if="error" class="error">
+      <i class="fa-solid fa-xmark argin-bottom-1rem"></i>
+      {{ error }}
+    </div>
     <div class="product-cards">
       <ProductKBItem
         v-for="product in products"
@@ -13,64 +24,63 @@
     </div>
   </div>
 </template>
-
-<script>
-import { fetchKbProducts } from '@/api/productApi' // fetchKbProducts 함수 경로
+<script setup>
+import { ref, onMounted } from 'vue'
+import { fetchKbProducts } from '@/api/productApi'
 import ProductKBItem from './ProductKBItem.vue'
+import { useAuthStore } from '@/stores/authStore'
 
-export default {
-  components: {
-    ProductKBItem
-  },
-  data() {
-    return {
-      products: [], // 제품 목록
-      loading: true, // 로딩 상태
-      error: null, // 에러 상태
-      hoveredCard: null // 현재 마우스를 올린 카드
-    }
-  },
-  async mounted() {
-    await this.loadProducts() // 컴포넌트 마운트 시 데이터 로드
-  },
-  methods: {
-    async loadProducts() {
-      try {
-        this.products = await fetchKbProducts() // 데이터 가져오기
-      } catch (error) {
-        this.error = '상품을 가져오는 데 실패했습니다. 다시 시도해주세요.' // 에러 처리
-      } finally {
-        this.loading = false // 로딩 완료
-      }
-    },
-    onMouseOver(productNo) {
-      this.hoveredCard = productNo // 마우스를 올린 카드 번호 저장
-    },
-    onMouseLeave() {
-      this.hoveredCard = null // 마우스가 떠났을 때 초기화
-    }
+const products = ref([])
+const loading = ref(true)
+const error = ref(null)
+const hoveredCard = ref(null)
+const authStore = useAuthStore()
+
+const loadProducts = async () => {
+  try {
+    products.value = await fetchKbProducts()
+  } catch (err) {
+    error.value = '상품을 가져오는 데 실패했습니다. 다시 시도해주세요.'
+  } finally {
+    loading.value = false
   }
 }
+
+const onMouseOver = (productNo) => {
+  hoveredCard.value = productNo
+}
+
+const onMouseLeave = () => {
+  hoveredCard.value = null
+}
+
+onMounted(() => {
+  loadProducts()
+})
 </script>
 
 <style scoped>
 .kb-product-list {
+  margin-top: -2rem;
+}
+
+.kb-product-list .title {
+  text-align: center;
+  line-height: 2.5rem;
+  margin: 2rem 1rem 1.5rem;
+  padding: 0;
+  border: none;
+  word-break: keep-all;
+}
+
+.kb-product-list .product-cards {
   display: flex;
-  flex-direction: column; /* 세로로 정렬 */
-}
-
-.loading {
-  text-align: center; /* 중앙 정렬 */
-}
-
-.error {
-  color: red; /* 에러 메시지 색상 */
-  text-align: center; /* 중앙 정렬 */
-}
-
-.product-cards {
-  display: flex; /* 가로로 펼치기 */
-  flex-wrap: wrap; /* 카드가 여러 줄로 나열되도록 */
-  justify-content: space-around; /* 카드 간격 조정 */
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 17px;
+  background: #f3f3ff;
+  padding: 2rem 1.5rem;
+  min-height: 3rem;
+  border-radius: 28px;
 }
 </style>

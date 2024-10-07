@@ -9,9 +9,10 @@
       </li>
     </ul>
 
-    <h2 class="title margin-top-1rem">포인트 <span class="text-accent">출금</span></h2>
+    <h2 class="title margin-top-3rem">포인트 <span class="text-accent">출금</span></h2>
     <div class="withdraw-section">
       <div class="form-group">
+        <h3 class="title margin-top-2rem margin-bottom-1rem text-accent">입금할 계좌</h3>
         <select v-model="accountIndex" class="form-control mr-2 account-select" id="accountSelect">
           <option value="" disabled selected>내 계좌 선택</option>
           <!-- 비활성화 및 기본값 설정 -->
@@ -19,17 +20,35 @@
             {{ account }}
           </option>
         </select>
-        <span class="common-label">계좌로</span>
-        <input
-          v-model.number="withdrawAmount"
-          type="number"
-          class="form-control ml-2 amount-input"
-          placeholder="출금할 포인트"
-        />
-        <span class="common-label">원</span>
-        <button @click="withdrawPoints" class="btn btn-success ml-2">입금</button>
+        <h3 class="title margin-top-2rem margin-bottom-1rem text-accent">입금액</h3>
+        <div class="input-box">
+          <input
+            v-model.number="withdrawAmount"
+            type="number"
+            class="form-control ml-2 amount-input"
+            placeholder="출금할 포인트"
+          />
+          <span class="common-label">원</span>
+        </div>
+        <button
+          @click="withdrawPoints"
+          class="button-main btn btn-success margin-top-1rem width100"
+        >
+          <i class="fa-solid fa-money-bill-transfer"></i> 입금
+        </button>
       </div>
     </div>
+    <!-- <h2 class="title margin-top-3rem">포인트 <span class="text-accent">출금 내역 조회</span></h2>
+    <div class="withdraw-section">
+      <div class="form-group">
+        <div class="title-box margin-top-2rem margin-bottom-1rem">
+          <h3 class="title text-accent">포인트 출금 내역</h3>
+          <button class="button-main link">
+            <i class="fa-solid fa-magnifying-glass"></i> 조회
+          </button>
+        </div>
+      </div>
+    </div> -->
   </div>
 </template>
 
@@ -135,6 +154,12 @@ export default {
   padding-bottom: 1rem;
 }
 
+.point-management h3.title {
+  font-size: 20px;
+  letter-spacing: -1px;
+  padding: 0;
+}
+
 .point-management ul.current-points li {
   font-size: 20px;
   letter-spacing: -1px;
@@ -153,16 +178,35 @@ export default {
   font-size: 20px;
 }
 
-.account-select {
+.point-management .form-group .input-box {
+  position: relative;
+}
+.point-management .form-group .title {
+  position: relative;
+  padding-left: 1.4rem;
+}
+.point-management .form-group .title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 15px;
+  height: 2px;
+  border-radius: 10px;
+  background-color: #6846f5;
 }
 
-.amount-input {
+.point-management .form-group .input-box .common-label {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-weight: 500;
+  font-size: 18px;
+  color: #666;
 }
 
-.common-label {
-  margin: 0 10px;
-  /* "계좌로" 및 "원" 텍스트와 셀렉트/인풋 사이의 간격 조정 */
-  font-weight: bold;
-  /* 텍스트를 두껍게 */
+.point-management .form-group .button-main {
+  margin-left: 0;
+  color: #fff;
 }
 </style>

@@ -1,11 +1,19 @@
 <template>
   <div class="infinite-scroll">
-    <h1>예적금 상품 목록</h1>
+    <div class="filter-bar margin-top-1rem margin-bottom-1rem">
+      <input type="radio" id="deposit" value="예금" v-model="productType" />
+      <label :class="{ active: productType === '예금' }" for="deposit">예금</label>
+      <input type="radio" id="saving" value="적금" v-model="productType" />
+      <label :class="{ active: productType === '적금' }" for="saving">적금</label>
+      <input type="radio" id="loan" value="대출" v-model="productType" />
+      <label :class="{ active: productType === '대출' }" for="loan">대출</label>
+    </div>
+    <h2 class="title margin-top-3rem"><span class="text-accent">예ㆍ적금 상품</span> 목록</h2>
     <div class="search-bar">
       <!-- SearchBar 컴포넌트 사용 -->
       <SearchBar v-model="keyword" @search="searchProducts" />
     </div>
-    <ul>
+    <ul class="product-list">
       <ProductItem
         v-for="product in list"
         :key="`${product.finPrdtNm}-${product.spclCnd}`"
@@ -14,13 +22,17 @@
     </ul>
 
     <!-- 로딩 상태 표시 -->
-    <div v-if="loading" class="loading">로딩 중...</div>
-    <div v-if="noMoreData" class="no-more">더 이상 데이터가 없습니다.</div>
+    <div v-if="loading" class="loading margin-top-3rem">
+      <i class="fa-solid fa-spinner margin-bottom-1rem"></i><br />로딩 중...
+    </div>
+    <div v-if="noMoreData" class="no-more">
+      <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />상품이 더 이상 없습니다.
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { fetchProducts } from '@/api/productApi'
 import ProductItem from './ProductItem.vue'
@@ -32,7 +44,7 @@ const totalPage = ref(0)
 const keyword = ref('')
 const loading = ref(false)
 const noMoreData = ref(false)
-
+const productType = ref('예금')
 const route = useRoute()
 const router = useRouter()
 
@@ -42,7 +54,7 @@ const loadProducts = async () => {
 
   setTimeout(async () => {
     try {
-      const data = await fetchProducts(pageNum.value, keyword.value)
+      const data = await fetchProducts(pageNum.value, keyword.value, productType.value)
       if (data.list.length > 0) {
         list.value = [...list.value, ...data.list]
         totalPage.value = data.totalPage
@@ -70,6 +82,13 @@ const searchProducts = async (searchTerm) => {
   await loadProducts()
 }
 
+watch([productType, keyword], async () => {
+  pageNum.value = 1
+  list.value = []
+  noMoreData.value = false
+  await loadProducts()
+})
+
 const handleScroll = () => {
   const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10
   if (scrollBottom && !loading.value) {
@@ -92,14 +111,13 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.loading {
-  text-align: center;
-  padding: 20px;
-  color: gray;
-}
-.no-more {
-  text-align: center;
-  padding: 20px;
-  color: gray;
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 17px;
+  padding: 2rem 1.5rem;
+  min-height: 3rem;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #e4deff 63.02%, #fff);
 }
 </style>

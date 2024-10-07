@@ -11,26 +11,41 @@
       </div>
       <search-bar v-model="keyword" @search="searchBoards" />
     </div>
+    <dl class="total">
+      <dt>전체</dt>
+      <dd>
+        <b>{{ totalCnt }}</b
+        >건
+      </dd>
+    </dl>
     <!-- 정렬 기준 선택 -->
-    <div class="select-form">
-      <select v-model="sortBy" @change="loadBoards">
-        <option value="latest">최신순</option>
-        <option value="likes">좋아요순</option>
-        <option value="views">조회순</option>
-        <option value="comments">댓글순</option>
-      </select>
-    </div>
-    <!-- <BoardBest /> -->
-    <div class="alert alert-info mt-3">
-      * 인기 글은 저번 달 조회수, 댓글 수, 좋아요 수를 기준으로 선정되었습니다.
+    <div class="table-top-box margin-top-1rem margin-bottom-1rem">
+      <div class="select-form">
+        <select v-model="sortBy" @change="loadBoards">
+          <option value="latest">최신순</option>
+          <option value="likes">좋아요순</option>
+          <option value="views">조회순</option>
+          <option value="comments">댓글순</option>
+        </select>
+      </div>
+      <!-- <BoardBest /> -->
+      <div class="alert">
+        <i class="fa-solid fa-circle-info"></i> 인기 글은 저번 달 조회수, 댓글 수, 좋아요 수를
+        기준으로 선정되었습니다.
+      </div>
+      <div class="button-box">
+        <router-link :to="{ name: 'board/create' }" class="button-main btn btn-primary">
+          글쓰기
+        </router-link>
+      </div>
     </div>
     <!-- Board List -->
     <table class="table">
       <colgroup>
         <col width="8%" />
-        <col width="72%" />
+        <col width="70%" />
         <col width="10%" />
-        <col width="20%" />
+        <col width="22%" />
       </colgroup>
       <thead>
         <tr>
@@ -58,52 +73,32 @@
               <!-- <span v-if="bestlist.includes(board.boardNo)">
                 <i class="fa-solid fa-star" style="color: gold"></i>
               </span> -->
-              <ul class="board-ex-info">
-                <li><i class="fa-solid fa-eye"></i> {{ board.views }}&nbsp;&nbsp;</li>
-                <li><i class="fa-solid fa-comment"></i> {{ board.comments }}&nbsp;&nbsp;</li>
-                <li><i class="fa-solid fa-thumbs-up"></i> {{ board.likes }}</li>
+              <ul class="table-ex-info">
+                <li><i class="fa-solid fa-user"></i> {{ board.views }}</li>
+                <li><i class="fa-solid fa-heart"></i> {{ board.likes }}</li>
+                <li><i class="fa-solid fa-comment"></i> {{ board.comments }}</li>
               </ul>
             </router-link>
           </td>
-          <td class="bold">{{ board.userName }}</td>
+          <td>
+            <span class="badge">{{ board.userName }}</span>
+          </td>
           <td class="date">{{ moment(board.regDate).format('YYYY-MM-DD HH:mm') }}</td>
         </tr>
       </tbody>
     </table>
-    <div class="button-box">
-      <router-link :to="{ name: 'board/create' }" class="button-main btn btn-primary">
-        <i class="fa-solid fa-pen-to-square"></i> 글 작성
-      </router-link>
-    </div>
 
     <pagination :currentPage="pageNum" :totalPages="totalPage" @page-change="changePage" />
   </div>
 </template>
 
 <style scope>
-.search-section {
-  text-align: center;
-}
-
-.select-form {
-  display: inline-block;
-}
-
 .board-list {
   position: relative;
 }
 .button-box {
   position: absolute;
-  margin-top: 2.5rem;
   right: 0;
-}
-
-.board-ex-info li {
-  margin-top: 10px;
-  display: inline-block;
-  margin-right: 7px;
-  font-size: 15px;
-  color: #b4b4b4;
 }
 </style>
 
@@ -124,6 +119,7 @@ const amount = ref(10)
 const sortBy = ref('latest')
 const router = useRouter()
 const route = useRoute()
+const totalCnt = ref(0)
 
 const loadBoards = async () => {
   try {
@@ -132,6 +128,7 @@ const loadBoards = async () => {
     totalPage.value = data.totalPage || 0
     pageNum.value = data.pageNum || 1
     amount.value = data.amount || 10
+    totalCnt.value = data.totalCount || 0
   } catch (error) {
     console.error('Error loading boards:', error)
   }
@@ -187,44 +184,4 @@ watch(
 )
 </script>
 
-<style scoped>
-.table {
-  width: 100%;
-  table-layout: fixed;
-}
-
-.table th,
-.table td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.table th {
-  text-align: left;
-}
-
-.board-list .top-post {
-  background-color: #f7f6f0 !important;
-  /* border-left: 5px solid #f57f17;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
-  transition:
-    transform 0.3s ease,
-    background-color 0.3s ease;
-}
-
-.top-post:hover {
-  transform: scale(1.02);
-  background-color: #e8f5e9;
-}
-
-.table th,
-.table td {
-  padding: 12px 15px;
-}
-
-.table td {
-  vertical-align: middle;
-  word-break: break-word;
-}
-</style>
+<style scoped></style>

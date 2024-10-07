@@ -15,13 +15,14 @@ export const fetchKbProducts = async () => {
   }
 }
 
-export const fetchProducts = async (currentPage, keyword) => {
+export const fetchProducts = async (currentPage, keyword, productType) => {
   try {
     const response = await axios.get(`${API_URL}/list`, {
       params: {
         page: currentPage,
         amount: DEFAULT_AMOUNT,
-        keyword: keyword
+        keyword: keyword,
+        type: productType
       }
     })
     return response.data // API 응답 데이터를 반환

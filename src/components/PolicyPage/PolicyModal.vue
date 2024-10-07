@@ -1,12 +1,19 @@
 <template>
   <Teleport to="body">
-    <div v-if="isVisible" class="modal-overlay" @click.self="closeModal">
-      <div class="modal-content">
-        <h2 class="policy-title">{{ policy.polyBizSjnm }}</h2>
-        <p class="policy-description">{{ policy.polyItcnCn }}</p>
-        <p class="policy-details" v-html="formattedPolicyDetails"></p>
-        <p class="policy-type">{{ policy.polyBizTy }}</p>
-        <button @click="closeModal" class="close-button">닫기</button>
+    <div v-if="isVisible" class="policy-modal modal-overlay" @click.self="closeModal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-header">
+          <h4>정책 <b class="text-accent">내용</b></h4>
+          <button @click="closeModal" class="close"><span>&times;</span></button>
+        </div>
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="policy-type">{{ policy.polyBizTy }}</div>
+            <h3 class="policy-title">{{ policy.polyBizSjnm }}</h3>
+            <div class="policy-description">{{ policy.polyItcnCn }}</div>
+            <div class="policy-details margin-top-1rem" v-html="formattedPolicyDetails"></div>
+          </div>
+        </div>
       </div>
     </div>
   </Teleport>
@@ -40,73 +47,56 @@ const formattedPolicyDetails = computed(() => {
 </script>
 
 <style scoped>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  transition: opacity 0.3s ease;
+.policy-modal .modal-dialog {
+  max-width: 50vw;
 }
 
-.modal-content {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 30px;
-  max-width: 700px;
-  width: 90%;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+.policy-modal .modal-content {
+  padding: 1.7rem;
   animation: slide-down 0.3s ease;
 }
 
-.policy-title {
+.policy-modal .policy-type {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  border: 1px solid #6846f5;
+  color: #6846f5;
+  padding: 3px 8px;
+  line-height: 1;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+
+.policy-modal .policy-title {
   margin-top: 0;
-  color: #007bff;
-  font-size: 28px;
-  font-weight: bold;
+  color: #6846f5;
+  font-size: 1.6rem;
+  word-break: keep-all;
+  font-weight: 600;
+  letter-spacing: -1px;
 }
 
-.policy-description {
+.policy-modal .policy-description {
+  font-size: 1.05rem;
   color: #333;
-  font-size: 18px;
-  margin-bottom: 15px;
+  word-break: keep-all;
+  line-height: 26px;
+  letter-spacing: -1px;
+  font-weight: 400;
+  margin: 10px 0;
 }
 
-.policy-details {
-  color: #666;
-  font-size: 16px;
+.policy-modal .policy-details {
+  color: #454545;
+  font-size: 17px;
   margin-bottom: 15px;
-  border-left: 4px solid gray;
-  padding-left: 10px;
-  background-color: #f8f9fa;
+  border-left: 4px solid #cfc6fd;
+  padding: 10px;
+  background-color: #f3f3ff;
   white-space: pre-line;
-}
-
-.policy-type {
-  color: gray;
-  font-size: 16px;
-  font-style: italic;
-  margin-top: 10px;
-  padding-top: 10px;
-}
-
-.close-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.close-button:hover {
-  background-color: #0056b3;
+  line-height: 28px;
 }
 
 /* 모달 슬라이드 애니메이션 */

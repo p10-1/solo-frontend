@@ -1,0 +1,59 @@
+/* 모달 오버레이 스타일 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 12;
+}
+
+.modal-dialog {
+  position: absolute;
+  top: 10vh;
+  min-width: 20vw;
+  max-width: 450px;
+  width: 100%;
+  border-radius: 20px;
+  border: 1px solid #e8e8e8;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 30px 25px 10px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed #e8e8e8;
+}
+
+.modal-header h4 {
+  position: relative;
+  font-size: 1.3rem;
+  font-weight: 300;
+  letter-spacing: -0.8px;
+}
+.modal-header h4 i.icon {
+  position: absolute;
+  top: -0.7rem;
+  transform: rotate(40deg);
+  margin-top: -2px;
+  margin-left: -5px;
+}
+
+.modal-header .close {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #fff;
+  vertical-align: middle;
+  font-weight: 500;
+  border-radius: 50%;
+  background-color: #222;
+  cursor: pointer;
+}
