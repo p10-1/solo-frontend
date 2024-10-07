@@ -1,16 +1,14 @@
 <template>
-  <div class="asset-list-continer">
-    <h2 class="title">
-      "<span class="text-accent">ㅇㅇ</span>"님을 위해
-      <span class="text-accent">맞춤 자산 분석</span>을 해드려요
-      <span class="text-accent"><i class="fa-regular fa-face-smile"></i></span>
-    </h2>
+  <div class="asset-list">
+    <h1 class="asset-list__title">자산 정보</h1>
     <div v-if="loading" class="asset-list__loading">Loading...</div>
     <div v-else-if="error" class="asset-list__error">{{ error }}</div>
     <template v-else-if="processedData">
       <div class="asset-list__grid">
-        <div class="asset-section asset-total">
+        <div class="asset-list__section asset-list__total">
           <TotalAsset :totalAmount="processedData.totalAsset" />
+        </div>
+        <div class="asset-list__section asset-list__distribution">
           <Distribution :assetDetails="processedData.assetDetails" />
         </div>
         <div class="asset-list__section asset-list__comparison-container">
@@ -18,9 +16,9 @@
           <div class="asset-list__comparison-charts">
             <div class="asset-list__chart">
               <AssetComparison
-                v-if="processedData.comparisonData"
-                :assetType="selectedAssetType"
-                :comparisonData="processedData.comparisonData"
+                :userAsset="calculateTotalAssets(processedData.assetDetails)"
+                :userType="processedData.assetDetails.type || 0"
+                :selectedAssetType="selectedAssetType"
               />
             </div>
             <div class="asset-list__chart">
@@ -92,7 +90,13 @@ const parseJsonArray = (jsonString) => {
     return []
   }
 }
-
+const calculateTotalAssets = (assetDetails) => {
+  const totals = {}
+  for (const [type, data] of Object.entries(assetDetails)) {
+    totals[type] = data.total
+  }
+  return totals
+}
 // 자산 데이터를 처리하여 필요한 형태로 변환하는 함수
 
 //따로 함수 처리 ㅎ
@@ -114,6 +118,8 @@ const processAssetData = (data, assetTypes) => {
 // 처리된 자산 데이터를 계산하고 반환하는 computed 함수
 const processedData = computed(() => {
   if (!rawAssetData.value || rawAssetData.value.length === 0) {
+    console.log('AssetList: No raw asset data available')
+
     return {
       totalAsset: 0,
       assetDetails: {
@@ -172,9 +178,12 @@ const processedData = computed(() => {
     }
   })
 
-  return {
+  const result = {
     totalAsset,
-    assetDetails,
+    assetDetails: {
+      ...assetDetails,
+      type: currentData.type || 'unknown'
+    },
     comparisonData,
     timeComparisonData,
     loanData: {
@@ -183,48 +192,53 @@ const processedData = computed(() => {
       period: Number(currentData.period),
       interest: Number(currentData.interest)
     }
-    // recommendationData: {
-    //   consume: currentData.consume
-    // }
   }
+
+  console.log('AssetList: Processed data:', result)
+  return result
 })
 
 const selectAssetType = (type) => {
   selectedAssetType.value = type
+  console.log('Selected asset type:', selectedAssetType.value)
 }
 
 onMounted(loadData)
 </script>
 
 <style scoped>
-.asset-list-continer {
-  margin-top: -2rem;
-}
-.asset-list-continer .title {
-  text-align: center;
-  line-height: 2.5rem;
-  margin: 2rem 1rem 1.5rem;
-  padding: 0;
-  border: none;
-  word-break: keep-all;
+.asset-list {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-.asset-section {
-  display: flex;
-  justify-content: space-between;
-  gap: 17px;
-  padding: 2rem 1.5rem;
-  min-height: 3rem;
-  border-radius: 28px;
-  background-color: #f3f3ff;
-  align-items: flex-start;
+.asset-list__title {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.asset-list__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+}
+
+.asset-list__section {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
 .asset-list__total,
 .asset-list__distribution {
+  grid-column: 1 / -1;
 }
 
 .asset-list__comparison-container {
+  grid-column: 1 / -1;
 }
 
 .asset-list__comparison-charts {

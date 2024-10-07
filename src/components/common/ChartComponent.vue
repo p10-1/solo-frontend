@@ -37,6 +37,13 @@ const createChart = () => {
   }
 
   const ctx = chartRef.value.getContext('2d')
+  if (!ctx) {
+    console.error('Failed to get context for canvas')
+    return
+  }
+
+  console.log('Creating new chart with data:', props.data)
+
   chartInstance = new Chart(ctx, {
     type: props.type,
     data: props.data,

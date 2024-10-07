@@ -8,11 +8,10 @@
       <MyAsset />
     </div>
 
-    <!-- 하단 컴포넌트 (MyPoint, MyBoard) -->
     <div class="bottom-section">
       <div class="bottom-components">
         <div :style="{ width: '35%' }">
-          <MyPoint />
+          <MyPoint @update="handleUpdate"/>
         </div>
         <div :style="{ width: '65%' }">
           <MyBoard />
@@ -22,22 +21,19 @@
   </div>
 </template>
 
-<script>
-// 컴포넌트 임포트
+<script setup>
 import MyPoint from '@/components/MyPage/MyPoint.vue'
 import MyType from '@/components/MyPage/MyType.vue'
 import MyAsset from '@/components/MyPage/MyAsset.vue'
 import MyBoard from '@/components/MyPage/MyBoard.vue'
 
-export default {
-  name: 'App',
-  components: {
-    MyPoint,
-    MyType,
-    MyAsset,
-    MyBoard
-  }
-}
+const handleUpdate = () => {
+  refreshPage();
+};
+
+const refreshPage = () => {
+  window.location.reload(); // 페이지 새로 고침
+};
 </script>
 
 <style scoped>
