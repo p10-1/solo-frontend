@@ -16,9 +16,8 @@
           <div class="asset-list__comparison-charts">
             <div class="asset-list__chart">
               <AssetComparison
-                v-if="processedData.comparisonData"
-                :assetType="selectedAssetType"
-                :comparisonData="processedData.comparisonData"
+                :userAsset="calculateTotalAssets(processedData.assetDetails)"
+                :userType="processedData.assetDetails.type || 0"
               />
             </div>
             <div class="asset-list__chart">
@@ -90,7 +89,13 @@ const parseJsonArray = (jsonString) => {
     return []
   }
 }
-
+const calculateTotalAssets = (assetDetails) => {
+  const totals = {}
+  for (const [type, data] of Object.entries(assetDetails)) {
+    totals[type] = data.total
+  }
+  return totals
+}
 // 자산 데이터를 처리하여 필요한 형태로 변환하는 함수
 
 //따로 함수 처리 ㅎ
@@ -112,6 +117,8 @@ const processAssetData = (data, assetTypes) => {
 // 처리된 자산 데이터를 계산하고 반환하는 computed 함수
 const processedData = computed(() => {
   if (!rawAssetData.value || rawAssetData.value.length === 0) {
+    console.log('AssetList: No raw asset data available')
+
     return {
       totalAsset: 0,
       assetDetails: {
@@ -170,9 +177,12 @@ const processedData = computed(() => {
     }
   })
 
-  return {
+  const result = {
     totalAsset,
-    assetDetails,
+    assetDetails: {
+      ...assetDetails,
+      type: currentData.type || 'unknown'
+    },
     comparisonData,
     timeComparisonData,
     loanData: {
@@ -181,10 +191,10 @@ const processedData = computed(() => {
       period: Number(currentData.period),
       interest: Number(currentData.interest)
     }
-    // recommendationData: {
-    //   consume: currentData.consume
-    // }
   }
+
+  console.log('AssetList: Processed data:', result)
+  return result
 })
 
 const selectAssetType = (type) => {

@@ -1,124 +1,142 @@
 <template>
   <div class="asset-comparison">
-    <h2 class="asset-comparison__title">{{ assetTypeTitle }} 비교</h2>
-    <div class="asset-comparison__chart-container">
+    <h2 class="asset-comparison__title">자산 비교</h2>
+    <div v-if="comparisonData" class="asset-comparison__chart-container">
       <ChartComponent type="bar" :data="chartData" :options="chartOptions" height="300px" />
     </div>
-    <div class="asset-comparison__summary">
-      <p class="asset-comparison__summary-text">평균 대비 차이:</p>
-      <p :class="['asset-comparison__trend', trendDirection]">
-        {{ trendDirection === 'increase' ? '높음' : '낮음' }}
-        <span class="asset-comparison__percentage"
-          >(차이: {{ Math.abs(differencePercentage) }}%)</span
-        >
+    <div v-if="comparisonData" class="asset-comparison__summary">
+      <p>자산 유형: {{ userType }}</p>
+      <p>내 총 자산: {{ formatCurrency(calculateTotal(userAsset)) }}</p>
+      <p>전체 평균 자산: {{ formatCurrency(calculateTotal(comparisonData.overallAverage)) }}</p>
+      <p>
+        {{ userType }} 평균 자산: {{ formatCurrency(calculateTotal(comparisonData.typeAverage)) }}
       </p>
+    </div>
+    <div v-if="error" class="asset-comparison__error">
+      <p>에러 발생: {{ error }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
-//src/components/AssetPage/AssetComparison.vue
-
-import { computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import ChartComponent from '@/components/common/ChartComponent.vue'
+import { fetchAssetComparison } from '@/api/assetApi'
 
 const props = defineProps({
-  assetType: {
-    // 자산 종류를 받아옴
-    type: String,
-    required: true
-  },
-  comparisonData: {
-    // 비교 데이터 (평균 및 사용자 데이터)
+  userAsset: {
     type: Object,
     required: true
+  },
+  userType: {
+    type: String,
+    required: true
   }
 })
 
-// 자산 종류에 따른 제목 설정
+const comparisonData = ref(null)
+const error = ref(null)
 
-const assetTypeTitle = computed(() => {
-  const titles = {
-    cash: '현금자산',
-    deposit: '예적금',
-    stock: '주식',
-    insurance: '보험'
+const loadComparisonData = async () => {
+  try {
+    console.log('AssetComparison: Fetching comparison data for type:', props.userType)
+    comparisonData.value = await fetchAssetComparison(props.userType)
+    console.log('AssetComparison: Received comparison data:', comparisonData.value)
+
+    if (!comparisonData.value || typeof comparisonData.value !== 'object') {
+      console.error('Received comparison data is invalid:', comparisonData.value)
+    }
+  } catch (err) {
+    console.error('AssetComparison: Failed to fetch comparison data:', err)
+    error.value = err.message
   }
-  return titles[props.assetType] || '자산'
-})
-
-// 비교할 데이터를 설정 (사용자와 평균 데이터)
-
-const currentComparisonData = computed(
-  () => props.comparisonData[props.assetType] || { average: 0, user: 0 }
-)
-
-const userAmount = computed(() => currentComparisonData.value.user)
-const averageAmount = computed(() => currentComparisonData.value.average)
-// 두 자산의 합계
-
-// 사용자의 자산과 평균 자산을 비교한 결과 메시지 생성
-
-const differencePercentage = computed(() => {
-  const difference = userAmount.value - averageAmount.value
-  return ((difference / averageAmount.value) * 100).toFixed(2)
-})
-
-const trendDirection = computed(() => {
-  return userAmount.value > averageAmount.value ? 'increase' : 'decrease'
-})
-
-const formatCurrency = (value) => {
-  return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value)
 }
 
-/// 차트를 생성하는 함수
-const chartData = computed(() => ({
-  labels: ['평균', '나'],
-  datasets: [
-    {
-      label: assetTypeTitle.value,
-      data: [averageAmount.value, userAmount.value],
-      backgroundColor: ['#36a2eb', '#ff6384'],
-      borderColor: ['#36a2eb', '#ff6384'],
-      borderWidth: 1
-    }
-  ]
-}))
+onMounted(loadComparisonData)
+
+watch(() => props.userType, loadComparisonData)
+
+const chartData = computed(() => {
+  if (!comparisonData.value) {
+    console.error('comparisonData is null or undefined')
+    return null
+  }
+
+  const labels = ['현금', '예금', '주식', '보험']
+  const userData = labels.map((label) => props.userAsset[label.toLowerCase()] || 0)
+  const overallAverageData = labels.map(
+    (label) => comparisonData.value.overallAverage[label.toLowerCase()] || 0
+  )
+  const typeAverageData = labels.map(
+    (label) => comparisonData.value.typeAverage[label.toLowerCase()] || 0
+  )
+
+  console.log('Labels:', labels)
+  console.log('User Data:', userData)
+  console.log('Overall Average Data:', overallAverageData)
+  console.log('Type Average Data:', typeAverageData)
+  console.log('API Response:', comparisonData.value)
+  console.log('User Asset Data:', props.userAsset)
+
+  // If data arrays are all zeros, log a warning
+  if (userData.every((value) => value === 0)) {
+    console.warn('User data is all zeros')
+  }
+  if (overallAverageData.every((value) => value === 0)) {
+    console.warn('Overall average data is all zeros')
+  }
+  if (typeAverageData.every((value) => value === 0)) {
+    console.warn(`${props.userType} average data is all zeros`)
+  }
+
+  return {
+    labels,
+    datasets: [
+      {
+        label: '내 자산',
+        data: userData,
+        backgroundColor: 'rgba(255, 99, 132, 0.5)'
+      },
+      {
+        label: '전체 평균',
+        data: overallAverageData,
+        backgroundColor: 'rgba(54, 162, 235, 0.5)'
+      },
+      {
+        label: `${props.userType} 평균`,
+        data: typeAverageData,
+        backgroundColor: 'rgba(75, 192, 192, 0.5)'
+      }
+    ]
+  }
+})
 
 const chartOptions = computed(() => ({
   responsive: true,
-  maintainAspectRatio: false,
   scales: {
     y: {
       beginAtZero: true,
       ticks: {
-        callback: function (value) {
-          return formatCurrency(value)
-        }
+        callback: (value) => formatCurrency(value)
       }
     }
   },
   plugins: {
-    legend: {
-      display: false
-    },
     tooltip: {
       callbacks: {
-        label: function (context) {
-          let label = context.dataset.label || ''
-          if (label) {
-            label += ': '
-          }
-          if (context.parsed.y !== null) {
-            label += formatCurrency(context.parsed.y)
-          }
-          return label
-        }
+        label: (context) => `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`
       }
     }
   }
 }))
+
+const calculateTotal = (asset) => {
+  return Object.values(asset).reduce((sum, value) => sum + (value || 0), 0)
+}
+
+const formatCurrency = (value) => {
+  return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value)
+}
 </script>
 
 <style scoped>

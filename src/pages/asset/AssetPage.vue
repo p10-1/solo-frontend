@@ -1,6 +1,7 @@
 <template>
   <div class="asset-page">
     <AssetList />
+    <AssetTypeDistribution />
   </div>
 </template>
 

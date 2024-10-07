@@ -71,6 +71,9 @@ const highestAssetType = computed(() => {
 
 // 숫자를 포맷하는 함수
 const formatNumber = (num) => {
+  if (num === undefined || num === null) {
+    return '0'
+  }
   return num.toLocaleString()
 }
 
