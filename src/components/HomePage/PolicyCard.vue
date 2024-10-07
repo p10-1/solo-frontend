@@ -78,7 +78,7 @@ onUnmounted(() => {
 }
 .slider-container {
   position: relative;
-  width: 1000px; /* 컴포넌트 크기 키움 */
+  width: 500px; /* 컴포넌트 크기 키움 */
   overflow: hidden;
   margin: auto;
 }

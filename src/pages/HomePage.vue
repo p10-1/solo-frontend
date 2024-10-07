@@ -1,23 +1,22 @@
 <template>
-  <div class="main-top">
-    <div class="main-top-item item-box">여긴 그래프</div>
-    <div class="main-top-item">
-      <div class="item-box">
-        <QuizCard />
-      </div>
-      <div class="item-box">
-        <BoardCard />
-      </div>
+  <div class="main-top-item item-box">여긴 그래프</div>
+  <div class="main-top-item">
+    <div class="item-box">
+      <QuizCard />
+    </div>
+    <div class="item-box">
+      <BoardCard />
     </div>
   </div>
 
-  <!-- This section centers the NewsCard -->
-  <div class="item-box">
+  <div class="news-box">
     <NewsCard />
   </div>
 
-  <div class="layout-2">
+  <div class="">
     <PolicyCard />
+  </div>
+  <div class="layout-3">
     <ProductCard />
   </div>
 </template>
@@ -40,16 +39,16 @@ export default {
 }
 </script>
 <style scoped>
-.main-top {
+/*.main-top {
   margin-top: -2.25rem;
   background: linear-gradient(180deg, #f1eeff 63.02%, #fff);
   display: flex;
   justify-content: space-between;
   gap: 20px;
   padding: 20px;
-}
+}*/
 
-.main-top .main-top-item {
+.main-top-item {
   flex-grow: 1;
   flex-basis: 0;
   display: flex;
@@ -57,7 +56,7 @@ export default {
   gap: 20px;
 }
 
-.main-top .item-box {
+.item-box {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -65,16 +64,6 @@ export default {
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 2px 10px 0 rgba(17, 42, 128, 0.04);
-  width: 100%;
-}
-
-.news-box {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  border-radius: 16px;
-  background: #fff;
   width: 100%;
 }
 
@@ -98,27 +87,20 @@ export default {
   text-align: center;
 }
 
-.layout-2-basline {
+.layout-2 {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: stretch;
 }
 
-.layout-2-center {
+/*.layout-2-center {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.layout-3-baseline {
+}*/
+.layout-3 {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-}
-
-.layout-3-center {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
 }
 </style>
