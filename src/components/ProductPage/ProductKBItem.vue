@@ -2,7 +2,13 @@
   <div class="kb-product-card">
     <div class="company-name">{{ props.product.korCoNm }}</div>
     <h2 class="product-name">{{ props.product.finPrdtNm }}</h2>
-    <div class="interest-rate">{{ props.product.mtrtInt }}</div>
+    <div class="detail">
+      {{ props.product.mtrtInt }}
+      {{ props.product.loanLmt }}
+      {{ props.product.dlyRate }}
+      {{ props.product.erlyRpayFee }}
+    </div>
+    <!-- <div class="loan-limit">{{ props.product.loanLmt }}</div> -->
   </div>
 </template>
 
@@ -58,7 +64,7 @@ const props = defineProps({
   letter-spacing: -1px;
 }
 
-.kb-product-card .interest-rate {
+.kb-product-card .detail {
   border-top: 1px dashed #e4deff;
   padding-top: 10px;
   font-size: 0.9rem;
