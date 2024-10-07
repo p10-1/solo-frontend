@@ -138,7 +138,7 @@ onUnmounted(() => {
   color: #666;
 }
 
-/* .popular-news h3 {
+.popular-news h3 {
   font-size: 1.2em;
   color: #333;
 }
@@ -155,7 +155,7 @@ onUnmounted(() => {
 }
 
 .news-card {
-  width: 30%; 
+  width: 30%;
   background: #f8f9fa;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -165,7 +165,7 @@ onUnmounted(() => {
 }
 
 .news-item {
-  margin: 10px 0; 
+  margin: 10px 0;
 }
 
 .news-card:hover {
@@ -182,5 +182,5 @@ onUnmounted(() => {
 .router-link {
   margin-top: 10px;
   display: inline-block;
-} */
+}
 </style>

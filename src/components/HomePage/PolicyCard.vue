@@ -68,9 +68,17 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.btn {
+  background-color: #6846f5;
+  color: white;
+}
+.btn:hover {
+  background-color: #6143d6;
+  color: white;
+}
 .slider-container {
   position: relative;
-  width: 500px; /* 컴포넌트 크기 키움 */
+  width: 1000px; /* 컴포넌트 크기 키움 */
   overflow: hidden;
   margin: auto;
 }
@@ -110,7 +118,7 @@ onUnmounted(() => {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #007bff;
+  background-color: #6846f5;
   color: white;
   border: none;
   padding: 10px;

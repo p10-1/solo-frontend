@@ -8,9 +8,17 @@
       <div class="item-box">
         <BoardCard />
       </div>
+      <div class="news-box">
+        <NewsCard />
+      </div>
     </div>
   </div>
-  <NewsCard />
+
+  <!-- This section centers the NewsCard -->
+  <div class="news-center-container">
+    <NewsCard />
+  </div>
+
   <div class="layout-2">
     <PolicyCard />
     <ProductCard />
@@ -64,7 +72,17 @@ export default {
   width: 100%;
 }
 
-/* .layoutFlex {
+.news-box {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 16px;
+  background: #fff;
+  width: 100%;
+}
+
+.layoutFlex {
   display: flex;
   flex-wrap: wrap;
   gap: 0 40px;
@@ -82,7 +100,7 @@ export default {
   line-height: 100px;
   color: #fff;
   text-align: center;
-} */
+}
 
 .layout-2-basline {
   display: flex;
