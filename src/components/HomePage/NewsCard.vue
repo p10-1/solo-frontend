@@ -1,82 +1,65 @@
 <template>
-  <div id="newsCarousel" class="d-flex justify-content-between">
-    <template v-if="newsList.length > 0">
-      <div v-for="(categoryItem, categoryIndex) in newsList" :key="categoryIndex" class="news-card">
-        <h3>{{ categoryItem.category }}의 뉴스</h3>
-        <div class="news-item">
-          <h5 class="news-title">
-            {{ categoryItem.newsItems[categoryItem.currentNewsIndex].title }}
-          </h5>
-          <p class="news-description">
-            {{ categoryItem.newsItems[categoryItem.currentNewsIndex].link }}
-          </p>
-          <button class="btn btn-primary btn-sm mt-3" @click.stop="goToNews">더 알아보기</button>
-        </div>
-        <div class="d-flex justify-content-between mt-2">
-          <button class="btn btn-secondary btn-sm" @click.prevent="prevNews(categoryIndex)">
-            이전
-          </button>
-          <button class="btn btn-secondary btn-sm" @click.prevent="nextNews(categoryIndex)">
-            다음
-          </button>
+  <div class="slider-container">
+    <div class="slider">
+      <div class="slider-card" v-for="(categoryItem, categoryIndex) in newsList" :key="categoryIndex">
+        <div @click="goToNews(categoryItem.category)" class="card-content">
+          <div class="text-content">
+            <h3 class="news-category">오늘의 {{ categoryItem.category }} 뉴스</h3>
+            <h5 class="news-title">{{ categoryItem.newsItems[categoryItem.currentNewsIndex].title }}</h5>
+          </div>
+          <img 
+            v-if="categoryItem.newsItems[categoryItem.currentNewsIndex].imageUrl" 
+            :src="categoryItem.newsItems[categoryItem.currentNewsIndex].imageUrl" 
+            alt="뉴스 이미지" 
+            class="news-image img-fluid" 
+          />
         </div>
       </div>
-    </template>
-    <template v-else>
-      <div>뉴스가 없습니다.</div>
-    </template>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { recommendNews } from '@/api/newsAPI'
+import { recommendNews } from '@/api/newsApi'
 
 const router = useRouter()
 const newsList = ref([])
-let autoSlideIntervals = [] // 각 카테고리별 자동 슬라이드 타이머
 
-// 뉴스 데이터를 가져오는 함수
 const fetchNews = async () => {
   try {
     const response = await recommendNews()
     newsList.value = Object.entries(response).map(([category, news]) => ({
       category,
-      newsItems: Array.isArray(news) ? news : [news],
-      currentNewsIndex: 0
-    }))
-    console.log('Fetched News:', newsList.value) // 가져온 뉴스 리스트를 콘솔에 출력
+      newsItems: Array.isArray(news) ? news.map(item => ({
+        ...item,
+        imageUrl: item.imageUrl // imageUrl 추가
+      })) : [{ ...news, imageUrl: news.imageUrl }], 
+      currentNewsIndex: 0 
+    }));
   } catch (error) {
     console.error('뉴스를 가져오는 데 실패했습니다:', error)
   }
 }
 
-// 뉴스 페이지로 이동하는 함수
-const goToNews = () => {
-  router.push('/news') // 뉴스 페이지로 이동
+const goToNews = (category) => { 
+  router.push({ path: '/news', query: { category } });
 }
 
-// 다음 뉴스로 이동하는 함수
-const nextNews = (categoryIndex) => {
-  const category = newsList.value[categoryIndex]
-  category.currentNewsIndex = (category.currentNewsIndex + 1) % category.newsItems.length // 다음 뉴스로 순환
-}
+// 자동 슬라이드 기능
+const slideInterval = ref(null)
 
-// 이전 뉴스로 이동하는 함수
-const prevNews = (categoryIndex) => {
-  const category = newsList.value[categoryIndex]
-  category.currentNewsIndex =
-    (category.currentNewsIndex - 1 + category.newsItems.length) % category.newsItems.length // 이전 뉴스로 순환
-}
-
-// 자동으로 다음 뉴스로 넘어가는 함수
 const startAutoSlide = () => {
-  autoSlideIntervals = newsList.value.map((_, index) => {
-    return setInterval(() => {
-      nextNews(index) // 각 카테고리의 뉴스 인덱스를 증가시킴
-    }, 3000) // 3초마다 자동으로 다음 뉴스로 넘어감
-  })
+  slideInterval.value = setInterval(() => {
+    newsList.value.forEach((category) => {
+      if (category.currentNewsIndex < category.newsItems.length - 1) {
+        category.currentNewsIndex++;
+      } else {
+        category.currentNewsIndex = 0; // 마지막 뉴스에서 첫 번째 뉴스로 돌아감
+      }
+    });
+  }, 6000);
 }
 
 onMounted(() => {
@@ -85,102 +68,74 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  autoSlideIntervals.forEach((interval) => clearInterval(interval)) // 타이머 정리
+  clearInterval(slideInterval.value);
 })
 </script>
 
 <style scoped>
-.newsList {
-  justify-content: space-between;
-  margin: 40px 0 20px;
-}
-
-.newsList li {
-  border-top: 3px solid #000;
-  width: calc(32.5% - 10px);
-  gap: 0 20px;
-  color: #222;
-  padding: 24px 0 52px;
-  cursor: pointer;
-}
-
-.newsList li:hover {
-  color: #5f7dff;
-}
-
-.newsList li .image-box {
+.slider-container {
+  position: relative;
   width: 100%;
-  height: 200px;
-}
-
-.newsList li .empty {
-  text-align: center;
-  line-height: 200px;
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: -1px;
-  color: #666;
-  background-color: #f7f7f7;
-}
-
-.newsList li p.title {
-  margin: 12px 0;
-  font-size: 22px;
-  font-weight: 600;
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  margin: auto;
 }
 
-.newsList li .date {
-  font-size: 18px;
-  font-weight: 400;
-  color: #666;
+.slider {
+  display: flex; 
 }
 
-/* .popular-news h3 {
-  font-size: 1.2em;
-  color: #333;
-}
-
-.popular-news ul {
-  list-style: none;
-  padding: 0;
-}
-
-.popular-news li {
-  margin-bottom: 8px;
+.slider-card {
+  width: calc(33.33% - 40px); 
+  background-color: #fff; 
+  border-top: 2px solid #6846F5; 
+  border-bottom: 2px solid #CFC6FD; 
+  padding: 10px; 
+  box-shadow: none; 
+  cursor: pointer;
+  margin: 0 20px; 
+  height: 130px; 
   display: flex;
+  flex-direction: column; 
   justify-content: space-between;
+  border-radius: 0; 
+  transition: transform 0.3s; 
 }
 
-.news-card {
-  width: 30%; 
-  background: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  text-align: center;
-  transition: transform 0.3s ease;
+.slider-card:hover {
+  transform: translateY(-5px); /* 마우스 오버 시 카드 상승 효과 */
 }
 
-.news-item {
-  margin: 10px 0; 
+.card-content {
+  display: flex;
+  justify-content: space-between; 
+  flex-grow: 1;
 }
 
-.news-card:hover {
-  transform: scale(1.05);
+.text-content {
+  flex: 0 0 60%; 
+  overflow: hidden; 
+}
+
+.news-category {
+  font-size: 1rem; 
+  margin: 0; 
+  font-weight: bold;
 }
 
 .news-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin: 10px 0;
+  font-size: 0.9rem; 
+  margin: 5px 0; /* 제목 간격 조정 */
   color: #333;
 }
 
-.router-link {
-  margin-top: 10px;
-  display: inline-block;
-} */
+.news-image {
+  width: 100px; 
+  height: 100px; 
+  object-fit: cover; /* 비율 유지하며 잘라내기 */
+  margin-left: 10px; 
+  flex: 0 0 40%; 
+  border-radius: 4px; 
+}
+
+
 </style>

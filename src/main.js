@@ -1,7 +1,7 @@
 // import './assets/main.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import '@fortawesome/fontawesome-free/css/all.css'
-import 'vue-awesome-paginate/dist/style.css'
+//import 'vue-awesome-paginate/dist/style.css'
 
 // default css
 import '@/assets/css/fonts.css'
