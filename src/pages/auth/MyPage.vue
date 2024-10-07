@@ -10,10 +10,8 @@
 
     <div class="bottom-section">
       <div class="bottom-components">
-        <MyPoint @update="handleUpdate" />
-        <MyBoard />
         <div :style="{ width: '35%' }">
-          <MyPoint />
+          <MyPoint @update="handleUpdate" />
         </div>
         <div :style="{ width: '65%' }">
           <MyBoard />
@@ -30,12 +28,12 @@ import MyAsset from '@/components/MyPage/MyAsset.vue'
 import MyBoard from '@/components/MyPage/MyBoard.vue'
 
 const handleUpdate = () => {
-  refreshPage();
-};
+  refreshPage()
+}
 
 const refreshPage = () => {
-  window.location.reload(); // 페이지 새로 고침
-};
+  window.location.reload() // 페이지 새로 고침
+}
 </script>
 
 <style scoped>

@@ -1,13 +1,35 @@
 <template>
   <div class="infinite-scroll">
-    <div class="category-filter">
-      <label for="category-select">카테고리 선택:</label>
-      <select id="category-select" v-model="selectedCategory" @change="resetFilter">
-        <option value="">전체</option>
-        <option value="경제">경제</option>
-        <option value="부동산">부동산</option>
-        <option value="증권">증권</option>
-      </select>
+    <div class="filter-bar">
+      <input type="radio" id="all" value="" v-model="selectedCategory" @change="resetFilter" />
+      <label for="all" :class="{ active: selectedCategory === '' }">전체</label>
+
+      <input
+        type="radio"
+        id="economy"
+        value="경제"
+        v-model="selectedCategory"
+        @change="resetFilter"
+      />
+      <label for="economy" :class="{ active: selectedCategory === '경제' }">경제</label>
+
+      <input
+        type="radio"
+        id="real-estate"
+        value="부동산"
+        v-model="selectedCategory"
+        @change="resetFilter"
+      />
+      <label for="real-estate" :class="{ active: selectedCategory === '부동산' }">부동산</label>
+
+      <input
+        type="radio"
+        id="stocks"
+        value="증권"
+        v-model="selectedCategory"
+        @change="resetFilter"
+      />
+      <label for="stocks" :class="{ active: selectedCategory === '증권' }">증권</label>
     </div>
 
     <div class="news-container">
@@ -28,133 +50,91 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'; 
-import { getNews, getNewsBycategory } from '@/api/newsApi';
-import { useRoute } from 'vue-router';
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { getNews, getNewsBycategory } from '@/api/newsApi'
+import { useRoute } from 'vue-router'
 
-const newsList = ref([]);
-const currentPage = ref(1);
-const loading = ref(false);
-const noMoreData = ref(false);
-const selectedCategory = ref('');
+const newsList = ref([])
+const currentPage = ref(1)
+const loading = ref(false)
+const noMoreData = ref(false)
+const selectedCategory = ref('')
 
-const route = useRoute();
-selectedCategory.value = route.query.category || '';
+const route = useRoute()
+selectedCategory.value = route.query.category || ''
 
 // 필터링된 뉴스 리스트
 const filteredNewsList = computed(() => {
   return newsList.value.filter((news) => {
-    const newsCategory = news.category.trim();
-    const selected = selectedCategory.value.trim();
-    return selected === '' || newsCategory === selected;
-  });
-});
+    const newsCategory = news.category.trim()
+    const selected = selectedCategory.value.trim()
+    return selected === '' || newsCategory === selected
+  })
+})
 
 // 뉴스 로드 함수
 const loadNews = async () => {
-  if (loading.value || noMoreData.value) return;
-  loading.value = true;
+  if (loading.value || noMoreData.value) return
+  loading.value = true
 
-  await new Promise((resolve) => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 500))
 
   try {
-    let data;
+    let data
     if (selectedCategory.value) {
-      data = await getNewsBycategory(currentPage.value, selectedCategory.value);
+      data = await getNewsBycategory(currentPage.value, selectedCategory.value)
     } else {
-      data = await getNews(currentPage.value);
+      data = await getNews(currentPage.value)
     }
     if (data.list && data.list.length > 0) {
-      newsList.value = [...newsList.value, ...data.list];
-      currentPage.value++;
+      newsList.value = [...newsList.value, ...data.list]
+      currentPage.value++
     } else {
-      noMoreData.value = true;
+      noMoreData.value = true
     }
   } catch (error) {
-    console.error('뉴스를 불러오는 중 오류 발생', error);
+    console.error('뉴스를 불러오는 중 오류 발생', error)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 
 const resetFilter = () => {
-  currentPage.value = 1;
-  newsList.value = [];
-  noMoreData.value = false;
-  loadNews();
-};
-
+  currentPage.value = 1
+  newsList.value = []
+  noMoreData.value = false
+  loadNews()
+}
 
 const formatDate = (dateString) => {
-  // 공백을 'T'로 바꿔 ISO 형식으로 변환
-  const isoString = dateString.replace(' ', 'T');
-  const date = new Date(isoString + 'Z'); // UTC로 해석
-  
-  // 한국 시간으로 변환
+  const isoString = dateString.replace(' ', 'T')
+  const date = new Date(isoString + 'Z')
+
   return date.toLocaleDateString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
-    day: '2-digit',
-  });
-};
-
+    day: '2-digit'
+  })
+}
 
 onMounted(() => {
-  loadNews();
-  window.addEventListener('scroll', handleScroll);
-});
+  loadNews()
+  window.addEventListener('scroll', handleScroll)
+})
 
 const handleScroll = () => {
-  const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10;
+  const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10
   if (scrollBottom && !loading.value) {
-    loadNews(); 
+    loadNews()
   }
-};
+}
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-});
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <style scoped>
-body {
-  background-color: #f9f9f9;
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 20px;
-}
-
-.infinite-scroll {
-  max-width: 800px;
-  margin: auto;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-}
-
-.category-filter {
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-}
-
-.category-filter label {
-  margin-right: 10px;
-  font-weight: bold;
-}
-
-.category-filter select {
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  transition: border-color 0.3s;
-}
-
-.category-filter select:hover {
-  border-color: #aaa;
-}
-
 .news-container {
   display: flex;
   flex-wrap: wrap;
@@ -163,8 +143,8 @@ body {
 .news-item {
   width: 45%;
   margin: 2%;
-  border-top: 2px solid #6846F5;
-  border-bottom: 2px solid #CFC6FD;
+  border-top: 2px solid #6846f5;
+  border-bottom: 2px solid #cfc6fd;
   border-left: none;
   border-right: none;
   border-radius: 0;
@@ -177,7 +157,9 @@ body {
   position: relative;
   background-color: #ffffff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .news-item:hover {
@@ -220,27 +202,13 @@ body {
   right: 10px;
 }
 
-.loading,
-.no-more {
-  text-align: center;
-  padding: 20px;
-  color: #555;
-  font-size: 1.2em;
-  border-top: 1px solid #ddd;
-  margin-top: 20px;
-}
-
 @media (max-width: 600px) {
   .infinite-scroll {
     padding: 10px;
   }
 
-  .category-filter {
+  .filter-bar {
     flex-direction: column;
-  }
-
-  .category-filter label {
-    margin-bottom: 5px;
   }
 
   .news-item {
