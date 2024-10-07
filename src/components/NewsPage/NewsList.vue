@@ -1,13 +1,17 @@
 <template>
   <div class="infinite-scroll">
-    <div class="category-filter">
-      <label for="category-select">카테고리 선택:</label>
-      <select id="category-select" v-model="selectedCategory" @change="resetFilter">
-        <option value="">전체</option>
-        <option value="경제">경제</option>
-        <option value="부동산">부동산</option>
-        <option value="증권">증권</option>
-      </select>
+    <div class="filter-bar">
+      <input type="radio" id="all" value="" v-model="selectedCategory" @change="resetFilter" />
+      <label for="all" :class="{ active: selectedCategory === '' }">전체</label>
+
+      <input type="radio" id="economy" value="경제" v-model="selectedCategory" @change="resetFilter" />
+      <label for="economy" :class="{ active: selectedCategory === '경제' }">경제</label>
+
+      <input type="radio" id="real-estate" value="부동산" v-model="selectedCategory" @change="resetFilter" />
+      <label for="real-estate" :class="{ active: selectedCategory === '부동산' }">부동산</label>
+
+      <input type="radio" id="stocks" value="증권" v-model="selectedCategory" @change="resetFilter" />
+      <label for="stocks" :class="{ active: selectedCategory === '증권' }">증권</label>
     </div>
 
     <div class="news-container">
@@ -84,20 +88,16 @@ const resetFilter = () => {
   loadNews();
 };
 
-
 const formatDate = (dateString) => {
-  // 공백을 'T'로 바꿔 ISO 형식으로 변환
   const isoString = dateString.replace(' ', 'T');
-  const date = new Date(isoString + 'Z'); // UTC로 해석
+  const date = new Date(isoString + 'Z');
   
-  // 한국 시간으로 변환
   return date.toLocaleDateString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
   });
 };
-
 
 onMounted(() => {
   loadNews();
@@ -133,26 +133,42 @@ body {
   padding: 20px;
 }
 
-.category-filter {
-  margin-bottom: 20px;
+.filter-bar {
   display: flex;
+  justify-content: center;
   align-items: center;
+  gap: 0.2rem;
+  padding: 0.5rem;
+  margin: 0;
 }
 
-.category-filter label {
-  margin-right: 10px;
-  font-weight: bold;
+.filter-bar input[type='radio'] {
+  display: none;
 }
 
-.category-filter select {
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  transition: border-color 0.3s;
+.filter-bar label {
+  min-width: 100px;
+  text-align: center;
+  padding: 0.8rem 1rem;
+  border-radius: 20px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1;
+  color: #222;
+  letter-spacing: -1px;
+  transition: all 0.6s;
+  cursor: pointer;
 }
 
-.category-filter select:hover {
-  border-color: #aaa;
+.filter-bar label:hover,
+.filter-bar label:active {
+  background-color: #6846f5;
+  color: #fff;
+}
+
+.filter-bar label.active {
+  background-color: #6846f5;
+  color: #fff;
 }
 
 .news-container {
@@ -235,12 +251,8 @@ body {
     padding: 10px;
   }
 
-  .category-filter {
+  .filter-bar {
     flex-direction: column;
-  }
-
-  .category-filter label {
-    margin-bottom: 5px;
   }
 
   .news-item {
