@@ -1,19 +1,22 @@
 <template>
+  <!-- <h2 class="title">자산 비중</h2> -->
   <div class="asset-distribution">
-    <h2 class="asset-distribution__title">자산 비중</h2>
-    <p v-if="highestAssetType" class="asset-distribution__highlight">
-      보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
-    </p>
-    <div class="asset-distribution__content">
-      <div class="asset-distribution__chart">
-        <ChartComponent type="doughnut" :data="chartData" :options="chartOptions" />
+    <div class="asset-content">
+      <div v-if="highestAssetType" class="asset-highlight">
+        보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
       </div>
-      <div class="asset-distribution__legend">
-        <div v-for="asset in sortedAssetDetails" :key="asset.name" class="asset-type">
-          <span class="asset-color" :style="{ backgroundColor: getAssetColor(asset.name) }"></span>
-          <span class="asset-name">{{ assetNames[asset.name] }}</span>
-          <span class="asset-percentage">{{ calculatePercentage(asset.total) }}%</span>
-          <span class="asset-amount">{{ formatNumber(asset.total) }}원</span>
+      <div class="asset-chart">
+        <ChartComponent type="doughnut" :data="chartData" :options="chartOptions" />
+        <div class="asset-legend">
+          <div v-for="asset in sortedAssetDetails" :key="asset.name" class="asset-type">
+            <span
+              class="asset-color"
+              :style="{ backgroundColor: getAssetColor(asset.name) }"
+            ></span>
+            <span class="asset-name">{{ assetNames[asset.name] }}</span>
+            <span class="asset-percentage">{{ calculatePercentage(asset.total) }}%</span>
+            <span class="asset-amount">{{ formatNumber(asset.total) }}원</span>
+          </div>
         </div>
       </div>
     </div>
@@ -124,37 +127,22 @@ const chartOptions = computed(() => ({
 
 <style scoped>
 .asset-distribution {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-bottom: 20px;
+  border-radius: 25px;
+  padding: 2rem 1.7rem;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
 }
 
-.asset-distribution__title {
-  font-size: 1.2rem;
-  color: #333;
-  margin-bottom: 5px;
+.asset-distribution .asset-content {
 }
 
 .asset-distribution__highlight {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 15px;
 }
 
 .asset-distribution__content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .asset-distribution__chart-container {
-  width: 50%;
-  max-width: 300px;
-  height: 300px;
-  position: relative;
-  overflow: hidden;
 }
 
 .asset-distribution__legend {

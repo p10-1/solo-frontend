@@ -1,7 +1,18 @@
 <template>
   <div class="kb-product-list">
-    <div v-if="loading" class="loading">로딩 중...</div>
-    <div v-else-if="error" class="error">{{ error }}</div>
+    <h2 class="title">
+      "<span class="text-accent">ㅇㅇ</span>" 님을 위한
+      <span class="text-accent">맞춤 추천 상품</span>이에요
+      <span class="text-accent"><i class="fa-regular fa-face-smile"></i></span>
+    </h2>
+    <div v-if="loading" class="loading margin-top-3rem">
+      <i class="fa-solid fa-spinner margin-bottom-1rem"></i>
+      <br />로딩 중...
+    </div>
+    <div v-else-if="error" class="error">
+      <i class="fa-solid fa-xmark argin-bottom-1rem"></i>
+      {{ error }}
+    </div>
     <div class="product-cards">
       <ProductKBItem
         v-for="product in products"
@@ -55,22 +66,26 @@ export default {
 
 <style scoped>
 .kb-product-list {
+  margin-top: -2rem;
+}
+
+.kb-product-list .title {
+  text-align: center;
+  line-height: 2.5rem;
+  margin: 2rem 1rem 1.5rem;
+  padding: 0;
+  border: none;
+  word-break: keep-all;
+}
+
+.kb-product-list .product-cards {
   display: flex;
-  flex-direction: column; /* 세로로 정렬 */
-}
-
-.loading {
-  text-align: center; /* 중앙 정렬 */
-}
-
-.error {
-  color: red; /* 에러 메시지 색상 */
-  text-align: center; /* 중앙 정렬 */
-}
-
-.product-cards {
-  display: flex; /* 가로로 펼치기 */
-  flex-wrap: wrap; /* 카드가 여러 줄로 나열되도록 */
-  justify-content: space-around; /* 카드 간격 조정 */
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 17px;
+  background: #f3f3ff;
+  padding: 2rem 1.5rem;
+  min-height: 3rem;
+  border-radius: 28px;
 }
 </style>

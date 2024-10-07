@@ -3,8 +3,7 @@
     <h2 class="title">나의 <span class="text-accent">자산 관리 유형</span>은 어디?</h2>
     <br />
     <div v-if="selectedType" class="user-type-info">
-      <span class="text-accent text-black"
-        ><i class="fa-solid fa-circle-info"></i> {{ nickName }}</span
+      <span class="text-accent"><i class="fa-solid fa-circle-info"></i> {{ nickName }}</span
       >님의 자산 타입은 <span class="text-accent">"{{ selectedType }}"</span> 입니다.
     </div>
     <div v-else class="text-p">
@@ -44,12 +43,16 @@
   color: #333;
 }
 .my-type .user-type-info {
-  font-size: 18px;
-  letter-spacing: -0.5px;
+  color: #555;
+  letter-spacing: -0.7px;
   padding: 12px 16px;
-  border-radius: 8px;
-  background: var(--gray020, #f4f6fa);
+  border-radius: 12px;
+  background: var(--gray020, #fffbec);
   color: var(--font-secondary, #475067);
+}
+.my-type .user-type-info i {
+  color: #f7d095;
+  margin-right: 5px;
 }
 .my-type .user-type-info .text-accent {
   font-size: 23px;
@@ -62,7 +65,7 @@
 .my-type .button-container .btn {
   padding: 1.6rem 1.4rem;
   border-radius: 5px;
-  border: 3px solid #cacaca;
+  border: 3px solid #e4deff;
   background-color: #fcfcfc;
   width: 100%;
   transition: all 0.6s;
@@ -100,78 +103,63 @@
 }
 </style>
 
-<script>
-import axios from 'axios'
+<script setup>
+import { ref, onMounted } from 'vue';
+import { getType, updateType } from '@/api/mypageApi'; // api.js에서 함수 가져오기
 
-export default {
-  data() {
-    return {
-      selectedType: null,
-      nickName: '', // 사용자 이름 변수 추가
-      assetTypes: [
-        {
-          title: '위험 추구형',
-          description: 'High Risk! High Return!',
-          icon: '⚠️'
-        },
-        {
-          title: '자산 분산형',
-          description: '분산 투자가 자산관리의 왕도!',
-          icon: '💨'
-        },
-        {
-          title: '안정 추구형',
-          description: 'Lisk는 싫어 안전이 좋아',
-          icon: '🌱'
-        },
-        {
-          title: '대출 우선형',
-          description: '대출로 인해 더 많은 투자 기회!',
-          icon: '🏦'
-        }
-      ]
-    }
+const selectedType = ref(null);
+const nickName = ref('');
+const assetTypes = ref([
+  {
+    title: '위험 추구형',
+    description: 'High Risk! High Return!',
+    icon: '⚠️',
   },
-  mounted() {
-    // 세션 스토리지에서 userInfo 가져오기
-    const userInfo = JSON.parse(sessionStorage.getItem('userInfo')) // 객체로 변환
-
-    // nickName 설정
-    this.nickName = userInfo ? userInfo.nickName : '사용자' // 기본값 설정
-    this.fetchUserAsset() // 사용자 자산 가져오기
+  {
+    title: '자산 분산형',
+    description: '분산 투자가 자산관리의 왕도!',
+    icon: '💨',
   },
-  methods: {
-    async fetchUserAsset() {
-      try {
-        const response = await axios.get('/api/mypage/getType')
-        const userAsset = response.data
+  {
+    title: '안정 추구형',
+    description: 'Lisk는 싫어 안전이 좋아',
+    icon: '🌱',
+  },
+  {
+    title: '대출 우선형',
+    description: '대출로 인해 더 많은 투자 기회!',
+    icon: '🏦',
+  },
+]);
 
-        console.log('사용자 자산:', userAsset) // 응답 로그 추가
-
-        this.selectedType = userAsset // userAsset이 문자열이므로 그대로 할당
-      } catch (error) {
-        console.error('사용자 자산 로드 실패:', error)
-      }
-    },
-    selectType(type) {
-      this.selectedType = type.title
-      this.updateType(type)
-    },
-    async updateType(type) {
-      console.log('자산:', type.title)
-      try {
-        const response = await axios.post('/api/mypage/updateType', {
-          selectedType: type.title
-        })
-        console.log('서버 응답:', response.data)
-        alert('유형이 성공적으로 업데이트되었습니다.')
-      } catch (error) {
-        console.error('업데이트 실패:', error)
-        alert('업데이트 실패. 다시 시도해 주세요.')
-      }
-    }
+const loadUserAsset = async () => {
+  try {
+    const userAsset = await getType(); // 요청 호출
+    selectedType.value = userAsset;
+  } catch (error) {
+    alert('사용자 자산을 가져오는 데 실패했습니다.');
   }
-}
+};
+
+const selectType = (type) => {
+  selectedType.value = type.title;
+  updateTypeValue(type);
+};
+
+const updateTypeValue = async (type) => {
+  try {
+    const response = await updateType(type.title); // 요청 호출
+    alert(response);
+  } catch (error) {
+    alert('업데이트 실패. 다시 시도해 주세요.');
+  }
+};
+
+onMounted(() => {
+  const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+  nickName.value = userInfo ? userInfo.nickName : '사용자';
+  loadUserAsset(); // 사용자 자산 로드
+});
 </script>
 
 <style scoped>

@@ -1,14 +1,16 @@
 <template>
-  <div class="asset-list">
-    <h1 class="asset-list__title">자산 정보</h1>
+  <div class="asset-list-continer">
+    <h2 class="title">
+      "<span class="text-accent">ㅇㅇ</span>"님을 위해
+      <span class="text-accent">맞춤 자산 분석</span>을 해드려요
+      <span class="text-accent"><i class="fa-regular fa-face-smile"></i></span>
+    </h2>
     <div v-if="loading" class="asset-list__loading">Loading...</div>
     <div v-else-if="error" class="asset-list__error">{{ error }}</div>
     <template v-else-if="processedData">
       <div class="asset-list__grid">
-        <div class="asset-list__section asset-list__total">
+        <div class="asset-section asset-total">
           <TotalAsset :totalAmount="processedData.totalAsset" />
-        </div>
-        <div class="asset-list__section asset-list__distribution">
           <Distribution :assetDetails="processedData.assetDetails" />
         </div>
         <div class="asset-list__section asset-list__comparison-container">
@@ -205,38 +207,34 @@ onMounted(loadData)
 </script>
 
 <style scoped>
-.asset-list {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+.asset-list-continer {
+  margin-top: -2rem;
 }
-
-.asset-list__title {
+.asset-list-continer .title {
   text-align: center;
-  margin-bottom: 30px;
-  color: #333;
+  line-height: 2.5rem;
+  margin: 2rem 1rem 1.5rem;
+  padding: 0;
+  border: none;
+  word-break: keep-all;
 }
 
-.asset-list__grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 30px;
-}
-
-.asset-list__section {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+.asset-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 17px;
+  padding: 2rem 1.5rem;
+  min-height: 3rem;
+  border-radius: 28px;
+  background-color: #f3f3ff;
+  align-items: flex-start;
 }
 
 .asset-list__total,
 .asset-list__distribution {
-  grid-column: 1 / -1;
 }
 
 .asset-list__comparison-container {
-  grid-column: 1 / -1;
 }
 
 .asset-list__comparison-charts {

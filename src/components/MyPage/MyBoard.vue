@@ -1,45 +1,44 @@
 <template>
   <div class="container my-4">
-    <h2 class="title">내가 작성한 글</h2>
+    <div class="title-box">
+      <h2 class="title">내가 <span class="text-accent font-weigth-300">작성한 글</span></h2>
+      <router-link to="borad" class="link"><i class="fa-solid fa-plus"></i> 더보기</router-link>
+    </div>
     <div class="scroll-container">
-      <table class="table table-striped">
+      <table class="table">
         <colgroup>
-          <col width="10%" />
-          <col width="50%" />
-          <col width="10%" />
-          <col width="10%" />
-          <col width="10%" />
-          <col width="10%" />
+          <col width="13%" />
+          <col width="60%" />
+          <col width="27%" />
         </colgroup>
         <thead>
           <tr>
             <th>번호</th>
             <th class="text-align-left">제목</th>
-            <th>좋아요</th>
-            <th>댓글</th>
             <th>작성일</th>
-            <th>조회수</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="board in boards" :key="board.boardNo">
             <td>{{ board.boardNo }}</td>
-            <td>
+            <td class="text-align-left">
               <router-link
                 :to="{
                   name: 'board/detail',
                   params: { boardNo: board.boardNo }
                 }"
               >
-                {{ board.title }}
-                {{ board.likes }}
-                {{ board.comments }}
+                <div class="link">
+                  {{ board.title }}
+                </div>
+                <ul class="table-ex-info">
+                  <li><i class="fa-solid fa-user"></i> {{ board.views }}</li>
+                  <li><i class="fa-solid fa-heart"></i> {{ board.likes }}</li>
+                  <li><i class="fa-solid fa-comment"></i> {{ board.comments }}</li>
+                </ul>
               </router-link>
             </td>
-            <td></td>
-            <td></td>
-            <td>{{ formatDate(board.updateDate) }}</td>
-            <td>{{ board.views }}</td>
+            <td class="date">{{ formatDate(board.updateDate) }}</td>
           </tr>
         </tbody>
       </table>
@@ -78,21 +77,11 @@ onMounted(() => {
 
 <style scoped>
 .scroll-container {
-  max-height: 300px;
+  min-height: 20rem;
+  max-height: 38rem;
   width: 100%;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   border: 1px solid #ddd;
-}
-
-.table th {
-  height: 40px;
-  padding: 0 20px !important;
-  border-bottom: 1px solid #ddd;
-  background: #f7f7f7;
-  color: #222;
-  text-align: center !important;
-  vertical-align: middle;
-}
-.table td {
 }
 </style>

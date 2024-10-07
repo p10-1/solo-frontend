@@ -1,11 +1,11 @@
 <template>
   <div class="infinite-scroll">
-    <h1>예적금 상품 목록</h1>
+    <h2 class="title margin-top-3rem"><span class="text-accent">예ㆍ적금 상품</span> 목록</h2>
     <div class="search-bar">
       <!-- SearchBar 컴포넌트 사용 -->
       <SearchBar v-model="keyword" @search="searchProducts" />
     </div>
-    <ul>
+    <ul class="product-list">
       <ProductItem
         v-for="product in list"
         :key="`${product.finPrdtNm}-${product.spclCnd}`"
@@ -14,8 +14,12 @@
     </ul>
 
     <!-- 로딩 상태 표시 -->
-    <div v-if="loading" class="loading">로딩 중...</div>
-    <div v-if="noMoreData" class="no-more">더 이상 데이터가 없습니다.</div>
+    <div v-if="loading" class="loading margin-top-3rem">
+      <i class="fa-solid fa-spinner margin-bottom-1rem"></i><br />로딩 중...
+    </div>
+    <div v-if="noMoreData" class="no-more">
+      <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />상품이 더 이상 없습니다.
+    </div>
   </div>
 </template>
 
@@ -92,14 +96,13 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.loading {
-  text-align: center;
-  padding: 20px;
-  color: gray;
-}
-.no-more {
-  text-align: center;
-  padding: 20px;
-  color: gray;
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 17px;
+  padding: 2rem 1.5rem;
+  min-height: 3rem;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #e4deff 63.02%, #fff);
 }
 </style>
