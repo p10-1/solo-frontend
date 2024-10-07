@@ -32,3 +32,15 @@ export const fetchAssetAverages = async () => {
     handleApiError(error, '평균 자산 데이터를 가져오는 데 실패했습니다:')
   }
 }
+
+export const fetchAssetComparison = async (type) => {
+  try {
+    console.log('AssetApi: Sending request for type:', type)
+    const response = await axios.get(`${API_URL}/comparison/${encodeURIComponent(type)}`)
+    console.log('AssetApi: Received response:', response.data)
+    return response.data
+  } catch (error) {
+    console.error('AssetApi: Failed to fetch asset comparison data:', error.response || error)
+    throw error
+  }
+}

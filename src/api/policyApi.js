@@ -1,12 +1,11 @@
 //src/api/policyApi.js
 import axios from 'axios'
 
-const API_URL = 'http://localhost:9000/api/policy'
+const API_URL = '/api/policy'
 const DEFAULT_AMOUNT = 10
 
 export const fetchPolicies = async (currentPage, keyword, policyType) => {
   try {
-    console.log(policyType)
     const response = await axios.get(`${API_URL}/list`, {
       params: {
         page: currentPage,
@@ -15,7 +14,6 @@ export const fetchPolicies = async (currentPage, keyword, policyType) => {
         category: policyType
       }
     })
-    console.log('fetch: ', response.data)
     return response.data
   } catch (error) {
     console.error('정책을 가져오는 데 실패했습니다:', error)

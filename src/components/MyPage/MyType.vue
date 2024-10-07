@@ -28,6 +28,68 @@
   </div>
 </template>
 
+<script setup>
+import { ref, onMounted } from 'vue'
+import { getType, updateType } from '@/api/mypageApi' // api.js에서 함수 가져오기
+
+const selectedType = ref(null)
+const nickName = ref('')
+const assetTypes = ref([
+  {
+    title: '위험 추구형',
+    description: 'High Risk! High Return!',
+    icon: '⚠️'
+  },
+  {
+    title: '자산 분산형',
+    description: '분산 투자가 자산관리의 왕도!',
+    icon: '💨'
+  },
+  {
+    title: '안정 추구형',
+    description: 'Risk는 싫어 안전이 좋아',
+    icon: '🌱'
+  },
+  {
+    title: '대출 우선형',
+    description: '대출로 인해 더 많은 투자 기회!',
+    icon: '🏦'
+  }
+])
+
+const loadUserAsset = async () => {
+  try {
+    const userAsset = await getType() // 요청 호출
+    selectedType.value = userAsset
+  } catch (error) {
+    alert('사용자 자산을 가져오는 데 실패했습니다.')
+  }
+}
+
+const selectType = (type) => {
+  selectedType.value = type.title
+  updateTypeValue(type)
+}
+
+const updateTypeValue = async (type) => {
+  try {
+    const response = await updateType(type.title)
+    // response가 "success"가 아닐 경우만 alert
+    if (response !== 'success') {
+      alert(response)
+    }
+  } catch (error) {
+    alert('업데이트 실패. 다시 시도해 주세요.')
+  }
+}
+
+onMounted(() => {
+  const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+  nickName.value = userInfo ? userInfo.nickName : '사용자'
+  loadUserAsset() // 사용자 자산 로드
+})
+</script>
+
 <style scope>
 .my-type h2.title {
   font-weight: 300;
@@ -105,64 +167,5 @@
   letter-spacing: -0.5px;
 }
 </style>
-
-<script setup>
-import { ref, onMounted } from 'vue'
-import { getType, updateType } from '@/api/mypageApi' // api.js에서 함수 가져오기
-
-const selectedType = ref(null)
-const nickName = ref('')
-const assetTypes = ref([
-  {
-    title: '위험 추구형',
-    description: 'High Risk! High Return!',
-    icon: '⚠️'
-  },
-  {
-    title: '자산 분산형',
-    description: '분산 투자가 자산관리의 왕도!',
-    icon: '💨'
-  },
-  {
-    title: '안정 추구형',
-    description: 'Lisk는 싫어 안전이 좋아',
-    icon: '🌱'
-  },
-  {
-    title: '대출 우선형',
-    description: '대출로 인해 더 많은 투자 기회!',
-    icon: '🏦'
-  }
-])
-
-const loadUserAsset = async () => {
-  try {
-    const userAsset = await getType() // 요청 호출
-    selectedType.value = userAsset
-  } catch (error) {
-    alert('사용자 자산을 가져오는 데 실패했습니다.')
-  }
-}
-
-const selectType = (type) => {
-  selectedType.value = type.title
-  updateTypeValue(type)
-}
-
-const updateTypeValue = async (type) => {
-  try {
-    const response = await updateType(type.title) // 요청 호출
-    alert(response)
-  } catch (error) {
-    alert('업데이트 실패. 다시 시도해 주세요.')
-  }
-}
-
-onMounted(() => {
-  const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-  nickName.value = userInfo ? userInfo.nickName : '사용자'
-  loadUserAsset() // 사용자 자산 로드
-})
-</script>
 
 <style scoped></style>
