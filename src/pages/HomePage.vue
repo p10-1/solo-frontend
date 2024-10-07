@@ -11,7 +11,6 @@
     </div>
   </div>
   <NewsCard />
-  <br/><br/>
   <div class="layout-2">
     <PolicyCard />
     <ProductCard />

@@ -84,10 +84,6 @@ const resetFilter = () => {
   loadNews();
 };
 
-// const formatDate = (dateString) => {
-//   const date = new Date(dateString);
-//   return date.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 반환
-// };
 
 const formatDate = (dateString) => {
   // 공백을 'T'로 바꿔 ISO 형식으로 변환
@@ -111,7 +107,7 @@ onMounted(() => {
 const handleScroll = () => {
   const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10;
   if (scrollBottom && !loading.value) {
-    loadNews(); // 추가 데이터 로드
+    loadNews(); 
   }
 };
 
@@ -165,63 +161,63 @@ body {
 }
 
 .news-item {
-  width: 45%; /* 기본적으로 한 줄에 두 개 표시 */
+  width: 45%;
   margin: 2%;
-  border-top: 2px solid #6846F5; /* 위 테두리 설정 (굵고 어두운 색상) */
-  border-bottom: 2px solid #CFC6FD; /* 아래 테두리 설정 (굵고 어두운 색상) */
-  border-left: none; /* 좌측 테두리 없음 */
-  border-right: none; /* 우측 테두리 없음 */
-  border-radius: 0; /* 모서리 둥글게 하지 않음 */
+  border-top: 2px solid #6846F5;
+  border-bottom: 2px solid #CFC6FD;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
   padding: 10px;
   box-sizing: border-box;
-  height: 125px; /* 카드 높이 설정 (조정 가능) */
+  height: 125px;
   display: flex;
-  flex-direction: column; /* 세로 방향으로 정렬 */
-  justify-content: space-between; /* 요소 간의 공간을 균등하게 배분 */
-  position: relative; /* 날짜를 절대 위치로 설정하기 위해 필요 */
-  background-color: #ffffff; /* 카드 배경색 */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 카드 그림자 */
-  transition: transform 0.3s, box-shadow 0.3s; /* 부드러운 변환 효과 */
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  background-color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .news-item:hover {
-  transform: translateY(-5px); /* 마우스 오버 시 카드 상승 효과 */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 강화 */
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .image-title-cell {
   display: flex;
-  align-items: center; /* 이미지와 제목을 상단 정렬 */
-  height: 100px; /* 고정 높이 설정 */
+  align-items: center;
+  height: 100px;
 }
 
 .news-image {
-  width: 100px; /* 이미지 너비 설정 */
-  height: 80%; /* 부모의 높이에 맞춰서 100% 설정 */
-  object-fit: cover; /* 비율을 유지하면서 크기에 맞춤 (잘림) */
+  width: 100px;
+  height: 80%;
+  object-fit: cover;
 }
 
 .title-container {
-  flex-grow: 1; /* 제목이 가능한 한 많은 공간을 차지하도록 함 */
+  flex-grow: 1;
   margin-left: 15px;
 }
 
 .title-container a {
-  font-weight: bold; /* 제목 굵게 */
-  color: #333; /* 제목 색상 */
-  text-decoration: none; /* 링크 밑줄 제거 */
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
 }
 
 .title-container a:hover {
-  text-decoration: underline; /* 링크에 마우스 오버 시 밑줄 추가 */
+  text-decoration: underline;
 }
 
 .pub-date {
   font-size: 0.8em;
-  color: #929191; /* 원래 색상으로 변경 */
-  position: absolute; /* 날짜를 절대 위치로 설정 */
-  bottom: 10px; /* 하단에서 10px */
-  right: 10px; /* 우측에서 10px */
+  color: #929191;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 
 .loading,
@@ -248,10 +244,8 @@ body {
   }
 
   .news-item {
-    width: 100%; /* 작은 화면에서는 한 줄에 하나만 보이도록 설정 */
-    margin: 0; /* 마진 제거 */
+    width: 100%;
+    margin: 0;
   }
 }
-
-
 </style>

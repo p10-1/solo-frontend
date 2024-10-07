@@ -81,24 +81,24 @@ onUnmounted(() => {
 }
 
 .slider {
-  display: flex; /* 카드들을 가로로 정렬 */
+  display: flex; 
 }
 
 .slider-card {
-  width: calc(33.33% - 40px); /* 카드의 넓이를 3분의 1로 설정하고 마진을 고려 */
-  background-color: #fff; /* 카드 배경색 변경 */
-  border-top: 2px solid #6846F5; /* 위 테두리 설정 */
-  border-bottom: 2px solid #CFC6FD; /* 아래 테두리 설정 */
-  padding: 10px; /* 패딩 조정 */
-  box-shadow: none; /* 그림자 제거 */
+  width: calc(33.33% - 40px); 
+  background-color: #fff; 
+  border-top: 2px solid #6846F5; 
+  border-bottom: 2px solid #CFC6FD; 
+  padding: 10px; 
+  box-shadow: none; 
   cursor: pointer;
-  margin: 0 20px; /* 카드 간격 조정 */
-  height: 130px; /* 카드 높이 조정 */
+  margin: 0 20px; 
+  height: 130px; 
   display: flex;
-  flex-direction: column; /* 세로 방향으로 정렬 */
-  justify-content: space-between; /* 공간 분배 */
-  border-radius: 0; /* 모서리 둥글게 하지 않음 */
-  transition: transform 0.3s; /* 부드러운 변환 효과 */
+  flex-direction: column; 
+  justify-content: space-between;
+  border-radius: 0; 
+  transition: transform 0.3s; 
 }
 
 .slider-card:hover {
@@ -107,34 +107,34 @@ onUnmounted(() => {
 
 .card-content {
   display: flex;
-  justify-content: space-between; /* 텍스트와 이미지를 양쪽으로 배치 */
+  justify-content: space-between; 
   flex-grow: 1;
 }
 
 .text-content {
-  flex: 0 0 60%; /* 텍스트 영역을 60%로 설정 */
-  overflow: hidden; /* 넘치는 텍스트 숨기기 */
+  flex: 0 0 60%; 
+  overflow: hidden; 
 }
 
 .news-category {
-  font-size: 1rem; /* 카테고리 제목 크기 조정 */
-  margin: 0; /* 기본 마진 제거 */
-  font-weight: bold; /* 제목 굵게 */
+  font-size: 1rem; 
+  margin: 0; 
+  font-weight: bold;
 }
 
 .news-title {
-  font-size: 0.9rem; /* 뉴스 제목 크기 조정 */
+  font-size: 0.9rem; 
   margin: 5px 0; /* 제목 간격 조정 */
   color: #333;
 }
 
 .news-image {
-  width: 100px; /* 고정 너비 설정 */
-  height: 100px; /* 고정 높이 설정 */
+  width: 100px; 
+  height: 100px; 
   object-fit: cover; /* 비율 유지하며 잘라내기 */
-  margin-left: 10px; /* 제목과 이미지 간의 간격 조정 */
-  flex: 0 0 40%; /* 이미지 영역을 40%로 설정 (필요에 따라 조정 가능) */
-  border-radius: 4px; /* 이미지 모서리 둥글게 */
+  margin-left: 10px; 
+  flex: 0 0 40%; 
+  border-radius: 4px; 
 }
 
 

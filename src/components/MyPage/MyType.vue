@@ -147,10 +147,8 @@ const selectType = (type) => {
 };
 
 const updateTypeValue = async (type) => {
-  console.log('자산:', type.title);
   try {
     const response = await updateType(type.title); // 요청 호출
-    console.log('서버 응답:', response);
     alert(response);
   } catch (error) {
     alert('업데이트 실패. 다시 시도해 주세요.');
