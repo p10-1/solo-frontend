@@ -8,6 +8,7 @@ import MyPage from '../pages/auth/MyPage.vue'
 import News from '../pages/news/NewsPage.vue'
 import Policy from '../pages/policy/PolicyPage.vue'
 import FirstUser from '@/pages/auth/FirstUser.vue'
+import Login from '@/pages/auth/Login.vue'
 import Product from '@/pages/product/ProductPage.vue'
 import boardRoutes from './board'
 const router = createRouter({
@@ -18,11 +19,11 @@ const router = createRouter({
       name: 'home',
       component: Home
     },
-    // {
-    //   path: '/:pathMatch(.*)*',
-    //   name: 'NotFound',
-    //   component: NotFound
-    // },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
     {
       path: '/firstUser',
       name: 'FirstUser',

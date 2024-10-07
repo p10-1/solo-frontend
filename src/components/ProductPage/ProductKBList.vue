@@ -1,8 +1,8 @@
 <template>
   <div class="kb-product-list">
     <h2 class="title">
-      "<span class="text-accent">ㅇㅇ</span>" 님을 위한
-      <span class="text-accent">맞춤 추천 상품</span>이에요
+      "<span class="text-accent">{{ authStore.userInfo.userName }}</span
+      >" 님을 위한 <span class="text-accent">KB 추천 상품</span>이에요
       <span class="text-accent"><i class="fa-regular fa-face-smile"></i></span>
     </h2>
     <div v-if="loading" class="loading margin-top-3rem">
@@ -24,44 +24,55 @@
     </div>
   </div>
 </template>
-
-<script>
-import { fetchKbProducts } from '@/api/productApi' // fetchKbProducts 함수 경로
+<script setup>
+import { ref, onMounted, watch } from 'vue'
+import { fetchKbProducts } from '@/api/productApi'
 import ProductKBItem from './ProductKBItem.vue'
+import { useAuthStore } from '@/stores/authStore'
+import { defineProps } from 'vue'
 
-export default {
-  components: {
-    ProductKBItem
-  },
-  data() {
-    return {
-      products: [], // 제품 목록
-      loading: true, // 로딩 상태
-      error: null, // 에러 상태
-      hoveredCard: null // 현재 마우스를 올린 카드
-    }
-  },
-  async mounted() {
-    await this.loadProducts() // 컴포넌트 마운트 시 데이터 로드
-  },
-  methods: {
-    async loadProducts() {
-      try {
-        this.products = await fetchKbProducts() // 데이터 가져오기
-      } catch (error) {
-        this.error = '상품을 가져오는 데 실패했습니다. 다시 시도해주세요.' // 에러 처리
-      } finally {
-        this.loading = false // 로딩 완료
-      }
-    },
-    onMouseOver(productNo) {
-      this.hoveredCard = productNo // 마우스를 올린 카드 번호 저장
-    },
-    onMouseLeave() {
-      this.hoveredCard = null // 마우스가 떠났을 때 초기화
-    }
+const props = defineProps({
+  productType: {
+    type: String,
+    required: true
+  }
+})
+
+const products = ref([])
+const loading = ref(true)
+const error = ref(null)
+const hoveredCard = ref(null)
+const authStore = useAuthStore()
+
+const loadProducts = async () => {
+  try {
+    products.value = await fetchKbProducts(props.productType)
+  } catch (err) {
+    error.value = '상품을 가져오는 데 실패했습니다. 다시 시도해주세요.'
+  } finally {
+    loading.value = false
   }
 }
+
+watch(
+  () => props.productType,
+  async (newValue) => {
+    console.log('새로운 productType:', newValue)
+    await loadProducts()
+  }
+)
+
+const onMouseOver = (productNo) => {
+  hoveredCard.value = productNo
+}
+
+const onMouseLeave = () => {
+  hoveredCard.value = null
+}
+
+onMounted(() => {
+  loadProducts()
+})
 </script>
 
 <style scoped>

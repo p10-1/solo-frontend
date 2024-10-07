@@ -10,10 +10,8 @@
 
     <div class="bottom-section">
       <div class="bottom-components">
-        <MyPoint @update="handleUpdate" />
-        <MyBoard />
         <div :style="{ width: '35%' }">
-          <MyPoint />
+          <MyPoint @update="handleUpdate"/>
         </div>
         <div :style="{ width: '65%' }">
           <MyBoard />

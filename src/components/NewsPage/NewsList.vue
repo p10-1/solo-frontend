@@ -1,13 +1,17 @@
 <template>
   <div class="infinite-scroll">
-    <div class="category-filter">
-      <label for="category-select">카테고리 선택:</label>
-      <select id="category-select" v-model="selectedCategory" @change="resetFilter">
-        <option value="">전체</option>
-        <option value="경제">경제</option>
-        <option value="부동산">부동산</option>
-        <option value="증권">증권</option>
-      </select>
+    <div class="filter-bar">
+      <input type="radio" id="all" value="" v-model="selectedCategory" @change="resetFilter" />
+      <label for="all" :class="{ active: selectedCategory === '' }">전체</label>
+
+      <input type="radio" id="economy" value="경제" v-model="selectedCategory" @change="resetFilter" />
+      <label for="economy" :class="{ active: selectedCategory === '경제' }">경제</label>
+
+      <input type="radio" id="real-estate" value="부동산" v-model="selectedCategory" @change="resetFilter" />
+      <label for="real-estate" :class="{ active: selectedCategory === '부동산' }">부동산</label>
+
+      <input type="radio" id="stocks" value="증권" v-model="selectedCategory" @change="resetFilter" />
+      <label for="stocks" :class="{ active: selectedCategory === '증권' }">증권</label>
     </div>
 
     <div class="news-container">
@@ -22,8 +26,12 @@
       </div>
     </div>
 
-    <div v-if="loading" class="loading">로딩 중...</div>
-    <div v-if="noMoreData" class="no-more">더 이상 데이터가 없습니다.</div>
+    <div v-if="loading" class="loading margin-top-3rem">
+      <i class="fa-solid fa-spinner margin-bottom-1rem"></i><br />로딩 중...
+    </div>
+    <div v-if="noMoreData" class="no-more">
+      <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />정책이 더 이상 없습니다.
+    </div>
   </div>
 </template>
 
@@ -84,20 +92,16 @@ const resetFilter = () => {
   loadNews();
 };
 
-
 const formatDate = (dateString) => {
-  // 공백을 'T'로 바꿔 ISO 형식으로 변환
   const isoString = dateString.replace(' ', 'T');
-  const date = new Date(isoString + 'Z'); // UTC로 해석
+  const date = new Date(isoString + 'Z');
   
-  // 한국 시간으로 변환
   return date.toLocaleDateString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
   });
 };
-
 
 onMounted(() => {
   loadNews();
@@ -133,27 +137,6 @@ body {
   padding: 20px;
 }
 
-.category-filter {
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-}
-
-.category-filter label {
-  margin-right: 10px;
-  font-weight: bold;
-}
-
-.category-filter select {
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  transition: border-color 0.3s;
-}
-
-.category-filter select:hover {
-  border-color: #aaa;
-}
 
 .news-container {
   display: flex;
@@ -220,27 +203,13 @@ body {
   right: 10px;
 }
 
-.loading,
-.no-more {
-  text-align: center;
-  padding: 20px;
-  color: #555;
-  font-size: 1.2em;
-  border-top: 1px solid #ddd;
-  margin-top: 20px;
-}
-
 @media (max-width: 600px) {
   .infinite-scroll {
     padding: 10px;
   }
 
-  .category-filter {
+  .filter-bar {
     flex-direction: column;
-  }
-
-  .category-filter label {
-    margin-bottom: 5px;
   }
 
   .news-item {
