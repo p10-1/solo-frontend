@@ -1,7 +1,6 @@
 <template>
   <div class="asset-type-buttons">
     <!-- 자산 타입 선택 버튼들 -->
-
     <button
       v-for="type in assetTypes"
       :key="type.value"
@@ -14,7 +13,6 @@
 </template>
 
 <script setup>
-//src/components/AssetPage/AssetTypeButtons.vue
 import { ref } from 'vue'
 
 const props = defineProps({
@@ -24,7 +22,6 @@ const props = defineProps({
 const emit = defineEmits(['select-type']) // 부모에게 타입 선택 이벤트를 전달
 
 // 자산 타입 리스트
-
 const assetTypes = ref([
   { name: '현금자산', value: 'cash' },
   { name: '예적금', value: 'deposit' },
@@ -33,7 +30,6 @@ const assetTypes = ref([
 ])
 
 // 타입 선택 함수
-
 const selectType = (type) => {
   emit('select-type', type) // 부모 컴포넌트에 선택된 타입 전달
 }
