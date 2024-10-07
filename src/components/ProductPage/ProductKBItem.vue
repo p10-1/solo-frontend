@@ -7,7 +7,6 @@
 </template>
 
 <script setup>
-// props 선언
 const props = defineProps({
   product: {
     type: Object,

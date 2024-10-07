@@ -25,10 +25,18 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { fetchKbProducts } from '@/api/productApi'
 import ProductKBItem from './ProductKBItem.vue'
 import { useAuthStore } from '@/stores/authStore'
+import { defineProps } from 'vue'
+
+const props = defineProps({
+  productType: {
+    type: String,
+    required: true
+  }
+})
 
 const products = ref([])
 const loading = ref(true)
@@ -38,13 +46,21 @@ const authStore = useAuthStore()
 
 const loadProducts = async () => {
   try {
-    products.value = await fetchKbProducts()
+    products.value = await fetchKbProducts(props.productType)
   } catch (err) {
     error.value = '상품을 가져오는 데 실패했습니다. 다시 시도해주세요.'
   } finally {
     loading.value = false
   }
 }
+
+watch(
+  () => props.productType,
+  async (newValue) => {
+    console.log('새로운 productType:', newValue)
+    await loadProducts()
+  }
+)
 
 const onMouseOver = (productNo) => {
   hoveredCard.value = productNo

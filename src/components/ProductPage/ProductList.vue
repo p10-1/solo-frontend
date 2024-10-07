@@ -1,4 +1,5 @@
 <template>
+  <ProductKBList :product-type="productType" />
   <div class="infinite-scroll">
     <div class="filter-bar margin-top-1rem margin-bottom-1rem">
       <input type="radio" id="deposit" value="예금" v-model="productType" />
@@ -13,12 +14,24 @@
       <!-- SearchBar 컴포넌트 사용 -->
       <SearchBar v-model="keyword" @search="searchProducts" />
     </div>
+    <dl class="total">
+      <dt>전체</dt>
+      <dd>
+        <b>{{ totalCnt }}</b
+        >건
+      </dd>
+    </dl>
     <ul class="product-list">
-      <ProductItem
-        v-for="product in list"
-        :key="`${product.finPrdtNm}-${product.spclCnd}`"
-        :product="product"
-      />
+      <template v-if="productType === '대출'">
+        <LoanItem v-for="loan in list" :key="`${loan.finPrdtCd}-${loan.korCoNm}`" :loan="loan" />
+      </template>
+      <template v-else>
+        <ProductItem
+          v-for="product in list"
+          :key="`${product.finPrdtNm}-${product.spclCnd}`"
+          :product="product"
+        />
+      </template>
     </ul>
 
     <!-- 로딩 상태 표시 -->
@@ -36,6 +49,8 @@ import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { fetchProducts } from '@/api/productApi'
 import ProductItem from './ProductItem.vue'
+import LoanItem from './LoanItem.vue'
+import ProductKBList from './ProductKBList.vue'
 import SearchBar from '@/components/common/SearchBar.vue'
 
 const list = ref([])
@@ -47,6 +62,7 @@ const noMoreData = ref(false)
 const productType = ref('예금')
 const route = useRoute()
 const router = useRouter()
+const totalCnt = ref(0)
 
 const loadProducts = async () => {
   if (loading.value || noMoreData.value) return
@@ -55,6 +71,7 @@ const loadProducts = async () => {
   setTimeout(async () => {
     try {
       const data = await fetchProducts(pageNum.value, keyword.value, productType.value)
+      totalCnt.value = data.totalCount || 0
       if (data.list.length > 0) {
         list.value = [...list.value, ...data.list]
         totalPage.value = data.totalPage

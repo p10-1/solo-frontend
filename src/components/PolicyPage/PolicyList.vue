@@ -4,6 +4,13 @@
     <div class="search-bar">
       <SearchBar v-model="keyword" @search="searchPolicies" />
     </div>
+    <dl class="total">
+      <dt>전체</dt>
+      <dd>
+        <b>{{ totalCnt }}</b
+        >건
+      </dd>
+    </dl>
     <div class="filter-bar margin-top-1rem margin-bottom-1rem">
       <input type="radio" id="all" value="0" v-model="policyType" />
       <label :class="{ active: policyType === '0' }" for="all">전체</label>
@@ -49,7 +56,8 @@ const totalPage = ref(0)
 const keyword = ref('')
 const loading = ref(false)
 const noMoreData = ref(false)
-const policyType = ref('0') // 선택된 정책 유형을 저장
+const policyType = ref('0')
+const totalCnt = ref(0)
 
 const route = useRoute()
 
@@ -59,7 +67,8 @@ const loadPolicies = async () => {
 
   setTimeout(async () => {
     try {
-      const data = await fetchPolicies(pageNum.value, keyword.value, policyType.value) // 정책 유형 추가
+      const data = await fetchPolicies(pageNum.value, keyword.value, policyType.value)
+      totalCnt.value = data.totalCount
       if (data.list.length > 0) {
         list.value = [...list.value, ...data.list]
         totalPage.value = data.totalPage

@@ -5,9 +5,14 @@ const RENT_HOUSE_URL = '/finlife/finlifeapi/rentHouseLoanProductsSearch.json'
 const auth = '6928010ff912e958af75e974b7c9696f'
 const DEFAULT_AMOUNT = 10
 
-export const fetchKbProducts = async () => {
+export const fetchKbProducts = async (productType) => {
   try {
-    const response = await axios.get(`${API_URL}/kb`)
+    console.log(productType)
+    const response = await axios.get(`${API_URL}/kb`, {
+      params: {
+        type: productType
+      }
+    })
     return response.data
   } catch (error) {
     console.error('KB예적금 상품을 가져오는 데 실패했습니다:', error)
@@ -56,13 +61,13 @@ export const getRecommend = async (userId) => {
   }
 }
 
-export const getRentHouseLoan = async (topFinGrpNo, pageNo) => {
+export const getRentHouseLoan = async (topFinGrpNo) => {
   try {
     const response = await axios.get(RENT_HOUSE_URL, {
       params: {
-        auth: auth, 
+        auth: auth,
         topFinGrpNo: topFinGrpNo,
-        pageNo: pageNo
+        pageNo: 1
       }
     })
     return response.data.result.baseList
