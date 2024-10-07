@@ -38,7 +38,7 @@
         </button>
       </div>
     </div>
-    <h2 class="title margin-top-3rem">포인트 <span class="text-accent">출금 내역 조회</span></h2>
+    <!-- <h2 class="title margin-top-3rem">포인트 <span class="text-accent">출금 내역 조회</span></h2>
     <div class="withdraw-section">
       <div class="form-group">
         <div class="title-box margin-top-2rem margin-bottom-1rem">
@@ -48,7 +48,7 @@
           </button>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
