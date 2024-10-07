@@ -1,16 +1,37 @@
 <template>
+  <ProductKBList :product-type="productType" />
   <div class="infinite-scroll">
+    <div class="filter-bar margin-top-1rem margin-bottom-1rem">
+      <input type="radio" id="deposit" value="예금" v-model="productType" />
+      <label :class="{ active: productType === '예금' }" for="deposit">예금</label>
+      <input type="radio" id="saving" value="적금" v-model="productType" />
+      <label :class="{ active: productType === '적금' }" for="saving">적금</label>
+      <input type="radio" id="loan" value="대출" v-model="productType" />
+      <label :class="{ active: productType === '대출' }" for="loan">대출</label>
+    </div>
     <h2 class="title margin-top-3rem"><span class="text-accent">예ㆍ적금 상품</span> 목록</h2>
     <div class="search-bar">
       <!-- SearchBar 컴포넌트 사용 -->
       <SearchBar v-model="keyword" @search="searchProducts" />
     </div>
+    <dl class="total">
+      <dt>전체</dt>
+      <dd>
+        <b>{{ totalCnt }}</b
+        >건
+      </dd>
+    </dl>
     <ul class="product-list">
-      <ProductItem
-        v-for="product in list"
-        :key="`${product.finPrdtNm}-${product.spclCnd}`"
-        :product="product"
-      />
+      <template v-if="productType === '대출'">
+        <LoanItem v-for="loan in list" :key="`${loan.finPrdtCd}-${loan.korCoNm}`" :loan="loan" />
+      </template>
+      <template v-else>
+        <ProductItem
+          v-for="product in list"
+          :key="`${product.finPrdtNm}-${product.spclCnd}`"
+          :product="product"
+        />
+      </template>
     </ul>
 
     <!-- 로딩 상태 표시 -->
@@ -24,10 +45,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { fetchProducts } from '@/api/productApi'
 import ProductItem from './ProductItem.vue'
+import LoanItem from './LoanItem.vue'
+import ProductKBList from './ProductKBList.vue'
 import SearchBar from '@/components/common/SearchBar.vue'
 
 const list = ref([])
@@ -36,9 +59,10 @@ const totalPage = ref(0)
 const keyword = ref('')
 const loading = ref(false)
 const noMoreData = ref(false)
-
+const productType = ref('예금')
 const route = useRoute()
 const router = useRouter()
+const totalCnt = ref(0)
 
 const loadProducts = async () => {
   if (loading.value || noMoreData.value) return
@@ -46,7 +70,8 @@ const loadProducts = async () => {
 
   setTimeout(async () => {
     try {
-      const data = await fetchProducts(pageNum.value, keyword.value)
+      const data = await fetchProducts(pageNum.value, keyword.value, productType.value)
+      totalCnt.value = data.totalCount || 0
       if (data.list.length > 0) {
         list.value = [...list.value, ...data.list]
         totalPage.value = data.totalPage
@@ -73,6 +98,13 @@ const searchProducts = async (searchTerm) => {
   })
   await loadProducts()
 }
+
+watch([productType, keyword], async () => {
+  pageNum.value = 1
+  list.value = []
+  noMoreData.value = false
+  await loadProducts()
+})
 
 const handleScroll = () => {
   const scrollBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10
