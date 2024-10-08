@@ -2,7 +2,7 @@
   <div class="container my-4">
     <div class="title-box">
       <h2 class="title">내가 <span class="text-accent font-weigth-300">작성한 글</span></h2>
-      <router-link to="borad" class="link"><i class="fa-solid fa-plus"></i> 더보기</router-link>
+      <router-link to="board" class="link"><i class="fa-solid fa-plus"></i> 더보기</router-link>
     </div>
     <div class="scroll-container">
       <table class="table">
