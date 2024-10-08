@@ -42,7 +42,7 @@ const createChart = () => {
     return
   }
 
-  console.log('Creating new chart with data:', props.data)
+  // console.log('Creating new chart with data:', props.data)
 
   chartInstance = new Chart(ctx, {
     type: props.type,

@@ -3,48 +3,59 @@
     <h2 class="mb-4">인기 글</h2>
     <div v-if="loading" class="alert alert-info">로딩 중...</div>
     <div v-if="error" class="alert alert-danger">{{ error }}</div>
+
     <div class="alert alert-info mt-3">
       * 인기 글은 저번 달 조회수, 댓글 수, 좋아요 수를 기준으로 선정되었습니다.
     </div>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th>번호</th>
-          <th>제목</th>
-          <th>작성자</th>
-          <th>작성일</th>
-          <th>
-            <i class="fa-solid fa-eye"></i> 조회수&nbsp;&nbsp;
-            <i class="fa-solid fa-comment"></i> 댓글 수&nbsp;&nbsp;
-            <i class="fa-solid fa-thumbs-up"></i> 좋아요 수
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="board in bestBoards" :key="board.boardNo">
-          <td>{{ board.boardNo }}</td>
-          <td>
-            <router-link
-              :to="{
-                name: 'board/detail',
-                params: { boardNo: board.boardNo }
-              }"
-            >
-              {{ board.title }}
-            </router-link>
-          </td>
-          <td>{{ board.userName }}</td>
-          <td>{{ moment(board.regDate).format('YYYY-MM-DD HH:mm') }}</td>
-          <td>
-            <i class="fa-solid fa-eye"></i> {{ board.views }}&nbsp;&nbsp;<i
-              class="fa-solid fa-comment"
-            ></i>
-            {{ board.comments }}&nbsp;&nbsp;<i class="fa-solid fa-thumbs-up"></i> {{ board.likes }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- 슬라이더 -->
+    <div class="slider">
+      <div class="slides">
+        <div
+          class="slide"
+          v-for="(board, index) in bestBoards"
+          :key="board.boardNo"
+          :class="{ active: currentIndex === index }"
+        >
+          <div class="card">
+            <div class="card-body">
+              <h5 class="text-align-left link">
+                <router-link
+                  :to="{
+                    name: 'board/detail',
+                    params: { boardNo: board.boardNo }
+                  }"
+                >
+                  {{ board.title }}
+                  <!-- <span v-if="bestlist.includes(board.boardNo)">
+                <i class="fa-solid fa-star" style="color: gold"></i>
+              </span> -->
+                  <ul class="table-ex-info">
+                    <li><i class="fa-solid fa-user"></i> {{ board.views }}</li>
+                    <li><i class="fa-solid fa-heart"></i> {{ board.likes }}</li>
+                    <li><i class="fa-solid fa-comment"></i> {{ board.comments }}</li>
+                  </ul>
+                </router-link>
+              </h5>
+              <p class="card-text">
+                {{ truncateContent(board.content) }}
+              </p>
+              <p class="card-text">
+                <span class="badge">{{ board.userName }}</span>
+                <br />
+                <small class="text-muted"
+                  >작성일: {{ moment(board.regDate).format('YYYY-MM-DD HH:mm') }}</small
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 슬라이더 컨트롤 -->
+      <button @click="prevSlide" class="prev">Previous</button>
+      <button @click="nextSlide" class="next">Next</button>
+    </div>
   </div>
 </template>
 
@@ -56,6 +67,7 @@ import moment from 'moment'
 const bestBoards = ref([])
 const loading = ref(true)
 const error = ref(null)
+const currentIndex = ref(0)
 
 onMounted(async () => {
   try {
@@ -66,21 +78,68 @@ onMounted(async () => {
     loading.value = false
   }
 })
+
+// 슬라이드 컨트롤 함수
+const prevSlide = () => {
+  currentIndex.value =
+    currentIndex.value === 0 ? bestBoards.value.length - 1 : currentIndex.value - 1
+}
+
+const nextSlide = () => {
+  currentIndex.value =
+    currentIndex.value === bestBoards.value.length - 1 ? 0 : currentIndex.value + 1
+}
+
+// Helper function to truncate content
+const truncateContent = (content, length = 100) => {
+  return content.length > length ? content.slice(0, length) + '...' : content
+}
 </script>
+
 <style scoped>
-.table {
-  width: 100%; /* 테이블이 부모 요소의 너비를 차지하도록 설정 */
-  table-layout: fixed; /* 열 너비 고정 */
+.slider {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  overflow: hidden;
 }
 
-.table th,
-.table td {
-  overflow: hidden; /* 내용이 넘칠 경우 숨김 */
-  text-overflow: ellipsis; /* 넘치는 텍스트에 점(...) 표시 */
-  white-space: nowrap; /* 줄 바꿈 방지 */
+.slides {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  transform: translateX(calc(-100% * var(--current-index)));
 }
 
-.table th {
-  text-align: left; /* 제목 정렬 */
+.slide {
+  min-width: 100%;
+  transition: opacity 0.5s ease;
+  opacity: 0;
+  display: none;
+}
+
+.slide.active {
+  opacity: 1;
+  display: block;
+}
+
+.prev,
+.next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
 }
 </style>
