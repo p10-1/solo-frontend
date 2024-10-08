@@ -14,7 +14,7 @@ export const getAsset = async () => {
 
 export const updateAsset = async (data) => {
     try {
-        await axios.post(`${API_BASE_URL}/updateAsset`, data, { withCredentials: true });
+        await axios.put(`${API_BASE_URL}/updateAsset`, data, { withCredentials: true });
         return true;
     } catch (error) {
         console.error('업데이트 실패:', error);
@@ -72,7 +72,7 @@ export const getType = async () => {
 // 사용자의 타입 수정
   export const updateType = async (selectedType) => {
     try {
-      const response = await axios.post('/api/mypage/updateType', { selectedType });
+      const response = await axios.put('/api/mypage/updateType', { selectedType });
       return response.data;
     } catch (error) {
       console.error('업데이트 실패:', error);

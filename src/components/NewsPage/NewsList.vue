@@ -92,21 +92,16 @@ const resetFilter = () => {
   loadNews();
 };
 
-
 const formatDate = (dateString) => {
   const date = new Date(dateString);
-  return date.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 반환
-};
-// const formatDate = (dateString) => {
-//   const isoString = dateString.replace(' ', 'T');
-//   const date = new Date(isoString + 'Z');
   
-//   return date.toLocaleDateString('ko-KR', {
-//     year: 'numeric',
-//     month: '2-digit',
-//     day: '2-digit',
-//   });
-// };
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`; // YYYY-MM-DD 형식으로 반환
+};
+
 
 onMounted(() => {
   loadNews();
