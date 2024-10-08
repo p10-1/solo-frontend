@@ -25,7 +25,7 @@ export const updateAsset = async (data) => {
 // 포인트 조회 
 export const fetchPoints = async () => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/points`, { withCredentials: true });
+        const response = await axios.get(`${API_BASE_URL}/getPoint`, { withCredentials: true });
         return response.data;
     } catch (error) {
         console.error('포인트 조회 오류:', error);
