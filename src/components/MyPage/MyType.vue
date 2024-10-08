@@ -29,67 +29,66 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { getType, updateType } from '@/api/mypageApi'; // api.js에서 함수 가져오기
+import { ref, onMounted } from 'vue'
+import { getType, updateType } from '@/api/mypageApi' // api.js에서 함수 가져오기
 
-const selectedType = ref(null);
-const nickName = ref('');
+const selectedType = ref(null)
+const nickName = ref('')
 const assetTypes = ref([
   {
     title: '위험 추구형',
     description: 'High Risk! High Return!',
-    icon: '⚠️',
+    icon: '⚠️'
   },
   {
     title: '자산 분산형',
     description: '분산 투자가 자산관리의 왕도!',
-    icon: '💨',
+    icon: '💨'
   },
   {
     title: '안정 추구형',
     description: 'Risk는 싫어 안전이 좋아',
-    icon: '🌱',
+    icon: '🌱'
   },
   {
     title: '대출 우선형',
     description: '대출로 인해 더 많은 투자 기회!',
-    icon: '🏦',
-  },
-]);
+    icon: '🏦'
+  }
+])
 
 const loadUserAsset = async () => {
   try {
-    const userAsset = await getType(); // 요청 호출
-    selectedType.value = userAsset;
+    const userAsset = await getType() // 요청 호출
+    selectedType.value = userAsset
   } catch (error) {
-    alert('사용자 자산을 가져오는 데 실패했습니다.');
+    alert('사용자 자산을 가져오는 데 실패했습니다.')
   }
-};
+}
 
 const selectType = (type) => {
-  selectedType.value = type.title;
-  updateTypeValue(type);
-};
+  selectedType.value = type.title
+  updateTypeValue(type)
+}
 
 const updateTypeValue = async (type) => {
   try {
-    const response = await updateType(type.title); 
+    const response = await updateType(type.title)
     // response가 "success"가 아닐 경우만 alert
     if (response !== 'success') {
-      alert(response);
+      alert(response)
     }
   } catch (error) {
-    alert('업데이트 실패. 다시 시도해 주세요.');
+    alert('업데이트 실패. 다시 시도해 주세요.')
   }
-};
+}
 
 onMounted(() => {
-  const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
-  nickName.value = userInfo ? userInfo.nickName : '사용자';
-  loadUserAsset(); // 사용자 자산 로드
-});
+  const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+  nickName.value = userInfo ? userInfo.nickName : '사용자'
+  loadUserAsset() // 사용자 자산 로드
+})
 </script>
-
 
 <style scope>
 .my-type h2.title {
@@ -101,16 +100,20 @@ onMounted(() => {
 .my-type .text-p {
   font-size: 20px;
   letter-spacing: -0.6px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background-color: #f3f3ff;
 }
 .my-type .text-black {
   color: #333;
 }
 .my-type .user-type-info {
+  font-size: 20px;
   color: #555;
   letter-spacing: -0.7px;
   padding: 12px 16px;
   border-radius: 12px;
-  background: var(--gray020, #fffbec);
+  background-color: #fffbec;
   color: var(--font-secondary, #475067);
 }
 .my-type .user-type-info i {
@@ -118,7 +121,6 @@ onMounted(() => {
   margin-right: 5px;
 }
 .my-type .user-type-info .text-accent {
-  font-size: 23px;
   font-weight: 600;
 }
 .my-type .button-container {
@@ -127,7 +129,7 @@ onMounted(() => {
 }
 .my-type .button-container .btn {
   padding: 1.6rem 1.4rem;
-  border-radius: 5px;
+  border-radius: 28px;
   border: 3px solid #e4deff;
   background-color: #fcfcfc;
   width: 100%;
@@ -166,55 +168,4 @@ onMounted(() => {
 }
 </style>
 
-
-<style scoped>
-/* .button-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.btn {
-  border: 2px solid black;
-  padding: 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition:
-    background-color 0.3s,
-    border-color 0.3s;
-  width: 23%;
-  text-align: left;
-  background-color: white;
-  display: flex;
-  align-items: center;
-}
-
-.btn:hover {
-  background-color: #f0f0f0;
-}
-
-.selected {
-  background-color: #007bff;
-  color: white;
-  border-color: #0056b3;
-}
-
-.icon {
-  font-size: 40px;
-  margin-right: 10px;
-}
-
-.text-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.title {
-  font-weight: bold;
-}
-
-.description {
-  font-size: 14px;
-} */
-</style>
+<style scoped></style>

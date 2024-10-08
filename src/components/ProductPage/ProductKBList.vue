@@ -88,7 +88,7 @@ onMounted(() => {
 .kb-product-list .product-cards {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 17px;
   background: #f3f3ff;
   padding: 2rem 1.5rem;
