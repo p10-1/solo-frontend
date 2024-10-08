@@ -44,10 +44,18 @@
           </div>
         </div>
         <div class="asset-list__section asset-list__loan">
-          <LoanInfo :loanData="processedData.loanData" />
+          <h2 class="section-title">대출 정보</h2>
+          <template v-if="hasLoanData">
+            <LoanInfo :loanData="processedData.loanData" />
+          </template>
+          <p v-else class="no-loan-message">대출이 존재하지 않습니다.</p>
         </div>
         <div class="asset-list__section asset-list__recommended-products">
-          <Recommendation :loanPeriod="processedData.loanData.period" />
+          <h2 class="section-title">추천 상품</h2>
+          <template v-if="hasLoanData">
+            <Recommendation :loanPeriod="processedData.loanData.period" />
+          </template>
+          <p v-else class="no-recommendation-message">대출 정보가 없어 추천 상품이 없습니다.</p>
         </div>
       </div>
     </template>
@@ -237,6 +245,12 @@ const processedData = computed(() => {
   }
 })
 
+// 대출 정보 존재 여부를 확인하는 computed 속성
+const hasLoanData = computed(() => {
+  if (!processedData.value || !processedData.value.loanData) return false
+  const { amount, purpose, period, interest } = processedData.value.loanData
+  return amount > 0 || purpose || period > 0 || interest > 0
+})
 const selectAssetType = (type) => {
   selectedAssetType.value = type
 }
@@ -352,5 +366,25 @@ onMounted(loadData)
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+.asset-list__no-loan {
+  text-align: center;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  color: #6c757d;
+}
+.section-title {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.no-loan-message,
+.no-recommendation-message {
+  text-align: center;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  color: #6c757d;
 }
 </style>
