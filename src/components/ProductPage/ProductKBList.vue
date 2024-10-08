@@ -1,6 +1,5 @@
 <template>
   <div class="kb-product-list">
-    
     <div v-if="loading" class="loading margin-top-3rem">
       <i class="fa-solid fa-spinner margin-bottom-1rem"></i>
       <br />로딩 중...
@@ -25,7 +24,6 @@ import { ref, onMounted, watch } from 'vue'
 import { fetchKbProducts } from '@/api/productApi'
 import ProductKBItem from './ProductKBItem.vue'
 import { useAuthStore } from '@/stores/authStore'
-import { defineProps } from 'vue'
 
 const props = defineProps({
   productType: {
