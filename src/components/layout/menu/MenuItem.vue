@@ -7,7 +7,7 @@ const props = defineProps({
   <li class="">
     <router-link class="" :to="menu.url">
       <!-- <i :class="menu.icon"></i> -->
-      {{ menu.title }}
+      {{ props.menu.title }}
     </router-link>
   </li>
 </template>
