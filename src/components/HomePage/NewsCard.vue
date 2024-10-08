@@ -85,6 +85,23 @@ onUnmounted(() => {
 .slider {
   display: flex;
 }
+
+.slider-card {
+  width: calc(33.33% - 40px);
+  background-color: #fff;
+  border-top: 2px solid #6846f5;
+  border-bottom: 2px solid #cfc6fd;
+  padding: 10px;
+  box-shadow: none;
+  cursor: pointer;
+  margin: 0 20px;
+  height: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 0;
+  transition: transform 0.3s;
+}
 .slider-card {
   width: calc(33.33% - 40px);
   background-color: #fff;

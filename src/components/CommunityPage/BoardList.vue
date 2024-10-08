@@ -13,7 +13,10 @@
     </div>
     <dl class="total">
       <dt>전체</dt>
-      <dd><b>0</b>건</dd>
+      <dd>
+        <b>{{ totalCnt }}</b
+        >건
+      </dd>
     </dl>
     <!-- 정렬 기준 선택 -->
     <div class="table-top-box margin-top-1rem margin-bottom-1rem">
@@ -116,6 +119,7 @@ const amount = ref(10)
 const sortBy = ref('latest')
 const router = useRouter()
 const route = useRoute()
+const totalCnt = ref(0)
 
 const loadBoards = async () => {
   try {
@@ -124,6 +128,7 @@ const loadBoards = async () => {
     totalPage.value = data.totalPage || 0
     pageNum.value = data.pageNum || 1
     amount.value = data.amount || 10
+    totalCnt.value = data.totalCount || 0
   } catch (error) {
     console.error('Error loading boards:', error)
   }

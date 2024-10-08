@@ -44,8 +44,12 @@
       </div>
     </div>
 
-    <div v-if="loading" class="loading">로딩 중...</div>
-    <div v-if="noMoreData" class="no-more">더 이상 데이터가 없습니다.</div>
+    <div v-if="loading" class="loading margin-top-3rem">
+      <i class="fa-solid fa-spinner margin-bottom-1rem"></i><br />로딩 중...
+    </div>
+    <div v-if="noMoreData" class="no-more">
+      <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />정책이 더 이상 없습니다.
+    </div>
   </div>
 </template>
 
@@ -151,43 +155,6 @@ body {
   padding: 20px;
 }
 
-.filter-bar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.2rem;
-  padding: 0.5rem;
-  margin: 0;
-}
-
-.filter-bar input[type='radio'] {
-  display: none;
-}
-
-.filter-bar label {
-  min-width: 100px;
-  text-align: center;
-  padding: 0.8rem 1rem;
-  border-radius: 20px;
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 1;
-  color: #222;
-  letter-spacing: -1px;
-  transition: all 0.6s;
-  cursor: pointer;
-}
-
-.filter-bar label:hover,
-.filter-bar label:active {
-  background-color: #6846f5;
-  color: #fff;
-}
-
-.filter-bar label.active {
-  background-color: #6846f5;
-  color: #fff;
-}
 
 .news-container {
   display: flex;
@@ -254,16 +221,6 @@ body {
   position: absolute;
   bottom: 10px;
   right: 10px;
-}
-
-.loading,
-.no-more {
-  text-align: center;
-  padding: 20px;
-  color: #555;
-  font-size: 1.2em;
-  border-top: 1px solid #ddd;
-  margin-top: 20px;
 }
 
 @media (max-width: 600px) {

@@ -1,18 +1,18 @@
 <template>
   <div class="product-page">
-    <ProductKBList />
+    <!-- <ProductKBList /> -->
     <ProductList />
   </div>
 </template>
 
 <script>
 import ProductList from '@/components/ProductPage/ProductList.vue'
-import ProductKBList from '@/components/ProductPage/ProductKBList.vue'
+// import ProductKBList from '@/components/ProductPage/ProductKBList.vue'
 
 export default {
   components: {
-    ProductList,
-    ProductKBList
+    ProductList
+    // ProductKBList
   }
 }
 </script>
