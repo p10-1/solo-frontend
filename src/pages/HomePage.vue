@@ -1,15 +1,21 @@
 <template>
   <div class="main-top">
-    <div class="main-top-item item-box">여긴 그래프</div>
-    <div class="main-top-item">
+    <div class="main-top-item" style="width: 55%">
+      <div class="item-box">
+        <h2 class="main-title">내 자산 현황</h2>
+        <div class="empty-box">여긴 그래프</div>
+      </div>
+    </div>
+    <div class="main-top-item" style="width: 45%">
+      <div class="item-box">
+        <CategoryList />
+      </div>
       <div class="item-box">
         <QuizCard />
       </div>
-      <div class="item-box">
-        <BoardCard />
-      </div>
     </div>
   </div>
+  <BoardCard />
   <NewsCard />
   <div class="layout-2">
     <PolicyCard />
@@ -20,6 +26,7 @@
 <script>
 import QuizCard from '@/components/HomePage/QuizCard.vue'
 // import Distribution from '@/components/AssetPage/Distribution.vue'
+import CategoryList from '@/components/HomePage/CategoryList.vue'
 import PolicyCard from '@/components/HomePage/PolicyCard.vue'
 import NewsCard from '@/components/HomePage/NewsCard.vue'
 import BoardCard from '@/components/HomePage/BoardCard.vue'
@@ -30,38 +37,44 @@ export default {
     BoardCard,
     PolicyCard,
     NewsCard,
-    ProductCard
+    ProductCard,
+    CategoryList
   }
 }
-// #eff5ff
 </script>
 <style scoped>
 .main-top {
   margin-top: -2.25rem;
-  background: linear-gradient(180deg, #f1eeff 63.02%, #fff);
+  /* background: #f3f3ff; */
   display: flex;
   justify-content: space-between;
   gap: 20px;
   padding: 20px;
 }
 
+.main-top .empty-box {
+  width: 100%;
+  border-radius: 25px;
+  padding: 2rem 1.7rem;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
+}
+
 .main-top .main-top-item {
   flex-grow: 1;
-  flex-basis: 0;
+  /* flex-basis: 0; */
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
 .main-top .item-box {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: column;
-  justify-content: center;
-  border-radius: 16px;
-  background: #fff;
-  box-shadow: 0 2px 10px 0 rgba(17, 42, 128, 0.04);
-  width: 100%;
+  justify-content: flex-start;
 }
 
 /* .layoutFlex {
@@ -83,28 +96,4 @@ export default {
   color: #fff;
   text-align: center;
 } */
-
-.layout-2-basline {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-
-.layout-2-center {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.layout-3-baseline {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-
-.layout-3-center {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 </style>

@@ -14,7 +14,7 @@
       <!-- SearchBar 컴포넌트 사용 -->
       <SearchBar v-model="keyword" @search="searchProducts" />
     </div>
-    <dl class="total">
+    <dl class="total margin-bottom-1rem">
       <dt>전체</dt>
       <dd>
         <b>{{ totalCnt }}</b
