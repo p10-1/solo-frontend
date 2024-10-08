@@ -4,13 +4,7 @@
     <div class="search-bar">
       <SearchBar v-model="keyword" @search="searchPolicies" />
     </div>
-    <dl class="total">
-      <dt>전체</dt>
-      <dd>
-        <b>{{ totalCnt }}</b
-        >건
-      </dd>
-    </dl>
+
     <div class="filter-bar margin-top-1rem margin-bottom-1rem">
       <input type="radio" id="all" value="0" v-model="policyType" />
       <label :class="{ active: policyType === '0' }" for="all">전체</label>
@@ -30,6 +24,14 @@
       <input type="radio" id="rights" value="참여권리" v-model="policyType" />
       <label :class="{ active: policyType === '참여권리' }" for="rights">참여권리</label>
     </div>
+
+    <dl class="total">
+      <dt>전체</dt>
+      <dd>
+        <b>{{ totalCnt }}</b
+        >건
+      </dd>
+    </dl>
 
     <div class="policy-list margin-top-1rem">
       <PolicyItem v-for="policy in list" :key="policy.bizId" :policy="policy" />
@@ -123,7 +125,7 @@ onBeforeUnmount(() => {
 .policy-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 17px;
   background: linear-gradient(180deg, #f3f3ff 63.02%, #fff);
   padding: 1.5rem;

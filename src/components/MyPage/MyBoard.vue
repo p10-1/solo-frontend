@@ -1,5 +1,5 @@
 <template>
-  <div class="container my-4">
+  <div class="container">
     <div class="title-box">
       <h2 class="title">내가 <span class="text-accent font-weigth-300">작성한 글</span></h2>
       <router-link to="board" class="link"><i class="fa-solid fa-plus"></i> 더보기</router-link>
@@ -78,7 +78,7 @@ onMounted(() => {
 <style scoped>
 .scroll-container {
   min-height: 20rem;
-  max-height: 38rem;
+  max-height: 27rem;
   width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;

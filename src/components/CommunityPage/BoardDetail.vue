@@ -266,6 +266,7 @@ dl.card-text dd {
   padding: 80px 20px;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
+  word-break: break-word;
 }
 
 .responsive-img {
@@ -294,11 +295,9 @@ dl.card-text dd {
 }
 
 .comments-section dt {
-  max-width: 150px;
-  display: inline-block;
-  vertical-align: top;
+  display: block;
   word-wrap: break-word;
-  padding: 0 1rem;
+  padding-bottom: 0.5rem;
 }
 .comments-section dt span.badge {
   height: 20px;
@@ -306,7 +305,7 @@ dl.card-text dd {
   padding: 0 10px;
   border-radius: 10px;
   background-color: #7d64da;
-  font-size: 14px;
+  font-size: 15px;
   color: #fff !important;
   vertical-align: middle;
   text-align: center;
@@ -314,12 +313,12 @@ dl.card-text dd {
   margin-right: 5px;
 }
 .comments-section dd {
-  display: inline-block;
   margin-bottom: 0;
   padding: 1.7rem 1.5rem;
   background-color: #f3f3ff;
   border-radius: 0px 28px 28px 28px;
-  width: calc(100% - 132px);
+  width: 100%;
+  letter-spacing: -0.7px;
 }
 
 .comments-section .text-muted {

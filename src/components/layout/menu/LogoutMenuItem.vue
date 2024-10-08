@@ -17,6 +17,6 @@ const logout = async () => {
 
 <style scope>
 .log-out-button {
-  margin-left: 3vw;
+  margin-left: 2rem;
 }
 </style>

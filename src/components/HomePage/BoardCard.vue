@@ -1,25 +1,15 @@
 <template>
   <div class="best-posts-container">
     <div class="header">
-      <h2>인기 글</h2>
+      <h2 class="main-title">인기 글</h2>
       <button class="more-button" @click="goToBoard">더보기</button>
     </div>
-    <table class="table table-lg">
-      <thead>
-        <tr>
-          <th>제목</th>
-          <th>작성자</th>
-          <th>작성 날짜</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(post, index) in bestPosts" :key="index">
-          <td class="truncate">{{ post.title }}</td>
-          <td class="truncate">{{ post.userName }}</td>
-          <td>{{ formatDate(post.regDate) }}</td>
-        </tr>
-      </tbody>
-    </table>
+
+    <ul v-for="(post, index) in bestPosts" :key="index">
+      <li class="truncate">{{ post.title }}</li>
+      <li class="truncate">{{ post.userName }}</li>
+      <li>{{ formatDate(post.regDate) }}</li>
+    </ul>
   </div>
 </template>
 
