@@ -2,7 +2,14 @@
   <ProductFilter v-model:productType="productType" />
   <ProductKBList :product-type="productType" />
   <div class="infinite-scroll">
-    <h2 class="title margin-top-3rem"><span class="text-accent">예ㆍ적금 상품</span> 목록</h2>
+    <h2 class="title margin-top-3rem">
+      <span class="text-accent"
+        ><span class="text-accent">
+          {{ productType == '대출' ? '전세자금대출' : productType }}
+        </span>
+      </span>
+      목록
+    </h2>
     <div class="search-bar">
       <!-- SearchBar 컴포넌트 사용 -->
       <SearchBar v-model="keyword" @search="searchProducts" />
@@ -38,8 +45,9 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useProductStore } from '@/stores/productStore'
 import { fetchProducts } from '@/api/productApi'
 import ProductItem from './ProductItem.vue'
 import LoanItem from './LoanItem.vue'
@@ -53,9 +61,10 @@ const totalPage = ref(0)
 const keyword = ref('')
 const loading = ref(false)
 const noMoreData = ref(false)
-const productType = ref('예금')
 const route = useRoute()
 const router = useRouter()
+const productStore = useProductStore()
+const productType = computed(() => productStore.productType)
 const totalCnt = ref(0)
 
 const loadProducts = async () => {
@@ -110,7 +119,7 @@ const handleScroll = () => {
 onMounted(() => {
   keyword.value = route.query.keyword || ''
   pageNum.value = parseInt(route.query.page) || 1
-
+  // productType.value = route.query.productType || '에금'
   loadProducts()
 
   window.addEventListener('scroll', handleScroll)
