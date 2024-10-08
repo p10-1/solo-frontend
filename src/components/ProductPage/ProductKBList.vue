@@ -23,7 +23,6 @@
 import { ref, onMounted, watch } from 'vue'
 import { fetchKbProducts } from '@/api/productApi'
 import ProductKBItem from './ProductKBItem.vue'
-import { useAuthStore } from '@/stores/authStore'
 
 const props = defineProps({
   productType: {
@@ -36,7 +35,6 @@ const products = ref([])
 const loading = ref(true)
 const error = ref(null)
 const hoveredCard = ref(null)
-const authStore = useAuthStore()
 
 const loadProducts = async () => {
   try {
