@@ -1,9 +1,4 @@
 <template>
-  <h2 class="title">
-    "<span class="text-accent">{{ authStore.userInfo.userName }}</span
-    >" 님을 위한 <span class="text-accent">KB 추천 상품</span>이에요
-    <span class="text-accent"><i class="fa-regular fa-face-smile"></i></span>
-  </h2>
   <div class="filter-bar margin-top-1rem margin-bottom-1rem">
     <input type="radio" id="deposit" value="예금" v-model="selectedType" />
     <label :class="{ active: selectedType === '예금' }" for="deposit">예금</label>
@@ -15,10 +10,10 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import { useAuthStore } from '@/stores/authStore'
-const authStore = useAuthStore()
+import { ref, watch, onMounted } from 'vue'
+import { useProductStore } from '@/stores/productStore'
 
+const productStore = useProductStore()
 const props = defineProps({
   productType: {
     type: String,
@@ -27,11 +22,27 @@ const props = defineProps({
 })
 
 const emits = defineEmits(['update:productType'])
-
 const selectedType = ref(props.productType)
 
+// Watch for changes on selectedType to emit updates
 watch(selectedType, (newType) => {
   emits('update:productType', newType)
+})
+
+// Watch for changes on props.productType to sync with local state
+watch(
+  () => props.productType,
+  (newType) => {
+    if (newType !== selectedType.value) {
+      selectedType.value = newType
+      productStore.setProductType(newType)
+    }
+  }
+)
+
+// On mounted, set the initial selected type from the props
+onMounted(() => {
+  selectedType.value = props.productType
 })
 </script>
 

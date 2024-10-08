@@ -7,18 +7,21 @@
           <i class="fa-solid fa-coins"></i>
           예금
         </router-link>
+        <a @click="handleClick('예금')"><i class="fa-solid fa-coins"></i>예금</a>
       </li>
       <li>
         <router-link :to="{ name: 'product' }">
           <i class="fa-solid fa-piggy-bank"></i>
           적금
         </router-link>
+        <a @click="handleClick('적금')"><i class="fa-solid fa-coins"></i>적금</a>
       </li>
       <li>
         <router-link :to="{ name: 'product' }">
           <i class="fa-solid fa-house-circle-check"></i>
           전세대출
         </router-link>
+        <a @click="handleClick('대출')"><i class="fa-solid fa-coins"></i>전세대출</a>
       </li>
     </ul>
     <h2 class="main-title">제공 서비스</h2>
@@ -46,7 +49,26 @@
     </ul>
   </div>
 </template>
-<script></script>
+<script setup>
+import { useRouter } from 'vue-router'
+import { useProductStore } from '@/stores/productStore'
+
+const router = useRouter()
+const productStore = useProductStore()
+
+const handleClick = (type) => {
+  setProductType(type)
+  navigateToProduct()
+}
+
+const setProductType = (type) => {
+  productStore.setProductType(type)
+}
+
+const navigateToProduct = () => {
+  router.push({ name: 'product' })
+}
+</script>
 <style scope>
 .main-title {
   font-size: 24px;

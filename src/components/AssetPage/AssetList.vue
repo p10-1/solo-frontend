@@ -17,12 +17,24 @@
                 key="user-distribution"
                 :assetDetails="processedData.assetDetails"
                 title="내 자산 분포"
-              />
-              <Distribution
+              >
+                <template #extra>
+                  <div v-if="highestAssetType" class="asset-highlight">
+                    보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
+                  </div>
+                </template>
+              </Distribution>
+              <DistributionAverage
                 v-else-if="currentSlide === 1 && processedData.typeAverages"
-                key="average-distribution"
+                key="type-average-distribution"
                 :assetDetails="processedData.typeAverages"
                 :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
+              />
+              <DistributionAverage
+                v-else-if="currentSlide === 2 && processedData.overallAverages"
+                key="overall-average-distribution"
+                :assetDetails="processedData.overallAverages"
+                title="전체 사용자 평균 자산 분포"
               />
             </transition>
           </div>
@@ -74,6 +86,7 @@ import AssetComparison from '@/components/AssetPage/AssetComparison.vue'
 import TimeComparison from '@/components/AssetPage/TimeComparison.vue'
 import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
 import Recommendation from '@/components/AssetPage/Recommendation.vue'
+import DistributionAverage from '@/components/AssetPage/DistributionAverage.vue'
 
 const loading = ref(true) // 로딩 상태 관리
 const error = ref(null) // 에러 상태 관리
@@ -84,19 +97,22 @@ const selectedAssetType = ref('cash') // 선택된 자산 타입 기본값은 'c
 
 //슬라이드 구현
 const currentSlide = ref(0)
+const totalSlides = 3 // 전체 슬라이드 수를 3으로 변경
 
 const nextSlide = () => {
-  currentSlide.value = currentSlide.value === 0 ? 1 : 0
+  currentSlide.value = (currentSlide.value + 1) % totalSlides
 }
 
 const prevSlide = () => {
-  currentSlide.value = currentSlide.value === 1 ? 0 : 1
+  currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides
 }
 
-onMounted(() => {
-  loadData()
-})
-
+const assetNames = {
+  cash: '현금자산',
+  deposit: '예적금',
+  stock: '주식',
+  insurance: '보험'
+}
 // 자산 데이터 및 평균 데이터를 API로부터 로드하는 함수
 
 const fieldMapping = {
@@ -105,7 +121,13 @@ const fieldMapping = {
   stock: { bank: 'stockBank', account: 'stockAccount', value: 'stock' },
   insurance: { bank: 'insuranceCompany', account: 'insuranceName', value: 'insurance' }
 }
-
+const highestAssetType = computed(() => {
+  if (!processedData.value || !processedData.value.assetDetails) return null
+  const sortedAssets = Object.entries(processedData.value.assetDetails).sort(
+    ([, a], [, b]) => b.total - a.total
+  )
+  return sortedAssets[0]?.[0]
+})
 const loadData = async () => {
   console.log('1. loadData 함수 시작')
   try {
@@ -149,14 +171,24 @@ const processAssetData = (data, assetTypes) => {
   return assetTypes.reduce((processed, type) => {
     const mapping = fieldMapping[type]
     if (mapping) {
+      const values = parseJsonArray(data[mapping.value])
+      const banks = parseJsonArray(data[mapping.bank])
+      const accounts = parseJsonArray(data[mapping.account])
+
       processed[type] = {
-        values: parseJsonArray(data[mapping.value]),
-        banks: parseJsonArray(data[mapping.bank]),
-        accounts: parseJsonArray(data[mapping.account])
+        values: values.length ? values.map((v) => Number(v) || 0) : [0],
+        banks: banks.length ? banks : [''],
+        accounts: accounts.length ? accounts : ['']
       }
     }
     return processed
   }, {})
+}
+const calculateAverage = (values) => {
+  const validValues = values.filter((v) => v > 0)
+  return validValues.length
+    ? validValues.reduce((sum, val) => sum + val, 0) / validValues.length
+    : 0
 }
 
 // 처리된 자산 데이터를 계산하고 반환하는 computed 함수
@@ -169,12 +201,13 @@ const processedData = computed(() => {
         deposit: { total: 0, details: [] },
         stock: { total: 0, details: [] },
         insurance: { total: 0, details: [] },
-        type: 'unknown'
+        type: '유형을 입력해 주세요'
       },
       comparisonData: {},
       typeAverages: null,
       timeComparisonData: {},
-      loanData: { amount: 0, purpose: '', period: 0, interest: 0 }
+      loanData: { amount: 0, purpose: '', period: 0, interest: 0 },
+      overallAverages: null
     }
   }
 
@@ -194,31 +227,33 @@ const processedData = computed(() => {
   const totalAsset = calculateTotal(currentAssetData)
 
   const assetDetails = assetTypes.reduce((details, type) => {
+    const values = currentAssetData[type].values
     details[type] = {
-      total: currentAssetData[type].values.reduce((sum, val) => sum + Number(val), 0),
-      details: currentAssetData[type].values.map((value, index) => ({
-        bank: currentAssetData[type].banks[index],
-        account: currentAssetData[type].accounts[index],
-        value: Number(value)
+      total: values.reduce((sum, val) => sum + val, 0),
+      details: values.map((value, index) => ({
+        bank: currentAssetData[type].banks[index] || '',
+        account: currentAssetData[type].accounts[index] || '',
+        value: value
       }))
     }
     return details
   }, {})
 
   const comparisonData = assetTypes.reduce((data, type) => {
-    const currentTotal = currentAssetData[type].values.reduce((sum, val) => sum + Number(val), 0)
-    const previousTotal = previousAssetData[type].values.reduce((sum, val) => sum + Number(val), 0)
+    const currentValues = currentAssetData[type].values
+    const previousValues = previousAssetData[type].values
     data[type] = {
       average: assetAverages.value ? assetAverages.value[type] : 0,
-      user: currentTotal
+      user: calculateAverage(currentValues),
+      previousAverage: calculateAverage(previousValues)
     }
     return data
   }, {})
 
   const timeComparisonData = assetTypes.reduce((data, type) => {
     data[type] = {
-      previousMonth: previousAssetData[type].values.reduce((sum, val) => sum + Number(val), 0),
-      currentMonth: currentAssetData[type].values.reduce((sum, val) => sum + Number(val), 0)
+      previousMonth: calculateAverage(previousAssetData[type].values),
+      currentMonth: calculateAverage(currentAssetData[type].values)
     }
     return data
   }, {})
@@ -229,12 +264,20 @@ const processedData = computed(() => {
         return averages
       }, {})
     : null
+  // 새로 추가된 부분: overallAverages 계산
+  const overallAverages = assetAverages.value
+    ? assetTypes.reduce((averages, type) => {
+        averages[type] = { total: assetAverages.value[type] || 0 }
+        return averages
+      }, {})
+    : null
 
   return {
     totalAsset,
-    assetDetails: { ...assetDetails, type: currentData.type || 'unknown' },
+    assetDetails: { ...assetDetails, type: currentData.type || '유형을 입력해주세요' },
     comparisonData,
     typeAverages,
+    overallAverages, // 여기에 overallAverages 추가
     timeComparisonData,
     loanData: {
       amount: Number(currentData.loanAmount),
@@ -255,7 +298,9 @@ const selectAssetType = (type) => {
   selectedAssetType.value = type
 }
 
-onMounted(loadData)
+onMounted(async () => {
+  await loadData()
+})
 </script>
 
 <style scoped>
@@ -386,5 +431,10 @@ onMounted(loadData)
   background-color: #f8f9fa;
   border-radius: 8px;
   color: #6c757d;
+}
+.asset-highlight {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #4caf50;
 }
 </style>
