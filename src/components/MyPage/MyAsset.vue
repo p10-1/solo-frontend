@@ -1,215 +1,315 @@
 <template>
-    <div class="asset-manager container mt-5">
-        <h1 class="text-center">자산 관리</h1><br />
-        <div class="text-center mb-4">
-            <button class="btn btn-primary" v-if="!loaded" @click="loadAsset">내 자산 불러오기</button>
-        </div>
+  <div class="my-asset-manager">
+    <h2 class="title">자산 관리</h2>
+    <div class="text-center">
+      <button class="button-main" v-if="!loaded" @click="loadAsset">
+        <i class="fa-solid fa-circle-down"></i> 내 자산 불러오기
+      </button>
+    </div>
 
-        <div class="asset-loan-container" v-if="loaded">
-            <div class="asset-section mb-4" v-for="(type, index) in assetTypesList" :key="index">
-                <h3>{{ getAssetTypeName(type) }}</h3>
-                <ul class="list-group">
-                    <li v-for="(asset, assetIndex) in assetTypes[type]" :key="assetIndex" class="list-group-item">
-                        <div v-if="!editMode">
-                            {{ asset.bank }} - {{ asset.accountNumber }}: {{ asset.amount ? asset.amount.toLocaleString() : '0' }}원
-                        </div>
-                        <div v-else>
-                            <input v-model="asset.bank" class="form-control mb-2" placeholder="은행명" />
-                            <input v-model="asset.accountNumber" class="form-control mb-2" placeholder="계좌 번호" />
-                            <input v-model.number="asset.amount" type="number" class="form-control" placeholder="금액" />
-                        </div>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h3>대출 자산</h3>
-                </div>
-                <div class="card-body">
-                    <div v-if="isLoanDetailsValid">
-                        <div v-if="!editMode">
-                            <p><strong>대출 목적:</strong> {{ loanDetails.loanPurpose }}</p>
-                            <p><strong>대출 금액:</strong> {{ loanDetails.loanAmount ? loanDetails.loanAmount.toLocaleString() : '0' }}원</p>
-                            <p><strong>대출 기간:</strong> {{ loanDetails.period }}개월</p>
-                            <p><strong>대출 이율:</strong> {{ loanDetails.interest }}%</p>
-                        </div>
-                        <div v-else>
-                            <input v-model="loanDetails.loanPurpose" class="form-control mb-2" placeholder="대출 목적" />
-                            <input v-model.number="loanDetails.loanAmount" type="number" class="form-control mb-2" placeholder="대출 금액" />
-                            <input v-model.number="loanDetails.period" type="number" class="form-control mb-2" placeholder="대출 기간" />
-                            <input v-model.number="loanDetails.interest" type="number" class="form-control" placeholder="대출 이율" />
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="my-asset-list" v-if="loaded">
+      <h3 class="title margin-top-2rem margin-bottom-1rem">자산</h3>
+      <div class="list-align">
+        <div class="list-item" v-for="(type, index) in assetTypesList" :key="index">
+          <h4 class="title">{{ getAssetTypeName(type) }}</h4>
+          <ul>
+            <li
+              v-for="(asset, assetIndex) in assetTypes[type]"
+              :key="assetIndex"
+              class="asset-item"
+            >
+              <dl v-if="!editMode">
+                <dt>{{ asset.bank }}</dt>
+                <dd>{{ asset.accountNumber }}</dd>
+                <dd>
+                  <span class="text-accent">{{
+                    asset.amount ? asset.amount.toLocaleString() : '0'
+                  }}</span
+                  >원
+                </dd>
+              </dl>
+              <dl v-else>
+                <dt><input v-model="asset.bank" class="form-control" placeholder="은행명" /></dt>
+                <dd>
+                  <input
+                    v-model="asset.accountNumber"
+                    class="form-control"
+                    placeholder="계좌 번호"
+                  />
+                </dd>
+                <dd>
+                  <input
+                    v-model.number="asset.amount"
+                    type="number"
+                    class="form-control"
+                    placeholder="금액"
+                  />
+                </dd>
+              </dl>
+            </li>
+          </ul>
         </div>
+      </div>
+
+      <div class="laon-section">
+        <h3 class="title margin-top-3rem margin-bottom-1rem">대출</h3>
+        <div v-if="isLoanDetailsValid" class="my-loan-list">
+          <div v-if="!editMode">
+            <ul class="list-item">
+              <li>대출 금액</li>
+              <li>
+                {{ loanDetails.loanAmount ? loanDetails.loanAmount.toLocaleString() : '0' }}원
+              </li>
+            </ul>
+            <ul class="list-item">
+              <li>대출 목적</li>
+              <li>{{ loanDetails.loanPurpose }}</li>
+            </ul>
+            <ul class="list-item">
+              <li>대출 기간</li>
+              <li>{{ loanDetails.period }}개월</li>
+            </ul>
+            <ul class="list-item">
+              <li>대출 이율</li>
+              <li>{{ loanDetails.interest }}%</li>
+            </ul>
+          </div>
+          <div v-else>
+            <ul class="list-item">
+              <li>대출 목적</li>
+              <li>
+                <input
+                  v-model="loanDetails.loanPurpose"
+                  class="form-control"
+                  placeholder="대출 목적"
+                />
+              </li>
+            </ul>
+            <ul class="list-item">
+              <li>대출 금액</li>
+              <li>
+                <input
+                  v-model.number="loanDetails.loanAmount"
+                  type="number"
+                  class="form-control"
+                  placeholder="대출 금액"
+                />
+              </li>
+            </ul>
+            <ul class="list-item">
+              <li>대출 기간</li>
+              <li>
+                <input
+                  v-model.number="loanDetails.period"
+                  type="number"
+                  class="form-control"
+                  placeholder="대출 기간"
+                />
+              </li>
+            </ul>
+            <ul class="list-item">
+              <li>대출 이율</li>
+              <li>
+                <input
+                  v-model.number="loanDetails.interest"
+                  type="number"
+                  class="form-control"
+                  placeholder="대출 이율"
+                />
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="text-center margin-top-1rem">
-      <button class="button-sub btn btn-secondary" @click="toggleEditMode">
-        {{ editMode ? '저장하기' : '수정하기' }}</button
-      ><br /><br />
+      <button class="button-sub" @click="toggleEditMode">
+        {{ editMode ? '저장하기' : '수정하기' }}
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { getAsset, updateAsset } from '@/api/mypageApi';
+import { ref, computed } from 'vue'
+import { getAsset, updateAsset } from '@/api/mypageApi'
 
 // 상태 정의
 const assetTypes = ref({
-    cash: [],
-    deposit: [],
-    stock: [],
-    insurance: []
-});
-const loanDetails = ref({});
-const editMode = ref(false);
-const loaded = ref(false);
-const assetTypesList = ['cash', 'deposit', 'stock', 'insurance'];
+  cash: [],
+  deposit: [],
+  stock: [],
+  insurance: []
+})
+const loanDetails = ref({})
+const editMode = ref(false)
+const loaded = ref(false)
+const assetTypesList = ['cash', 'deposit', 'stock', 'insurance']
 
 // 대출 정보 유효성 검사
 const isLoanDetailsValid = computed(() => {
-    const { loanPurpose, loanAmount, period, interest } = loanDetails.value;
-    return loanPurpose && loanAmount !== null && period !== null && interest !== null;
-});
+  const { loanPurpose, loanAmount, period, interest } = loanDetails.value
+  return loanPurpose && loanAmount !== null && period !== null && interest !== null
+})
 
 // 자산 타입 이름 가져오기
-const getAssetTypeName = (type) => ({
+const getAssetTypeName = (type) =>
+  ({
     cash: '현금 자산',
     deposit: '예적금 자산',
     stock: '증권 자산',
     insurance: '보험 자산'
-}[type] || type);
+  })[type] || type
 
 // 자산 파싱
 const parseAssets = (data, type) => {
-    const banks = JSON.parse(data[`${type}Bank`] || "[]");
-    const accounts = JSON.parse(data[`${type}Account`] || "[]");
-    const amounts = JSON.parse(data[type] || "[]");
-    return banks.map((bank, index) => ({
-        bank,
-        accountNumber: accounts[index] || '',
-        amount: amounts[index] ? parseInt(amounts[index], 10) : 0
-    }));
-};
+  const banks = JSON.parse(data[`${type}Bank`] || '[]')
+  const accounts = JSON.parse(data[`${type}Account`] || '[]')
+  const amounts = JSON.parse(data[type] || '[]')
+  return banks.map((bank, index) => ({
+    bank,
+    accountNumber: accounts[index] || '',
+    amount: amounts[index] ? parseInt(amounts[index], 10) : 0
+  }))
+}
 
 // 자산 로드
 const loadAsset = async () => {
-    try {
-        const responseData = await getAsset();
-        if (!responseData) {
-            alert('자산 데이터가 없습니다. 다시 시도해 주세요.');
-            return;
-        }
-
-        assetTypesList.forEach(type => {
-            assetTypes.value[type] = parseAssets(responseData, type);
-        });
-
-        if (responseData.insuranceCompany) {
-            assetTypes.value.insurance = JSON.parse(responseData.insuranceCompany).map((company, index) => ({
-                bank: company,
-                accountNumber: JSON.parse(responseData.insuranceName)[index] || '',
-                amount: parseInt(JSON.parse(responseData.insurance)[index], 10) || 0
-            }));
-        }
-
-        loanDetails.value = {
-            loanPurpose: responseData.loanPurpose || null,
-            loanAmount: responseData.loanAmount || null,
-            period: responseData.period || null,
-            interest: responseData.interest || null
-        };
-
-        loaded.value = true;
-    } catch {
-        alert('자산 불러오기 실패. 다시 시도해 주세요.');
+  try {
+    const responseData = await getAsset()
+    if (!responseData) {
+      alert('자산 데이터가 없습니다. 다시 시도해 주세요.')
+      return
     }
-};
+
+    assetTypesList.forEach((type) => {
+      assetTypes.value[type] = parseAssets(responseData, type)
+    })
+
+    if (responseData.insuranceCompany) {
+      assetTypes.value.insurance = JSON.parse(responseData.insuranceCompany).map(
+        (company, index) => ({
+          bank: company,
+          accountNumber: JSON.parse(responseData.insuranceName)[index] || '',
+          amount: parseInt(JSON.parse(responseData.insurance)[index], 10) || 0
+        })
+      )
+    }
+
+    loanDetails.value = {
+      loanPurpose: responseData.loanPurpose || null,
+      loanAmount: responseData.loanAmount || null,
+      period: responseData.period || null,
+      interest: responseData.interest || null
+    }
+
+    loaded.value = true
+  } catch {
+    alert('자산 불러오기 실패. 다시 시도해 주세요.')
+  }
+}
 
 // 수정 모드 전환
 const toggleEditMode = async () => {
-    if (editMode.value) {
-        const updatedData = prepareUpdatedData();
-        try {
-            await updateAsset(updatedData);
-            alert('자산 및 대출 정보가 업데이트되었습니다.');
-        } catch {
-            alert('업데이트 실패. 다시 시도해 주세요.');
-        }
+  if (editMode.value) {
+    const updatedData = prepareUpdatedData()
+    try {
+      await updateAsset(updatedData)
+      alert('자산 및 대출 정보가 업데이트되었습니다.')
+    } catch {
+      alert('업데이트 실패. 다시 시도해 주세요.')
     }
-    editMode.value = !editMode.value;
-};
+  }
+  editMode.value = !editMode.value
+}
 
 // 업데이트된 데이터 준비
 const prepareUpdatedData = () => {
-    const updatedData = {};
-    assetTypesList.forEach(type => {
-        updatedData[type] = JSON.stringify(assetTypes.value[type].map(asset => asset.amount));
-        updatedData[`${type}Account`] = JSON.stringify(assetTypes.value[type].map(asset => asset.accountNumber));
-        updatedData[`${type}Bank`] = JSON.stringify(assetTypes.value[type].map(asset => asset.bank));
-    });
-    Object.assign(updatedData, loanDetails.value);
+  const updatedData = {}
+  assetTypesList.forEach((type) => {
+    updatedData[type] = JSON.stringify(assetTypes.value[type].map((asset) => asset.amount))
+    updatedData[`${type}Account`] = JSON.stringify(
+      assetTypes.value[type].map((asset) => asset.accountNumber)
+    )
+    updatedData[`${type}Bank`] = JSON.stringify(assetTypes.value[type].map((asset) => asset.bank))
+  })
+  Object.assign(updatedData, loanDetails.value)
 
-    if (assetTypes.value.insurance.length > 0) {
-        updatedData.insuranceCompany = JSON.stringify(assetTypes.value.insurance.map(ins => ins.bank));
-        updatedData.insuranceName = JSON.stringify(assetTypes.value.insurance.map(ins => ins.accountNumber));
-        updatedData.insurance = JSON.stringify(assetTypes.value.insurance.map(ins => ins.amount));
-    }
+  if (assetTypes.value.insurance.length > 0) {
+    updatedData.insuranceCompany = JSON.stringify(assetTypes.value.insurance.map((ins) => ins.bank))
+    updatedData.insuranceName = JSON.stringify(
+      assetTypes.value.insurance.map((ins) => ins.accountNumber)
+    )
+    updatedData.insurance = JSON.stringify(assetTypes.value.insurance.map((ins) => ins.amount))
+  }
 
-    return updatedData;
-};
+  return updatedData
+}
 </script>
 
 <style scoped>
-.asset-manager {
-  text-align: left;
+.my-asset-manager {
 }
-
-.asset-manager .title {
-  font-weight: 300;
-  line-height: 1;
-}
-
-.asset-manager .button-box {
+/* 자산 */
+.my-asset-list div.list-align {
   display: flex;
+  gap: 19px;
+  flex-wrap: wrap;
+}
+.my-asset-list h3.title {
+  padding: 0;
+  font-weight: 400;
   position: relative;
-  margin-top: 0;
-  left: 0;
-  justify-content: center;
+  color: #6846f5;
+}
+.my-asset-list .list-item {
+  width: calc(50% - 9.5px);
+  position: relative;
+  min-height: 7.8rem;
+  padding: 1.25rem 1.4rem;
+  border: 3px solid #e4deff;
+  border-radius: 24px;
+}
+.my-asset-list .list-item h4.title {
+  margin: 8px 0 12px;
+  font-weight: 400;
+  padding-top: 0;
+  padding-bottom: 8px;
+  font-size: 22px;
+  letter-spacing: -1px;
+  border-bottom: 2px solid #eee;
+}
+.my-asset-list .asset-item dl {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 5px;
+  font-size: 18px;
 }
 
-.asset-manager .button-box .button-main {
+.my-asset-list .asset-item dt {
+  font-weight: 400;
+  letter-spacing: -0.8px;
+  color: #6846f5;
+}
+
+.my-asset-list .asset-item dl dd {
+  color: #666;
+}
+
+.my-asset-list .asset-item dl dd:nth-child(2) {
+  letter-spacing: -0.5px;
   margin-left: 0;
-  margin-right: 10px;
+  flex-grow: 1;
 }
 
-.asset-loan-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.my-asset-list .asset-item dl dd .text-accent {
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
-.asset-loan-container .asset-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-}
-
-.loan-section {
-  margin-top: 20px;
-}
-
-input,
-select {
-  padding: 8px;
-  margin-right: 10px;
-}
-
-button {
-  padding: 8px 16px;
+/* 대출 */
+.my-loan-list {
 }
 </style>
