@@ -73,7 +73,9 @@ const loadProducts = async () => {
 
   setTimeout(async () => {
     try {
+      console.log('fetch: ', productType.value)
       const data = await fetchProducts(pageNum.value, keyword.value, productType.value)
+      console.log(data)
       totalCnt.value = data.totalCount || 0
       if (data.list.length > 0) {
         list.value = [...list.value, ...data.list]
@@ -103,12 +105,14 @@ const searchProducts = async (searchTerm) => {
 }
 
 watch(productType, async (newType) => {
-  console.log('ProductType changed:', newType)
+  pageNum.value = 1
+  list.value = []
+  noMoreData.value = false
   productStore.setProductType(newType)
   await loadProducts() // Load products whenever productType changes
 })
 
-watch(keyword, async (newValue) => {
+watch(keyword, async () => {
   pageNum.value = 1
   list.value = []
   noMoreData.value = false
