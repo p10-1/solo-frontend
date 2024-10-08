@@ -41,8 +41,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineEmits } from 'vue'
-import { fetchPoints, pointsToCash, getBank } from '@/api/mypageApi'
+import { ref, onMounted } from 'vue';
+import { fetchPoints, pointsToCash, getBank } from '@/api/mypageApi';
 
 // 이벤트 정의
 const emit = defineEmits(['update'])

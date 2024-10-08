@@ -12,7 +12,7 @@
           <col width="27%" />
         </colgroup>
         <thead>
-          <tr>
+          <tr> 
             <th>번호</th>
             <th class="text-align-left">제목</th>
             <th>작성일</th>
