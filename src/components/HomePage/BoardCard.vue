@@ -1,15 +1,19 @@
 <template>
   <div class="best-posts-container">
-    <div class="header">
-      <h2 class="main-title">인기 글</h2>
-      <button class="more-button" @click="goToBoard">더보기</button>
+    <div class="title-box margin-top-2rem margin-bottom-1rem">
+      <h2 class="main-title">커뮤니티 <span class="text-accent">HOT</span></h2>
+      <button class="link" @click="goToBoard">
+        <i class="fa-solid fa-plus"></i>
+        더보기
+      </button>
     </div>
-
-    <ul v-for="(post, index) in bestPosts" :key="index">
-      <li class="truncate">{{ post.title }}</li>
-      <li class="truncate">{{ post.userName }}</li>
-      <li>{{ formatDate(post.regDate) }}</li>
-    </ul>
+    <div class="posts-content">
+      <ul v-for="(post, index) in bestPosts" :key="index" class="bxslider posts-list">
+        <li class="truncate posts-title">{{ post.title }}</li>
+        <li class="truncate">{{ post.userName }}</li>
+        <li>{{ formatDate(post.regDate) }}</li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -49,50 +53,22 @@ onMounted(() => {
 
 <style scoped>
 .best-posts-container {
-  margin: 20px 0;
   width: 100%;
-  max-width: 400px; /* 테이블 크기 확장 */
+  padding: 1rem;
 }
-
-.header {
+.posts-content {
+  width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 17px;
 }
-
-h2 {
-  font-size: 1.3rem; /* 제목 크기 확장 */
+.posts-content ul.posts-list {
+  padding: 1.5rem;
+  background-color: #f3f3ff;
+  min-height: 10rem;
+  border-radius: 28px;
 }
-
-.table {
-  width: 100%;
-  font-size: 0.8rem; /* 테이블 글자 크기 확장 */
-}
-
-.table th,
-.table td {
-  padding: 10px; /* 셀 패딩 조정 */
-  text-align: left; /* 좌측 정렬 */
-}
-
-.truncate {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 200px; /* 텍스트 너비 확장 */
-}
-
-.more-button {
-  padding: 8px 12px; /* 버튼 크기 확장 */
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.more-button:hover {
-  background-color: #0056b3;
+.posts-content ul.posts-list li {
 }
 </style>

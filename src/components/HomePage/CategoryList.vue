@@ -3,14 +3,21 @@
     <h2 class="main-title">자산 형성 도움</h2>
     <ul class="catagory-list margin-top-1rem margin-bottom-2rem">
       <li>
-        <router-link :to="{ name: 'product' }"> <i class="fa-solid fa-coins"></i>예금 </router-link>
-      </li>
-      <li>
-        <router-link :to="{ name: 'product' }"><i class="fa-solid fa-coins"></i>적금</router-link>
+        <router-link :to="{ name: 'product' }">
+          <i class="fa-solid fa-coins"></i>
+          예금
+        </router-link>
       </li>
       <li>
         <router-link :to="{ name: 'product' }">
-          <i class="fa-solid fa-coins"></i>전세대출
+          <i class="fa-solid fa-piggy-bank"></i>
+          적금
+        </router-link>
+      </li>
+      <li>
+        <router-link :to="{ name: 'product' }">
+          <i class="fa-solid fa-house-circle-check"></i>
+          전세대출
         </router-link>
       </li>
     </ul>
@@ -18,15 +25,22 @@
     <ul class="catagory-list margin-top-1rem">
       <li>
         <router-link :to="{ name: 'asset' }">
-          <i class="fa-solid fa-coins"></i>자산분석
+          <i class="fa-solid fa-chart-pie"></i>
+          <!-- <i class="fa-solid fa-chart-simple"></i> -->
+          자산분석
         </router-link>
       </li>
       <li>
-        <router-link :to="{ name: 'board' }"><i class="fa-solid fa-coins"></i>커뮤니티</router-link>
+        <router-link :to="{ name: 'board' }">
+          <i class="fa-solid fa-comments"></i>
+          <!-- <i class="fa-solid fa-user-group"></i> -->
+          커뮤니티
+        </router-link>
       </li>
       <li>
         <router-link :to="{ name: 'mypage' }">
-          <i class="fa-solid fa-coins"></i>마이페이지
+          <i class="fa-solid fa-face-smile"></i>
+          마이페이지
         </router-link>
       </li>
     </ul>
@@ -71,9 +85,16 @@
   color: #6846f5;
   font-weight: 600;
 }
-.catagory-list li i {
+.catagory-list li a i {
   display: block;
   margin-bottom: 15px;
   font-size: 2.2rem;
+  background: linear-gradient(to right top, #7d64da, #a686f3);
+  color: transparent;
+  -webkit-background-clip: text;
+  transition: all 0.6s;
+}
+.catagory-list li a:hover i {
+  color: #6846f5;
 }
 </style>

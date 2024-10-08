@@ -1,18 +1,19 @@
 <template>
   <div class="quiz-container">
-    <h3 class="main-title">오늘의 금융 퀴즈</h3>
+    <h3 class="main-title">
+      오늘의 금융 퀴즈
+      <span class="text-accent"
+        ><i class="fa-solid fa-question"></i><i class="fa-solid fa-exclamation"></i
+      ></span>
+    </h3>
     <div class="quiz-card" @click="openModal">
       <div v-if="description" class="quiz-description">
-        <div class="hiding">
-          <p>{{ description }}</p>
-          <div class="button-main">참여하기</div>
-        </div>
+        <p>{{ description }}</p>
+        <div class="button-main">참여하기</div>
       </div>
       <div class="loading" v-else>
-        <div>
-          <i class="fa-solid fa-spinner margin-bottom-1rem"></i>
-          퀴즈를 불러오는 중입니다...
-        </div>
+        <i class="fa-solid fa-spinner margin-bottom-1rem"></i>
+        퀴즈를 불러오는 중입니다...
       </div>
     </div>
 
@@ -65,55 +66,53 @@ const openModal = () => {
 <style scoped>
 .quiz-container {
   width: 100%;
-  padding: 2rem 1.7rem;
-}
-
-.quiz-card {
-  margin-top: 15px;
-  width: 100%;
   padding: 1rem;
+}
+.quiz-card {
+  margin-top: 16px;
+  width: 100%;
+  padding: 2rem 1rem;
   border-radius: 25px;
+  text-align: center;
   background-color: #fff;
   box-shadow: 0px 0px 15px rgb(221, 214, 255);
+  transition: all 0.3s;
   transition:
     transform 0.3s,
     box-shadow 0.3s;
   cursor: pointer;
 }
-
 .quiz-card:hover {
-  transform: translateY(-10px); /* 호버 시 살짝 올라가는 효과 */
+  transform: translateY(-10px);
 }
 
-.quiz-description {
-  position: relative;
+.quiz-card:hover .quiz-description p {
+  font-weight: 600;
+  color: #6846f5;
+}
+.quiz-card .quiz-description {
   padding: 0 2rem;
-  min-height: 80px;
+}
+.quiz-card .quiz-description p {
   font-size: 1.05rem;
+  line-height: 1.45rem;
   word-break: keep-all;
-  line-height: 28px;
-  letter-spacing: -1px;
-  font-weight: 400;
-  margin: 10px 0 0;
+  margin-bottom: 15px;
 }
 
 .quiz-card .button-main {
-  margin-left: 0;
   height: 40px;
-  background-color: #f7d095;
-  color: #222;
   line-height: 37px;
-  margin-bottom: 1.2rem;
 }
 
-.card-body .loading {
+.quiz-card .loading {
   line-height: 2rem;
   font-size: 18px;
   letter-spacing: -1px;
   text-align: center;
   font-weight: 400;
 }
-.card-body .loading i {
+.quiz-card .loading i {
   display: block;
   margin-bottom: 10px;
 }
