@@ -1,16 +1,7 @@
 <template>
   <div class="board-list">
     <h2 class="title">커뮤니티</h2>
-    <div class="search-section">
-      <div class="select-form">
-        <select v-model="category">
-          <option value="title">제목</option>
-          <option value="content">내용</option>
-          <option value="userName">작성자</option>
-        </select>
-      </div>
-      <search-bar v-model="keyword" @search="searchBoards" />
-    </div>
+
     <dl class="total">
       <dt>전체</dt>
       <dd>
@@ -29,9 +20,19 @@
         </select>
       </div>
       <!-- <BoardBest /> -->
-      <div class="alert">
+      <!-- <div class="alert">
         <i class="fa-solid fa-circle-info"></i> 인기 글은 저번 달 조회수, 댓글 수, 좋아요 수를
         기준으로 선정되었습니다.
+      </div> -->
+      <div class="search-section">
+        <div class="select-form">
+          <select v-model="category">
+            <option value="title">제목</option>
+            <option value="content">내용</option>
+            <option value="userName">작성자</option>
+          </select>
+        </div>
+        <search-bar v-model="keyword" @search="searchBoards" />
       </div>
       <div class="button-box">
         <router-link :to="{ name: 'board/create' }" class="button-main btn btn-primary">
