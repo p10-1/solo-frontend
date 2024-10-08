@@ -17,10 +17,10 @@
   </div>
   <BoardCard />
   <NewsCard />
-  <div class="layout-2">
+  <!-- <div class="layout-2">
     <PolicyCard />
     <ProductCard />
-  </div>
+  </div> -->
 </template>
 
 <script>

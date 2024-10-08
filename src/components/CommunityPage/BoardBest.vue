@@ -9,53 +9,45 @@
     </div>
 
     <!-- 슬라이더 -->
-    <div class="slider">
-      <div class="slides">
-        <div
-          class="slide"
-          v-for="(board, index) in bestBoards"
-          :key="board.boardNo"
-          :class="{ active: currentIndex === index }"
-        >
-          <div class="card">
-            <div class="card-body">
-              <h5 class="text-align-left link">
-                <router-link
-                  :to="{
-                    name: 'board/detail',
-                    params: { boardNo: board.boardNo }
-                  }"
-                >
-                  {{ board.title }}
-                  <!-- <span v-if="bestlist.includes(board.boardNo)">
-                <i class="fa-solid fa-star" style="color: gold"></i>
-              </span> -->
-                  <ul class="table-ex-info">
-                    <li><i class="fa-solid fa-user"></i> {{ board.views }}</li>
-                    <li><i class="fa-solid fa-heart"></i> {{ board.likes }}</li>
-                    <li><i class="fa-solid fa-comment"></i> {{ board.comments }}</li>
-                  </ul>
-                </router-link>
-              </h5>
-              <p class="card-text">
-                {{ truncateContent(board.content) }}
-              </p>
-              <p class="card-text">
-                <span class="badge">{{ board.userName }}</span>
-                <br />
-                <small class="text-muted"
-                  >작성일: {{ moment(board.regDate).format('YYYY-MM-DD HH:mm') }}</small
-                >
-              </p>
-            </div>
+    <swiper
+      :pagination="{ clickable: true }"
+      :navigation="true"
+      :modules="modules"
+      :loop="true"
+      class="mySwiper"
+    >
+      <swiper-slide v-for="board in bestBoards" :key="board.boardNo">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="text-align-left link">
+              <router-link
+                :to="{
+                  name: 'board/detail',
+                  params: { boardNo: board.boardNo }
+                }"
+              >
+                {{ board.title }}
+                <ul class="table-ex-info">
+                  <li><i class="fa-solid fa-user"></i> {{ board.views }}</li>
+                  <li><i class="fa-solid fa-heart"></i> {{ board.likes }}</li>
+                  <li><i class="fa-solid fa-comment"></i> {{ board.comments }}</li>
+                </ul>
+              </router-link>
+            </h5>
+            <p class="card-text">
+              {{ truncateContent(board.content) }}
+            </p>
+            <p class="card-text">
+              <span class="badge">{{ board.userName }}</span>
+              <br />
+              <small class="text-muted"
+                >작성일: {{ moment(board.regDate).format('YYYY-MM-DD HH:mm') }}</small
+              >
+            </p>
           </div>
         </div>
-      </div>
-
-      <!-- 슬라이더 컨트롤 -->
-      <button @click="prevSlide" class="prev">Previous</button>
-      <button @click="nextSlide" class="next">Next</button>
-    </div>
+      </swiper-slide>
+    </swiper>
   </div>
 </template>
 
@@ -64,11 +56,20 @@ import { ref, onMounted } from 'vue'
 import { getBest } from '@/api/boardApi'
 import moment from 'moment'
 
+// Swiper 컴포넌트 임포트
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Pagination, Navigation } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+
+const modules = [Pagination, Navigation]
+// 데이터 변수
 const bestBoards = ref([])
 const loading = ref(true)
 const error = ref(null)
-const currentIndex = ref(0)
 
+// 데이터 로드
 onMounted(async () => {
   try {
     bestBoards.value = await getBest()
@@ -79,17 +80,6 @@ onMounted(async () => {
   }
 })
 
-// 슬라이드 컨트롤 함수
-const prevSlide = () => {
-  currentIndex.value =
-    currentIndex.value === 0 ? bestBoards.value.length - 1 : currentIndex.value - 1
-}
-
-const nextSlide = () => {
-  currentIndex.value =
-    currentIndex.value === bestBoards.value.length - 1 ? 0 : currentIndex.value + 1
-}
-
 // Helper function to truncate content
 const truncateContent = (content, length = 100) => {
   return content.length > length ? content.slice(0, length) + '...' : content
@@ -97,49 +87,20 @@ const truncateContent = (content, length = 100) => {
 </script>
 
 <style scoped>
-.slider {
-  position: relative;
+/* Swiper 스타일 추가 */
+.mySwiper {
   width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-  overflow: hidden;
+  height: 100%;
 }
 
-.slides {
+.card {
+  /* 카드 스타일 */
+}
+
+.table-ex-info {
+  list-style: none;
+  padding: 0;
   display: flex;
-  transition: transform 0.5s ease-in-out;
-  transform: translateX(calc(-100% * var(--current-index)));
-}
-
-.slide {
-  min-width: 100%;
-  transition: opacity 0.5s ease;
-  opacity: 0;
-  display: none;
-}
-
-.slide.active {
-  opacity: 1;
-  display: block;
-}
-
-.prev,
-.next {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-}
-
-.prev {
-  left: 10px;
-}
-
-.next {
-  right: 10px;
+  gap: 10px;
 }
 </style>
