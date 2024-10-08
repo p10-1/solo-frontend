@@ -1,8 +1,3 @@
-<script setup>
-import Header from './Header.vue'
-import NavBar from './NavBar.vue'
-import Footer from './Footer.vue'
-</script>
 <template>
   <Header />
   <NavBar />
@@ -11,3 +6,8 @@ import Footer from './Footer.vue'
   </section>
   <Footer />
 </template>
+<script setup>
+import Header from './Header.vue'
+import NavBar from './NavBar.vue'
+import Footer from './Footer.vue'
+</script>

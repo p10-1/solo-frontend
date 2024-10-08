@@ -66,6 +66,7 @@ const loadPoints = async () => {
 const loadBank = async () => {
   try {
     const data = await getBank()
+    console.log(data)
     accounts.value = JSON.parse(data[0])
   } catch (error) {
     handleError('계좌 조회 오류가 발생했습니다.', error)
