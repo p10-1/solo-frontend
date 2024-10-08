@@ -1,4 +1,10 @@
 <template>
+  <div class="policy-content margin-top-2rem">
+    <div class="title-box">
+      <h2 class="main-title">정책</h2>
+      <button class="link"><i class="fa-solid fa-plus"></i> 더보기</button>
+    </div>
+  </div>
   <div class="slider-container">
     <div class="slider" :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
       <div v-for="(policy, index) in policies" :key="index" class="slider-card" @click="goToPolicy">
@@ -68,9 +74,12 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.policy-content {
+  width: 100%;
+}
+
 .slider-container {
   position: relative;
-  width: 500px; /* 컴포넌트 크기 키움 */
   overflow: hidden;
   margin: auto;
 }

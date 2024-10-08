@@ -3,40 +3,28 @@
     <h2 class="main-title">자산 형성 도움</h2>
     <ul class="catagory-list margin-top-1rem margin-bottom-2rem">
       <li>
-        <router-link :to="{ name: 'product' }">
-          <i class="fa-solid fa-coins"></i>
-          예금
-        </router-link>
         <a @click="handleClick('예금')"><i class="fa-solid fa-coins"></i>예금</a>
       </li>
       <li>
-        <router-link :to="{ name: 'product' }">
-          <i class="fa-solid fa-piggy-bank"></i>
-          적금
-        </router-link>
-        <a @click="handleClick('적금')"><i class="fa-solid fa-coins"></i>적금</a>
+        <a @click="handleClick('적금')"><i class="fa-solid fa-piggy-bank"></i>적금</a>
       </li>
       <li>
-        <router-link :to="{ name: 'product' }">
-          <i class="fa-solid fa-house-circle-check"></i>
-          전세대출
-        </router-link>
-        <a @click="handleClick('대출')"><i class="fa-solid fa-coins"></i>전세대출</a>
+        <a @click="handleClick('대출')"><i class="fa-solid fa-house-circle-check"></i>전세대출</a>
       </li>
     </ul>
-    <h2 class="main-title">제공 서비스</h2>
+    <!-- <h2 class="main-title">제공 서비스</h2>
     <ul class="catagory-list margin-top-1rem">
       <li>
         <router-link :to="{ name: 'asset' }">
           <i class="fa-solid fa-chart-pie"></i>
-          <!-- <i class="fa-solid fa-chart-simple"></i> -->
+          <i class="fa-solid fa-chart-simple"></i>
           자산분석
         </router-link>
       </li>
       <li>
         <router-link :to="{ name: 'board' }">
           <i class="fa-solid fa-comments"></i>
-          <!-- <i class="fa-solid fa-user-group"></i> -->
+          <i class="fa-solid fa-user-group"></i>
           커뮤니티
         </router-link>
       </li>
@@ -46,7 +34,7 @@
           마이페이지
         </router-link>
       </li>
-    </ul>
+    </ul> -->
   </div>
 </template>
 <script setup>
@@ -101,11 +89,12 @@ const navigateToProduct = () => {
   font-size: 17px;
   letter-spacing: -0.8px;
   text-align: center;
-  transition: all 0.6s;
+  transition: all 0.3s;
+  cursor: pointer;
 }
 .catagory-list li a:hover {
-  color: #6846f5;
   font-weight: 600;
+  color: #6846f5 !important;
 }
 .catagory-list li a i {
   display: block;

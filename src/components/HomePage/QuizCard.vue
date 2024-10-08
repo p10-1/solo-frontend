@@ -101,8 +101,14 @@ const openModal = () => {
 }
 
 .quiz-card .button-main {
+  width: 100%;
   height: 40px;
   line-height: 37px;
+  background: linear-gradient(to right top, #7d64da, #a686f3);
+  border-color: #cfc6fd;
+}
+.quiz-card:hover .button-main {
+  background-color: #6846f5 !important;
 }
 
 .quiz-card .loading {

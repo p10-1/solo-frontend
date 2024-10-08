@@ -3,12 +3,16 @@
     <div class="container">
       <h1>
         <router-link to="/" class="logo">
-          <img src="../../assets/images/logo2.png" />
+          <img src="../../assets/images/logo2.png" alt="푸터 로고" />
         </router-link>
       </h1>
       <div class="dic">
         <ul>
-          <li><i class="fa-solid fa-ghost"></i> <a href="#"> Creative solo </a></li>
+          <li>
+            <router-link :to="{ SoloTeam }"
+              ><i class="fa-solid fa-ghost"></i> Creative Solo Team</router-link
+            >
+          </li>
           <li>
             <i class="fa-solid fa-mobile-button"></i> 고객문의 :
             <a class="btn" href="tel:000-000-0000">051-125-2554</a>

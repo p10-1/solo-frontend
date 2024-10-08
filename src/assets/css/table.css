@@ -2,10 +2,12 @@
 .table-top-box {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
 }
-.table-top-box .alert {
+.custom-alert {
   margin: 0;
+  display: inline-block;
   color: #555;
   letter-spacing: -0.7px;
   padding: 12px 16px;
@@ -13,7 +15,7 @@
   background: var(--gray020, #fffbec);
   color: var(--font-secondary, #475067);
 }
-.table-top-box .alert i {
+.custom-alert i {
   color: #f7d095;
   margin-right: 5px;
 }
@@ -88,13 +90,18 @@ dl.total dd {
   border-right: 0;
 }
 .badge {
-  display: inline-block;
-  padding: 4px 10px;
-  font-size: 16px;
-  color: #6d6d6d;
+  height: 20px;
+  line-height: 19px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background-color: #7d64da;
+  font-size: 15px !important;
+  color: #fff !important;
   vertical-align: middle;
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
+  margin-right: 5px;
+  margin-bottom: 5px;
 }
 .table tbody .link a {
   padding: 0;
@@ -120,7 +127,7 @@ dl.total dd {
   display: inline-block;
   margin-right: 8px;
   font-size: 14px;
-  color: #b9b9b9;
+  color: #c9c9c9;
 }
 
 /* 게시판 인기글 */

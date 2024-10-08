@@ -70,7 +70,7 @@ onMounted(() => {
 
 <style scoped>
 .kb-product-list {
-  margin-top: -2rem;
+  margin-top: 1rem;
 }
 
 .kb-product-list .title {

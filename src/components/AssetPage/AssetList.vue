@@ -1,8 +1,9 @@
 <template>
+  <h2 class="comment-title">
+    "<span class="text-accent">ㅇㅇ</span>"님의 자산을 <span class="text-accent">분석</span>했어요
+    <span class="text-accent"><i class="fa-regular fa-face-smile-wink"></i></span>
+  </h2>
   <div class="asset-list">
-    <h1 class="asset-list__title">자산 정보</h1>
-    <!-- 자산 목록 페이지의 메인 타이틀 -->
-
     <!-- 데이터를 불러오는 동안 로딩 스피너 또는 메시지 표시 -->
     <div v-if="loading" class="asset-list__loading">Loading...</div>
 

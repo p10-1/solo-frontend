@@ -1,4 +1,5 @@
 <template>
+  <PromotionSlide />
   <div class="main-top">
     <div class="main-top-item" style="width: 55%">
       <div class="item-box">
@@ -16,11 +17,18 @@
     </div>
   </div>
   <BoardCard />
-  <NewsCard />
-  <PolicyCard />
+  <div class="main-bottom">
+    <div class="main-bottom-item">
+      <NewsCard />
+    </div>
+    <div class="main-bottom-item">
+      <PolicyCard />
+    </div>
+  </div>
 </template>
 
 <script>
+import PromotionSlide from '@/components/HomePage/PromotionSlide.vue'
 import QuizCard from '@/components/HomePage/QuizCard.vue'
 // import Distribution from '@/components/AssetPage/Distribution.vue'
 import CategoryList from '@/components/HomePage/CategoryList.vue'
@@ -34,6 +42,7 @@ export default {
     BoardCard,
     PolicyCard,
     NewsCard,
+    PromotionSlide,
     // ProductCard,
     CategoryList
   }
@@ -74,23 +83,16 @@ export default {
   justify-content: flex-start;
 }
 
-/* .layoutFlex {
+.main-bottom {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0 40px;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
 }
-
-  .layoutFlex .li {
-    width: calc(100% / 2 - 20px);
-
-    overflow: hidden;
-  }
-
-.asset-empty {
-  background-color: #485168;
-  min-height: 100px;
-  line-height: 100px;
-  color: #fff;
-  text-align: center;
-} */
+.main-bottom .main-bottom-item {
+  width: calc(50% - 10px);
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-start;
+}
 </style>
