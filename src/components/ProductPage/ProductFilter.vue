@@ -10,8 +10,10 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+import { useProductStore } from '@/stores/productStore'
 
+const productStore = useProductStore()
 const props = defineProps({
   productType: {
     type: String,
@@ -20,11 +22,27 @@ const props = defineProps({
 })
 
 const emits = defineEmits(['update:productType'])
-
 const selectedType = ref(props.productType)
 
+// Watch for changes on selectedType to emit updates
 watch(selectedType, (newType) => {
   emits('update:productType', newType)
+})
+
+// Watch for changes on props.productType to sync with local state
+watch(
+  () => props.productType,
+  (newType) => {
+    if (newType !== selectedType.value) {
+      selectedType.value = newType
+      productStore.setProductType(newType)
+    }
+  }
+)
+
+// On mounted, set the initial selected type from the props
+onMounted(() => {
+  selectedType.value = props.productType
 })
 </script>
 

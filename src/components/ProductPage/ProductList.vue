@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProductStore } from '@/stores/productStore'
 import { fetchProducts } from '@/api/productApi'
@@ -64,7 +64,7 @@ const noMoreData = ref(false)
 const route = useRoute()
 const router = useRouter()
 const productStore = useProductStore()
-const productType = computed(() => productStore.productType)
+const productType = ref(productStore.productType)
 const totalCnt = ref(0)
 
 const loadProducts = async () => {
@@ -102,11 +102,17 @@ const searchProducts = async (searchTerm) => {
   await loadProducts()
 }
 
-watch([productType, keyword], async () => {
+watch(productType, async (newType) => {
+  console.log('ProductType changed:', newType)
+  productStore.setProductType(newType)
+  await loadProducts() // Load products whenever productType changes
+})
+
+watch(keyword, async (newValue) => {
   pageNum.value = 1
   list.value = []
   noMoreData.value = false
-  await loadProducts()
+  await loadProducts() // Load products whenever keyword changes
 })
 
 const handleScroll = () => {
