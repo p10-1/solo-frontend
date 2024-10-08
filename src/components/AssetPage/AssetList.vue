@@ -8,16 +8,25 @@
         <div class="asset-list__section asset-list__total">
           <TotalAsset :totalAmount="processedData.totalAsset" />
         </div>
-        <div class="asset-list__section asset-list__distribution">
-          <Distribution :assetDetails="processedData.assetDetails" />
-        </div>
-        <div class="asset-list__section asset-list__average-distribution">
-          <Distribution
-            v-if="processedData.typeAverages"
-            :assetDetails="processedData.typeAverages"
-            :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
-          />
-          <p v-else>평균 자산 데이터를 불러오는 중입니다...</p>
+        <div class="asset-list__section asset-list__distribution-slider">
+          <button @click="prevSlide" class="slider-btn prev-btn">‹</button>
+          <div class="slider-content">
+            <transition name="fade" mode="out-in">
+              <Distribution
+                v-if="currentSlide === 0"
+                key="user-distribution"
+                :assetDetails="processedData.assetDetails"
+                title="내 자산 분포"
+              />
+              <Distribution
+                v-else-if="currentSlide === 1 && processedData.typeAverages"
+                key="average-distribution"
+                :assetDetails="processedData.typeAverages"
+                :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
+              />
+            </transition>
+          </div>
+          <button @click="nextSlide" class="slider-btn next-btn">›</button>
         </div>
         <div class="asset-list__section asset-list__comparison-container">
           <AssetTypeButtons :selectedType="selectedAssetType" @select-type="selectAssetType" />
@@ -64,6 +73,21 @@ const error = ref(null) // 에러 상태 관리
 const rawAssetData = ref(null) // 자산 데이터 원본
 const assetAverages = ref(null) // 평균 자산 데이터
 const selectedAssetType = ref('cash') // 선택된 자산 타입 기본값은 'cash'
+
+//슬라이드 구현
+const currentSlide = ref(0)
+
+const nextSlide = () => {
+  currentSlide.value = currentSlide.value === 0 ? 1 : 0
+}
+
+const prevSlide = () => {
+  currentSlide.value = currentSlide.value === 1 ? 0 : 1
+}
+
+onMounted(() => {
+  loadData()
+})
 
 // 자산 데이터 및 평균 데이터를 API로부터 로드하는 함수
 
@@ -218,7 +242,6 @@ const selectAssetType = (type) => {
 }
 
 onMounted(loadData)
-
 </script>
 
 <style scoped>
@@ -296,5 +319,38 @@ onMounted(loadData)
 }
 .asset-list__recommended-products {
   grid-column: 1 / -1;
+}
+.asset-list__distribution-slider {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.slider-content {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.slider-btn {
+  font-size: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 15px;
+}
+
+.slider-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
