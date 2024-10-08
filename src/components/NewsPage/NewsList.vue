@@ -113,15 +113,19 @@ const resetFilter = () => {
 }
 
 const formatDate = (dateString) => {
-  const isoString = dateString.replace(' ', 'T')
-  const date = new Date(isoString + 'Z')
-
-  return date.toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  })
+  const date = new Date(dateString)
+  return date.toISOString().split('T')[0] // YYYY-MM-DD 형식으로 반환
 }
+// const formatDate = (dateString) => {
+//   const isoString = dateString.replace(' ', 'T');
+//   const date = new Date(isoString + 'Z');
+
+//   return date.toLocaleDateString('ko-KR', {
+//     year: 'numeric',
+//     month: '2-digit',
+//     day: '2-digit',
+//   });
+// };
 
 onMounted(() => {
   loadNews()
