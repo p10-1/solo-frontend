@@ -1,5 +1,6 @@
 <template>
   <div class="asset-distribution">
+    <h3>{{ title || '자산 분포' }}</h3>
     <div class="asset-content">
       <div v-if="highestAssetType" class="asset-highlight">
         보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
@@ -33,8 +34,15 @@ const props = defineProps({
   assetDetails: {
     type: Object,
     required: true
+  },
+  title: {
+    type: String,
+    default: '자산 분포'
   }
 })
+
+console.log('Distribution received assetDetails:', props.assetDetails)
+console.log('Distribution received title:', props.title)
 
 // 자산 이름 매핑
 const assetNames = {
@@ -52,25 +60,34 @@ const assetColors = {
   insurance: '#4BC0C0'
 }
 
-// 총 자산 금액 계산
+// computed 속성들
 const totalAsset = computed(() => {
-  return Object.values(props.assetDetails).reduce((sum, asset) => sum + (asset.total || 0), 0) // Default to 0 if asset total is undefined
-})
-// Filter out assets with zero or undefined totals
-const filteredAssetDetails = computed(() => {
-  return sortedAssetDetails.value.filter((asset) => asset.total > 0) // Only keep assets with a total greater than 0
+  const total = Object.values(props.assetDetails).reduce(
+    (sum, asset) => sum + (asset.total || 0),
+    0
+  )
+  // console.log('Total asset:', total)
+  return total
 })
 
-// 자산을 금액 순으로 정렬
 const sortedAssetDetails = computed(() => {
-  return Object.entries(props.assetDetails)
+  const sorted = Object.entries(props.assetDetails)
     .map(([name, details]) => ({ name, ...details }))
     .sort((a, b) => b.total - a.total)
+  // console.log('Sorted asset details:', sorted)
+  return sorted
 })
 
-// 자산이 가장 많은 타입 계산
+const filteredAssetDetails = computed(() => {
+  const filtered = sortedAssetDetails.value.filter((asset) => asset.total > 0)
+  // console.log('Filtered asset details:', filtered)
+  return filtered
+})
+
 const highestAssetType = computed(() => {
-  return sortedAssetDetails.value[0]?.name
+  const highest = sortedAssetDetails.value[0]?.name
+  // console.log('Highest asset type:', highest)
+  return highest
 })
 
 // 숫자를 포맷하는 함수
@@ -92,16 +109,20 @@ const getAssetColor = (assetName) => {
   return assetColors[assetName] || '#9966FF'
 }
 
-// 차트 생성 함수
-const chartData = computed(() => ({
-  labels: sortedAssetDetails.value.map((asset) => assetNames[asset.name]),
-  datasets: [
-    {
-      data: sortedAssetDetails.value.map((asset) => asset.total || 0), // Use 0 if asset total is undefined
-      backgroundColor: sortedAssetDetails.value.map((asset) => getAssetColor(asset.name))
-    }
-  ]
-}))
+// chartData computed 속성
+const chartData = computed(() => {
+  const data = {
+    labels: sortedAssetDetails.value.map((asset) => assetNames[asset.name]),
+    datasets: [
+      {
+        data: sortedAssetDetails.value.map((asset) => asset.total || 0),
+        backgroundColor: sortedAssetDetails.value.map((asset) => getAssetColor(asset.name))
+      }
+    ]
+  }
+  // console.log('Chart data:', data)
+  return data
+})
 
 const chartOptions = computed(() => ({
   responsive: true,

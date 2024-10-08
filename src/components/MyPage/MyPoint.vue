@@ -45,65 +45,72 @@ import { ref, onMounted } from 'vue';
 import { fetchPoints, pointsToCash, getBank } from '@/api/mypageApi';
 
 // 이벤트 정의
-const emit = defineEmits(['update']);
+const emit = defineEmits(['update'])
 
-const points = ref(0);
-const withdrawAmount = ref(0);
-const accountIndex = ref(null);
-const accounts = ref([]);
+const points = ref(0)
+const withdrawAmount = ref(0)
+const accountIndex = ref(null)
+const accounts = ref([])
 
 // 상수 정의
-const MIN_WITHDRAW_AMOUNT = 1000;
+const MIN_WITHDRAW_AMOUNT = 1000
 
 const loadPoints = async () => {
   try {
-    points.value = await fetchPoints();
+    points.value = await fetchPoints()
   } catch (error) {
-    handleError('포인트 조회 중 오류가 발생했습니다.', error);
+    handleError('포인트 조회 중 오류가 발생했습니다.', error)
   }
-};
+}
 
 const loadBank = async () => {
   try {
-    const data = await getBank();
-    accounts.value = JSON.parse(data[0]);
+    const data = await getBank()
+    console.log(data)
+    accounts.value = JSON.parse(data[0])
   } catch (error) {
-    handleError('계좌 조회 오류가 발생했습니다.', error);
+    handleError('계좌 조회 오류가 발생했습니다.', error)
   }
-};
+}
 
 // 에러 처리 함수
 const handleError = (message, error) => {
-  console.error(error);
-  alert(message);
-};
+  console.error(error)
+  alert(message)
+}
 
 const handleWithdrawResponse = (response) => {
   if (response === 'success') {
-    points.value -= withdrawAmount.value;
-    withdrawAmount.value = 0;
-    accountIndex.value = null; 
+    points.value -= withdrawAmount.value
+    withdrawAmount.value = 0
+    accountIndex.value = null
   } else {
-    alert(response);
+    alert(response)
   }
-};
+}
 
 const withdrawPoints = async () => {
-  if (withdrawAmount.value >= MIN_WITHDRAW_AMOUNT && withdrawAmount.value <= points.value && accountIndex.value !== null) {
+  if (
+    withdrawAmount.value >= MIN_WITHDRAW_AMOUNT &&
+    withdrawAmount.value <= points.value &&
+    accountIndex.value !== null
+  ) {
     try {
-      const response = await pointsToCash(accountIndex.value, withdrawAmount.value);
-      handleWithdrawResponse(response);
-      emit('update');
+      const response = await pointsToCash(accountIndex.value, withdrawAmount.value)
+      handleWithdrawResponse(response)
+      emit('update')
     } catch (error) {
-      handleError('서버와 연결할 수 없습니다. 다시 시도해 주세요.', error);
+      handleError('서버와 연결할 수 없습니다. 다시 시도해 주세요.', error)
     }
   } else {
-    alert(`출금할 수 없는 금액이거나 계좌를 선택하지 않았습니다. (최소 ${MIN_WITHDRAW_AMOUNT}원 이상 출금 가능)`);
+    alert(
+      `출금할 수 없는 금액이거나 계좌를 선택하지 않았습니다. (최소 ${MIN_WITHDRAW_AMOUNT}원 이상 출금 가능)`
+    )
   }
-};
+}
 
 onMounted(() => {
-  loadPoints();
-  loadBank();
-});
+  loadPoints()
+  loadBank()
+})
 </script>
