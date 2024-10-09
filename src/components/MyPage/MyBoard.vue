@@ -12,7 +12,7 @@
           <col width="27%" />
         </colgroup>
         <thead>
-          <tr> 
+          <tr>
             <th>번호</th>
             <th class="text-align-left">제목</th>
             <th>작성일</th>
@@ -28,8 +28,9 @@
                   params: { boardNo: board.boardNo }
                 }"
               >
-                <div class="link">
-                  {{ board.title }}
+                <!-- text가 길때 제한길이 이하는 '...'으로 표시되고 hover하면 전체 text 보여주기 -->
+                <div class="link truncated" :title="board.title">
+                  {{ truncateTitle(board.title) }}
                 </div>
                 <ul class="table-ex-info">
                   <li><i class="fa-solid fa-user"></i> {{ board.views }}</li>
@@ -63,6 +64,14 @@ const loadMyBoards = async () => {
   } catch (error) {
     console.error('내 게시물을 불러오는 중 오류가 발생했습니다.', error)
   }
+}
+
+const truncateTitle = (title) => {
+  const maxLength = 20 // 길이제한
+  if (title.length > maxLength) {
+    return title.slice(0, maxLength) + '...' // 길이제한 이하는 '...'으로 보여주기
+  }
+  return title
 }
 
 const formatDate = (date) => {

@@ -6,8 +6,7 @@ defineProps({ username: String })
     <router-link class="" to="/mypage">
       <div class="user-info">
         <b>{{ username }}</b
-        >님
-        <i class="fa-solid fa-caret-down margin-left"></i>
+        >님<i class="fa-solid fa-caret-down margin-left"></i>
       </div>
     </router-link>
     <!-- 드롭 다운 메뉴 -->
@@ -22,7 +21,16 @@ defineProps({ username: String })
     </ul>
   </li>
 </template>
+
 <style scope>
+.profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Makes the image circular */
+  margin-right: 10px; /* Adds space between the image and the username */
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+}
+
 .margin-left {
   margin-left: 7px;
 }

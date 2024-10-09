@@ -23,6 +23,7 @@
           <div class="title">{{ type.title }}</div>
           <div class="description">{{ type.description }}</div>
         </div>
+        <!-- <div class="icon"><img :src="type.icon" alt="icon" class="icon-img" /></div> -->
       </button>
     </div>
   </div>
@@ -110,6 +111,7 @@ onMounted(() => {
 .my-type h2.title span.text-accent {
   font-weight: 300;
 }
+
 .my-type .text-p {
   font-size: 20px;
   letter-spacing: -0.6px;
@@ -151,6 +153,10 @@ onMounted(() => {
 .my-type .button-container .btn:hover {
   background-color: #fffbec;
   border: 3px solid #ffba62;
+  box-shadow: 0px 0px 15px rgb(253, 228, 195);
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 .my-type .button-container .btn.selected {
   background-color: #fffbec;
@@ -159,10 +165,15 @@ onMounted(() => {
 .my-type .button-container .icon {
   display: inline-block;
   width: 35%;
+  margin-right:;
+}
+.my-type .icon-img {
+  vertical-align: baseline;
 }
 .my-type .button-container .text-container {
+  margin-right: 5%;
   display: inline-block;
-  width: 65%;
+  width: 60%;
   text-align: left;
 }
 .my-type .button-container .title {

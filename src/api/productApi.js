@@ -7,7 +7,6 @@ const DEFAULT_AMOUNT = 10
 
 export const fetchKbProducts = async (productType) => {
   try {
-    console.log(productType)
     const response = await axios.get(`${API_URL}/kb`, {
       params: {
         type: productType

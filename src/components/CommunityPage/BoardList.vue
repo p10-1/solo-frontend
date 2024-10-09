@@ -2,15 +2,8 @@
   <div class="board-list">
     <h2 class="title">커뮤니티</h2>
 
-    <dl class="total">
-      <dt>전체</dt>
-      <dd>
-        <b>{{ totalCnt }}</b
-        >건
-      </dd>
-    </dl>
     <!-- 정렬 기준 선택 -->
-    <div class="table-top-box margin-top-1rem margin-bottom-1rem">
+    <div class="search-section">
       <div class="select-form">
         <select v-model="sortBy" @change="loadBoards">
           <option value="latest">최신순</option>
@@ -19,27 +12,31 @@
           <option value="comments">댓글순</option>
         </select>
       </div>
-      <!-- <BoardBest /> -->
-      <!-- <div class="alert">
-        <i class="fa-solid fa-circle-info"></i> 인기 글은 저번 달 조회수, 댓글 수, 좋아요 수를
-        기준으로 선정되었습니다.
-      </div> -->
-      <div class="search-section">
-        <div class="select-form">
-          <select v-model="category">
-            <option value="title">제목</option>
-            <option value="content">내용</option>
-            <option value="userName">작성자</option>
-          </select>
-        </div>
-        <search-bar v-model="keyword" @search="searchBoards" />
+      <div class="select-form">
+        <select v-model="category">
+          <option value="title">제목</option>
+          <option value="content">내용</option>
+          <option value="userName">작성자</option>
+        </select>
       </div>
+      <search-bar v-model="keyword" @search="searchBoards" />
+    </div>
+    <div class="table-top-box margin-top-1rem margin-bottom-1rem">
+      <dl class="total">
+        <dt>전체</dt>
+        <dd>
+          <b>{{ totalCnt }}</b
+          >건
+        </dd>
+      </dl>
+
       <div class="button-box">
         <router-link :to="{ name: 'board/create' }" class="button-main btn btn-primary">
           글쓰기
         </router-link>
       </div>
     </div>
+
     <!-- Board List -->
     <table class="table">
       <colgroup>
@@ -57,11 +54,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="(board, index) in list"
-          :key="board.boardNo"
-          :class="{ 'top-post': pageNum === 1 && index < 5 }"
-        >
+        <tr v-for="board in list" :key="board.boardNo">
           <td>{{ board.boardNo }}</td>
           <td class="text-align-left link">
             <router-link
@@ -69,11 +62,14 @@
                 name: 'board/detail',
                 params: { boardNo: board.boardNo }
               }"
+              class="router-link no-underline"
             >
-              {{ board.title }}
-              <!-- <span v-if="bestlist.includes(board.boardNo)">
-                <i class="fa-solid fa-star" style="color: gold"></i>
-              </span> -->
+              <!-- text가 길때 제한길이 이하는 '...'으로 표시되고 hover하면 전체 text 보여주기 -->
+              <div class="link truncated" :title="board.title">
+                {{ truncateTitle(board.title) }}
+              </div>
+              <!-- Conditionally show the 'new' label if the post is recent -->
+              <span v-if="isNew(board.regDate)" class="new-label">new</span>
               <ul class="table-ex-info">
                 <li><i class="fa-solid fa-user"></i> {{ board.views }}</li>
                 <li><i class="fa-solid fa-heart"></i> {{ board.likes }}</li>
@@ -101,6 +97,43 @@
   position: absolute;
   right: 0;
 }
+.truncated {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%; /* Ensures the element respects its parent's width */
+  display: inline-block;
+  position: relative; /* Position relative to display the tooltip */
+}
+.truncated:hover::after {
+  content: attr(title); /* Display the full title from the `title` attribute */
+  position: absolute;
+  left: 0;
+  top: 100%;
+  background: #333;
+  color: #fff;
+  padding: 5px 10px;
+  white-space: nowrap;
+  z-index: 1000;
+  font-size: 14px;
+  border-radius: 4px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+.new-label {
+  font-style: italic;
+  color: #6846f5;
+  padding: 5px 2px;
+  font-size: 1rem;
+  border-radius: 5px;
+  margin-left: 20px;
+}
+.board-list .router-link {
+  text-decoration: none !important; /* new 밑줄 안 생기게 */
+}
+
+.board-list .router-link:hover {
+  text-decoration: none !important; /* new hover 밑줄 안 생기게 */
+}
 </style>
 
 <script setup>
@@ -121,6 +154,22 @@ const sortBy = ref('latest')
 const router = useRouter()
 const route = useRoute()
 const totalCnt = ref(0)
+
+const truncateTitle = (title) => {
+  const maxLength = 35 // 길이제한(47:시간 아래로 들여쓰기됨)
+  if (title.length > maxLength) {
+    return title.slice(0, maxLength) + '...' // 제한길이 이하는 '...'로 표시
+  }
+  return title
+}
+
+// Method to check if the post is "new" (posted within the last 24 hours)
+const isNew = (regDate) => {
+  const postDate = moment(regDate)
+  const now = moment()
+  const hoursDiff = now.diff(postDate, 'hours')
+  return hoursDiff <= 24 // If the post is less than 24 hours old, it's considered "new"
+}
 
 const loadBoards = async () => {
   try {
@@ -184,5 +233,3 @@ watch(
   { immediate: true }
 )
 </script>
-
-<style scoped></style>
