@@ -12,30 +12,20 @@
           <button @click="prevSlide" class="slider-btn prev-btn">‹</button>
           <div class="slider-content">
             <transition name="fade" mode="out-in">
-              <Distribution
-                v-if="currentSlide === 0"
-                key="user-distribution"
-                :assetDetails="processedData.assetDetails"
-                title="내 자산 분포"
-              >
+              <Distribution v-if="currentSlide === 0" key="user-distribution" :assetDetails="processedData.assetDetails"
+                title="내 자산 분포">
                 <template #extra>
                   <div v-if="highestAssetType" class="asset-highlight">
                     보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
                   </div>
                 </template>
               </Distribution>
-              <DistributionAverage
-                v-else-if="currentSlide === 1 && processedData.typeAverages"
-                key="type-average-distribution"
-                :assetDetails="processedData.typeAverages"
-                :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
-              />
-              <DistributionAverage
-                v-else-if="currentSlide === 2 && processedData.overallAverages"
-                key="overall-average-distribution"
-                :assetDetails="processedData.overallAverages"
-                title="전체 사용자 평균 자산 분포"
-              />
+              <DistributionAverage v-else-if="currentSlide === 1 && processedData.typeAverages"
+                key="type-average-distribution" :assetDetails="processedData.typeAverages"
+                :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`" />
+              <DistributionAverage v-else-if="currentSlide === 2 && processedData.overallAverages"
+                key="overall-average-distribution" :assetDetails="processedData.overallAverages"
+                title="전체 사용자 평균 자산 분포" />
             </transition>
           </div>
           <button @click="nextSlide" class="slider-btn next-btn">›</button>
@@ -44,11 +34,8 @@
           <AssetTypeButtons :selectedType="selectedAssetType" @select-type="selectAssetType" />
           <div class="asset-list__comparison-charts">
             <div class="asset-list__chart">
-              <AssetComparison
-                :userAsset="calculateTotalAssets(processedData.assetDetails)"
-                :userType="processedData.assetDetails.type || 'unknown'"
-                :selectedAssetType="selectedAssetType"
-              />
+              <AssetComparison :userAsset="calculateTotalAssets(processedData.assetDetails)"
+                :userType="processedData.assetDetails.type || 'unknown'" :selectedAssetType="selectedAssetType" />
             </div>
             <div class="asset-list__chart">
               <TimeComparison :assetType="selectedAssetType" :assetData="rawAssetData" />
@@ -57,11 +44,19 @@
         </div>
         <div class="asset-list__section asset-list__loan">
           <h2 class="section-title">대출 정보</h2>
-          <template v-if="hasLoanData">
-            <LoanInfo :loanData="processedData.loanData" />
-          </template>
-          <p v-else class="no-loan-message">대출이 존재하지 않습니다.</p>
+          <div class="loan-container">
+            <template v-if="hasLoanData">
+              <div class="loan-info">
+                <LoanInfo :loanData="processedData.loanData" />
+              </div>
+              <div class="loan-guide">
+                <LoanGuide :loanData="processedData.loanData" />
+              </div>
+            </template>
+            <p v-else class="no-loan-message">대출이 존재하지 않습니다.</p>
+          </div>
         </div>
+
         <div class="asset-list__section asset-list__recommended-products">
           <h2 class="section-title">추천 상품</h2>
           <template v-if="hasLoanData">
@@ -87,6 +82,7 @@ import TimeComparison from '@/components/AssetPage/TimeComparison.vue'
 import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
 import Recommendation from '@/components/AssetPage/Recommendation.vue'
 import DistributionAverage from '@/components/AssetPage/DistributionAverage.vue'
+import LoanGuide from '@/components/AssetPage/LoanGuide.vue'
 
 const loading = ref(true) // 로딩 상태 관리
 const error = ref(null) // 에러 상태 관리
@@ -260,16 +256,16 @@ const processedData = computed(() => {
 
   const typeAverages = assetAverages.value
     ? assetTypes.reduce((averages, type) => {
-        averages[type] = { total: assetAverages.value[type] || 0 }
-        return averages
-      }, {})
+      averages[type] = { total: assetAverages.value[type] || 0 }
+      return averages
+    }, {})
     : null
   // 새로 추가된 부분: overallAverages 계산
   const overallAverages = assetAverages.value
     ? assetTypes.reduce((averages, type) => {
-        averages[type] = { total: assetAverages.value[type] || 0 }
-        return averages
-      }, {})
+      averages[type] = { total: assetAverages.value[type] || 0 }
+      return averages
+    }, {})
     : null
 
   return {
@@ -328,9 +324,11 @@ onMounted(async () => {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
 }
+
 .asset-list__average-distribution {
   grid-column: 1 / -1;
 }
+
 .asset-list__total,
 .asset-list__distribution {
   grid-column: 1 / -1;
@@ -376,9 +374,11 @@ onMounted(async () => {
     width: 100%;
   }
 }
+
 .asset-list__recommended-products {
   grid-column: 1 / -1;
 }
+
 .asset-list__distribution-slider {
   display: flex;
   align-items: center;
@@ -412,6 +412,7 @@ onMounted(async () => {
 .fade-leave-to {
   opacity: 0;
 }
+
 .asset-list__no-loan {
   text-align: center;
   padding: 20px;
@@ -419,6 +420,7 @@ onMounted(async () => {
   border-radius: 8px;
   color: #6c757d;
 }
+
 .section-title {
   margin-bottom: 15px;
   color: #333;
@@ -432,9 +434,26 @@ onMounted(async () => {
   border-radius: 8px;
   color: #6c757d;
 }
+
 .asset-highlight {
   margin-top: 10px;
   font-weight: bold;
   color: #4caf50;
 }
+
+/*새로 수정 */
+.loan-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.loan-info {
+  flex: 1; /* LoanInfo가 좌측에 오도록 설정 */
+  margin-right: 20px; /* LoanInfo와 LoanGuide 간의 간격 */
+}
+
+.loan-guide {
+  flex: 1; /* LoanGuide가 우측에 오도록 설정 */
+}
+
 </style>
