@@ -2,7 +2,9 @@
   <div class="news-content margin-top-2rem">
     <div class="title-box">
       <h2 class="main-title">뉴스</h2>
-      <button class="link"><i class="fa-solid fa-plus"></i> 더보기</button>
+      <router-link to="news">
+        <span class="link"><i class="fa-solid fa-plus"></i> 더보기</span>
+      </router-link>
     </div>
 
     <div class="filter-bar">
@@ -19,23 +21,26 @@
     <swiper
       ref="swiper"
       v-if="filteredNews.length > 0"
-      :slides-per-view="2"
       :navigation="true"
       :modules="modules"
-      loop
+      :loop="true"
+      :slides-per-view="2"
+      :space-between="25"
+      autoplay
     >
       <swiper-slide v-for="(newsItem, index) in displayedNews" :key="index">
-        <div @click="goToNews(newsItem.link)" class="card-content">
+        <div @click="goToNews(newsItem.link)" class="news-card margin-top-1rem">
           <!-- URL로 이동하도록 수정 -->
-          <div class="text-content">
-            <h5 class="news-title">{{ newsItem.title }}</h5>
+          <div class="img-content margin-bottom-1rem">
+            <img
+              v-if="newsItem.imageUrl"
+              :src="newsItem.imageUrl"
+              alt="뉴스 이미지"
+              class="news-image img-fluid"
+            />
           </div>
-          <img
-            v-if="newsItem.imageUrl"
-            :src="newsItem.imageUrl"
-            alt="뉴스 이미지"
-            class="news-image img-fluid"
-          />
+          <h5 class="news-title">{{ newsItem.title }}</h5>
+          <div class="pub-date">{{ newsItem.pubDate }}</div>
         </div>
       </swiper-slide>
     </swiper>
@@ -45,11 +50,14 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { recommendNews } from '@/api/newsApi'
+// Swiper 컴포넌트 임포트
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Pagination, Navigation } from 'swiper/modules'
-import 'swiper/swiper-bundle.css'
+import { Pagination, Navigation, Autoplay } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/pagination'
 
-const modules = [Pagination, Navigation]
+const modules = [Pagination, Navigation, Autoplay]
+
 const newsList = ref([])
 const selectedCategory = ref('경제') // 기본 선택 카테고리
 
@@ -97,44 +105,49 @@ onMounted(async () => {
 .news-content {
   width: 100%;
 }
-
-.card-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #fff;
+.news-card {
+  cursor: pointer;
 }
-
-.text-content {
-  flex: 1;
+.news-card:hover .img-content img {
+  transform: scale(1.1);
+}
+.news-card:hover .news-title {
+  font-weight: 600;
+  color: #6846f5;
+  text-decoration: underline;
+  transition: all 0.4s ease;
+}
+.news-card:hover .pub-date {
+  color: #6846f5;
+}
+.news-card .img-content {
+  border-radius: 27px;
+  width: 100%;
+  height: 8rem;
   overflow: hidden;
-  margin-right: 10px;
 }
-
-.news-title {
-  font-size: 0.9rem;
-  margin: 5px 0;
-  color: #333;
+.news-card .img-content img {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease;
 }
-
-.news-image {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 4px;
+.news-card .news-title {
+  text-align: center;
+  font-size: 1.12rem;
+  font-weight: 500;
+  letter-spacing: -1px;
+  line-height: 1.6rem;
+  word-break: keep-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  transition: all 0.4s ease;
 }
-
-.swiper-button-next {
-  right: 10px;
-  z-index: 10;
-}
-
-.swiper-button-prev {
-  left: 10px;
-  z-index: 10;
+.news-card .pub-date {
+  margin-top: 15px;
+  font-size: 15px;
+  text-align: center;
 }
 </style>

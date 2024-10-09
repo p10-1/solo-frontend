@@ -20,17 +20,29 @@
         class="mySwiper"
       >
         <swiper-slide v-for="(post, index) in bestPosts" :key="index" class="posts-list">
+          <!-- 링크 연결 실패ㅠㅠ -->
+          <!-- <router-link
+            :to="{
+              name: 'board/detail',
+              params: { postNo: post.boardNo }
+            }"
+          > -->
           <div class="posts-card">
             <div class="card-body">
-              <span class="badge">{{ post.userName }}</span>
+              <div class="card-ex-info">
+                <ul class="ex-info">
+                  <li><i class="fa-solid fa-user"></i> {{ post.views }}</li>
+                  <li><i class="fa-solid fa-heart"></i> {{ post.likes }}</li>
+                  <li><i class="fa-solid fa-comment"></i> {{ post.comments }}</li>
+                </ul>
+                <div class="text-mute">{{ formatDate(post.regDate) }}</div>
+              </div>
               <h5 class="card-title link">{{ post.title }}</h5>
               <div class="card-content">{{ post.content }}</div>
-              <div class="card-ex-info">
-                <div><i class="fa-solid fa-heart"></i> {{ post.likes }}</div>
-                <div class="text-muted">{{ formatDate(post.regDate) }}</div>
-              </div>
+              <span class="badge">{{ post.userName }}</span>
             </div>
           </div>
+          <!-- </router-link> -->
         </swiper-slide>
       </swiper>
     </div>
@@ -45,12 +57,12 @@ import moment from 'moment'
 
 // Swiper 컴포넌트 임포트
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Pagination, Navigation } from 'swiper/modules'
+import { Pagination, Navigation, Autoplay } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 
-const modules = [Pagination, Navigation]
+const modules = [Pagination, Navigation, Autoplay]
 
 const bestPosts = ref([])
 const router = useRouter()
@@ -85,7 +97,7 @@ onMounted(() => {
 .mySwiper {
   width: 100%;
   height: 100%;
-  padding: 1.5rem 3.5rem 2rem;
+  padding: 1.5rem 3rem 2rem;
 }
 
 .best-posts-container {
@@ -114,17 +126,17 @@ onMounted(() => {
   transition: all 0.4s;
 }
 .posts-card:hover {
+  background-color: #6846f5;
 }
 .posts-card:hover .card-title,
 .posts-card:hover .card-content {
-  color: #7d64da;
+  color: #fff;
 }
-.posts-card:hover .card-ex-info,
-.posts-card:hover .card-ex-info.text-muted {
+.posts-card:hover .badge {
   color: #cfc6fd !important;
 }
 .posts-card .card-title {
-  font-size: 1.22rem;
+  font-size: 1.2rem;
   font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -152,13 +164,26 @@ onMounted(() => {
 }
 
 .posts-card .card-ex-info {
-  position: absolute;
   width: 100%;
-  bottom: 1.8rem;
-  color: #b9b9b9;
+  color: #cfc6fd;
+  margin-bottom: 7px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   transition: all 0.4s;
+}
+.posts-card .ex-info li {
+  display: inline-block;
+  margin-right: 10px;
+}
+.posts-card .ex-info li i {
+  font-size: 14px;
+}
+.posts-card .badge {
+  position: absolute;
+  bottom: 1.6rem;
+  background: none;
+  padding: 0;
+  color: #7d64da !important;
 }
 </style>

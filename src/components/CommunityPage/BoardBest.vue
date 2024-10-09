@@ -3,8 +3,13 @@
     <h2 class="title">
       <span class="text-accent"><i class="fa-solid fa-ranking-star"></i></span> HOT
     </h2>
-    <div v-if="loading" class="alert alert-info">로딩 중...</div>
-    <div v-if="error" class="alert alert-danger">{{ error }}</div>
+    <div v-if="loading" class="loading">
+      <i class="fa-solid fa-spinner margin-bottom-1rem"></i>
+      로딩 중...
+    </div>
+    <div v-if="error" class="error">
+      <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />{{ error }}
+    </div>
 
     <div class="custom-alert">
       <i class="fa-solid fa-circle-info"></i> 인기 글은 저번 달 조회수, 댓글 수, 좋아요 수를
@@ -30,22 +35,20 @@
           }"
         >
           <div class="best-card">
-            <div class="card-body">
-              <span class="badge">{{ board.userName }}</span>
-              <h5 class="card-title text-align-left link">
-                {{ board.title }}
-              </h5>
-              <div class="card-content">
-                {{ truncateContent(board.content) }}
-              </div>
-              <div class="card-ex-info">
-                <ul class="table-ex-info">
-                  <li><i class="fa-solid fa-user"></i> {{ board.views }}</li>
-                  <li><i class="fa-solid fa-heart"></i> {{ board.likes }}</li>
-                  <li><i class="fa-solid fa-comment"></i> {{ board.comments }}</li>
-                  <li class="text-muted">{{ moment(board.regDate).format('YYYY-MM-DD') }}</li>
-                </ul>
-              </div>
+            <span class="badge">{{ board.userName }}</span>
+            <h5 class="card-title text-align-left link">
+              {{ board.title }}
+            </h5>
+            <span class="text-mute">{{ moment(board.regDate).format('YYYY-MM-DD') }}</span>
+            <div class="card-content">
+              {{ truncateContent(board.content) }}
+            </div>
+            <div class="card-ex-info">
+              <ul class="table-ex-info">
+                <li><i class="fa-solid fa-user"></i> {{ board.views }}</li>
+                <li><i class="fa-solid fa-heart"></i> {{ board.likes }}</li>
+                <li><i class="fa-solid fa-comment"></i> {{ board.comments }}</li>
+              </ul>
             </div>
           </div>
         </router-link>
@@ -61,12 +64,12 @@ import moment from 'moment'
 
 // Swiper 컴포넌트 임포트
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Pagination, Navigation } from 'swiper/modules'
+import { Pagination, Navigation, Autoplay } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 
-const modules = [Pagination, Navigation]
+const modules = [Pagination, Navigation, Autoplay]
 // 데이터 변수
 const bestBoards = ref([])
 const loading = ref(true)
@@ -155,17 +158,21 @@ const truncateContent = (content, length = 100) => {
 }
 .best-card .card-ex-info {
   position: absolute;
+  bottom: 0;
   width: 100%;
   bottom: 1.8rem;
   display: flex;
   align-items: baseline;
   transition: all 0.4s;
 }
-.best-card .card-ex-info .text-muted {
+.best-card .text-mute {
+  position: absolute;
+  top: 2rem;
+  right: 1.7rem;
   margin-left: 15px;
   font-size: 15px;
-  font-weight: 400;
-  color: #b9b9b9 !important;
+  font-weight: 500;
+  color: #b9b9b9;
   letter-spacing: -0.8px;
 }
 </style>

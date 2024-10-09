@@ -66,7 +66,7 @@ const openModal = () => {
 <style scoped>
 .quiz-container {
   width: 100%;
-  padding: 1rem;
+  padding: 1rem 0;
 }
 .quiz-card {
   margin-top: 16px;
@@ -91,24 +91,34 @@ const openModal = () => {
   color: #6846f5;
 }
 .quiz-card .quiz-description {
-  padding: 0 2rem;
+  position: relative;
+  height: 6.15rem;
+  padding: 0 1rem;
 }
 .quiz-card .quiz-description p {
   font-size: 1.05rem;
   line-height: 1.45rem;
   word-break: keep-all;
   margin-bottom: 15px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-.quiz-card .button-main {
-  width: 100%;
+.quiz-card .quiz-description .button-main {
+  position: absolute;
+  transform: translateX(-50%);
+  bottom: 0;
+  /* width: 100%; */
   height: 40px;
   line-height: 37px;
   background: linear-gradient(to right top, #7d64da, #a686f3);
   border-color: #cfc6fd;
 }
 .quiz-card:hover .button-main {
-  background-color: #6846f5 !important;
+  background-color: #6846f5;
 }
 
 .quiz-card .loading {

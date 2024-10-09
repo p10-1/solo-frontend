@@ -9,9 +9,9 @@
       <div class="dic">
         <ul>
           <li>
-            <router-link :to="{ SoloTeam }"
-              ><i class="fa-solid fa-ghost"></i> Creative Solo Team</router-link
-            >
+            <router-link to="SoloTeam">
+              <i class="fa-solid fa-ghost"></i> Creative Solo Team
+            </router-link>
           </li>
           <li>
             <i class="fa-solid fa-mobile-button"></i> 고객문의 :

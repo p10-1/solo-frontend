@@ -1,13 +1,10 @@
 <template>
   <PromotionSlide />
   <div class="main-top">
-    <div class="main-top-item" style="width: 55%">
-      <div class="item-box">
-        <h2 class="main-title">내 자산 현황</h2>
-        <div class="empty-box">여긴 그래프</div>
-      </div>
+    <div class="main-top-item">
+      <MainslideList />
     </div>
-    <div class="main-top-item" style="width: 45%">
+    <div class="main-top-item">
       <div class="item-box">
         <CategoryList />
       </div>
@@ -28,23 +25,25 @@
 </template>
 
 <script>
-import PromotionSlide from '@/components/HomePage/PromotionSlide.vue'
-import QuizCard from '@/components/HomePage/QuizCard.vue'
-// import Distribution from '@/components/AssetPage/Distribution.vue'
+import MainslideList from '@/components/HomePage/MainslideList.vue'
 import CategoryList from '@/components/HomePage/CategoryList.vue'
+import QuizCard from '@/components/HomePage/QuizCard.vue'
 import PolicyCard from '@/components/HomePage/PolicyCard.vue'
 import NewsCard from '@/components/HomePage/NewsCard.vue'
 import BoardCard from '@/components/HomePage/BoardCard.vue'
+// import PromotionSlide from '@/components/HomePage/PromotionSlide.vue'
+// import Distribution from '@/components/AssetPage/Distribution.vue'
 // import ProductCard from '@/components/HomePage/ProductCard.vue'
 export default {
   components: {
+    MainslideList,
+    CategoryList,
     QuizCard,
     BoardCard,
     PolicyCard,
-    NewsCard,
-    PromotionSlide,
+    NewsCard
+    // PromotionSlide,
     // ProductCard,
-    CategoryList
   }
 }
 </script>
@@ -53,8 +52,8 @@ export default {
   margin-top: -2.25rem;
   /* background: #f3f3ff; */
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
+  justify-content: flex-start;
+  gap: 4.6rem;
   padding: 20px;
 }
 
@@ -70,10 +69,18 @@ export default {
 }
 
 .main-top .main-top-item {
-  flex-grow: 1;
+  /* flex-grow: 1; */
   /* flex-basis: 0; */
   display: flex;
   flex-direction: column;
+}
+
+.main-top .main-top-item:first-child {
+  width: 55%;
+}
+
+.main-top .main-top-item:last-child {
+  width: 45%;
 }
 
 .main-top .item-box {
@@ -86,11 +93,11 @@ export default {
 .main-bottom {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: 4.6rem;
   padding: 20px;
 }
 .main-bottom .main-bottom-item {
-  width: calc(50% - 10px);
+  width: calc(50% - 2.3rem);
   flex-grow: 1;
   display: flex;
   justify-content: flex-start;
