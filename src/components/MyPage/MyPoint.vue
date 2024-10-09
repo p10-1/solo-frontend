@@ -116,8 +116,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.point-management {
-}
 
 .point-management .text-accent {
   font-weight: 300;

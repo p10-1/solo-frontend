@@ -249,8 +249,7 @@ const prepareUpdatedData = () => {
 </script>
 
 <style scoped>
-.my-asset-manager {
-}
+
 /* 자산 */
 .my-asset-list div.list-align {
   display: flex;
@@ -309,7 +308,5 @@ const prepareUpdatedData = () => {
   letter-spacing: -0.5px;
 }
 
-/* 대출 */
-.my-loan-list {
-}
+
 </style>
