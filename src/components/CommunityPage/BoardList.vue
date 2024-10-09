@@ -44,7 +44,7 @@
     <table class="table">
       <colgroup>
         <col width="8%" />
-        <col width="70%" />
+        <col width="60%" />
         <col width="10%" />
         <col width="22%" />
       </colgroup>

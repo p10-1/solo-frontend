@@ -251,11 +251,11 @@ h2.title {
 }
 
 h3.title {
+  font-weight: 500;
   line-height: 1;
-  margin-bottom: 7px;
-  padding: 0 30px 22px 30px;
+  padding: 10px 0 22px 0;
   letter-spacing: -1px;
-  font-size: 26px;
+  font-size: 25px;
   color: #222;
 }
 
@@ -473,7 +473,7 @@ p.text {
   min-width: 100px;
   text-align: center;
   padding: 0.8rem 1rem;
-  border-radius: 20px;
+  border-radius: 25px;
   /* background-color: #cfc6fd; */
   font-size: 18px;
   font-weight: 500;
@@ -516,6 +516,7 @@ p.text {
   letter-spacing: -1px;
 }
 .no-more i {
+  display: block;
   font-size: 3rem;
 }
 
@@ -526,8 +527,10 @@ p.text {
   font-size: 2.1rem;
   font-weight: 300;
   letter-spacing: -1px;
+  word-break: keep-all;
 }
 
 .error i {
   font-size: 3rem;
+  display: block;
 }

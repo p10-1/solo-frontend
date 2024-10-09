@@ -1,27 +1,15 @@
 <template>
-  <div class="board-container mt-5">
-    <div class="best-posts-container">
-      <div class="header">
-        <h2>인기 글</h2>
-        <button class="more-button" @click="goToBoard">더보기</button>
-      </div>
-      <table class="table table-lg">
-        <thead>
-          <tr>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>작성 날짜</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(post, index) in bestPosts" :key="index">
-            <td class="truncate">{{ post.title }}</td>
-            <td class="truncate">{{ post.userName }}</td>
-            <td>{{ formatDate(post.regDate) }}</td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="best-posts-container">
+    <div class="header">
+      <h2 class="main-title">인기 글</h2>
+      <button class="more-button" @click="goToBoard">더보기</button>
     </div>
+
+    <ul v-for="(post, index) in bestPosts" :key="index">
+      <li class="truncate">{{ post.title }}</li>
+      <li class="truncate">{{ post.userName }}</li>
+      <li>{{ formatDate(post.regDate) }}</li>
+    </ul>
   </div>
 </template>
 
@@ -60,8 +48,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.board-container {
-}
 .best-posts-container {
   margin: 20px 0;
   width: 100%;
@@ -72,7 +58,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 h2 {
@@ -99,7 +85,7 @@ h2 {
 
 .more-button {
   padding: 8px 12px; /* 버튼 크기 확장 */
-  background-color: #6846f5;
+  background-color: #007bff;
   color: white;
   border: none;
   cursor: pointer;

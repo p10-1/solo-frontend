@@ -52,13 +52,25 @@ dl.total dd {
   color: #fff;
   text-align: center !important;
   vertical-align: middle;
+  border-right: 1px solid #cfc6fd;
+}
+
+.table thead th:last-child {
+  border-right: 0;
 }
 
 .table thead tr th.text-align-left,
-.table tbody tr td.text-align-left {
+.table tbody tr td.text-align-left,
+.table tbody tr:hover td.link a {
   text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
+.link {
+  text-overflow: ellipsis;
+}
 .table tbody tr:hover td.link a {
   cursor: pointer;
   color: #6846f5;
@@ -70,12 +82,17 @@ dl.total dd {
 
 .table tbody td {
   height: 45px;
-  padding: 1.5rem 10px !important;
+  padding: 1.2rem 15px !important;
   line-height: 25px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #f1eeff;
   letter-spacing: -0.02em;
   text-align: center;
   vertical-align: middle !important;
+  white-space: pre-line;
+  border-right: 1px solid #eee;
+}
+.table tbody td:last-child {
+  border-right: 0;
 }
 .badge {
   display: inline-block;
@@ -86,8 +103,7 @@ dl.total dd {
   text-align: center;
   font-weight: 500;
 }
-.table tbody .link {
-  max-width: 100%;
+.table tbody .link a {
   padding: 0;
   font-size: 18px;
   line-height: 1;
@@ -111,7 +127,7 @@ dl.total dd {
   display: inline-block;
   margin-right: 8px;
   font-size: 14px;
-  color: #cfc6fd;
+  color: #b9b9b9;
 }
 
 /* 게시판 인기글 */

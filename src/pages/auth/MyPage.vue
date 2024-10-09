@@ -11,11 +11,7 @@
     <div class="bottom-section">
       <div class="bottom-components">
         <div :style="{ width: '35%' }">
-<<<<<<< HEAD
           <MyPoint @update="handleUpdate" />
-=======
-          <MyPoint @update="handleUpdate"/>
->>>>>>> design_seo
         </div>
         <div :style="{ width: '65%' }">
           <MyBoard />

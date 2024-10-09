@@ -32,10 +32,10 @@
 import { ref, onMounted } from 'vue'
 import { getType, updateType } from '@/api/mypageApi' // api.js에서 함수 가져오기
 
-import risk from '@/assets/images/asset_type/risk.png'
-import diversified from '@/assets/images/asset_type/diversified.png'
-import stability from '@/assets/images/asset_type/stability.png'
-import loan from '@/assets/images/asset_type/loan.png'
+import risk from '@/assets/images/mypage/risk.png'
+import diversified from '@/assets/images/mypage/diversified.png'
+import stability from '@/assets/images/mypage/stability.png'
+import loan from '@/assets/images/mypage/loan.png'
 
 const selectedType = ref(null)
 const nickName = ref('')
@@ -96,11 +96,13 @@ onMounted(() => {
 </script>
 
 <style scope>
+.icon {
+}
 .icon-img {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40%;
+  width: 80%;
 }
 .my-type h2.title {
   font-weight: 300;
@@ -111,16 +113,20 @@ onMounted(() => {
 .my-type .text-p {
   font-size: 20px;
   letter-spacing: -0.6px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background-color: #f3f3ff;
 }
 .my-type .text-black {
   color: #333;
 }
 .my-type .user-type-info {
+  font-size: 20px;
   color: #555;
   letter-spacing: -0.7px;
   padding: 12px 16px;
   border-radius: 12px;
-  background: var(--gray020, #fffbec);
+  background-color: #fffbec;
   color: var(--font-secondary, #475067);
 }
 .my-type .user-type-info i {
@@ -128,7 +134,6 @@ onMounted(() => {
   margin-right: 5px;
 }
 .my-type .user-type-info .text-accent {
-  font-size: 23px;
   font-weight: 600;
 }
 .my-type .button-container {
@@ -137,7 +142,7 @@ onMounted(() => {
 }
 .my-type .button-container .btn {
   padding: 1.6rem 1.4rem;
-  border-radius: 5px;
+  border-radius: 28px;
   border: 3px solid #e4deff;
   background-color: #fcfcfc;
   width: 100%;
@@ -174,56 +179,4 @@ onMounted(() => {
   word-break: keep-all;
   letter-spacing: -0.5px;
 }
-</style>
-
-<style scoped>
-/* .button-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.btn {
-  border: 2px solid black;
-  padding: 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition:
-    background-color 0.3s,
-    border-color 0.3s;
-  width: 23%;
-  text-align: left;
-  background-color: white;
-  display: flex;
-  align-items: center;
-}
-
-.btn:hover {
-  background-color: #f0f0f0;
-}
-
-.selected {
-  background-color: #007bff;
-  color: white;
-  border-color: #0056b3;
-}
-
-.icon {
-  font-size: 40px;
-  margin-right: 10px;
-}
-
-.text-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.title {
-  font-weight: bold;
-}
-
-.description {
-  font-size: 14px;
-} */
 </style>

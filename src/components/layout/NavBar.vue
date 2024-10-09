@@ -78,7 +78,7 @@ export default {
       this.$forceUpdate() // 화면 크기 변경 시 업데이트
     })
   },
-  beforeDestroy() {
+  beforeUnmount() {
     // 컴포넌트가 해제될 때 스크롤 이벤트 리스너 제거
     window.removeEventListener('scroll', this.handleScroll)
   }

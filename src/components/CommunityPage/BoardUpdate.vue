@@ -52,7 +52,9 @@
     <div class="my-5 text-center">
       <button type="submit" class="button-main">확인</button>
       <button type="button" class="button-sub margin-left-1rem" @click="reset">취소</button>
-      <button class="button-sub margin-left-1rem" @click="back">돌아가기</button>
+      <button class="button-sub margin-left-1rem" @click="back">
+        <i class="fa-solid fa-reply"></i> 뒤로
+      </button>
     </div>
   </form>
 </template>

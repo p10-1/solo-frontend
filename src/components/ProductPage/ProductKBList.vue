@@ -1,10 +1,6 @@
 <template>
   <div class="kb-product-list">
-    <h2 class="title">
-      "<span class="text-accent">{{ authStore.userInfo.userName }}</span
-      >" 님을 위한 <span class="text-accent">KB 추천 상품</span>이에요
-      <span class="text-accent"><i class="fa-regular fa-face-smile"></i></span>
-    </h2>
+    
     <div v-if="loading" class="loading margin-top-3rem">
       <i class="fa-solid fa-spinner margin-bottom-1rem"></i>
       <br />로딩 중...
@@ -92,7 +88,7 @@ onMounted(() => {
 .kb-product-list .product-cards {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 17px;
   background: #f3f3ff;
   padding: 2rem 1.5rem;
