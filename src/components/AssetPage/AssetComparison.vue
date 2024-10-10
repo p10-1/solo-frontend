@@ -1,6 +1,5 @@
 <template>
   <div class="asset-comparison">
-    
     <!-- 선택된 자산 유형에 따라 동적으로 타이틀을 표시 -->
     <h2 class="asset-comparison__title">{{ selectedAssetTypeName }} 비교</h2>
 
@@ -36,7 +35,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import ChartComponent from '@/components/common/ChartComponent.vue'
 import { fetchAssetComparison } from '@/api/assetApi'
 

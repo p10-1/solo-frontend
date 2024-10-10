@@ -29,10 +29,12 @@
             <span class="asset-name">{{ assetNames[asset.name] }}</span>
 
             <!-- 자산 비율 표시 -->
-            <span class="asset-percentage">{{ calculatePercentage(asset.total) }}%</span>
+            <span class="asset-percentage"
+              >{{ Math.round(calculatePercentage(asset.total)) }}%</span
+            >
 
             <!-- 자산 금액 표시 -->
-            <span class="asset-amount">{{ formatNumber(asset.total) }}원</span>
+            <span class="asset-amount">{{ formatNumber(Math.round(asset.total)) }}원</span>
           </div>
         </div>
       </div>
