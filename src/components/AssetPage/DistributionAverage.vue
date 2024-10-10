@@ -1,7 +1,7 @@
 <template>
   <div class="asset-distribution">
     <!-- 자산 분포 차트의 타이틀 -->
-    <h3>{{ title }}</h3>
+    <h3 class="main-title">{{ title }}</h3>
 
     <!-- 자산 분포를 나타내는 콘텐츠 영역 -->
     <div class="asset-content">

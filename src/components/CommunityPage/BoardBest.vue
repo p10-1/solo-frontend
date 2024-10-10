@@ -4,7 +4,7 @@
       <span class="text-accent"><i class="fa-solid fa-ranking-star"></i></span> HOT
     </h2>
     <div v-if="loading" class="loading">
-      <i class="fa-solid fa-spinner margin-bottom-1rem"></i>
+      <i class="fa-solid fa-spinner margin-bottom-1rem"></i><br />
       로딩 중...
     </div>
     <div v-if="error" class="error">
