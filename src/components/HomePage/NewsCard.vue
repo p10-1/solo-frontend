@@ -57,7 +57,7 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 
 const modules = [Pagination, Navigation, Autoplay]
-
+  
 const newsList = ref([])
 const selectedCategory = ref('경제') // 기본 선택 카테고리
 
