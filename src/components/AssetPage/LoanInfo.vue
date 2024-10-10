@@ -1,13 +1,13 @@
 <template>
   <h2 class="title">대출 정보</h2>
-  <div class="loan-info">
+  <div class="loan-info-container">
+    <!-- formattedLoanInfo 객체의 각 항목을 순회하여 대출 정보를 표시 -->
     <div v-for="(value, key) in formattedLoanInfo" :key="key" class="loan-item">
       <span class="loan-label">{{ key }}:</span>
       <span class="loan-value">{{ value }}</span>
     </div>
   </div>
 </template>
-
 <script setup>
 //src/components/AssetPage/LoanInfo.vue
 
@@ -52,31 +52,4 @@ const formattedLoanInfo = computed(() => ({
 }))
 </script>
 
-<style scoped>
-.loan-info {
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 8px;
-  margin-top: 20px;
-}
-
-h3 {
-  margin-bottom: 15px;
-  color: #333;
-}
-
-.loan-item {
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.loan-label {
-  font-weight: bold;
-  color: #555;
-}
-
-.loan-value {
-  color: #007bff;
-}
-</style>
+<style scoped></style>

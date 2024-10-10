@@ -1,8 +1,20 @@
 <template>
+  <h2 class="comment-title">
+    "<span class="text-accent">ㅇㅇ</span>"님을 위한
+    <span class="text-accent">추천 상품</span>이에요.
+    <span class="text-accent"><i class="fa-regular fa-face-smile"></i></span>
+  </h2>
   <ProductFilter v-model:productType="productType" />
   <ProductKBList :product-type="productType" />
   <div class="infinite-scroll">
-    <h2 class="title margin-top-3rem"><span class="text-accent">예ㆍ적금 상품</span> 목록</h2>
+    <h2 class="title margin-top-3rem">
+      <span class="text-accent"
+        ><span class="text-accent">
+          {{ productType == '대출' ? '전세자금대출' : productType }}
+        </span>
+      </span>
+      목록
+    </h2>
     <div class="search-bar">
       <!-- SearchBar 컴포넌트 사용 -->
       <SearchBar v-model="keyword" @search="searchProducts" />
@@ -40,6 +52,7 @@
 <script setup>
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useProductStore } from '@/stores/productStore'
 import { fetchProducts } from '@/api/productApi'
 import ProductItem from './ProductItem.vue'
 import LoanItem from './LoanItem.vue'
@@ -53,9 +66,10 @@ const totalPage = ref(0)
 const keyword = ref('')
 const loading = ref(false)
 const noMoreData = ref(false)
-const productType = ref('예금')
 const route = useRoute()
 const router = useRouter()
+const productStore = useProductStore()
+const productType = ref(productStore.productType)
 const totalCnt = ref(0)
 
 const loadProducts = async () => {
@@ -64,7 +78,9 @@ const loadProducts = async () => {
 
   setTimeout(async () => {
     try {
+      console.log('fetch: ', productType.value)
       const data = await fetchProducts(pageNum.value, keyword.value, productType.value)
+      console.log(data)
       totalCnt.value = data.totalCount || 0
       if (data.list.length > 0) {
         list.value = [...list.value, ...data.list]
@@ -93,11 +109,19 @@ const searchProducts = async (searchTerm) => {
   await loadProducts()
 }
 
-watch([productType, keyword], async () => {
+watch(productType, async (newType) => {
   pageNum.value = 1
   list.value = []
   noMoreData.value = false
-  await loadProducts()
+  productStore.setProductType(newType)
+  await loadProducts() // Load products whenever productType changes
+})
+
+watch(keyword, async () => {
+  pageNum.value = 1
+  list.value = []
+  noMoreData.value = false
+  await loadProducts() // Load products whenever keyword changes
 })
 
 const handleScroll = () => {
@@ -110,7 +134,7 @@ const handleScroll = () => {
 onMounted(() => {
   keyword.value = route.query.keyword || ''
   pageNum.value = parseInt(route.query.page) || 1
-
+  // productType.value = route.query.productType || '에금'
   loadProducts()
 
   window.addEventListener('scroll', handleScroll)

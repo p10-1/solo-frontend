@@ -2,6 +2,9 @@
   <a :href="productDetailLink" target="_blank" class="kb-product-card">
     <div class="company-name">{{ props.product.korCoNm }}</div>
     <h2 class="product-name">{{ props.product.finPrdtNm }}</h2>
+    <div class="link">
+      <i class="fa-solid fa-link"></i>
+    </div>
     <div class="detail">
       {{ props.product.mtrtInt }}
       {{ props.product.loanLmt }}
@@ -43,6 +46,7 @@ const productDetailLink = computed(() => {
 </script>
 <style scoped>
 .kb-product-card {
+  position: relative;
   flex: 0 0 calc(33.8% - 17px);
   width: 100%;
   min-height: 10rem;
@@ -61,6 +65,19 @@ const productDetailLink = computed(() => {
 .kb-product-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 0 18px #cfc6fd;
+}
+
+.kb-product-card .link {
+  position: absolute;
+  top: 2rem;
+  right: 1.7rem;
+  font-size: 1.8rem;
+  color: #d3d3d3;
+}
+
+.kb-product-card:hover .link {
+  color: #a686f3;
+  transition: all 0.6s;
 }
 
 .kb-product-card:hover .product-name {

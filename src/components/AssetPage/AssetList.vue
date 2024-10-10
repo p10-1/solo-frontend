@@ -1,35 +1,54 @@
 <template>
+  <h2 class="comment-title">
+    "<span class="text-accent">ㅇㅇ</span>"님의 자산을 <span class="text-accent">분석</span>했어요
+    <span class="text-accent"><i class="fa-regular fa-face-smile-wink"></i></span>
+  </h2>
   <div class="asset-list">
-    <h1 class="asset-list__title">자산 정보</h1>
-    <div v-if="loading" class="asset-list__loading">Loading...</div>
-    <div v-else-if="error" class="asset-list__error">{{ error }}</div>
+    <div v-if="loading" class="loading">
+      <i class="fa-solid fa-spinner margin-bottom-1rem"></i><br />
+      Loading...
+    </div>
+    <div v-else-if="error" class="error">
+      <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />{{ error }}
+    </div>
     <template v-else-if="processedData">
       <div class="asset-list__grid">
-        <div class="asset-list__section asset-list__total">
-          <TotalAsset :totalAmount="processedData.totalAsset" />
-        </div>
-        <div class="asset-list__section asset-list__distribution-slider">
+        <!-- 섹션: 전체 자산 금액을 표시하는 TotalAsset 컴포넌트 -->
+        <TotalAsset :totalAmount="processedData.totalAsset" />
+
+        <!-- 섹션: 자산 분포 및 평균과의 비교를 위한 슬라이더 -->
+        <div class="asset-list__distribution-slider">
+          <!-- 이전 슬라이드 버튼 -->
           <button @click="prevSlide" class="slider-btn prev-btn">‹</button>
+
+          <!-- 슬라이더 콘텐츠 영역 -->
           <div class="slider-content">
+            <!-- 페이드 효과로 슬라이드 전환 -->
             <transition name="fade" mode="out-in">
+              <!-- 첫 번째 슬라이드: 사용자 자산 분포를 나타냄 -->
               <Distribution
                 v-if="currentSlide === 0"
                 key="user-distribution"
                 :assetDetails="processedData.assetDetails"
                 title="내 자산 분포"
               >
+                <!-- 추가 콘텐츠 영역: 가장 많은 자산 종류 표시 -->
                 <template #extra>
                   <div v-if="highestAssetType" class="asset-highlight">
                     보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
                   </div>
                 </template>
               </Distribution>
+
+              <!-- 두 번째 슬라이드: 유형별 평균 자산 분포를 나타냄 -->
               <DistributionAverage
                 v-else-if="currentSlide === 1 && processedData.typeAverages"
                 key="type-average-distribution"
                 :assetDetails="processedData.typeAverages"
                 :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
               />
+
+              <!-- 세 번째 슬라이드: 전체 사용자 평균 자산 분포 -->
               <DistributionAverage
                 v-else-if="currentSlide === 2 && processedData.overallAverages"
                 key="overall-average-distribution"
@@ -38,11 +57,19 @@
               />
             </transition>
           </div>
+
+          <!-- 다음 슬라이드 버튼 -->
           <button @click="nextSlide" class="slider-btn next-btn">›</button>
         </div>
-        <div class="asset-list__section asset-list__comparison-container">
+
+        <!-- 섹션: 자산 비교 차트 영역 -->
+        <div class="asset-list__comparison-container">
+          <!-- 자산 종류 버튼 -->
           <AssetTypeButtons :selectedType="selectedAssetType" @select-type="selectAssetType" />
+
+          <!-- 자산 비교 차트 -->
           <div class="asset-list__comparison-charts">
+            <!-- 사용자 자산과 선택된 자산 종류 간 비교 -->
             <div class="asset-list__chart">
               <AssetComparison
                 :userAsset="calculateTotalAssets(processedData.assetDetails)"
@@ -50,24 +77,37 @@
                 :selectedAssetType="selectedAssetType"
               />
             </div>
+
+            <!-- 시간에 따른 자산 변화 비교 -->
             <div class="asset-list__chart">
               <TimeComparison :assetType="selectedAssetType" :assetData="rawAssetData" />
             </div>
           </div>
         </div>
-        <div class="asset-list__section asset-list__loan">
-          <h2 class="section-title">대출 정보</h2>
+
+        <!-- 섹션: 대출 정보 -->
+        <div class="asset-list__loan">
+          <!-- 대출 정보가 있는 경우 LoanInfo 컴포넌트로 대출 정보 표시 -->
           <template v-if="hasLoanData">
             <LoanInfo :loanData="processedData.loanData" />
           </template>
-          <p v-else class="no-loan-message">대출이 존재하지 않습니다.</p>
+          <!-- 대출 정보가 없는 경우 안내 메시지 표시 -->
+          <div v-else class="no-more">
+            <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />
+            대출이 존재하지 않습니다.
+          </div>
         </div>
-        <div class="asset-list__section asset-list__recommended-products">
-          <h2 class="section-title">추천 상품</h2>
+
+        <!-- 섹션: 추천 상품 -->
+        <div class="asset-list__recommended-products">
+          <!-- 대출 정보가 있는 경우 대출 기간에 따른 추천 상품 표시 -->
           <template v-if="hasLoanData">
             <Recommendation :loanPeriod="processedData.loanData.period" />
           </template>
-          <p v-else class="no-recommendation-message">대출 정보가 없어 추천 상품이 없습니다.</p>
+          <div v-else class="no-more">
+            <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />
+            대출 정보가 없어 추천 상품이 없습니다.
+          </div>
         </div>
       </div>
     </template>
@@ -304,93 +344,80 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.asset-list {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.asset-list__title {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #333;
-}
-
 .asset-list__grid {
+  /* 자산 목록의 그리드 레이아웃을 설정, 하나의 열로 구성하며, 각 항목 사이에 30px의 간격을 둠 */
   display: grid;
   grid-template-columns: 1fr;
   gap: 30px;
 }
 
-.asset-list__section {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-}
 .asset-list__average-distribution {
+  /* 자산 분포 섹션이 그리드에서 전체 너비를 차지하도록 설정 */
   grid-column: 1 / -1;
 }
+
 .asset-list__total,
 .asset-list__distribution {
+  /* 전체 자산 및 자산 분포 섹션이 그리드에서 전체 너비를 차지하도록 설정 */
   grid-column: 1 / -1;
 }
 
 .asset-list__comparison-container {
+  /* 자산 비교 섹션이 그리드에서 전체 너비를 차지하도록 설정 */
   grid-column: 1 / -1;
 }
 
 .asset-list__comparison-charts {
+  /* 자산 비교 차트를 가로로 배치하고, 차트들 간의 간격을 20px로 설정, 상단에 20px의 여백 추가 */
   display: flex;
   gap: 20px;
   margin-top: 20px;
 }
 
 .asset-list__chart {
+  /* 각 차트 영역이 동일한 비율로 크기를 조절하고, 최소 너비를 0으로 설정해 차트가 작아지더라도 레이아웃이 유지되도록 설정 */
   flex: 1;
   min-width: 0;
 }
 
 .asset-list__loan,
 .asset-list__recommendation {
+  /* 대출 정보 및 추천 상품 섹션이 그리드에서 전체 너비를 차지하도록 설정 */
   grid-column: 1 / -1;
-}
-
-.asset-list__loading,
-.asset-list__error {
-  text-align: center;
-  padding: 20px;
-  font-size: 18px;
-}
-
-.asset-list__error {
-  color: #ff4d4f;
 }
 
 @media (max-width: 768px) {
   .asset-list__comparison-charts {
+    /* 화면 너비가 768px 이하일 때, 자산 비교 차트를 세로로 배치 */
     flex-direction: column;
   }
 
   .asset-list__chart {
+    /* 화면 너비가 좁아지면 차트의 너비를 100%로 설정하여 가득 채우도록 설정 */
     width: 100%;
   }
 }
+
 .asset-list__recommended-products {
+  /* 추천 상품 섹션이 그리드에서 전체 너비를 차지하도록 설정 */
   grid-column: 1 / -1;
 }
+
 .asset-list__distribution-slider {
+  /* 자산 분포 슬라이더의 버튼과 슬라이더 콘텐츠가 수평으로 정렬되도록 설정 */
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .slider-content {
+  /* 슬라이더의 콘텐츠가 그리드 영역을 꽉 채우고, 넘치는 콘텐츠는 숨김 처리 */
   flex-grow: 1;
   overflow: hidden;
 }
 
 .slider-btn {
+  /* 슬라이더 버튼의 크기를 30px로 설정하고, 배경과 테두리 없이 버튼을 표시, 커서가 포인터로 변경되도록 설정 */
   font-size: 30px;
   background: none;
   border: none;
@@ -399,40 +426,25 @@ onMounted(async () => {
 }
 
 .slider-btn:disabled {
+  /* 비활성화된 슬라이더 버튼의 불투명도를 낮추고, 커서가 기본 모양으로 변경되도록 설정 */
   opacity: 0.5;
   cursor: not-allowed;
 }
 
 .fade-enter-active,
 .fade-leave-active {
+  /* 슬라이더 페이드 효과의 트랜지션 지속 시간을 0.5초로 설정 */
   transition: opacity 0.5s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
+  /* 슬라이더 페이드 효과가 시작되거나 종료될 때 투명하게 설정 */
   opacity: 0;
 }
-.asset-list__no-loan {
-  text-align: center;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  color: #6c757d;
-}
-.section-title {
-  margin-bottom: 15px;
-  color: #333;
-}
 
-.no-loan-message,
-.no-recommendation-message {
-  text-align: center;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  color: #6c757d;
-}
 .asset-highlight {
+  /* 자산 하이라이트 텍스트에 상단 10px의 여백과 굵은 글꼴, 초록색(#4caf50) 텍스트 색상을 적용 */
   margin-top: 10px;
   font-weight: bold;
   color: #4caf50;

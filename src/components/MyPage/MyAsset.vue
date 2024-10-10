@@ -51,73 +51,88 @@
         </div>
       </div>
 
-      <div class="laon-section">
+      <div class="loan-section">
         <h3 class="title margin-top-3rem margin-bottom-1rem">대출</h3>
         <div v-if="isLoanDetailsValid" class="my-loan-list">
           <div v-if="!editMode">
-            <ul class="list-item">
-              <li>대출 금액</li>
-              <li>
-                {{ loanDetails.loanAmount ? loanDetails.loanAmount.toLocaleString() : '0' }}원
-              </li>
-            </ul>
-            <ul class="list-item">
-              <li>대출 목적</li>
-              <li>{{ loanDetails.loanPurpose }}</li>
-            </ul>
-            <ul class="list-item">
-              <li>대출 기간</li>
-              <li>{{ loanDetails.period }}개월</li>
-            </ul>
-            <ul class="list-item">
-              <li>대출 이율</li>
-              <li>{{ loanDetails.interest }}%</li>
-            </ul>
+            <div class="list-item">
+              <ul>
+                <li>대출 금액</li>
+                <li>
+                  <span class="text-accent">{{
+                    loanDetails.loanAmount ? loanDetails.loanAmount.toLocaleString() : '0'
+                  }}</span
+                  >원
+                </li>
+              </ul>
+              <ul>
+                <li>대출 목적</li>
+                <li>
+                  <span class="text-accent">{{ loanDetails.loanPurpose }}</span>
+                </li>
+              </ul>
+              <ul>
+                <li>대출 기간</li>
+                <li>
+                  <span class="text-accent">{{ loanDetails.period }}</span
+                  >개월
+                </li>
+              </ul>
+              <ul>
+                <li>대출 이율</li>
+                <li>
+                  <span class="text-accent">{{ loanDetails.interest }}</span
+                  >%
+                </li>
+              </ul>
+            </div>
           </div>
           <div v-else>
-            <ul class="list-item">
-              <li>대출 목적</li>
-              <li>
-                <input
-                  v-model="loanDetails.loanPurpose"
-                  class="form-control"
-                  placeholder="대출 목적"
-                />
-              </li>
-            </ul>
-            <ul class="list-item">
-              <li>대출 금액</li>
-              <li>
-                <input
-                  v-model.number="loanDetails.loanAmount"
-                  type="number"
-                  class="form-control"
-                  placeholder="대출 금액"
-                />
-              </li>
-            </ul>
-            <ul class="list-item">
-              <li>대출 기간</li>
-              <li>
-                <input
-                  v-model.number="loanDetails.period"
-                  type="number"
-                  class="form-control"
-                  placeholder="대출 기간"
-                />
-              </li>
-            </ul>
-            <ul class="list-item">
-              <li>대출 이율</li>
-              <li>
-                <input
-                  v-model.number="loanDetails.interest"
-                  type="number"
-                  class="form-control"
-                  placeholder="대출 이율"
-                />
-              </li>
-            </ul>
+            <div class="list-item">
+              <ul>
+                <li>대출 목적</li>
+                <li>
+                  <input
+                    v-model="loanDetails.loanPurpose"
+                    class="form-control"
+                    placeholder="대출 목적"
+                  />
+                </li>
+              </ul>
+              <ul>
+                <li>대출 금액</li>
+                <li>
+                  <input
+                    v-model.number="loanDetails.loanAmount"
+                    type="number"
+                    class="form-control"
+                    placeholder="대출 금액"
+                  />
+                </li>
+              </ul>
+              <ul>
+                <li>대출 기간</li>
+                <li>
+                  <input
+                    v-model.number="loanDetails.period"
+                    type="number"
+                    class="form-control"
+                    placeholder="대출 기간"
+                  />
+                </li>
+              </ul>
+              <ul>
+                <li>대출 이율</li>
+                <li>
+                  <input
+                    v-model.number="loanDetails.interest"
+                    type="number"
+                    class="form-control"
+                    placeholder="대출 이율"
+                  />
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -136,12 +151,7 @@ import { ref, computed } from 'vue'
 import { getAsset, updateAsset } from '@/api/mypageApi'
 
 // 상태 정의
-const assetTypes = ref({
-  cash: [],
-  deposit: [],
-  stock: [],
-  insurance: []
-})
+const assetTypes = ref({ cash: [], deposit: [], stock: [], insurance: [] })
 const loanDetails = ref({})
 const editMode = ref(false)
 const loaded = ref(false)
@@ -249,6 +259,8 @@ const prepareUpdatedData = () => {
 </script>
 
 <style scoped>
+.my-asset-manager {
+}
 
 /* 자산 */
 .my-asset-list div.list-align {
@@ -286,27 +298,47 @@ const prepareUpdatedData = () => {
   margin-bottom: 5px;
   font-size: 18px;
 }
-
 .my-asset-list .asset-item dt {
-  font-weight: 400;
-  letter-spacing: -0.8px;
+  font-weight: 500;
   color: #6846f5;
+  letter-spacing: -0.8px;
 }
-
-.my-asset-list .asset-item dl dd {
-  color: #666;
-}
-
-.my-asset-list .asset-item dl dd:nth-child(2) {
-  letter-spacing: -0.5px;
-  margin-left: 0;
-  flex-grow: 1;
-}
-
-.my-asset-list .asset-item dl dd .text-accent {
+.my-asset-list .asset-item .text-accent {
+  color: #6846f5;
+  letter-spacing: -0.8px;
   font-weight: 700;
-  letter-spacing: -0.5px;
 }
-
-
+/* 대출 */
+.loan-section {
+  margin-top: 2rem;
+}
+.loan-section h3 {
+  margin-bottom: 1rem;
+}
+.loan-section .list-item {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0px 100px;
+  align-items: center;
+}
+.loan-section .list-item ul {
+  width: calc(50% - 50px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+}
+.loan-section .list-item li {
+  letter-spacing: -0.8px;
+}
+.loan-section .list-item li:first-child {
+  color: #6846f5;
+  font-weight: 500;
+}
+.loan-section .list-item .text-accent {
+  color: #6846f5;
+  font-weight: 700;
+}
 </style>

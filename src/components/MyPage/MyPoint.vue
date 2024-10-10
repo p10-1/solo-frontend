@@ -14,7 +14,7 @@
       <div class="form-group">
         <h3 class="title margin-top-2rem margin-bottom-1rem text-accent">입금할 계좌</h3>
         <select v-model="accountIndex" class="form-control mr-2 account-select" id="accountSelect">
-          <option value="" disabled selected>내 계좌 선택</option>
+          <option value="disabled selected">내 계좌 선택</option>
           <option v-for="(account, index) in accounts" :key="index" :value="index">
             {{ account }}
           </option>
@@ -41,8 +41,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { fetchPoints, pointsToCash, getBank } from '@/api/mypageApi';
+import { ref, onMounted } from 'vue'
+import { fetchPoints, pointsToCash, getBank } from '@/api/mypageApi'
 
 // 이벤트 정의
 const emit = defineEmits(['update'])
@@ -66,7 +66,6 @@ const loadPoints = async () => {
 const loadBank = async () => {
   try {
     const data = await getBank()
-    console.log(data)
     accounts.value = JSON.parse(data[0])
   } catch (error) {
     handleError('계좌 조회 오류가 발생했습니다.', error)
@@ -114,9 +113,7 @@ onMounted(() => {
   loadBank()
 })
 </script>
-
 <style scoped>
-
 .point-management .text-accent {
   font-weight: 300;
 }
