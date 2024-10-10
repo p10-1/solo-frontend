@@ -1,115 +1,73 @@
 <template>
-  <h2 class="comment-title">
-    "<span class="text-accent">ㅇㅇ</span>"님의 자산을 <span class="text-accent">분석</span>했어요
-    <span class="text-accent"><i class="fa-regular fa-face-smile-wink"></i></span>
-  </h2>
   <div class="asset-list">
-    <div v-if="loading" class="loading">
-      <i class="fa-solid fa-spinner margin-bottom-1rem"></i><br />
-      Loading...
-    </div>
-    <div v-else-if="error" class="error">
-      <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />{{ error }}
-    </div>
+    <h1 class="asset-list__title">자산 정보</h1>
+    <div v-if="loading" class="asset-list__loading">Loading...</div>
+    <div v-else-if="error" class="asset-list__error">{{ error }}</div>
     <template v-else-if="processedData">
       <div class="asset-list__grid">
-        <!-- 섹션: 전체 자산 금액을 표시하는 TotalAsset 컴포넌트 -->
-        <TotalAsset :totalAmount="processedData.totalAsset" />
-
-        <!-- 섹션: 자산 분포 및 평균과의 비교를 위한 슬라이더 -->
-        <div class="asset-list__distribution-slider">
-          <!-- 이전 슬라이드 버튼 -->
+        <div class="asset-list__section asset-list__total">
+          <TotalAsset :totalAmount="processedData.totalAsset" />
+        </div>
+        <div class="asset-list__section asset-list__distribution-slider">
           <button @click="prevSlide" class="slider-btn prev-btn">‹</button>
-
-          <!-- 슬라이더 콘텐츠 영역 -->
           <div class="slider-content">
-            <!-- 페이드 효과로 슬라이드 전환 -->
             <transition name="fade" mode="out-in">
-              <!-- 첫 번째 슬라이드: 사용자 자산 분포를 나타냄 -->
-              <Distribution
-                v-if="currentSlide === 0"
-                key="user-distribution"
-                :assetDetails="processedData.assetDetails"
-                title="내 자산 분포"
-              >
-                <!-- 추가 콘텐츠 영역: 가장 많은 자산 종류 표시 -->
+              <Distribution v-if="currentSlide === 0" key="user-distribution" :assetDetails="processedData.assetDetails"
+                title="내 자산 분포">
                 <template #extra>
                   <div v-if="highestAssetType" class="asset-highlight">
                     보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
                   </div>
                 </template>
               </Distribution>
-
-              <!-- 두 번째 슬라이드: 유형별 평균 자산 분포를 나타냄 -->
-              <DistributionAverage
-                v-else-if="currentSlide === 1 && processedData.typeAverages"
-                key="type-average-distribution"
-                :assetDetails="processedData.typeAverages"
-                :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
-              />
-
-              <!-- 세 번째 슬라이드: 전체 사용자 평균 자산 분포 -->
-              <DistributionAverage
-                v-else-if="currentSlide === 2 && processedData.overallAverages"
-                key="overall-average-distribution"
-                :assetDetails="processedData.overallAverages"
-                title="전체 사용자 평균 자산 분포"
-              />
+              <DistributionAverage v-else-if="currentSlide === 1 && processedData.typeAverages"
+                key="type-average-distribution" :assetDetails="processedData.typeAverages"
+                :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`" />
+              <DistributionAverage v-else-if="currentSlide === 2 && processedData.overallAverages"
+                key="overall-average-distribution" :assetDetails="processedData.overallAverages"
+                title="전체 사용자 평균 자산 분포" />
             </transition>
           </div>
-
-          <!-- 다음 슬라이드 버튼 -->
           <button @click="nextSlide" class="slider-btn next-btn">›</button>
         </div>
-
-        <!-- 섹션: 자산 비교 차트 영역 -->
-        <div class="asset-list__comparison-container">
-          <!-- 자산 종류 버튼 -->
+        <div class="asset-list__section asset-list__comparison-container">
           <AssetTypeButtons :selectedType="selectedAssetType" @select-type="selectAssetType" />
-
-          <!-- 자산 비교 차트 -->
           <div class="asset-list__comparison-charts">
-            <!-- 사용자 자산과 선택된 자산 종류 간 비교 -->
             <div class="asset-list__chart">
               <AssetComparison :userAsset="calculateTotalAssets(processedData.assetDetails)"
                 :userType="processedData.assetDetails.type || 'unknown'" :selectedAssetType="selectedAssetType" />
             </div>
-
-            <!-- 시간에 따른 자산 변화 비교 -->
             <div class="asset-list__chart">
               <TimeComparison :assetType="selectedAssetType" :assetData="rawAssetData" />
             </div>
           </div>
         </div>
-
-        <!-- 섹션: 대출 정보 -->
-        <div class="asset-list__loan">
-          <!-- 대출 정보가 있는 경우 LoanInfo 컴포넌트로 대출 정보 표시 -->
-          <template v-if="hasLoanData">
-            <LoanInfo :loanData="processedData.loanData" />
-          </template>
-          <!-- 대출 정보가 없는 경우 안내 메시지 표시 -->
-          <div v-else class="no-more">
-            <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />
-            대출이 존재하지 않습니다.
+        <div class="asset-list__section asset-list__loan">
+          <h2 class="section-title">대출 정보</h2>
+          <div class="loan-container">
+            <template v-if="hasLoanData">
+              <div class="loan-info">
+                <LoanInfo :loanData="processedData.loanData" />
+              </div>
+              <div class="loan-guide">
+                <LoanGuide :loanData="processedData.loanData" />
+              </div>
+            </template>
+            <p v-else class="no-loan-message">대출이 존재하지 않습니다.</p>
           </div>
         </div>
-
-        <!-- 섹션: 추천 상품 -->
-        <div class="asset-list__recommended-products">
-          <!-- 대출 정보가 있는 경우 대출 기간에 따른 추천 상품 표시 -->
+        <div class="asset-list__section asset-list__recommended-products">
+          <h2 class="section-title">추천 상품</h2>
           <template v-if="hasLoanData">
             <Recommendation :loanPeriod="processedData.loanData.period" />
           </template>
-          <div v-else class="no-more">
-            <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />
-            대출 정보가 없어 추천 상품이 없습니다.
-          </div>
+          <p v-else class="no-recommendation-message">대출 정보가 없어 추천 상품이 없습니다.</p>
         </div>
       </div>
     </template>
   </div>
 </template>
+
 
 <script setup>
 //src/components/AssetPage/AssetList.vue
@@ -354,7 +312,6 @@ onMounted(async () => {
   grid-column: 1 / -1;
 }
 
-
 .asset-list__total,
 .asset-list__distribution {
   /* 전체 자산 및 자산 분포 섹션이 그리드에서 전체 너비를 차지하도록 설정 */
@@ -397,12 +354,10 @@ onMounted(async () => {
   }
 }
 
-
 .asset-list__recommended-products {
   /* 추천 상품 섹션이 그리드에서 전체 너비를 차지하도록 설정 */
   grid-column: 1 / -1;
 }
-
 
 .asset-list__distribution-slider {
   /* 자산 분포 슬라이더의 버튼과 슬라이더 콘텐츠가 수평으로 정렬되도록 설정 */
@@ -451,7 +406,6 @@ onMounted(async () => {
   color: #4caf50;
 }
 
-/*새로 수정 */
 .loan-container {
   display: flex;
   justify-content: space-between;
@@ -465,5 +419,4 @@ onMounted(async () => {
 .loan-guide {
   flex: 1; /* LoanGuide가 우측에 오도록 설정 */
 }
-
 </style>
