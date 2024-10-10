@@ -67,7 +67,7 @@ const props = defineProps({
 
 // 가이드 기준 가격
 const guidePrices = {
-  붕어빵: 2000,
+  붕어빵: 700,
   커피: 5000,
   치킨: 30000,
   호텔뷔페: 100000,
