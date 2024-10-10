@@ -19,26 +19,30 @@
         <!-- 섹션: 자산 분포 및 평균과의 비교를 위한 슬라이더 -->
         <!-- <div class="asset-list__distribution-slider"> -->
         <!-- 이전 슬라이드 버튼 -->
-        <Distribution :assetDetails="processedData.assetDetails" title="내 자산 분포">
-          <template #extra>
-            <div v-if="highestAssetType" class="asset-highlight">
-              보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
-            </div>
-          </template>
-        </Distribution>
+        <Distribution
+          :assetDetails="processedData.assetDetails"
+          :title="'내 자산 분포'"
+          :userType="processedData.assetDetails.type"
+          comparisonType="personal"
+          :userAssetDetails="processedData.assetDetails"
+        />
 
-        <!-- 유형별 평균 자산 분포 -->
         <Distribution
           v-if="processedData.typeAverages"
           :assetDetails="processedData.typeAverages"
           :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
+          :userType="processedData.assetDetails.type"
+          comparisonType="typeAverage"
+          :userAssetDetails="processedData.assetDetails"
         />
 
-        <!-- 전체 사용자 평균 자산 분포 -->
         <Distribution
           v-if="processedData.overallAverages"
           :assetDetails="processedData.overallAverages"
           title="전체 사용자 평균 자산 분포"
+          userType="전체"
+          comparisonType="overallAverage"
+          :userAssetDetails="processedData.assetDetails"
         />
 
         <!-- 다음 슬라이드 버튼 -->
@@ -49,7 +53,10 @@
         <div class="asset-list__comparison-container">
           <!-- 자산 종류 버튼 -->
           <AssetTypeButtons :selectedType="selectedAssetType" @select-type="selectAssetType" />
+
+          <!-- 자산 비교 차트 -->
           <div class="asset-list__comparison-charts">
+            <!-- 사용자 자산과 선택된 자산 종류 간 비교 -->
             <div class="asset-list__chart">
               <AssetComparison
                 :userAsset="calculateTotalAssets(processedData.assetDetails)"
@@ -57,6 +64,8 @@
                 :selectedAssetType="selectedAssetType"
               />
             </div>
+
+            <!-- 시간에 따른 자산 변화 비교 -->
             <div class="asset-list__chart">
               <TimeComparison :assetType="selectedAssetType" :assetData="rawAssetData" />
             </div>
@@ -110,7 +119,7 @@
         <div class="asset-list__recommended-products">
           <!-- 대출 정보가 있는 경우 대출 기간에 따른 추천 상품 표시 -->
           <template v-if="hasLoanData">
-            <Recommendation :loanPeriod="assetStore.processedData.loanData.period" />
+            <Recommendation :loanPeriod="processedData.loanData.period" />
           </template>
           <div v-else class="no-more">
             <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />
@@ -144,32 +153,29 @@ const assetStyle = ref(null)
 
 const selectedAssetType = ref('cash') // 선택된 자산 타입 기본값은 'cash'
 
-// //슬라이드 구현
-// const currentSlide = ref(0)
-// const totalSlides = 3 // 전체 슬라이드 수를 3으로 변경
-
-// const nextSlide = () => {
-//   currentSlide.value = (currentSlide.value + 1) % totalSlides
-// }
-
-// const prevSlide = () => {
-//   currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides
-// }
-
-const assetNames = {
-  cash: '현금자산',
-  deposit: '예적금',
-  stock: '주식',
-  insurance: '보험'
+//반드시 필요
+const getIdealRatios = (userType) => {
+  switch (userType) {
+    case '위험 추구형':
+      return { safe: 0.5, risk: 0.5 }
+    case '자산 분산형':
+      return { safe: 0.6, risk: 0.4 }
+    case '안정 추구형':
+      return { safe: 0.8, risk: 0.2 }
+    case '대출 우선형':
+      return { safe: 0.7, risk: 0.3 } // 대출 상환을 위해 안전자산 비중을 높게 설정
+    default:
+      return { safe: 0.6, risk: 0.4 } // 기본값
+  }
 }
 
-const highestAssetType = computed(() => {
-  if (!assetStore.processedData || !assetStore.processedData.assetDetails) return null
-  const sortedAssets = Object.entries(assetStore.processedData.assetDetails).sort(
-    ([, a], [, b]) => b.total - a.total
-  )
-  return sortedAssets[0]?.[0]
-})
+const fieldMapping = {
+  cash: { bank: 'cashBank', account: 'cashAccount', value: 'cash' },
+  deposit: { bank: 'depositBank', account: 'depositAccount', value: 'deposit' },
+  stock: { bank: 'stockBank', account: 'stockAccount', value: 'stock' },
+  insurance: { bank: 'insuranceCompany', account: 'insuranceName', value: 'insurance' }
+}
+
 const loadData = async () => {
   console.log('1. loadData 함수 시작')
   try {
