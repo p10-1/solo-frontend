@@ -17,27 +17,27 @@
   </div>
   <BoardCard />
   <NewsCard />
-  <!-- <div class="layout-2">
-    <PolicyCard />
-    <ProductCard />
-  </div> -->
+  <div class="layout-2">
+    <!-- <PolicyCard /> -->
+    <!-- <ProductCard /> -->
+  </div>
 </template>
 
 <script>
 import QuizCard from '@/components/HomePage/QuizCard.vue'
 // import Distribution from '@/components/AssetPage/Distribution.vue'
 import CategoryList from '@/components/HomePage/CategoryList.vue'
-import PolicyCard from '@/components/HomePage/PolicyCard.vue'
+// import PolicyCard from '@/components/HomePage/PolicyCard.vue'
 import NewsCard from '@/components/HomePage/NewsCard.vue'
 import BoardCard from '@/components/HomePage/BoardCard.vue'
-import ProductCard from '@/components/HomePage/ProductCard.vue'
+// import ProductCard from '@/components/HomePage/ProductCard.vue'
 export default {
   components: {
     QuizCard,
     BoardCard,
-    PolicyCard,
+    // PolicyCard,
     NewsCard,
-    ProductCard,
+    // ProductCard,
     CategoryList
   }
 }
