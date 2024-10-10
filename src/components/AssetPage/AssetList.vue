@@ -1,6 +1,7 @@
 <template>
   <h2 class="comment-title">
-    "<span class="text-accent">ㅇㅇ</span>"님의 자산을 <span class="text-accent">분석</span>했어요
+    "<span class="text-accent">{{ authStore.userInfo.userName }}</span
+    >"님의 자산을 <span class="text-accent">분석</span>했어요
     <span class="text-accent"><i class="fa-regular fa-face-smile-wink"></i></span>
   </h2>
   <div class="asset-list">
@@ -119,6 +120,7 @@
 
 import { ref, computed, onMounted } from 'vue'
 import { fetchAssetData, fetchAssetAverages } from '@/api/assetApi'
+import { useAuthStore } from '@/stores/authStore'
 import TotalAsset from '@/components/AssetPage/TotalAsset.vue'
 import Distribution from '@/components/AssetPage/Distribution.vue'
 import AssetTypeButtons from '@/components/AssetPage/AssetTypeButtons.vue'
@@ -128,6 +130,7 @@ import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
 import Recommendation from '@/components/AssetPage/Recommendation.vue'
 import DistributionAverage from '@/components/AssetPage/DistributionAverage.vue'
 
+const authStore = useAuthStore()
 const loading = ref(true) // 로딩 상태 관리
 const error = ref(null) // 에러 상태 관리
 

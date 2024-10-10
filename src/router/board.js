@@ -15,6 +15,7 @@ const routes = [
     path: '/board/detail/:boardNo',
     name: 'board/detail',
     component: BoardDetail,
+    beforeEnter: isAuthenticated,
     props: true
   },
   {

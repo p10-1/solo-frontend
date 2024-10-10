@@ -1,7 +1,7 @@
 <template>
   <h2 class="comment-title">
-    "<span class="text-accent">ㅇㅇ</span>"님을 위한
-    <span class="text-accent">추천 상품</span>이에요.
+    "<span class="text-accent">{{ authStore.userInfo.userName }}</span
+    >"님을 위한 <span class="text-accent">추천 상품</span>이에요.
     <span class="text-accent"><i class="fa-regular fa-face-smile"></i></span>
   </h2>
   <ProductFilter v-model:productType="productType" />
@@ -53,6 +53,7 @@
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProductStore } from '@/stores/productStore'
+import { useAuthStore } from '@/stores/authStore'
 import { fetchProducts } from '@/api/productApi'
 import ProductItem from './ProductItem.vue'
 import LoanItem from './LoanItem.vue'
@@ -69,6 +70,7 @@ const noMoreData = ref(false)
 const route = useRoute()
 const router = useRouter()
 const productStore = useProductStore()
+const authStore = useAuthStore()
 const productType = ref(productStore.productType)
 const totalCnt = ref(0)
 
