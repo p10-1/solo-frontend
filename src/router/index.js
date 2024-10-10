@@ -13,6 +13,7 @@ import Product from '@/pages/product/ProductPage.vue'
 import boardRoutes from './board'
 // 팀소개 추가
 import SoloTeam from '@/pages/CreateSoloTeam.vue'
+import { isAuthenticated } from '@/util/guard'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -44,7 +45,8 @@ const router = createRouter({
     {
       path: '/asset',
       name: 'asset',
-      component: Asset
+      component: Asset,
+      beforeEnter: isAuthenticated
     },
     {
       path: '/mypage',
@@ -64,12 +66,14 @@ const router = createRouter({
     {
       path: '/policy',
       name: 'policy',
-      component: Policy
+      component: Policy,
+      beforeEnter: isAuthenticated
     },
     {
       path: '/product',
       name: 'product',
-      component: Product
+      component: Product,
+      beforeEnter: isAuthenticated
     },
     ...boardRoutes
   ]
