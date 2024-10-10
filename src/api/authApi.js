@@ -1,4 +1,3 @@
-// src/authApi.js
 import axios from 'axios'
 
 const API_URL = 'http://localhost:9000/api/member'
@@ -6,7 +5,6 @@ const API_URL = 'http://localhost:9000/api/member'
 export const loginWithKakao = async () => {
   try {
     const response = await axios.get(`${API_URL}/login`, { withCredentials: true })
-    console.log(response)
     window.location.href = response.data
   } catch (error) {
     console.error('Login error:', error)
@@ -23,7 +21,6 @@ export const logoutWithKakao = async () => {
 }
 
 export const handleLoginCallback = (code) => {
-  console.log(code)
   return axios.get(`${API_URL}/login/callback?code=${code}`, { withCredentials: true })
 }
 

@@ -14,7 +14,7 @@
       <div class="form-group">
         <h3 class="title margin-top-2rem margin-bottom-1rem text-accent">입금할 계좌</h3>
         <select v-model="accountIndex" class="form-control mr-2 account-select" id="accountSelect">
-          <option value="" disabled selected>내 계좌 선택</option>
+          <option value="disabled selected">내 계좌 선택</option>
           <option v-for="(account, index) in accounts" :key="index" :value="index">
             {{ account }}
           </option>
@@ -113,3 +113,63 @@ onMounted(() => {
   loadBank()
 })
 </script>
+<style scoped>
+.point-management .text-accent {
+  font-weight: 300;
+}
+
+.point-management ul.current-points {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed #eee;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+}
+
+.point-management h3.title {
+  font-size: 20px;
+  letter-spacing: -1px;
+  padding: 0;
+}
+
+.point-management ul.current-points li {
+  font-size: 20px;
+  letter-spacing: -1px;
+}
+
+.point-management ul.current-points li.points-info {
+  line-height: 1;
+}
+
+.point-management ul.current-points li.points-info span {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.point-management .withdraw-section {
+  font-size: 20px;
+}
+
+.point-management .form-group .input-box {
+  position: relative;
+}
+.point-management .form-group .title {
+  position: relative;
+  font-weight: 400;
+}
+
+.point-management .form-group .input-box .common-label {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-weight: 500;
+  font-size: 18px;
+  color: #666;
+}
+
+.point-management .form-group .button-main {
+  margin-left: 0;
+  color: #fff;
+}
+</style>

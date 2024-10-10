@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <button @click="goTologin" class="button-main">로그인</button>
 </template>
 <script setup>
@@ -8,9 +8,9 @@ const router = useRouter()
 const goTologin = () => {
   router.push({ name: 'login' })
 }
-</script> -->
+</script>
 
-<template>
+<!-- <template>
   <a href="#" class="button-main" @click.prevent="login">
     {{ isProcessing ? '로그인 중...' : '로그인' }}
   </a>
@@ -56,4 +56,4 @@ onMounted(() => {
       })
   }
 })
-</script>
+</script> -->

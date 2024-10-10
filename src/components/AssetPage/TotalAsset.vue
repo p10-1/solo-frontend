@@ -8,10 +8,12 @@
 
     <!-- 총 자산 금액 표시 영역 -->
     <div class="asset-amount">
-      <!-- 통화 기호 -->
       <span class="currency">₩</span>
       <!-- 애니메이션으로 자산 금액을 표시 -->
-      <span class="amount">{{ animatedAmount }}원</span>
+      <span class="amount">
+        <span class="text-accent">{{ animatedAmount }}</span
+        >원
+      </span>
     </div>
   </div>
 </template>

@@ -1,73 +1,121 @@
 <template>
+  <h2 class="comment-title">
+    "<span class="text-accent">ㅇㅇ</span>"님의 자산을 <span class="text-accent">분석</span>했어요
+    <span class="text-accent"><i class="fa-regular fa-face-smile-wink"></i></span>
+  </h2>
   <div class="asset-list">
-    <h1 class="asset-list__title">자산 정보</h1>
-    <div v-if="assetStore.loading" class="asset-list__loading">Loading...</div>
-    <div v-else-if="assetStore.error" class="asset-list__error">{{ assetStore.error }}</div>
-    <template v-else-if="assetStore.processedData">
+    <div v-if="loading" class="loading">
+      <i class="fa-solid fa-spinner margin-bottom-1rem"></i><br />
+      Loading...
+    </div>
+    <div v-else-if="error" class="error">
+      <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />{{ error }}
+    </div>
+    <template v-else-if="processedData">
       <div class="asset-list__grid">
-        <div class="asset-list__section asset-list__total">
-          <TotalAsset :totalAmount="assetStore.processedData.totalAsset" />
-        </div>
-        <div class="asset-list__section asset-list__distribution-slider">
-          <button @click="prevSlide" class="slider-btn prev-btn">‹</button>
-          <div class="slider-content">
-            <transition name="fade" mode="out-in">
-              <Distribution
-                v-if="currentSlide === 0"
-                key="user-distribution"
-                :assetDetails="assetStore.processedData.assetDetails"
-                title="내 자산 분포"
-              >
-                <template #extra>
-                  <div v-if="highestAssetType" class="asset-highlight">
-                    보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
-                  </div>
-                </template>
-              </Distribution>
-              <DistributionAverage
-                v-else-if="currentSlide === 1 && assetStore.processedData.typeAverages"
-                key="type-average-distribution"
-                :assetDetails="assetStore.processedData.typeAverages"
-                :title="`${assetStore.processedData.assetDetails.type || '전체'} 평균 자산 분포`"
-              />
-              <DistributionAverage
-                v-else-if="currentSlide === 2 && assetStore.processedData.overallAverages"
-                key="overall-average-distribution"
-                :assetDetails="assetStore.processedData.overallAverages"
-                title="전체 사용자 평균 자산 분포"
-              />
-            </transition>
-          </div>
-          <button @click="nextSlide" class="slider-btn next-btn">›</button>
-        </div>
-        <div class="asset-list__section asset-list__comparison-container">
+        <!-- 섹션: 전체 자산 금액을 표시하는 TotalAsset 컴포넌트 -->
+        <TotalAsset :totalAmount="processedData.totalAsset" />
+
+        <!-- 섹션: 자산 분포 및 평균과의 비교를 위한 슬라이더 -->
+        <!-- <div class="asset-list__distribution-slider"> -->
+        <!-- 이전 슬라이드 버튼 -->
+        <Distribution :assetDetails="processedData.assetDetails" title="내 자산 분포">
+          <template #extra>
+            <div v-if="highestAssetType" class="asset-highlight">
+              보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
+            </div>
+          </template>
+        </Distribution>
+
+        <!-- 유형별 평균 자산 분포 -->
+        <Distribution
+          v-if="processedData.typeAverages"
+          :assetDetails="processedData.typeAverages"
+          :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
+        />
+
+        <!-- 전체 사용자 평균 자산 분포 -->
+        <Distribution
+          v-if="processedData.overallAverages"
+          :assetDetails="processedData.overallAverages"
+          title="전체 사용자 평균 자산 분포"
+        />
+
+        <!-- 다음 슬라이드 버튼 -->
+        <!-- <button @click="nextSlide" class="slider-btn next-btn">›</button> -->
+        <!-- </div> -->
+
+        <!-- 섹션: 자산 비교 차트 영역 -->
+        <div class="asset-list__comparison-container">
+          <!-- 자산 종류 버튼 -->
           <AssetTypeButtons :selectedType="selectedAssetType" @select-type="selectAssetType" />
           <div class="asset-list__comparison-charts">
             <div class="asset-list__chart">
               <AssetComparison
-                :userAsset="calculateTotalAssets(assetStore.processedData.assetDetails)"
-                :userType="assetStore.processedData.assetDetails.type || 'unknown'"
+                :userAsset="calculateTotalAssets(processedData.assetDetails)"
+                :userType="processedData.assetDetails.type || 'unknown'"
                 :selectedAssetType="selectedAssetType"
               />
             </div>
             <div class="asset-list__chart">
-              <TimeComparison :assetType="selectedAssetType" :assetData="assetStore.rawAssetData" />
+              <TimeComparison :assetType="selectedAssetType" :assetData="rawAssetData" />
             </div>
           </div>
         </div>
-        <div class="asset-list__section asset-list__loan">
-          <h2 class="section-title">대출 정보</h2>
-          <template v-if="hasLoanData">
-            <LoanInfo :loanData="assetStore.processedData.loanData" />
-          </template>
-          <p v-else class="no-loan-message">대출이 존재하지 않습니다.</p>
+      </div>
+
+      <!-- 섹션: 대출 정보 -->
+      <div class="asset-list__section asset-list__loan">
+        <h2 class="section-title">대출 정보</h2>
+        <div v-if="processedData.loanData.purpose !== '전세자금'">
+          <label>상환 방법:</label>
+          <div>
+            <input
+              type="radio"
+              id="equal-principal-interest"
+              value="equal-principal-interest"
+              v-model="repaymentMethod"
+            />
+            <label for="equal-principal-interest">원리금 균등상환</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              id="equal-principal"
+              value="equal-principal"
+              v-model="repaymentMethod"
+            />
+            <label for="equal-principal">원금 균등상환</label>
+          </div>
         </div>
-        <div class="asset-list__section asset-list__recommended-products">
-          <h2 class="section-title">추천 상품</h2>
+
+        <div class="loan-container">
+          <!-- 대출 정보가 있는 경우 LoanInfo 컴포넌트로 대출 정보 표시 -->
+          <template v-if="hasLoanData">
+            <div class="loan-info">
+              <LoanInfo :loanData="processedData.loanData" />
+            </div>
+            <div class="loan-guide">
+              <LoanGuide :loanData="processedData.loanData" :repaymentMethod="repaymentMethod" />
+            </div>
+          </template>
+          <!-- 대출 정보가 없는 경우 안내 메시지 표시 -->
+          <div v-else class="no-more">
+            <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />
+            대출이 존재하지 않습니다.
+          </div>
+        </div>
+
+        <!-- 섹션: 추천 상품 -->
+        <div class="asset-list__recommended-products">
+          <!-- 대출 정보가 있는 경우 대출 기간에 따른 추천 상품 표시 -->
           <template v-if="hasLoanData">
             <Recommendation :loanPeriod="assetStore.processedData.loanData.period" />
           </template>
-          <p v-else class="no-recommendation-message">대출 정보가 없어 추천 상품이 없습니다.</p>
+          <div v-else class="no-more">
+            <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />
+            대출 정보가 없어 추천 상품이 없습니다.
+          </div>
         </div>
       </div>
     </template>
@@ -78,7 +126,7 @@
 //src/components/AssetPage/AssetList.vue
 
 import { ref, computed, onMounted } from 'vue'
-import { useAssetStore } from '@/stores/assetStore'
+import { fetchAssetData, fetchAssetComparison } from '@/api/assetApi'
 import TotalAsset from '@/components/AssetPage/TotalAsset.vue'
 import Distribution from '@/components/AssetPage/Distribution.vue'
 import AssetTypeButtons from '@/components/AssetPage/AssetTypeButtons.vue'
@@ -86,20 +134,27 @@ import AssetComparison from '@/components/AssetPage/AssetComparison.vue'
 import TimeComparison from '@/components/AssetPage/TimeComparison.vue'
 import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
 import Recommendation from '@/components/AssetPage/Recommendation.vue'
-import DistributionAverage from '@/components/AssetPage/DistributionAverage.vue'
+import LoanGuide from '@/components/AssetPage/LoanGuide.vue'
+const loading = ref(true) // 로딩 상태 관리
+const error = ref(null) // 에러 상태 관리
 
-const assetStore = useAssetStore()
-const selectedAssetType = ref('cash')
-const currentSlide = ref(0)
-const totalSlides = 3
+const rawAssetData = ref(null) // 자산 데이터 원본
+const assetAverages = ref(null) // 평균 자산 데이터
+const assetStyle = ref(null)
 
-const nextSlide = () => {
-  currentSlide.value = (currentSlide.value + 1) % totalSlides
-}
+const selectedAssetType = ref('cash') // 선택된 자산 타입 기본값은 'cash'
 
-const prevSlide = () => {
-  currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides
-}
+// //슬라이드 구현
+// const currentSlide = ref(0)
+// const totalSlides = 3 // 전체 슬라이드 수를 3으로 변경
+
+// const nextSlide = () => {
+//   currentSlide.value = (currentSlide.value + 1) % totalSlides
+// }
+
+// const prevSlide = () => {
+//   currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides
+// }
 
 const assetNames = {
   cash: '현금자산',
@@ -115,13 +170,36 @@ const highestAssetType = computed(() => {
   )
   return sortedAssets[0]?.[0]
 })
-
-const hasLoanData = computed(() => {
-  if (!assetStore.processedData || !assetStore.processedData.loanData) return false
-  const { amount, purpose, period, interest } = assetStore.processedData.loanData
-  return amount > 0 || purpose || period > 0 || interest > 0
-})
-
+const loadData = async () => {
+  console.log('1. loadData 함수 시작')
+  try {
+    loading.value = true
+    const assetData = await fetchAssetData()
+    console.log('3.assetData: ', assetData[0].type)
+    rawAssetData.value = assetData
+    console.log('3.rawAssetData: ', rawAssetData.value)
+    // assetAverages.value = averages
+    const assetDetail = await fetchAssetComparison(assetData[0].type)
+    console.log('assetDetail: ', assetDetail)
+    assetAverages.value = assetDetail.overallAverage
+    assetStyle.value = assetDetail.typeAverage
+  } catch (err) {
+    console.error('데이터 가져오기 실패:', err)
+    error.value = '데이터를 불러오는데 실패했습니다. 나중에 다시 시도해주세요.'
+  } finally {
+    loading.value = false
+    console.log('4. loadData 함수 종료')
+  }
+}
+// 자산 데이터를 처리하여 필요한 형태로 변환하는 함수
+const parseJsonArray = (jsonString) => {
+  try {
+    return JSON.parse(jsonString)
+  } catch (e) {
+    console.error('Failed to parse JSON string:', jsonString)
+    return []
+  }
+}
 const calculateTotalAssets = (assetDetails) => {
   const totals = {}
   for (const [type, data] of Object.entries(assetDetails)) {
@@ -129,44 +207,154 @@ const calculateTotalAssets = (assetDetails) => {
   }
   return totals
 }
+// 자산 데이터를 처리하여 필요한 형태로 변환하는 함수
 
+//따로 함수 처리 ㅎ
+
+const processAssetData = (data, assetTypes) => {
+  return assetTypes.reduce((processed, type) => {
+    const mapping = fieldMapping[type]
+    if (mapping) {
+      const values = parseJsonArray(data[mapping.value])
+      const banks = parseJsonArray(data[mapping.bank])
+      const accounts = parseJsonArray(data[mapping.account])
+
+      processed[type] = {
+        values: values.length ? values.map((v) => Number(v) || 0) : [0],
+        banks: banks.length ? banks : [''],
+        accounts: accounts.length ? accounts : ['']
+      }
+    }
+    return processed
+  }, {})
+}
+const calculateAverage = (values) => {
+  const validValues = values.filter((v) => v > 0)
+  return validValues.length
+    ? validValues.reduce((sum, val) => sum + val, 0) / validValues.length
+    : 0
+}
+
+// 처리된 자산 데이터를 계산하고 반환하는 computed 함수
+const processedData = computed(() => {
+  if (!rawAssetData.value || rawAssetData.value.length === 0) {
+    return {
+      totalAsset: 0,
+      assetDetails: {
+        cash: { total: 0, details: [] },
+        deposit: { total: 0, details: [] },
+        stock: { total: 0, details: [] },
+        insurance: { total: 0, details: [] },
+        type: '유형을 입력해 주세요'
+      },
+      comparisonData: {},
+      typeAverages: null,
+      timeComparisonData: {},
+      loanData: { amount: 0, purpose: '', period: 0, interest: 0 },
+      overallAverages: null
+    }
+  }
+
+  const currentData = rawAssetData.value[0] || {}
+  const previousData = rawAssetData.value[1] || currentData
+  const assetTypes = ['cash', 'deposit', 'stock', 'insurance']
+
+  const currentAssetData = processAssetData(currentData, assetTypes)
+  const previousAssetData = processAssetData(previousData, assetTypes)
+
+  const calculateTotal = (assetData) =>
+    Object.values(assetData).reduce(
+      (total, { values }) => total + values.reduce((sum, val) => sum + Number(val), 0),
+      0
+    )
+
+  const totalAsset = calculateTotal(currentAssetData)
+
+  const assetDetails = assetTypes.reduce((details, type) => {
+    const values = currentAssetData[type].values
+    details[type] = {
+      total: values.reduce((sum, val) => sum + val, 0),
+      details: values.map((value, index) => ({
+        bank: currentAssetData[type].banks[index] || '',
+        account: currentAssetData[type].accounts[index] || '',
+        value: value
+      }))
+    }
+    return details
+  }, {})
+
+  const comparisonData = assetTypes.reduce((data, type) => {
+    const currentValues = currentAssetData[type].values
+    const previousValues = previousAssetData[type].values
+    data[type] = {
+      average: assetAverages.value ? assetAverages.value[type] : 0,
+      user: calculateAverage(currentValues),
+      previousAverage: calculateAverage(previousValues)
+    }
+    return data
+  }, {})
+
+  const timeComparisonData = assetTypes.reduce((data, type) => {
+    data[type] = {
+      previousMonth: calculateAverage(previousAssetData[type].values),
+      currentMonth: calculateAverage(currentAssetData[type].values)
+    }
+    return data
+  }, {})
+
+  const typeAverages = assetStyle.value
+    ? assetTypes.reduce((averages, type) => {
+        averages[type] = { total: assetStyle.value[type] || 0 }
+        return averages
+      }, {})
+    : null
+  // 새로 추가된 부분: overallAverages 계산
+  const overallAverages = assetAverages.value
+    ? assetTypes.reduce((averages, type) => {
+        averages[type] = { total: assetAverages.value[type] || 0 }
+        return averages
+      }, {})
+    : null
+
+  return {
+    totalAsset,
+    assetDetails: { ...assetDetails, type: currentData.type || '유형을 입력해주세요' },
+    comparisonData,
+    typeAverages,
+    overallAverages, // 여기에 overallAverages 추가
+    timeComparisonData,
+    loanData: {
+      amount: Number(currentData.loanAmount),
+      purpose: currentData.loanPurpose,
+      period: Number(currentData.period),
+      interest: Number(currentData.interest)
+    }
+  }
+})
+
+// 대출 정보 존재 여부를 확인하는 computed 속성
+const hasLoanData = computed(() => {
+  if (!processedData.value || !processedData.value.loanData) return false
+  const { amount, purpose, period, interest } = processedData.value.loanData
+  return amount > 0 || purpose || period > 0 || interest > 0
+})
 const selectAssetType = (type) => {
   selectedAssetType.value = type
 }
 
-onMounted(() => {
-  assetStore.loadData()
+const repaymentMethod = ref('equal-principal-interest')
+
+onMounted(async () => {
+  await loadData()
 })
 </script>
 
 <style scoped>
-.asset-list {
-  /* 자산 목록의 최대 너비를 1200px로 설정하고, 중앙 정렬 및 20px의 패딩을 적용 */
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.asset-list__title {
-  /* 타이틀 텍스트를 중앙에 정렬하고, 아래쪽에 30px의 여백 추가, 텍스트 색상을 #333으로 설정 */
-  text-align: center;
-  margin-bottom: 30px;
-  color: #333;
-}
-
 .asset-list__grid {
   /* 자산 목록의 그리드 레이아웃을 설정, 하나의 열로 구성하며, 각 항목 사이에 30px의 간격을 둠 */
   display: grid;
   grid-template-columns: 1fr;
   gap: 30px;
-}
-
-.asset-list__section {
-  /* 각 자산 목록 섹션에 배경색을 흰색으로 설정하고, 둥근 모서리와 그림자 효과 추가, 20px의 내부 여백 적용 */
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
 }
 
 .asset-list__average-distribution {
@@ -202,19 +390,6 @@ onMounted(() => {
 .asset-list__recommendation {
   /* 대출 정보 및 추천 상품 섹션이 그리드에서 전체 너비를 차지하도록 설정 */
   grid-column: 1 / -1;
-}
-
-.asset-list__loading,
-.asset-list__error {
-  /* 로딩 및 에러 메시지를 중앙 정렬하고, 패딩을 20px로 설정, 글자 크기를 18px로 설정 */
-  text-align: center;
-  padding: 20px;
-  font-size: 18px;
-}
-
-.asset-list__error {
-  /* 에러 메시지의 글자 색상을 빨간색(#ff4d4f)으로 설정 */
-  color: #ff4d4f;
 }
 
 @media (max-width: 768px) {
@@ -274,35 +449,40 @@ onMounted(() => {
   opacity: 0;
 }
 
-.asset-list__no-loan {
-  /* 대출 정보가 없을 때 메시지를 중앙 정렬하고, 배경색을 연한 회색(#f8f9fa)으로 설정, 둥근 모서리 및 글자 색상 적용 */
-  text-align: center;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  color: #6c757d;
-}
-
-.section-title {
-  /* 섹션 제목의 아래쪽에 15px의 여백을 추가하고, 글자 색상을 #333으로 설정 */
-  margin-bottom: 15px;
-  color: #333;
-}
-
-.no-loan-message,
-.no-recommendation-message {
-  /* 대출 정보 또는 추천 상품이 없을 때의 메시지를 중앙 정렬하고, 연한 회색 배경과 둥근 모서리 적용, 텍스트 색상을 회색(#6c757d)으로 설정 */
-  text-align: center;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  color: #6c757d;
-}
-
 .asset-highlight {
   /* 자산 하이라이트 텍스트에 상단 10px의 여백과 굵은 글꼴, 초록색(#4caf50) 텍스트 색상을 적용 */
   margin-top: 10px;
   font-weight: bold;
   color: #4caf50;
+}
+
+.loan-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.loan-info {
+  flex: 1;
+  /* LoanInfo가 좌측에 오도록 설정 */
+  margin-right: 20px;
+  /* LoanInfo와 LoanGuide 간의 간격 */
+}
+
+.loan-guide {
+  flex: 1;
+  /* LoanGuide가 우측에 오도록 설정 */
+}
+
+.loan-header {
+  display: flex;
+  align-items: center;
+  /* 수직 중앙 정렬 */
+  justify-content: space-between;
+  /* 요소 간의 간격을 균등하게 분배 */
+}
+
+.loan-header label {
+  margin-right: 10px;
+  /* 선택 요소와 레이블 간의 간격 */
 }
 </style>
