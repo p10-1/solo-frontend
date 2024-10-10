@@ -3,9 +3,8 @@
     <h2>대출 가이드</h2>
 
     <!-- 원리금 균등 상환 방식 가이드 -->
-    <div class="guide-section">
-      <h5>원리금 균등 상환 방식</h5>
-      <br />
+    <div v-if="repaymentMethod === 'equal-principal-interest'" class="guide-section">
+
       <span v-if="loanData.purpose === '전세자금'">
         이번 달 이자인 {{ Math.floor(monthlyInterest).toLocaleString() }} 원으로<br>
         🍞 붕어빵 {{ monthlyInterestBread }}마리를 <br>
@@ -15,20 +14,18 @@
         먹을 수 있어요!
       </span>
       <span v-else>
-        이번 대출의 총 이자인{{ Math.floor(totalInterest).toLocaleString() }} 원으로 <br>
+        이번 대출의 총 이자인 {{ Math.floor(totalInterest).toLocaleString() }} 원으로 <br>
         🍞 붕어빵 {{ principalEqualization.bread }}마리를 <br>
         🍵 커피 {{ principalEqualization.coffee }}잔을 <br>
         🍗 치킨 {{ principalEqualization.chicken }}마리를 <br>
         🥘 호텔뷔페를 {{ principalEqualization.buffet }}번을 <br>
         먹을 수 있어요!
       </span>
-
     </div>
 
-    <!-- 원금 균등 상환 방식 가이드 -->
-    <div class="guide-section">
-      <h5>원금 균등 상환 방식</h5>
-      <br />
+<!-- 원금 균등 상환 방식 가이드 -->
+<div v-if="repaymentMethod === 'equal-principal'" class="guide-section">
+  
       <span v-if="loanData.purpose === '전세자금'">
         이번 달 이자인 {{ Math.floor(monthlyInterest).toLocaleString() }} 원으로 <br>
         🍞 붕어빵 {{ monthlyInterestBread }}마리를 <br>
@@ -38,11 +35,11 @@
         먹을 수 있어요!
       </span>
       <span v-else>
-        이번 대출의 총 이자인{{ Math.floor(totalPrincipalInterest).toLocaleString() }} 원으로<br />
+        이번 대출의 총 이자인 {{ Math.floor(totalPrincipalInterest).toLocaleString() }} 원으로<br />
         🍞 붕어빵 {{ principalEqualizationPrincipal.bread }}마리를 <br>
         🍵 커피 {{ principalEqualizationPrincipal.coffee }}잔을 <br>
         🍗 치킨 {{ principalEqualizationPrincipal.chicken }}마리를 <br>
-        🥘호텔뷔페를 {{ principalEqualizationPrincipal.buffet }}번을 <br>
+        🥘 호텔뷔페를 {{ principalEqualizationPrincipal.buffet }}번을 <br>
         먹을 수 있어요!
       </span>
     </div>
@@ -62,6 +59,10 @@ const props = defineProps({
       period: 0,
       interest: 0
     })
+  },
+  repaymentMethod: {
+    type: String,
+    required: true,
   }
 })
 
