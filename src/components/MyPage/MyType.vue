@@ -18,11 +18,11 @@
         :class="['btn', { selected: selectedType === type.title }]"
         @click="selectType(type)"
       >
-        <div class="icon">{{ type.icon }}</div>
         <div class="text-container">
           <div class="title">{{ type.title }}</div>
           <div class="description">{{ type.description }}</div>
         </div>
+        <div class="icon"><img :src="type.icon" alt="icon" class="icon-img" /></div>
       </button>
     </div>
   </div>
@@ -32,28 +32,33 @@
 import { ref, onMounted } from 'vue'
 import { getType, updateType } from '@/api/mypageApi' // api.js에서 함수 가져오기
 
+import risk from '@/assets/images/mypage/risk.png'
+import diversified from '@/assets/images/mypage/diversified.png'
+import stability from '@/assets/images/mypage/stability.png'
+import loan from '@/assets/images/mypage/loan.png'
+
 const selectedType = ref(null)
 const nickName = ref('')
 const assetTypes = ref([
   {
     title: '위험 추구형',
     description: 'High Risk! High Return!',
-    icon: '⚠️'
+    icon: risk
   },
   {
     title: '자산 분산형',
     description: '분산 투자가 자산관리의 왕도!',
-    icon: '💨'
+    icon: diversified
   },
   {
     title: '안정 추구형',
     description: 'Risk는 싫어 안전이 좋아',
-    icon: '🌱'
+    icon: stability
   },
   {
     title: '대출 우선형',
     description: '대출로 인해 더 많은 투자 기회!',
-    icon: '🏦'
+    icon: loan
   }
 ])
 
@@ -97,6 +102,7 @@ onMounted(() => {
 .my-type h2.title span.text-accent {
   font-weight: 300;
 }
+
 .my-type .text-p {
   font-size: 20px;
   letter-spacing: -0.6px;
@@ -138,6 +144,10 @@ onMounted(() => {
 .my-type .button-container .btn:hover {
   background-color: #fffbec;
   border: 3px solid #ffba62;
+  box-shadow: 0px 0px 15px rgb(253, 228, 195);
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 .my-type .button-container .btn.selected {
   background-color: #fffbec;
@@ -146,10 +156,15 @@ onMounted(() => {
 .my-type .button-container .icon {
   display: inline-block;
   width: 35%;
+  margin-right:;
+}
+.my-type .icon-img {
+  vertical-align: baseline;
 }
 .my-type .button-container .text-container {
+  margin-right: 5%;
   display: inline-block;
-  width: 65%;
+  width: 60%;
   text-align: left;
 }
 .my-type .button-container .title {

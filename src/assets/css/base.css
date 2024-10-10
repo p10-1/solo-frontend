@@ -239,6 +239,35 @@ h1.title {
   margin-bottom: 1.2rem;
 }
 
+h2.comment-title {
+  position: relative;
+  text-align: center;
+  font-weight: 300;
+  line-height: 1;
+  font-size: 32px;
+  letter-spacing: -1.5px;
+  color: #222;
+  padding: 15px 20px;
+  border-radius: 20px;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
+  display: inline-block;
+  margin: 0 auto 20px;
+  width: 40rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+h2.comment-title::after {
+  content: '';
+  position: absolute;
+  bottom: -19px;
+  left: 50%;
+  transform: translateX(-50%) rotate(180deg);
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent #fff transparent;
+}
+
 h2.title {
   margin-bottom: 20px;
   font-weight: 300;
