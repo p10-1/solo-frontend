@@ -43,27 +43,25 @@ const selectType = (type) => {
 
 <style scoped>
 .asset-type-buttons {
-  /* 자산 타입 버튼을 가로로 나열하고 중앙에 정렬, 상단에 20px의 여백 추가 */
   display: flex;
   justify-content: center;
-  margin-top: 20px;
 }
-
-button {
-  /* 각 버튼에 좌우 5px 간격, 내부에 10px 20px의 패딩 추가, 테두리와 둥근 모서리 적용 */
-  margin: 0 5px;
-  padding: 10px 20px;
-  border: 1px solid #ddd; /* 테두리를 연한 회색(#ddd)으로 설정 */
-  border-radius: 20px; /* 버튼의 모서리를 둥글게 처리 */
-  background-color: #f8f9fa; /* 버튼의 배경색을 연한 회색으로 설정 */
-  cursor: pointer; /* 커서를 포인터로 변경 */
-  transition: all 0.3s ease; /* 버튼 상태가 변할 때 부드러운 전환 효과 적용 */
+.asset-type-buttons button {
+  min-width: 100px;
+  text-align: center;
+  padding: 0.8rem 1rem;
+  border-radius: 25px;
+  /* background-color: #cfc6fd; */
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1;
+  color: #222;
+  letter-spacing: -1px;
+  transition: all 0.6s;
+  cursor: pointer;
 }
-
-button:hover,
-button.active {
-  /* 버튼에 마우스를 올리거나 선택된 상태일 때 배경색을 파란색(#007bff)으로 변경하고, 텍스트 색상을 흰색으로 변경 */
-  background-color: #007bff;
-  color: white;
+.asset-type-buttons button.active {
+  background-color: #6846f5;
+  color: #fff;
 }
 </style>

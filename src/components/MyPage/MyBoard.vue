@@ -60,7 +60,7 @@ const authStore = useAuthStore()
 const loadMyBoards = async () => {
   try {
     boards.value = await myBoard(userName.value)
-    console.log(boards)
+    console.log('내가쓴글:', boards)
   } catch (error) {
     console.error('내 게시물을 불러오는 중 오류가 발생했습니다.', error)
   }

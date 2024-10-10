@@ -2,18 +2,24 @@
   <div class="loan-info-container">
     <!-- purpose가 '전세자금'인 경우 -->
     <div v-if="props.loanData.purpose === '전세자금'">
-      <div v-for="(value, key) in formattedHouseLoanInfo" :key="key" class="loan-item">
-        <span class="loan-label">{{ key }}:</span>
-        <span class="loan-value">{{ value }}</span>
-      </div>
+      <ul v-for="(value, key) in formattedHouseLoanInfo" :key="key" class="loan-item">
+        <li class="loan-label">{{ key }}</li>
+        <li class="loan-value">
+          <span class="text-accent">{{ value }}</span
+          >원
+        </li>
+      </ul>
     </div>
 
     <!-- 그 외의 경우 -->
     <div v-else>
-      <div v-for="(value, key) in formattedLoanInfo" :key="key" class="loan-item">
-        <span class="loan-label">{{ key }}:</span>
-        <span class="loan-value">{{ value }}</span>
-      </div>
+      <ul v-for="(value, key) in formattedLoanInfo" :key="key" class="loan-item">
+        <li class="loan-label">{{ key }}</li>
+        <li class="loan-value">
+          <span class="text-accent">{{ value }}</span
+          >원
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -79,4 +85,43 @@ const formattedHouseLoanInfo = computed(() => ({
 }))
 </script>
 
-<style scoped></style>
+<style scoped>
+.loan-info-container {
+  position: relative;
+  width: 100%;
+  border-radius: 25px;
+  padding: 2rem 1.7rem;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
+}
+.loan-info-container .loan-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  border-bottom: 1px dashed #cfc6fd;
+}
+.loan-info-container .loan-item:last-child {
+  margin-bottom: 0;
+}
+.loan-item .loan-label {
+  font-size: 1.08rem;
+  font-weight: 500;
+  letter-spacing: -1px;
+  color: #333;
+}
+.loan-item .loan-value {
+  margin: 10px 0;
+  font-size: 1.08rem;
+  letter-spacing: -1px;
+  font-weight: 500;
+  color: #333;
+}
+.loan-item .loan-value .text-accent {
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+</style>

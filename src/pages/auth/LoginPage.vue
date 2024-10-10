@@ -31,12 +31,28 @@
 <script setup>
 import { ref } from 'vue'
 import { loginWithKakao } from '@/api/authApi'
+import { useRoute, useRouter } from 'vue-router'
 
 const isProcessing = ref(false)
+const route = useRoute()
+const router = useRouter()
 
-const login = () => {
+const login = async () => {
   isProcessing.value = true
-  loginWithKakao()
+  try {
+    // 카카오 로그인 처리 함수 호출
+    await loginWithKakao()
+
+    // 로그인 성공 후, 원래 가려던 페이지로 리디렉트
+    const nextRoute = route.query.next || '/'
+    console.log(nextRoute)
+    router.push(nextRoute)
+  } catch (error) {
+    console.error('로그인 실패:', error)
+    alert('로그인에 실패했습니다. 다시 시도해 주세요.')
+  } finally {
+    isProcessing.value = false
+  }
 }
 </script>
 <style scope>

@@ -599,7 +599,7 @@ p.text {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #cfc6fd;
+  color: #b6a8ff;
   background-color: #fff;
   border-radius: 50%;
   width: 5rem;
@@ -612,7 +612,7 @@ p.text {
 .comment-robot .robot-role {
   display: block;
   font-weight: 600;
-  color: #cfc6fd;
+  color: #b6a8ff;
   letter-spacing: -0.8px;
   margin-top: 5px;
   margin-bottom: 5px;

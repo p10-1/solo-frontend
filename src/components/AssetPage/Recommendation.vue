@@ -1,11 +1,11 @@
 <template>
-  <div class="recommend-container">
+  <section class="recommend-container">
     <h2 class="comment-title">
       "<span class="text-accent">ㅇㅇ</span>"님의 <span class="text-accent">자산 형성</span>을
       도와줄 <span class="text-accent">금융 상품</span>을 가져왔어요
       <span class="text-accent"><i class="fa-regular fa-face-smile"></i></span>
     </h2>
-    <div class="recommend-content">
+    <section class="recommend-content">
       <div v-if="loading" class="loading">
         <i class="fa-solid fa-spinner margin-bottom-1rem"></i>
         로딩 중...
@@ -64,8 +64,8 @@
           </li>
         </ul>
       </div>
-    </div>
-  </div>
+    </section>
+  </section>
 </template>
 
 <script setup>

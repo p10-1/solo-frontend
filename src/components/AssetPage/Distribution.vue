@@ -1,13 +1,12 @@
 <template>
   <div class="asset-distribution">
     <!-- 자산 분포를 설명하는 타이틀 -->
-    <h3>{{ title }}</h3>
-
-    <!-- 자산 내용을 담은 컨테이너 -->
+    <h3 class="main-title">{{ title }}</h3>
     <div class="asset-content">
-      <!-- 가장 많은 자산이 있는 경우 강조 메시지 표시 -->
-      <div v-if="highestAssetType" class="asset-highlight">
-        보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
+      <div v-if="highestAssetType" class="asset-highlight margin-top-1rem">
+        <i class="fa-solid fa-circle-info"></i>
+        보유 자산 중 <b>{{ assetNames[highestAssetType] }}</b
+        >이 제일 많아요!
       </div>
 
       <!-- 도넛 차트를 보여주는 섹션 -->
@@ -18,22 +17,20 @@
         <!-- 자산 종류별로 색상과 데이터를 표시하는 범례 -->
         <div class="asset-legend">
           <!-- 자산 총액이 0이 아닌 자산만 표시 -->
-          <div v-for="asset in filteredAssetDetails" :key="asset.name" class="asset-type">
+          <ul v-for="asset in filteredAssetDetails" :key="asset.name" class="asset-type">
             <!-- 자산 색상 표시 (자산 종류에 따라 동적으로 색상 설정) -->
-            <span
-              class="asset-color"
-              :style="{ backgroundColor: getAssetColor(asset.name) }"
-            ></span>
-
-            <!-- 자산 이름 표시 -->
-            <span class="asset-name">{{ assetNames[asset.name] }}</span>
-
-            <!-- 자산 비율 표시 -->
-            <span class="asset-percentage">{{ calculatePercentage(asset.total) }}%</span>
-
-            <!-- 자산 금액 표시 -->
-            <span class="asset-amount">{{ formatNumber(asset.total) }}원</span>
-          </div>
+            <li class="asset-name">
+              <span
+                :style="{ backgroundColor: getAssetColor(asset.name) }"
+                class="type-color"
+              ></span>
+              <span class="asset-name"></span>{{ assetNames[asset.name] }}
+            </li>
+            <li class="asset-percentage">{{ Math.round(calculatePercentage(asset.total)) }}%</li>
+            <li class="asset-amount">
+              <span class="text-accent">{{ formatNumber(Math.round(asset.total)) }} </span>원
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -174,40 +171,60 @@ const chartOptions = computed(() => ({
   background-color: #fff;
   box-shadow: 0px 0px 15px rgb(221, 214, 255);
 }
-
-.asset-type {
-  /* 자산 종류를 가로로 나열하고, 가운데 정렬, 아래쪽에 8px 간격 추가 */
+.asset-highlight {
+  font-size: 1rem;
+  color: #555;
+  letter-spacing: -0.7px;
+  font-weight: 500;
+  padding: 12px 16px;
+  word-break: keep-all;
+  border-radius: 12px;
+  background-color: #fffbec;
+  color: var(--font-secondary, #475067);
+}
+.asset-highlight i {
+  color: #f7d095;
+  margin-right: 2px;
+}
+.asset-legend .asset-type {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
+  justify-content: space-between;
   font-size: 0.9rem;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #cfc6fd;
 }
-
-.asset-color {
-  /* 자산 색상을 표시하는 작은 원을 생성 (10px 크기, 둥근 모서리) */
-  width: 10px;
-  height: 10px;
+.asset-type .asset-name {
+  flex: 0 0 45%;
+  font-size: 1rem;
+  letter-spacing: -1px;
+  font-weight: 500;
+}
+.asset-legend .asset-name .type-color {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
-  margin-right: 8px;
+  margin-right: 5px;
 }
-
-.asset-percentage {
-  /* 자산 비율을 굵은 글자로 표시하고, 오른쪽에 8px 간격 추가, 최소 너비 설정 */
+.asset-type .asset-percentage {
+  flex: 0 0 10%;
   font-weight: bold;
-  margin-right: 8px;
-  min-width: 40px;
+  padding: 3px 10px;
+  background-color: #f3f3ff;
+  border-radius: 20%;
 }
-
-.asset-name {
-  /* 자산 이름을 표시하고 오른쪽에 8px 간격 추가 */
-  flex: 1;
-  margin-right: 8px;
+.asset-type .asset-amount {
+  text-align: right;
+  flex: 0 0 30%;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  color: #333;
 }
-
-.asset-amount {
-  /* 자산 금액의 글자 크기를 조금 작게 설정하고, 색상을 회색으로 설정 */
-  font-size: 0.8rem;
-  color: #666;
+.asset-type .asset-amount .text-accent {
+  font-weight: 700;
 }
 
 @media (max-width: 768px) {

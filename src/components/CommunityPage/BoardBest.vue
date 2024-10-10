@@ -24,7 +24,7 @@
       :loop="true"
       :slides-per-view="3"
       :space-between="20"
-      :autoplay="{ delay: 1000, disableOnInteraction: false }"
+      :autoplay="{ delay: 2000, disableOnInteraction: false }"
       class="mySwiper"
     >
       <swiper-slide v-for="board in bestBoards" :key="board.boardNo">
