@@ -17,50 +17,33 @@
         <TotalAsset :totalAmount="processedData.totalAsset" />
 
         <!-- 섹션: 자산 분포 및 평균과의 비교를 위한 슬라이더 -->
-        <div class="asset-list__distribution-slider">
-          <!-- 이전 슬라이드 버튼 -->
-          <button @click="prevSlide" class="slider-btn prev-btn">‹</button>
+        <!-- <div class="asset-list__distribution-slider"> -->
+        <!-- 이전 슬라이드 버튼 -->
+        <Distribution :assetDetails="processedData.assetDetails" title="내 자산 분포">
+          <template #extra>
+            <div v-if="highestAssetType" class="asset-highlight">
+              보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
+            </div>
+          </template>
+        </Distribution>
 
-          <!-- 슬라이더 콘텐츠 영역 -->
-          <div class="slider-content">
-            <!-- 페이드 효과로 슬라이드 전환 -->
-            <transition name="fade" mode="out-in">
-              <!-- 첫 번째 슬라이드: 사용자 자산 분포를 나타냄 -->
-              <Distribution
-                v-if="currentSlide === 0"
-                key="user-distribution"
-                :assetDetails="processedData.assetDetails"
-                title="내 자산 분포"
-              >
-                <!-- 추가 콘텐츠 영역: 가장 많은 자산 종류 표시 -->
-                <template #extra>
-                  <div v-if="highestAssetType" class="asset-highlight">
-                    보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
-                  </div>
-                </template>
-              </Distribution>
+        <!-- 유형별 평균 자산 분포 -->
+        <Distribution
+          v-if="processedData.typeAverages"
+          :assetDetails="processedData.typeAverages"
+          :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
+        />
 
-              <!-- 두 번째 슬라이드: 유형별 평균 자산 분포를 나타냄 -->
-              <DistributionAverage
-                v-else-if="currentSlide === 1 && processedData.typeAverages"
-                key="type-average-distribution"
-                :assetDetails="processedData.typeAverages"
-                :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
-              />
+        <!-- 전체 사용자 평균 자산 분포 -->
+        <Distribution
+          v-if="processedData.overallAverages"
+          :assetDetails="processedData.overallAverages"
+          title="전체 사용자 평균 자산 분포"
+        />
 
-              <!-- 세 번째 슬라이드: 전체 사용자 평균 자산 분포 -->
-              <DistributionAverage
-                v-else-if="currentSlide === 2 && processedData.overallAverages"
-                key="overall-average-distribution"
-                :assetDetails="processedData.overallAverages"
-                title="전체 사용자 평균 자산 분포"
-              />
-            </transition>
-          </div>
-
-          <!-- 다음 슬라이드 버튼 -->
-          <button @click="nextSlide" class="slider-btn next-btn">›</button>
-        </div>
+        <!-- 다음 슬라이드 버튼 -->
+        <!-- <button @click="nextSlide" class="slider-btn next-btn">›</button> -->
+        <!-- </div> -->
 
         <!-- 섹션: 자산 비교 차트 영역 -->
         <div class="asset-list__comparison-container">
@@ -126,7 +109,6 @@ import AssetComparison from '@/components/AssetPage/AssetComparison.vue'
 import TimeComparison from '@/components/AssetPage/TimeComparison.vue'
 import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
 import Recommendation from '@/components/AssetPage/Recommendation.vue'
-import DistributionAverage from '@/components/AssetPage/DistributionAverage.vue'
 
 const loading = ref(true) // 로딩 상태 관리
 const error = ref(null) // 에러 상태 관리
@@ -135,18 +117,6 @@ const rawAssetData = ref(null) // 자산 데이터 원본
 const assetAverages = ref(null) // 평균 자산 데이터
 const selectedAssetType = ref('cash') // 선택된 자산 타입 기본값은 'cash'
 
-//슬라이드 구현
-const currentSlide = ref(0)
-const totalSlides = 3 // 전체 슬라이드 수를 3으로 변경
-
-const nextSlide = () => {
-  currentSlide.value = (currentSlide.value + 1) % totalSlides
-}
-
-const prevSlide = () => {
-  currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides
-}
-
 const assetNames = {
   cash: '현금자산',
   deposit: '예적금',
@@ -154,7 +124,6 @@ const assetNames = {
   insurance: '보험'
 }
 // 자산 데이터 및 평균 데이터를 API로부터 로드하는 함수
-
 const fieldMapping = {
   cash: { bank: 'cashBank', account: 'cashAccount', value: 'cash' },
   deposit: { bank: 'depositBank', account: 'depositAccount', value: 'deposit' },
@@ -187,7 +156,6 @@ const loadData = async () => {
 }
 
 // 자산 데이터를 처리하여 필요한 형태로 변환하는 함수
-
 const parseJsonArray = (jsonString) => {
   try {
     return JSON.parse(jsonString)
@@ -204,9 +172,7 @@ const calculateTotalAssets = (assetDetails) => {
   return totals
 }
 // 자산 데이터를 처리하여 필요한 형태로 변환하는 함수
-
 //따로 함수 처리 ㅎ
-
 const processAssetData = (data, assetTypes) => {
   return assetTypes.reduce((processed, type) => {
     const mapping = fieldMapping[type]

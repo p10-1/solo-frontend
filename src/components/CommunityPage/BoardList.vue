@@ -62,8 +62,14 @@
                 name: 'board/detail',
                 params: { boardNo: board.boardNo }
               }"
+              class="router-link no-underline"
             >
-              {{ board.title }}
+              <!-- text가 길때 제한길이 이하는 '...'으로 표시되고 hover하면 전체 text 보여주기 -->
+              <div class="truncated" :title="board.title">
+                {{ truncateTitle(board.title) }}
+              </div>
+              <!-- 24시간 이내 새 게시물 new 보여주기 -->
+              <span v-if="isNew(board.regDate)" class="new-label">NEW</span>
               <ul class="table-ex-info">
                 <li><i class="fa-solid fa-user"></i> {{ board.views }}</li>
                 <li><i class="fa-solid fa-heart"></i> {{ board.likes }}</li>
@@ -152,6 +158,23 @@ const changePage = async (page) => {
     }
   })
   await loadBoards()
+}
+
+// 타이틀 길이 제한
+const truncateTitle = (title) => {
+  const maxLength = 35 // 길이제한(47:시간 아래로 들여쓰기됨)
+  if (title.length > maxLength) {
+    return title.slice(0, maxLength) + '...' // 제한길이 이하는 '...'로 표시
+  }
+  return title
+}
+
+// new 보여주기
+const isNew = (regDate) => {
+  const postDate = moment(regDate)
+  const now = moment()
+  const hoursDiff = now.diff(postDate, 'hours')
+  return hoursDiff <= 24 // 24시간  이내만
 }
 
 onMounted(() => {
