@@ -71,11 +71,8 @@
           <div class="asset-list__comparison-charts">
             <!-- 사용자 자산과 선택된 자산 종류 간 비교 -->
             <div class="asset-list__chart">
-              <AssetComparison
-                :userAsset="calculateTotalAssets(processedData.assetDetails)"
-                :userType="processedData.assetDetails.type || 'unknown'"
-                :selectedAssetType="selectedAssetType"
-              />
+              <AssetComparison :userAsset="calculateTotalAssets(processedData.assetDetails)"
+                :userType="processedData.assetDetails.type || 'unknown'" :selectedAssetType="selectedAssetType" />
             </div>
 
             <!-- 시간에 따른 자산 변화 비교 -->
@@ -127,6 +124,7 @@ import TimeComparison from '@/components/AssetPage/TimeComparison.vue'
 import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
 import Recommendation from '@/components/AssetPage/Recommendation.vue'
 import DistributionAverage from '@/components/AssetPage/DistributionAverage.vue'
+import LoanGuide from '@/components/AssetPage/LoanGuide.vue'
 
 const loading = ref(true) // 로딩 상태 관리
 const error = ref(null) // 에러 상태 관리
@@ -300,16 +298,16 @@ const processedData = computed(() => {
 
   const typeAverages = assetAverages.value
     ? assetTypes.reduce((averages, type) => {
-        averages[type] = { total: assetAverages.value[type] || 0 }
-        return averages
-      }, {})
+      averages[type] = { total: assetAverages.value[type] || 0 }
+      return averages
+    }, {})
     : null
   // 새로 추가된 부분: overallAverages 계산
   const overallAverages = assetAverages.value
     ? assetTypes.reduce((averages, type) => {
-        averages[type] = { total: assetAverages.value[type] || 0 }
-        return averages
-      }, {})
+      averages[type] = { total: assetAverages.value[type] || 0 }
+      return averages
+    }, {})
     : null
 
   return {
@@ -356,6 +354,7 @@ onMounted(async () => {
   grid-column: 1 / -1;
 }
 
+
 .asset-list__total,
 .asset-list__distribution {
   /* 전체 자산 및 자산 분포 섹션이 그리드에서 전체 너비를 차지하도록 설정 */
@@ -398,10 +397,12 @@ onMounted(async () => {
   }
 }
 
+
 .asset-list__recommended-products {
   /* 추천 상품 섹션이 그리드에서 전체 너비를 차지하도록 설정 */
   grid-column: 1 / -1;
 }
+
 
 .asset-list__distribution-slider {
   /* 자산 분포 슬라이더의 버튼과 슬라이더 콘텐츠가 수평으로 정렬되도록 설정 */
@@ -449,4 +450,20 @@ onMounted(async () => {
   font-weight: bold;
   color: #4caf50;
 }
+
+/*새로 수정 */
+.loan-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.loan-info {
+  flex: 1; /* LoanInfo가 좌측에 오도록 설정 */
+  margin-right: 20px; /* LoanInfo와 LoanGuide 간의 간격 */
+}
+
+.loan-guide {
+  flex: 1; /* LoanGuide가 우측에 오도록 설정 */
+}
+
 </style>
