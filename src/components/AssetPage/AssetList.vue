@@ -27,19 +27,37 @@
           </template>
         </Distribution>
 
+        <swiper v-if="processedData" :navigation="true" :modules="modules" class="yourSwiper">
+          <!-- 유형별 평균 자산 분포 슬라이드 -->
+          <swiper-slide v-if="processedData.typeAverages">
+            <Distribution
+              :assetDetails="processedData.typeAverages"
+              :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
+            />
+          </swiper-slide>
+
+          <!-- 전체 사용자 평균 자산 분포 슬라이드 -->
+          <swiper-slide v-if="processedData.overallAverages">
+            <Distribution
+              :assetDetails="processedData.overallAverages"
+              title="전체 사용자 평균 자산 분포"
+            />
+          </swiper-slide>
+        </swiper>
+
         <!-- 유형별 평균 자산 분포 -->
-        <Distribution
+        <!-- <Distribution
           v-if="processedData.typeAverages"
           :assetDetails="processedData.typeAverages"
           :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
-        />
+        /> -->
 
         <!-- 전체 사용자 평균 자산 분포 -->
-        <Distribution
+        <!-- <Distribution
           v-if="processedData.overallAverages"
           :assetDetails="processedData.overallAverages"
           title="전체 사용자 평균 자산 분포"
-        />
+        /> -->
 
         <!-- 다음 슬라이드 버튼 -->
         <!-- <button @click="nextSlide" class="slider-btn next-btn">›</button> -->
@@ -140,6 +158,11 @@ import TimeComparison from '@/components/AssetPage/TimeComparison.vue'
 import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
 import Recommendation from '@/components/AssetPage/Recommendation.vue'
 import LoanGuide from '@/components/AssetPage/LoanGuide.vue'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import { Navigation } from 'swiper/modules'
+const modules = [Navigation]
 const loading = ref(true) // 로딩 상태 관리
 const error = ref(null) // 에러 상태 관리
 
@@ -430,5 +453,9 @@ onMounted(async () => {
   margin-top: 10px;
   font-weight: bold;
   color: #4caf50;
+}
+.yourSwiper {
+  width: 100%; /* 필요한 너비 설정 */
+  height: auto; /* 필요에 따라 높이도 조정 */
 }
 </style>
