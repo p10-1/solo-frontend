@@ -2,15 +2,8 @@
   <div class="board-list">
     <h2 class="title">커뮤니티</h2>
 
-    <dl class="total">
-      <dt>전체</dt>
-      <dd>
-        <b>{{ totalCnt }}</b
-        >건
-      </dd>
-    </dl>
     <!-- 정렬 기준 선택 -->
-    <div class="table-top-box margin-top-1rem margin-bottom-1rem">
+    <div class="search-section">
       <div class="select-form">
         <select v-model="sortBy" @change="loadBoards">
           <option value="latest">최신순</option>
@@ -19,22 +12,31 @@
           <option value="comments">댓글순</option>
         </select>
       </div>
-      <div class="search-section">
-        <div class="select-form">
-          <select v-model="category">
-            <option value="title">제목</option>
-            <option value="content">내용</option>
-            <option value="userName">작성자</option>
-          </select>
-        </div>
-        <search-bar v-model="keyword" @search="searchBoards" />
+      <div class="select-form">
+        <select v-model="category">
+          <option value="title">제목</option>
+          <option value="content">내용</option>
+          <option value="userName">작성자</option>
+        </select>
       </div>
+      <search-bar v-model="keyword" @search="searchBoards" />
+    </div>
+    <div class="table-top-box margin-top-1rem margin-bottom-1rem">
+      <dl class="total">
+        <dt>전체</dt>
+        <dd>
+          <b>{{ totalCnt }}</b
+          >건
+        </dd>
+      </dl>
+
       <div class="button-box">
         <router-link :to="{ name: 'board/create' }" class="button-main btn btn-primary">
           글쓰기
         </router-link>
       </div>
     </div>
+
     <!-- Board List -->
     <table class="table">
       <colgroup>

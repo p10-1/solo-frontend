@@ -1,30 +1,55 @@
 <template>
-  <div class="slider-container">
-    <div class="slider" :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
-      <div v-for="(policy, index) in policies" :key="index" class="slider-card" @click="goToPolicy">
-        <h3>청년 정책 알아보기</h3>
-        <h5 class="policy-title">{{ policy.polyBizSjnm }}</h5>
-        <p class="policy-description">{{ policy.polyItcnCn }}</p>
-        <button class="btn btn-primary btn-sm mt-3" @click.stop="goToPolicy">더 알아보기</button>
-      </div>
+  <div class="policy-container margin-top-2rem">
+    <div class="title-box">
+      <h2 class="main-title">청년 정책</h2>
+      <router-link to="policy">
+        <span class="link"><i class="fa-solid fa-plus"></i> 더보기</span>
+      </router-link>
     </div>
-    <!-- 첫 번째 아이템에서는 좌측 버튼을 비활성화 -->
-    <button @click="prevSlide" class="prev-btn" :disabled="currentIndex === 0">‹</button>
-    <!-- 마지막 아이템에서는 우측 버튼을 비활성화 -->
-    <button @click="nextSlide" class="next-btn" :disabled="currentIndex === policies.length - 1">
-      ›
-    </button>
+    <div class="main-policy-box margin-top-1rem">
+      <!-- 슬라이더 -->
+      <swiper
+        :pagination="{ clickable: true }"
+        :modules="modules"
+        :loop="true"
+        :slides-per-view="1"
+        :space-between="20"
+        :autoplay="{ delay: 3000, disableOnInteraction: false }"
+        class="mySwiper"
+      >
+        <swiper-slide v-for="(policy, index) in policies" :key="index" @click="goToPolicy">
+          <div class="main-policy-card">
+            <h3 class="policy-title">{{ policy.polyBizSjnm }}</h3>
+            <p class="card-content">{{ policy.polyItcnCn }}</p>
+            <div class="card-bottom">
+              <button class="button-main" @click.stop="goToPolicy">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                자세히 보기
+              </button>
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { recommendPolicies } from '@/api/policyApi'
 
+// Swiper 컴포넌트 임포트
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Pagination, Autoplay } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+
+const modules = [Pagination, Autoplay]
+
 const router = useRouter()
 const policies = ref([])
-const currentIndex = ref(0)
 
 const fetchPolicies = async () => {
   try {
@@ -38,103 +63,73 @@ const goToPolicy = () => {
   router.push('/policy')
 }
 
-const nextSlide = () => {
-  if (currentIndex.value < policies.value.length - 1) {
-    currentIndex.value++
-  } else {
-    currentIndex.value = 0
-  }
-}
-
-const prevSlide = () => {
-  if (currentIndex.value > 0) {
-    currentIndex.value--
-  }
-}
-
-let slideInterval
-const startAutoSlide = () => {
-  slideInterval = setInterval(nextSlide, 3000)
-}
-
 onMounted(() => {
   fetchPolicies()
-  startAutoSlide()
-})
-
-onUnmounted(() => {
-  clearInterval(slideInterval)
 })
 </script>
-
-<style scoped>
-.slider-container {
+<style scope>
+.policy-container {
+  width: 100%;
+}
+.main-policy-card {
   position: relative;
-  width: 500px; /* 컴포넌트 크기 키움 */
   overflow: hidden;
-  margin: auto;
-}
-
-.slider {
-  background-color: white;
-  display: flex;
-  transition: transform 0.5s ease;
-}
-
-.slider-card {
-  min-width: 100%;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  padding: 30px; /* 패딩을 더 줘서 여유롭게 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.policy-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin: 10px 0;
-  color: #333;
-}
-
-.policy-description {
-  font-size: 1rem;
-  color: #555;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.prev-btn,
-.next-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px;
+  width: 100%;
+  padding: 3rem;
+  /* background-color: #897fe6; */
+  background-color: #6846f5;
+  height: 18rem;
+  border-radius: 28px;
   cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.3s;
+  transition: all 0.4s;
 }
-
-.prev-btn:disabled,
-.next-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.3; /* 비활성화 상태에서는 투명도 감소 */
+.main-policy-card::after {
+  content: '\f66f';
+  font-family: FontAwesome;
+  color: #fff;
+  font-size: 16rem;
+  opacity: 0.05;
+  position: absolute;
+  bottom: -5rem;
+  right: 1rem;
 }
-
-.prev-btn {
-  left: 10px;
+.main-policy-card:hover .button-main {
+  background-color: #502fd4;
+  font-weight: 700;
 }
-
-.next-btn {
-  right: 10px;
+.main-policy-card:hover .policy-title,
+.main-policy-card:hover .card-content {
+  color: #f7e595;
+  transition: all 0.4s;
 }
-
-.prev-btn:hover:not(:disabled),
-.next-btn:hover:not(:disabled) {
-  opacity: 1; /* 활성화된 버튼은 hover 시 완전히 보이도록 */
+.main-policy-card .policy-title {
+  font-size: 1.32rem;
+  font-weight: 500;
+  word-break: keep-all;
+  line-height: 1.6rem;
+  letter-spacing: -1px;
+  margin-bottom: 0;
+  color: #fff;
+}
+.main-policy-card .card-content {
+  color: #fff;
+  border-top: 1px dashed #fff;
+  padding-top: 10px;
+  font-size: 1rem;
+  font-weight: 400;
+  word-break: keep-all;
+  line-height: 26px;
+  letter-spacing: -1px;
+  white-space: pre-line;
+  font-weight: 400;
+  margin: 10px 0 0;
+  white-space: pre-line;
+}
+.main-policy-card .card-bottom {
+  position: absolute;
+  bottom: 2.7rem;
+}
+.main-policy-card .button-main {
+  border-color: #502fd4;
 }
 </style>

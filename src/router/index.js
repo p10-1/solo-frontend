@@ -11,6 +11,8 @@ import FirstUser from '@/pages/auth/FirstUser.vue'
 import Login from '@/pages/auth/LoginPage.vue'
 import Product from '@/pages/product/ProductPage.vue'
 import boardRoutes from './board'
+// 팀소개 추가
+import SoloTeam from '@/pages/CreateSoloTeam.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -53,6 +55,11 @@ const router = createRouter({
       path: '/news',
       name: 'news',
       component: News
+    },
+    {
+      path: '/soloTeam',
+      name: 'soloTeam',
+      component: SoloTeam
     },
     {
       path: '/policy',

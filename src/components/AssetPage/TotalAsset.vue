@@ -1,12 +1,19 @@
 <template>
   <div class="total-asset">
+    <!-- 사용자 이름과 총 자산 타이틀 -->
     <h3>
       <span class="text-accent">{{ userName }}</span
       >님의 총 자산
     </h3>
+
+    <!-- 총 자산 금액 표시 영역 -->
     <div class="asset-amount">
       <span class="currency">₩</span>
-      <span class="amount">{{ animatedAmount }}원</span>
+      <!-- 애니메이션으로 자산 금액을 표시 -->
+      <span class="amount">
+        <span class="text-accent">{{ animatedAmount }}</span
+        >원
+      </span>
     </div>
   </div>
 </template>
@@ -60,21 +67,28 @@ watch(
 
 <style scoped>
 .total-asset {
+  /* 총 자산 영역을 플렉스 박스로 설정하여 타이틀과 금액을 수평으로 정렬, 
+     베이스라인을 기준으로 정렬하고, 필요시 줄바꿈 허용 */
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   flex-wrap: wrap;
+
+  /* 배경색을 흰색으로 설정하고, 둥근 모서리와 그림자 효과 적용 */
   border-radius: 25px;
   padding: 2rem 1.7rem;
   background-color: #fff;
   box-shadow: 0px 0px 15px rgb(221, 214, 255);
 }
+
 .total-asset h3 {
+  /* 총 자산 타이틀의 글자 크기를 1.4rem으로 설정, 마진을 제거 */
   font-size: 1.4rem;
   margin: 0;
 }
 
 .total-asset .asset-amount {
+  /* 총 자산 금액의 글자 크기를 1.4rem으로 설정 */
   font-size: 1.4rem;
 }
 </style>

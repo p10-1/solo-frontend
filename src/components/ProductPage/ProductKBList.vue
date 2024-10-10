@@ -23,6 +23,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { fetchKbProducts } from '@/api/productApi'
 import ProductKBItem from './ProductKBItem.vue'
+import { useAuthStore } from '@/stores/authStore'
 
 const props = defineProps({
   productType: {
@@ -69,7 +70,7 @@ onMounted(() => {
 
 <style scoped>
 .kb-product-list {
-  margin-top: -2rem;
+  margin-top: 1rem;
 }
 
 .kb-product-list .title {

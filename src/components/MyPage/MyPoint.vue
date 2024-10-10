@@ -14,7 +14,7 @@
       <div class="form-group">
         <h3 class="title margin-top-2rem margin-bottom-1rem text-accent">입금할 계좌</h3>
         <select v-model="accountIndex" class="form-control mr-2 account-select" id="accountSelect">
-          <option value="" disabled selected>내 계좌 선택</option>
+          <option value="disabled selected">내 계좌 선택</option>
           <option v-for="(account, index) in accounts" :key="index" :value="index">
             {{ account }}
           </option>
