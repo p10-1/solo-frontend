@@ -1,5 +1,4 @@
 <template>
-  <h2 class="title">대출 정보</h2>
   <div class="loan-info-container">
     <!-- purpose가 '전세자금'인 경우 -->
     <div v-if="props.loanData.purpose === '전세자금'">

@@ -87,15 +87,45 @@
         </div>
 
         <!-- 섹션: 대출 정보 -->
-        <div class="asset-list__loan">
-          <!-- 대출 정보가 있는 경우 LoanInfo 컴포넌트로 대출 정보 표시 -->
-          <template v-if="hasLoanData">
-            <LoanInfo :loanData="processedData.loanData" />
-          </template>
-          <!-- 대출 정보가 없는 경우 안내 메시지 표시 -->
-          <div v-else class="no-more">
-            <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />
-            대출이 존재하지 않습니다.
+        <div class="asset-list__section asset-list__loan">
+          <h2 class="section-title">대출 정보</h2>
+          <div v-if="processedData.loanData.purpose !== '전세자금'">
+            <label>상환 방법:</label>
+            <div>
+              <input
+                type="radio"
+                id="equal-principal-interest"
+                value="equal-principal-interest"
+                v-model="repaymentMethod"
+              />
+              <label for="equal-principal-interest">원리금 균등상환</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                id="equal-principal"
+                value="equal-principal"
+                v-model="repaymentMethod"
+              />
+              <label for="equal-principal">원금 균등상환</label>
+            </div>
+          </div>
+
+          <div class="loan-container">
+            <!-- 대출 정보가 있는 경우 LoanInfo 컴포넌트로 대출 정보 표시 -->
+            <template v-if="hasLoanData">
+              <div class="loan-info">
+                <LoanInfo :loanData="processedData.loanData" />
+              </div>
+              <div class="loan-guide">
+                <LoanGuide :loanData="processedData.loanData" :repaymentMethod="repaymentMethod" />
+              </div>
+            </template>
+            <!-- 대출 정보가 없는 경우 안내 메시지 표시 -->
+            <div v-else class="no-more">
+              <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />
+              대출이 존재하지 않습니다.
+            </div>
           </div>
         </div>
 
@@ -129,6 +159,7 @@ import TimeComparison from '@/components/AssetPage/TimeComparison.vue'
 import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
 import Recommendation from '@/components/AssetPage/Recommendation.vue'
 import DistributionAverage from '@/components/AssetPage/DistributionAverage.vue'
+import LoanGuide from '@/components/AssetPage/LoanGuide.vue'
 
 const authStore = useAuthStore()
 const loading = ref(true) // 로딩 상태 관리
@@ -341,6 +372,8 @@ const selectAssetType = (type) => {
   selectedAssetType.value = type
 }
 
+const repaymentMethod = ref('equal-principal-interest')
+
 onMounted(async () => {
   await loadData()
 })
@@ -451,5 +484,35 @@ onMounted(async () => {
   margin-top: 10px;
   font-weight: bold;
   color: #4caf50;
+}
+
+.loan-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.loan-info {
+  flex: 1;
+  /* LoanInfo가 좌측에 오도록 설정 */
+  margin-right: 20px;
+  /* LoanInfo와 LoanGuide 간의 간격 */
+}
+
+.loan-guide {
+  flex: 1;
+  /* LoanGuide가 우측에 오도록 설정 */
+}
+
+.loan-header {
+  display: flex;
+  align-items: center;
+  /* 수직 중앙 정렬 */
+  justify-content: space-between;
+  /* 요소 간의 간격을 균등하게 분배 */
+}
+
+.loan-header label {
+  margin-right: 10px;
+  /* 선택 요소와 레이블 간의 간격 */
 }
 </style>
