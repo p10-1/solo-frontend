@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
 // import config from '@/config'
 </script>
@@ -8,4 +7,3 @@
     <p>{{ config.subtitle }}</p>
   </div> -->
 </template>
-<style></style>

@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 // 이게 각각의 page를 가져오는 것
 import Home from '../pages/HomePage.vue'
-// import NotFound from '@/pages/NotFound.vue'
+import Callback from '@/pages/auth/CallbackPage.vue'
 import Board from '../pages/board/BoardPage.vue'
 import Asset from '../pages/asset/AssetPage.vue'
 import MyPage from '../pages/auth/MyPage.vue'
 import News from '../pages/news/NewsPage.vue'
 import Policy from '../pages/policy/PolicyPage.vue'
 import FirstUser from '@/pages/auth/FirstUser.vue'
-import Login from '@/pages/auth/Login.vue'
+import Login from '@/pages/auth/LoginPage.vue'
 import Product from '@/pages/product/ProductPage.vue'
 import boardRoutes from './board'
 // 팀소개 추가
@@ -25,6 +25,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/callback',
+      name: 'callback',
+      component: Callback
     },
     {
       path: '/firstUser',
