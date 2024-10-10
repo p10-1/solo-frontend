@@ -1,6 +1,7 @@
 <template>
   <h2 class="comment-title">
-    "<span class="text-accent">ㅇㅇ</span>"님의 자산을 <span class="text-accent">분석</span>했어요
+    "<span class="text-accent">{{ authStore.userInfo.userName }}</span
+    >"님의 자산을 <span class="text-accent">분석</span>했어요
     <span class="text-accent"><i class="fa-regular fa-face-smile-wink"></i></span>
   </h2>
   <div class="asset-list">
@@ -26,8 +27,12 @@
             <!-- 페이드 효과로 슬라이드 전환 -->
             <transition name="fade" mode="out-in">
               <!-- 첫 번째 슬라이드: 사용자 자산 분포를 나타냄 -->
-              <Distribution v-if="currentSlide === 0" key="user-distribution" :assetDetails="processedData.assetDetails"
-                title="내 자산 분포">
+              <Distribution
+                v-if="currentSlide === 0"
+                key="user-distribution"
+                :assetDetails="processedData.assetDetails"
+                title="내 자산 분포"
+              >
                 <!-- 추가 콘텐츠 영역: 가장 많은 자산 종류 표시 -->
                 <template #extra>
                   <div v-if="highestAssetType" class="asset-highlight">
@@ -37,14 +42,20 @@
               </Distribution>
 
               <!-- 두 번째 슬라이드: 유형별 평균 자산 분포를 나타냄 -->
-              <DistributionAverage v-else-if="currentSlide === 1 && processedData.typeAverages"
-                key="type-average-distribution" :assetDetails="processedData.typeAverages"
-                :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`" />
+              <DistributionAverage
+                v-else-if="currentSlide === 1 && processedData.typeAverages"
+                key="type-average-distribution"
+                :assetDetails="processedData.typeAverages"
+                :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
+              />
 
               <!-- 세 번째 슬라이드: 전체 사용자 평균 자산 분포 -->
-              <DistributionAverage v-else-if="currentSlide === 2 && processedData.overallAverages"
-                key="overall-average-distribution" :assetDetails="processedData.overallAverages"
-                title="전체 사용자 평균 자산 분포" />
+              <DistributionAverage
+                v-else-if="currentSlide === 2 && processedData.overallAverages"
+                key="overall-average-distribution"
+                :assetDetails="processedData.overallAverages"
+                title="전체 사용자 평균 자산 분포"
+              />
             </transition>
           </div>
 
@@ -61,8 +72,11 @@
           <div class="asset-list__comparison-charts">
             <!-- 사용자 자산과 선택된 자산 종류 간 비교 -->
             <div class="asset-list__chart">
-              <AssetComparison :userAsset="calculateTotalAssets(processedData.assetDetails)"
-                :userType="processedData.assetDetails.type || 'unknown'" :selectedAssetType="selectedAssetType" />
+              <AssetComparison
+                :userAsset="calculateTotalAssets(processedData.assetDetails)"
+                :userType="processedData.assetDetails.type || 'unknown'"
+                :selectedAssetType="selectedAssetType"
+              />
             </div>
 
             <!-- 시간에 따른 자산 변화 비교 -->
@@ -78,12 +92,21 @@
           <div v-if="processedData.loanData.purpose !== '전세자금'">
             <label>상환 방법:</label>
             <div>
-              <input type="radio" id="equal-principal-interest" value="equal-principal-interest"
-                v-model="repaymentMethod" />
+              <input
+                type="radio"
+                id="equal-principal-interest"
+                value="equal-principal-interest"
+                v-model="repaymentMethod"
+              />
               <label for="equal-principal-interest">원리금 균등상환</label>
             </div>
             <div>
-              <input type="radio" id="equal-principal" value="equal-principal" v-model="repaymentMethod" />
+              <input
+                type="radio"
+                id="equal-principal"
+                value="equal-principal"
+                v-model="repaymentMethod"
+              />
               <label for="equal-principal">원금 균등상환</label>
             </div>
           </div>
@@ -106,7 +129,6 @@
           </div>
         </div>
 
-
         <!-- 섹션: 추천 상품 -->
         <div class="asset-list__recommended-products">
           <!-- 대출 정보가 있는 경우 대출 기간에 따른 추천 상품 표시 -->
@@ -128,6 +150,7 @@
 
 import { ref, computed, onMounted } from 'vue'
 import { fetchAssetData, fetchAssetAverages } from '@/api/assetApi'
+import { useAuthStore } from '@/stores/authStore'
 import TotalAsset from '@/components/AssetPage/TotalAsset.vue'
 import Distribution from '@/components/AssetPage/Distribution.vue'
 import AssetTypeButtons from '@/components/AssetPage/AssetTypeButtons.vue'
@@ -137,6 +160,8 @@ import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
 import Recommendation from '@/components/AssetPage/Recommendation.vue'
 import DistributionAverage from '@/components/AssetPage/DistributionAverage.vue'
 import LoanGuide from '@/components/AssetPage/LoanGuide.vue'
+
+const authStore = useAuthStore()
 const loading = ref(true) // 로딩 상태 관리
 const error = ref(null) // 에러 상태 관리
 
@@ -309,16 +334,16 @@ const processedData = computed(() => {
 
   const typeAverages = assetAverages.value
     ? assetTypes.reduce((averages, type) => {
-      averages[type] = { total: assetAverages.value[type] || 0 }
-      return averages
-    }, {})
+        averages[type] = { total: assetAverages.value[type] || 0 }
+        return averages
+      }, {})
     : null
   // 새로 추가된 부분: overallAverages 계산
   const overallAverages = assetAverages.value
     ? assetTypes.reduce((averages, type) => {
-      averages[type] = { total: assetAverages.value[type] || 0 }
-      return averages
-    }, {})
+        averages[type] = { total: assetAverages.value[type] || 0 }
+        return averages
+      }, {})
     : null
 
   return {
@@ -347,7 +372,7 @@ const selectAssetType = (type) => {
   selectedAssetType.value = type
 }
 
-const repaymentMethod = ref('equal-principal-interest');
+const repaymentMethod = ref('equal-principal-interest')
 
 onMounted(async () => {
   await loadData()
