@@ -57,13 +57,14 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 
 const modules = [Pagination, Navigation, Autoplay]
-
+  
 const newsList = ref([])
 const selectedCategory = ref('경제') // 기본 선택 카테고리
 
 const fetchNews = async () => {
   try {
     const response = await recommendNews()
+    console.log("news",response);
     if (response && typeof response === 'object') {
       newsList.value = Object.entries(response).map(([category, news]) => ({
         category,
