@@ -69,15 +69,44 @@
         </div>
 
         <!-- 섹션: 대출 정보 -->
-        <div class="asset-list__loan">
-          <!-- 대출 정보가 있는 경우 LoanInfo 컴포넌트로 대출 정보 표시 -->
-          <template v-if="hasLoanData">
-            <LoanInfo :loanData="processedData.loanData" />
-          </template>
-          <!-- 대출 정보가 없는 경우 안내 메시지 표시 -->
-          <div v-else class="no-more">
-            <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />
-            대출이 존재하지 않습니다.
+        <div class="loan-container">
+          <h2 class="title">나의 대출 정보</h2>
+          <div class="loan-body">
+            <!-- 대출 정보가 있는 경우 LoanInfo 컴포넌트로 대출 정보 표시 -->
+            <template v-if="hasLoanData">
+              <div class="loan-guide">
+                <LoanGuide :loanData="processedData.loanData" :repaymentMethod="repaymentMethod" />
+              </div>
+              <div class="loan-info">
+                <div v-if="processedData.loanData.purpose !== '전세자금'">
+                  <label>상환 방법:</label>
+                  <div>
+                    <input
+                      type="radio"
+                      id="equal-principal-interest"
+                      value="equal-principal-interest"
+                      v-model="repaymentMethod"
+                    />
+                    <label for="equal-principal-interest">원리금 균등상환</label>
+                  </div>
+                  <div>
+                    <input
+                      type="radio"
+                      id="equal-principal"
+                      value="equal-principal"
+                      v-model="repaymentMethod"
+                    />
+                    <label for="equal-principal">원금 균등상환</label>
+                  </div>
+                </div>
+                <LoanInfo :loanData="processedData.loanData" />
+              </div>
+            </template>
+            <!-- 대출 정보가 없는 경우 안내 메시지 표시 -->
+            <div v-else class="no-more">
+              <i class="fa-solid fa-xmark argin-bottom-1rem"></i><br />
+              대출이 존재하지 않습니다.
+            </div>
           </div>
         </div>
 
@@ -109,7 +138,8 @@ import AssetComparison from '@/components/AssetPage/AssetComparison.vue'
 import TimeComparison from '@/components/AssetPage/TimeComparison.vue'
 import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
 import Recommendation from '@/components/AssetPage/Recommendation.vue'
-
+import DistributionAverage from '@/components/AssetPage/DistributionAverage.vue'
+import LoanGuide from '@/components/AssetPage/LoanGuide.vue'
 const loading = ref(true) // 로딩 상태 관리
 const error = ref(null) // 에러 상태 관리
 
@@ -303,6 +333,8 @@ const hasLoanData = computed(() => {
 const selectAssetType = (type) => {
   selectedAssetType.value = type
 }
+
+const repaymentMethod = ref('equal-principal-interest')
 
 onMounted(async () => {
   await loadData()

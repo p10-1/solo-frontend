@@ -28,9 +28,6 @@
                   params: { boardNo: board.boardNo }
                 }"
               >
-                <!-- <div class="link">
-                  {{ truncateTitle(board.title) }}
-                </div> -->
                 <!-- text가 길때 제한길이 이하는 '...'으로 표시되고 hover하면 전체 text 보여주기 -->
                 <div class="link truncated" :title="board.title">
                   {{ truncateTitle(board.title) }}

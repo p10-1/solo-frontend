@@ -84,7 +84,7 @@ const fetchNews = async () => {
 
 const filteredNews = computed(() => {
   const categoryData = newsList.value.find((item) => item.category === selectedCategory.value)
-  return categoryData ? categoryData.newsItems : []
+  return categoryData ? categoryData.newsItems.filter((newsItem) => newsItem.imageUrl) : []
 })
 
 // 현재 인덱스에 따라 표시할 뉴스
