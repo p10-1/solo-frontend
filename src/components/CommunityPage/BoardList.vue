@@ -74,7 +74,7 @@
           <td>
             <span class="badge">{{ board.userName }}</span>
           </td>
-          <td class="date">{{ moment(board.regDate).format('YYYY-MM-DD HH:mm') }}</td>
+          <td class="date">{{ formatTimeAgo(board.regDate) }}</td>
         </tr>
       </tbody>
     </table>
@@ -138,6 +138,26 @@ const searchBoards = async (searchTerm) => {
     }
   })
   await loadBoards()
+}
+
+const formatTimeAgo = (regDate) => {
+  const now = moment()
+  const postDate = moment(regDate)
+
+  if (now.isSame(postDate, 'day')) {
+    const hoursDiff = now.diff(postDate, 'hours')
+    const minutesDiff = now.diff(postDate, 'minutes')
+    const secondDiff = now.diff(postDate, 'seconds')
+    if (hoursDiff === 0 && minutesDiff === 0) {
+      return `${secondDiff}초 전`
+    } else if (hoursDiff === 0 && minutesDiff < 60) {
+      return `${minutesDiff}분 전`
+    } else if (hoursDiff < 24) {
+      return `${hoursDiff}시간 전`
+    }
+  }
+
+  return moment(regDate).format('YYYY-MM-DD HH:mm') // 오늘이 아니면 원래 포맷으로 반환
 }
 
 const changePage = async (page) => {
