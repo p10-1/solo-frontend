@@ -56,7 +56,7 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 
 const modules = [Pagination, Navigation, Autoplay]
-  
+
 const newsList = ref([])
 const selectedCategory = ref('경제') // 기본 선택 카테고리
 
@@ -84,7 +84,7 @@ const fetchNews = async () => {
 
 const filteredNews = computed(() => {
   const categoryData = newsList.value.find((item) => item.category === selectedCategory.value)
-  return categoryData ? categoryData.newsItems.filter((newsItem) => newsItem.imageUrl) : []
+  return categoryData ? categoryData.newsItems.filter(newsItem => newsItem.imageUrl) : []
 })
 
 // 현재 인덱스에 따라 표시할 뉴스

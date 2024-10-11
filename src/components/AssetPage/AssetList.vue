@@ -1,6 +1,6 @@
 <template>
   <h2 class="comment-title">
-    "<span class="text-accent">ㅇㅇ</span>"님의 자산을 <span class="text-accent">분석</span>했어요
+    "<span class="text-accent">{{ authStore.userInfo.userName }}</span>"님의 자산을 <span class="text-accent">분석</span>했어요
     <span class="text-accent"><i class="fa-regular fa-face-smile-wink"></i></span>
   </h2>
   <section class="asset-list">
@@ -105,22 +105,18 @@
       </section>
 
       <!-- 섹션: 대출 정보 -->
-      <div>
+      <div class="margin-top-3rem">
         <h2 class="title">대출 정보</h2>
-        <dl class="radio-form margin-top-2rem" v-if="processedData.loanData.purpose !== '전세자금'">
+        <dl v-if="processedData.loanData.purpose !== '전세자금'" class="radio-form margin-top-2rem">
           <dt>상환 방법</dt>
           <dd>
             <input
               type="radio"
               id="equal-principal-interest"
-              value="equal-principal-interest"
+              value="equal-principal-interest"    
               v-model="repaymentMethod"
             />
-            <label
-              for="equal-principal-interest"
-              class="button-radio active"
-              :class="{ active: repaymentMethod === 'equal-principal-interest' }"
-            >
+            <label for="equal-principal-interest" class="button-radio" :class="{ active: repaymentMethod === 'equal-principal-interest' }">
               원리금 균등상환
             </label>
           </dd>
@@ -131,12 +127,7 @@
               value="equal-principal"
               v-model="repaymentMethod"
             />
-            <label
-              for="equal-principal"
-              class="button-radio"
-              :class="{ active: repaymentMethod === 'equal-principal' }"
-              >원금 균등상환</label
-            >
+            <label for="equal-principal" class="button-radio" :class="{ active: repaymentMethod === 'equal-principal' }">원금 균등상환</label>
           </dd>
         </dl>
         <!-- 대출 정보가 있는 경우 LoanInfo 컴포넌트로 대출 정보 표시 -->
@@ -173,6 +164,7 @@
 
 import { ref, computed, onMounted } from 'vue'
 import { fetchAssetData, fetchAssetComparison } from '@/api/assetApi'
+import { useAuthStore } from '@/stores/authStore'
 import TotalAsset from '@/components/AssetPage/TotalAsset.vue'
 import Distribution from '@/components/AssetPage/Distribution.vue'
 import AssetTypeButtons from '@/components/AssetPage/AssetTypeButtons.vue'
@@ -186,6 +178,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { Navigation } from 'swiper/modules'
 const modules = [Navigation]
+const authStore = useAuthStore()
 const loading = ref(true) // 로딩 상태 관리
 const error = ref(null) // 에러 상태 관리
 
