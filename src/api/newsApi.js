@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:9000/api/news'
+const API_URL = '/api/news'
 
 // 전체 뉴스를 가져오는 함수
 export const getNews = async (currentPage) => {

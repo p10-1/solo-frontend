@@ -16,17 +16,17 @@
         :loop="true"
         :slides-per-view="3"
         :space-between="20"
-        :autoplay="{ delay: 1000, disableOnInteraction: false }"
+        :autoplay="{ delay: 2000, disableOnInteraction: false }"
         class="mySwiper"
       >
         <swiper-slide v-for="(post, index) in bestPosts" :key="index" class="posts-list">
           <!-- 링크 연결 실패ㅠㅠ -->
-          <!-- <router-link
+          <router-link
             :to="{
               name: 'board/detail',
-              params: { postNo: post.boardNo }
+              params: { boardNo: post.boardNo }
             }"
-          > -->
+          ></router-link>
           <div class="posts-card">
             <div class="card-body">
               <div class="card-ex-info">

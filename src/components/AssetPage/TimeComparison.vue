@@ -1,7 +1,9 @@
 <template>
   <div class="time-comparison">
     <!-- 자산 타입에 따라 동적으로 타이틀 표시 -->
-    <h2 class="time-comparison__title">{{ assetTypeNames[assetType] }} 월별 비교</h2>
+    <h2 class="title">
+      <span class="text-accent">{{ assetTypeNames[assetType] }} 월별</span> 비교
+    </h2>
 
     <!-- 차트 렌더링을 위한 캔버스 -->
     <div class="time-comparison__chart-container">
@@ -10,11 +12,13 @@
 
     <!-- 자산 변동 요약 정보가 있을 경우 표시 -->
     <div v-if="processedData.length > 0" class="time-comparison__summary">
-      <p class="time-comparison__summary-text">최근 {{ processedData.length }}개월 변화:</p>
-      <p :class="['time-comparison__trend', trendDirection]">
-        {{ trendDirection === 'increase' ? '증가' : '감소' }}
-        <span class="time-comparison__percentage">(변화율: {{ trendPercentage }}%)</span>
-      </p>
+      <ul class="comparison-info">
+        <li>최근 {{ processedData.length }}개월 변화</li>
+        <li :class="['time-comparison__trend', trendDirection]">
+          <span class="text-accent">{{ trendDirection === 'increase' ? '증가' : '감소' }}</span>
+          <span class="time-comparison__percentage">(변화율: {{ trendPercentage }}%)</span>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -189,88 +193,35 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .time-comparison {
-  /* 시간 비교 카드 스타일: 배경색을 흰색으로 설정하고, 둥근 모서리, 패딩 및 그림자 효과 추가 */
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  position: relative;
+  width: 100%;
+  min-height: 17rem;
+  border-radius: 25px;
+  padding: 2rem 1.7rem;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
-
-.time-comparison__title {
-  /* 타이틀의 글자 크기를 1.5rem으로 설정하고, 색상은 진한 회색(#333), 아래쪽에 20px 간격 추가, 중앙 정렬 */
-  font-size: 1.5rem;
+.time-comparison .comparison-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  margin-bottom: 1rem;
+  border-bottom: 1px dashed #cfc6fd;
+}
+.time-comparison .comparison-info li {
+  font-size: 1.08rem;
+  font-weight: 500;
+  letter-spacing: -1px;
   color: #333;
-  margin-bottom: 20px;
-  text-align: center;
 }
-
-.time-comparison__chart-container {
-  /* 차트 컨테이너 높이를 300px로 설정하고, 아래쪽에 20px 간격 추가 */
-  height: 300px;
-  margin-bottom: 20px;
+.time-comparison .comparison-info .text-accent {
+  font-weight: 600;
 }
-
-.time-comparison__summary {
-  /* 자산 변동 요약을 담는 섹션: 연한 회색 배경, 둥근 모서리 처리, 15px의 패딩 적용 */
-  background-color: #f8f9fa;
-  border-radius: 4px;
-  padding: 15px;
-}
-
-.time-comparison__summary-text {
-  /* 요약 정보 텍스트 스타일: 글자 크기 1.1rem, 중간 회색(#555) 색상, 아래쪽에 10px 간격 */
-  font-size: 1.1rem;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.time-comparison__trend {
-  /* 자산 증감 경향을 강조하기 위해 글자 크기를 1.2rem으로 설정하고, 굵은 글씨로 표시 */
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
 .time-comparison__percentage {
-  /* 변화율 텍스트 스타일: 1rem 크기, 기본 굵기 */
-  font-size: 1rem;
-  font-weight: normal;
-}
-
-.increase {
-  /* 자산이 증가할 때 텍스트 색상을 초록색(#28a745)으로 설정 */
-  color: #28a745;
-}
-
-.decrease {
-  /* 자산이 감소할 때 텍스트 색상을 빨간색(#dc3545)으로 설정 */
-  color: #dc3545;
-}
-
-.neutral {
-  /* 자산 변화가 없을 때 텍스트 색상을 중간 회색(#6c757d)으로 설정 */
-  color: #6c757d;
-}
-
-@media (max-width: 768px) {
-  .time-comparison__chart-container {
-    /* 작은 화면에서 차트 컨테이너 높이를 250px로 줄임 */
-    height: 250px;
-  }
-
-  .time-comparison__title {
-    /* 작은 화면에서는 타이틀 크기를 1.3rem으로 줄임 */
-    font-size: 1.3rem;
-  }
-
-  .time-comparison__summary-text,
-  .time-comparison__trend {
-    /* 작은 화면에서는 요약 텍스트와 경향 텍스트의 글자 크기를 1rem으로 줄임 */
-    font-size: 1rem;
-  }
-
-  .time-comparison__percentage {
-    /* 작은 화면에서 변화율 텍스트 크기를 0.9rem으로 줄임 */
-    font-size: 0.9rem;
-  }
+  color: #888;
 }
 </style>
