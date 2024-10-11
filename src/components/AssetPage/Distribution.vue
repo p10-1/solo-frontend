@@ -40,6 +40,7 @@
       </div>
     </div>
 
+    <!-- 추가 -->
     <div class="asset-evaluation">
       <h4>자산 평가</h4>
       <p>{{ assetEvaluation }}</p>
@@ -53,6 +54,7 @@
 import { ref, computed } from 'vue'
 import ChartComponent from '@/components/common/ChartComponent.vue'
 
+//추가
 const props = defineProps({
   assetDetails: {
     type: Object,
@@ -80,7 +82,7 @@ const props = defineProps({
     // 사용자의 실제 자산 정보. assetDetails와 같은 구조
   }
 })
-
+//추가
 const getIdealRatios = (userType) => {
   switch (userType) {
     case '위험 추구형':
@@ -90,13 +92,11 @@ const getIdealRatios = (userType) => {
     case '안정 추구형':
       return { safe: 0.8, risk: 0.2 }
     case '대출 우선형':
-      return { safe: 0.1, risk: 0.0 }
+      return { safe: 1.0, risk: 0.0 }
     default:
       return { safe: 0.6, risk: 0.4 }
   }
 }
-
-const idealRatios = computed(() => getIdealRatios(props.userType))
 
 // 로그 추가
 console.log('Distribution component received props:')
@@ -188,6 +188,8 @@ const chartOptions = computed(() => ({
   }
 }))
 
+
+//추가
 const calculateAssetRatios = (assets) => {
   const safeAsset =
     (assets.cash?.total || 0) + (assets.deposit?.total || 0) + (assets.insurance?.total || 0)
@@ -198,44 +200,23 @@ const calculateAssetRatios = (assets) => {
     riskRatio: riskAsset / totalAsset
   }
 }
-
-const compareRatios = (userRatio, comparisonRatio, assetType) => {
-  const difference = (userRatio - comparisonRatio) * 100
-  if (Math.abs(difference) < 5) {
-    return `${assetType} 비중이 비슷합니다.`
-  } else if (difference > 0) {
-    return `${assetType} 비중이 ${Math.round(difference)}% 더 높습니다.`
-  } else {
-    return `${assetType} 비중이 ${Math.round(-difference)}% 더 낮습니다.`
-  }
-}
-
+//추가
 const assetEvaluation = computed(() => {
   const { safeRatio, riskRatio } = calculateAssetRatios(props.assetDetails)
-  const userRatios = calculateAssetRatios(props.userAssetDetails)
+  const idealRatios = getIdealRatios(props.userType)
+  const difference = (safeRatio - idealRatios.safe) * 100
 
-  switch (props.comparisonType) {
-    case 'personal':
-      const idealSafeRatio = idealRatios.value.safe
-      const difference = Math.abs(safeRatio - idealSafeRatio)
-      if (difference < 0.1) {
-        return `현재 자산 분포는 ${props.userType}에 적합한 비율과 유사합니다.`
-      } else if (safeRatio > idealSafeRatio) {
-        return `현재 안전자산 비중이 ${props.userType}에 비해 ${Math.round(difference * 100)}% 높습니다. 위험자산 비중을 높이는 것을 고려해보세요.`
-      } else {
-        return `현재 위험자산 비중이 ${props.userType}에 비해 ${Math.round(difference * 100)}% 높습니다. 안전자산 비중을 높이는 것을 고려해보세요.`
-      }
-    case 'typeAverage':
-      const safeComparison = compareRatios(userRatios.safeRatio, safeRatio, '안전자산')
-      const riskComparison = compareRatios(userRatios.riskRatio, riskRatio, '위험자산')
-      return `${props.userType} 유형의 평균 자산 분포와 비교했을 때, 당신의 ${safeComparison} ${riskComparison}`
-    case 'overallAverage':
-      const overallSafeComparison = compareRatios(userRatios.safeRatio, safeRatio, '안전자산')
-      const overallRiskComparison = compareRatios(userRatios.riskRatio, riskRatio, '위험자산')
-      return `전체 사용자의 평균 자산 분포와 비교했을 때, 당신의 ${overallSafeComparison} ${overallRiskComparison}`
-    default:
-      return '자산 유형을 선택하여 더 자세한 평가를 받아보세요.'
+  let evaluation = `현재 안전자산 비중은 ${(safeRatio * 100).toFixed(1)}%, 위험자산 비중은 ${(riskRatio * 100).toFixed(1)}%입니다. `
+
+  if (Math.abs(difference) < 5) {
+    evaluation += `${props.userType}에 적합한 비율과 유사합니다.`
+  } else if (difference > 0) {
+    evaluation += `현재 안전자산 비중이 ${props.userType}에 비해 ${Math.abs(difference).toFixed(1)}% 높습니다. 위험자산 비중을 높이는 것을 고려해보세요.`
+  } else {
+    evaluation += `현재 위험자산 비중이 ${props.userType}에 비해 ${Math.abs(difference).toFixed(1)}% 높습니다. 안전자산 비중을 높이는 것을 고려해보세요.`
   }
+
+  return evaluation
 })
 </script>
 

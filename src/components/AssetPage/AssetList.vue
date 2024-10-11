@@ -16,9 +16,6 @@
         <!-- 섹션: 전체 자산 금액을 표시하는 TotalAsset 컴포넌트 -->
         <TotalAsset :totalAmount="processedData.totalAsset" />
 
-        <!-- 섹션: 자산 분포 및 평균과의 비교를 위한 슬라이더 -->
-        <!-- <div class="asset-list__distribution-slider"> -->
-        <!-- 이전 슬라이드 버튼 -->
         <Distribution
           :assetDetails="processedData.assetDetails"
           :title="'내 자산 분포'"
