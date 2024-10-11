@@ -1,46 +1,64 @@
 <template>
   <div class="loan-guide">
-    <h2>대출 가이드</h2>
+    <dl class="comment-robot">
+      <dt>
+        <span class="robot-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </span>
+      </dt>
+      <dd>
+        <div class="robot-role">대출 멘토 Tip</div>
+        <!-- 원리금 균등 상환 방식 가이드 -->
+        <div v-if="repaymentMethod === 'equal-principal-interest'" class="comment">
+          <span v-if="loanData.purpose === '전세자금'">
+            이번 달 이자인
+            <span class="text-accent">{{ Math.floor(monthlyInterest).toLocaleString() }}</span
+            >원으로<br />
+            🍞 붕어빵 <span class="text-accent-black">{{ monthlyInterestBread }}마리</span>, <br />
+            🍵 커피 {{ monthlyInterestCoffee }}잔, <br />
+            🍗 치킨 {{ monthlyInterestChicken }}마리, <br />
+            🥘 호텔뷔페를 {{ monthlyInterestBuffet }}번 <br />
+            먹을 수 있어요!
+          </span>
+          <span v-else>
+            이번 대출의 총 이자인
+            <span class="text-accent">{{ Math.floor(totalInterest).toLocaleString() }}</span
+            >원으로 <br />
+            🍞 붕어빵 {{ principalEqualization.bread }}마리, <br />
+            🍵 커피 {{ principalEqualization.coffee }}잔, <br />
+            🍗 치킨 {{ principalEqualization.chicken }}마리, <br />
+            🥘 호텔뷔페를 {{ principalEqualization.buffet }}번 <br />
+            먹을 수 있어요!
+          </span>
+        </div>
 
-    <!-- 원리금 균등 상환 방식 가이드 -->
-    <div v-if="repaymentMethod === 'equal-principal-interest'" class="guide-section">
-      <span v-if="loanData.purpose === '전세자금'">
-        이번 달 이자인 {{ Math.floor(monthlyInterest).toLocaleString() }} 원으로<br />
-        🍞 붕어빵 {{ monthlyInterestBread }}마리를 <br />
-        🍵 커피 {{ monthlyInterestCoffee }}잔을 <br />
-        🍗 치킨 {{ monthlyInterestChicken }}마리를 <br />
-        🥘 호텔뷔페를 {{ monthlyInterestBuffet }}번을 <br />
-        먹을 수 있어요!
-      </span>
-      <span v-else>
-        이번 대출의 총 이자인 {{ Math.floor(totalInterest).toLocaleString() }} 원으로 <br />
-        🍞 붕어빵 {{ principalEqualization.bread }}마리를 <br />
-        🍵 커피 {{ principalEqualization.coffee }}잔을 <br />
-        🍗 치킨 {{ principalEqualization.chicken }}마리를 <br />
-        🥘 호텔뷔페를 {{ principalEqualization.buffet }}번을 <br />
-        먹을 수 있어요!
-      </span>
-    </div>
-
-    <!-- 원금 균등 상환 방식 가이드 -->
-    <div v-if="repaymentMethod === 'equal-principal'" class="guide-section">
-      <span v-if="loanData.purpose === '전세자금'">
-        이번 달 이자인 {{ Math.floor(monthlyInterest).toLocaleString() }} 원으로 <br />
-        🍞 붕어빵 {{ monthlyInterestBread }}마리를 <br />
-        🍵 커피 {{ monthlyInterestCoffee }}잔을 <br />
-        🍗 치킨 {{ monthlyInterestChicken }}마리를 <br />
-        🥘 호텔뷔페를 {{ monthlyInterestBuffet }}번을 <br />
-        먹을 수 있어요!
-      </span>
-      <span v-else>
-        이번 대출의 총 이자인 {{ Math.floor(totalPrincipalInterest).toLocaleString() }} 원으로<br />
-        🍞 붕어빵 {{ principalEqualizationPrincipal.bread }}마리를 <br />
-        🍵 커피 {{ principalEqualizationPrincipal.coffee }}잔을 <br />
-        🍗 치킨 {{ principalEqualizationPrincipal.chicken }}마리를 <br />
-        🥘 호텔뷔페를 {{ principalEqualizationPrincipal.buffet }}번을 <br />
-        먹을 수 있어요!
-      </span>
-    </div>
+        <!-- 원금 균등 상환 방식 가이드 -->
+        <div v-if="repaymentMethod === 'equal-principal'" class="comment">
+          <span v-if="loanData.purpose === '전세자금'">
+            이번 달 이자인
+            <span class="text-accent">{{ Math.floor(monthlyInterest).toLocaleString() }}</span
+            >원으로 <br />
+            🍞 붕어빵 {{ monthlyInterestBread }}마리, <br />
+            🍵 커피 {{ monthlyInterestCoffee }}잔, <br />
+            🍗 치킨 {{ monthlyInterestChicken }}마리, <br />
+            🥘 호텔뷔페를 {{ monthlyInterestBuffet }}번 <br />
+            먹을 수 있어요!
+          </span>
+          <span v-else>
+            이번 대출의 총 이자인
+            <span class="text-accent">{{
+              Math.floor(totalPrincipalInterest).toLocaleString()
+            }}</span
+            >원으로<br />
+            🍞 붕어빵 {{ principalEqualizationPrincipal.bread }}마리, <br />
+            🍵 커피 {{ principalEqualizationPrincipal.coffee }}잔, <br />
+            🍗 치킨 {{ principalEqualizationPrincipal.chicken }}마리, <br />
+            🥘 호텔뷔페를 {{ principalEqualizationPrincipal.buffet }}번 <br />
+            먹을 수 있어요!
+          </span>
+        </div>
+      </dd>
+    </dl>
   </div>
 </template>
 
@@ -149,23 +167,14 @@ const principalEqualizationPrincipal = computed(() => {
 </script>
 
 <style scoped>
-.loan-guide {
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.guide-section {
-  margin-bottom: 20px;
-  padding: 15px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-h3 {
-  margin-bottom: 10px;
+.loan-guide .comment-robot .comment {
+  font-size: 1.08rem;
+  line-height: 1.7rem;
+  letter-spacing: -1px;
   color: #333;
+}
+.loan-guide .comment-robot .comment .text-accent {
+  font-weight: 600;
+  font-size: 1.5rem;
 }
 </style>
