@@ -76,7 +76,11 @@ const router = createRouter({
       beforeEnter: isAuthenticated
     },
     ...boardRoutes
-  ]
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    // 항상 상단으로 스크롤
+    return { top: 0 }
+  }
 })
 
 export default router

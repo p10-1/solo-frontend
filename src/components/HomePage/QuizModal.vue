@@ -159,13 +159,13 @@ const checkAnswer = async () => {
   font-weight: 600;
   letter-spacing: -1px; /* 텍스트 촘촘하게 */
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   justify-content: flex-start; /* 왼쪽 정렬 */
 }
 
 .result-message i {
-  font-size: 1rem; /* 아이콘 크기 */
-  margin-right: 8px; /* 아이콘과 텍스트 사이의 간격 */
+  font-size: 1.15rem; /* 아이콘 크기 */
+  margin-right: 5px; /* 아이콘과 텍스트 사이의 간격 */
 }
 
 .success {
