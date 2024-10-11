@@ -1,6 +1,6 @@
 <template>
   <h2 class="comment-title">
-    "<span class="text-accent">ㅇㅇ</span>"님의 자산을 <span class="text-accent">분석</span>했어요
+    "<span class="text-accent">{{ authStore.userInfo.userName }}</span>"님의 자산을 <span class="text-accent">분석</span>했어요
     <span class="text-accent"><i class="fa-regular fa-face-smile-wink"></i></span>
   </h2>
   <section class="asset-list">
@@ -164,6 +164,7 @@
 
 import { ref, computed, onMounted } from 'vue'
 import { fetchAssetData, fetchAssetComparison } from '@/api/assetApi'
+import { useAuthStore } from '@/stores/authStore'
 import TotalAsset from '@/components/AssetPage/TotalAsset.vue'
 import Distribution from '@/components/AssetPage/Distribution.vue'
 import AssetTypeButtons from '@/components/AssetPage/AssetTypeButtons.vue'
@@ -177,6 +178,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { Navigation } from 'swiper/modules'
 const modules = [Navigation]
+const authStore = useAuthStore()
 const loading = ref(true) // 로딩 상태 관리
 const error = ref(null) // 에러 상태 관리
 
