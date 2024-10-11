@@ -147,6 +147,48 @@
   font-weight: 600;
 }
 
+/* radio버튼 css */
+.radio-form {
+}
+.radio-form dt {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -1px;
+  margin-bottom: 1rem;
+}
+.radio-form dd {
+  display: inline-block;
+  margin-right: 5px;
+}
+.radio-form input[type='radio'] {
+  display: none;
+}
+.radio-form .button-radio {
+  font-size: 1.08rem;
+  min-width: 170px;
+  text-align: center;
+  padding: 0.8rem 1.5rem;
+  border: 2px solid #cfc6fd;
+  color: #cfc6fd;
+  letter-spacing: -0.9px;
+  font-weight: 500;
+  border-radius: 27px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.radio-form .button-radio:hover {
+  border: 2px solid #6846f5;
+  color: #6846f5;
+  font-weight: 600;
+  background-color: #f3f3ff;
+}
+.radio-form .button-radio.active {
+  border: 2px solid #6846f5;
+  color: #6846f5;
+  font-weight: 600;
+  background-color: #f3f3ff;
+}
+
 /* textarea */
 textarea.form-control {
   width: 100%;

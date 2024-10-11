@@ -41,7 +41,7 @@
     <table class="table">
       <colgroup>
         <col width="8%" />
-        <col width="60%" />
+        <col width="70%" />
         <col width="10%" />
         <col width="22%" />
       </colgroup>
@@ -65,11 +65,11 @@
               class="router-link no-underline"
             >
               <!-- text가 길때 제한길이 이하는 '...'으로 표시되고 hover하면 전체 text 보여주기 -->
-              <div class="link truncated" :title="board.title">
+              <div class="truncated" :title="board.title">
                 {{ truncateTitle(board.title) }}
               </div>
-              <!-- Conditionally show the 'new' label if the post is recent -->
-              <span v-if="isNew(board.regDate)" class="new-label">new</span>
+              <!-- 24시간 이내 새 게시물 new 보여주기 -->
+              <span v-if="isNew(board.regDate)" class="new-label">NEW</span>
               <ul class="table-ex-info">
                 <li><i class="fa-solid fa-user"></i> {{ board.views }}</li>
                 <li><i class="fa-solid fa-heart"></i> {{ board.likes }}</li>
@@ -80,7 +80,7 @@
           <td>
             <span class="badge">{{ board.userName }}</span>
           </td>
-          <td class="date">{{ moment(board.regDate).format('YYYY-MM-DD HH:mm') }}</td>
+          <td class="date">{{ formatTimeAgo(board.regDate) }}</td>
         </tr>
       </tbody>
     </table>
@@ -96,43 +96,6 @@
 .button-box {
   position: absolute;
   right: 0;
-}
-.truncated {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%; /* Ensures the element respects its parent's width */
-  display: inline-block;
-  position: relative; /* Position relative to display the tooltip */
-}
-.truncated:hover::after {
-  content: attr(title); /* Display the full title from the `title` attribute */
-  position: absolute;
-  left: 0;
-  top: 100%;
-  background: #333;
-  color: #fff;
-  padding: 5px 10px;
-  white-space: nowrap;
-  z-index: 1000;
-  font-size: 14px;
-  border-radius: 4px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-.new-label {
-  font-style: italic;
-  color: #6846f5;
-  padding: 5px 2px;
-  font-size: 1rem;
-  border-radius: 5px;
-  margin-left: 20px;
-}
-.board-list .router-link {
-  text-decoration: none !important; /* new 밑줄 안 생기게 */
-}
-
-.board-list .router-link:hover {
-  text-decoration: none !important; /* new hover 밑줄 안 생기게 */
 }
 </style>
 
@@ -154,22 +117,6 @@ const sortBy = ref('latest')
 const router = useRouter()
 const route = useRoute()
 const totalCnt = ref(0)
-
-const truncateTitle = (title) => {
-  const maxLength = 35 // 길이제한(47:시간 아래로 들여쓰기됨)
-  if (title.length > maxLength) {
-    return title.slice(0, maxLength) + '...' // 제한길이 이하는 '...'로 표시
-  }
-  return title
-}
-
-// Method to check if the post is "new" (posted within the last 24 hours)
-const isNew = (regDate) => {
-  const postDate = moment(regDate)
-  const now = moment()
-  const hoursDiff = now.diff(postDate, 'hours')
-  return hoursDiff <= 24 // If the post is less than 24 hours old, it's considered "new"
-}
 
 const loadBoards = async () => {
   try {
@@ -199,6 +146,26 @@ const searchBoards = async (searchTerm) => {
   await loadBoards()
 }
 
+const formatTimeAgo = (regDate) => {
+  const now = moment()
+  const postDate = moment(regDate)
+
+  if (now.isSame(postDate, 'day')) {
+    const hoursDiff = now.diff(postDate, 'hours')
+    const minutesDiff = now.diff(postDate, 'minutes')
+    const secondDiff = now.diff(postDate, 'seconds')
+    if (hoursDiff === 0 && minutesDiff === 0) {
+      return `${secondDiff}초 전`
+    } else if (hoursDiff === 0 && minutesDiff < 60) {
+      return `${minutesDiff}분 전`
+    } else if (hoursDiff < 24) {
+      return `${hoursDiff}시간 전`
+    }
+  }
+
+  return moment(regDate).format('YYYY-MM-DD HH:mm') // 오늘이 아니면 원래 포맷으로 반환
+}
+
 const changePage = async (page) => {
   pageNum.value = page
   await router.push({
@@ -211,6 +178,23 @@ const changePage = async (page) => {
     }
   })
   await loadBoards()
+}
+
+// 타이틀 길이 제한
+const truncateTitle = (title) => {
+  const maxLength = 35 // 길이제한(47:시간 아래로 들여쓰기됨)
+  if (title.length > maxLength) {
+    return title.slice(0, maxLength) + '...' // 제한길이 이하는 '...'로 표시
+  }
+  return title
+}
+
+// new 보여주기
+const isNew = (regDate) => {
+  const postDate = moment(regDate)
+  const now = moment()
+  const hoursDiff = now.diff(postDate, 'hours')
+  return hoursDiff <= 24 // 24시간  이내만
 }
 
 onMounted(() => {
@@ -233,3 +217,5 @@ watch(
   { immediate: true }
 )
 </script>
+
+<style scoped></style>
