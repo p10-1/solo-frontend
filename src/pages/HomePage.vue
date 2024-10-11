@@ -32,7 +32,7 @@ import PolicyCard from '@/components/HomePage/PolicyCard.vue'
 import NewsCard from '@/components/HomePage/NewsCard.vue'
 import BoardCard from '@/components/HomePage/BoardCard.vue'
 // import PromotionSlide from '@/components/HomePage/PromotionSlide.vue'
-// import Distribution from '@/components/AssetPage/Distribution.vue'
+//import AssetSummary from '@/components/HomePage/AssetSummary.vue'
 // import ProductCard from '@/components/HomePage/ProductCard.vue'
 export default {
   components: {
@@ -41,7 +41,8 @@ export default {
     QuizCard,
     BoardCard,
     PolicyCard,
-    NewsCard
+    NewsCard,
+    //AssetSummary
     // PromotionSlide,
     // ProductCard,
   }

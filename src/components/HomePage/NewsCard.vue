@@ -46,7 +46,6 @@
     </swiper>
   </div>
 </template>
-
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { recommendNews } from '@/api/newsApi'
@@ -101,7 +100,6 @@ onMounted(async () => {
   await fetchNews()
 })
 </script>
-
 <style scoped>
 .news-content {
   width: 100%;

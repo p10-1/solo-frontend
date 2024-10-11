@@ -19,17 +19,18 @@
           <!-- 이전 슬라이드 버튼 -->
           <div class="asset-statistics">
             <div class="asset-top-item">
-              <TotalAsset :totalAmount="processedData.totalAsset" />
+              <Distribution
+                :assetDetails="processedData.assetDetails"
+                :title="'내 자산 분포'"
+                :userType="processedData.assetDetails.type"
+                comparisonType="personal"
+                :userAssetDetails="processedData.assetDetails"
+              />
             </div>
             <div class="asset-top-item">
-              <Distribution :assetDetails="processedData.assetDetails" title="내 자산 분포">
-                <template #extra>
-                  <div v-if="highestAssetType" class="asset-highlight">
-                    보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
-                  </div>
-                </template>
-              </Distribution>
+              <TotalAsset :totalAmount="processedData.totalAsset" />
             </div>
+
             <div class="asset-top-item">
               <swiper v-if="processedData" :navigation="true" :modules="modules" class="yourSwiper">
                 <!-- 유형별 평균 자산 분포 슬라이드 -->
@@ -37,6 +38,9 @@
                   <Distribution
                     :assetDetails="processedData.typeAverages"
                     :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
+                    :userType="processedData.assetDetails.type"
+                    comparisonType="typeAverage"
+                    :userAssetDetails="processedData.assetDetails"
                   />
                 </swiper-slide>
 
@@ -45,6 +49,9 @@
                   <Distribution
                     :assetDetails="processedData.overallAverages"
                     title="전체 사용자 평균 자산 분포"
+                    userType="전체"
+                    comparisonType="overallAverage"
+                    :userAssetDetails="processedData.assetDetails"
                   />
                 </swiper-slide>
               </swiper>
@@ -191,12 +198,12 @@ const selectedAssetType = ref('cash') // 선택된 자산 타입 기본값은 'c
 //   currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides
 // }
 
-const assetNames = {
-  cash: '현금자산',
-  deposit: '예적금',
-  stock: '주식',
-  insurance: '보험'
-}
+// const assetNames = {
+//   cash: '현금자산',
+//   deposit: '예적금',
+//   stock: '주식',
+//   insurance: '보험'
+// }
 // 자산 데이터 및 평균 데이터를 API로부터 로드하는 함수
 const fieldMapping = {
   cash: { bank: 'cashBank', account: 'cashAccount', value: 'cash' },
@@ -204,13 +211,13 @@ const fieldMapping = {
   stock: { bank: 'stockBank', account: 'stockAccount', value: 'stock' },
   insurance: { bank: 'insuranceCompany', account: 'insuranceName', value: 'insurance' }
 }
-const highestAssetType = computed(() => {
-  if (!processedData.value || !processedData.value.assetDetails) return null
-  const sortedAssets = Object.entries(processedData.value.assetDetails).sort(
-    ([, a], [, b]) => b.total - a.total
-  )
-  return sortedAssets[0]?.[0]
-})
+// const highestAssetType = computed(() => {
+//   if (!processedData.value || !processedData.value.assetDetails) return null
+//   const sortedAssets = Object.entries(processedData.value.assetDetails).sort(
+//     ([, a], [, b]) => b.total - a.total
+//   )
+//   return sortedAssets[0]?.[0]
+// })
 const loadData = async () => {
   console.log('1. loadData 함수 시작')
   try {

@@ -28,8 +28,11 @@
         </div>
       </div>
       <div v-if="isCorrect !== null" class="result-body">
-        <p class="result-message">
-          <i class="fa-regular fa-face-grin-tongue-squint"></i>
+        <p :class="['result-message', { success: isCorrect, error: isCorrect === false }]">
+          <i
+            :class="isCorrect ? 'fa-regular fa-face-laugh-squint' : 'fa-regular fa-face-sad-tear'"
+          ></i>
+          <!-- 웃는 표정은 맞았을 때, 우는 표정은 틀렸을 때 -->
           {{ isCorrect ? '맞았습니다!' : '틀렸습니다!' }}
         </p>
         <p class="point-message">{{ isPoint }}</p>
@@ -141,6 +144,9 @@ const checkAnswer = async () => {
   background-color: #6846f5;
   border: none;
 }
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
 
 .result-body {
   padding: 10px 25px 20px;
@@ -148,16 +154,30 @@ const checkAnswer = async () => {
 }
 
 .result-message {
-  font-size: 1.15rem;
-  margin-top: 15px;
+  font-size: 1.15rem; /* 텍스트 크기 */
+  margin-top: 10px; /* 마진 조정 */
   font-weight: 600;
-  letter-spacing: -1px;
-  color: #e32626;
+  letter-spacing: -1px; /* 텍스트 촘촘하게 */
+  display: flex;
+  /* align-items: center; */
+  justify-content: flex-start; /* 왼쪽 정렬 */
+}
+
+.result-message i {
+  font-size: 1.15rem; /* 아이콘 크기 */
+  margin-right: 5px; /* 아이콘과 텍스트 사이의 간격 */
+}
+
+.success {
+  color: #1e90ff; /* 파란색 (성공 시) */
+}
+
+.error {
+  color: #e32626; /* 빨간색 (오류 시) */
 }
 
 .point-message {
   font-size: 1.15rem;
-  margin-top: 15px;
   margin-top: 10px;
   font-weight: 600;
   letter-spacing: -1px;

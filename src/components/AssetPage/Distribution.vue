@@ -35,8 +35,11 @@
       </div>
     </div>
 
-    <!-- 추가 슬롯을 위한 영역 (필요한 경우 추가 콘텐츠를 삽입할 수 있음) -->
-    <slot name="extra"></slot>
+    <!-- 추가 -->
+    <div class="asset-evaluation">
+      <h4>자산 평가</h4>
+      <p>{{ assetEvaluation }}</p>
+    </div>
   </div>
 </template>
 
@@ -46,25 +49,61 @@
 import { ref, computed } from 'vue'
 import ChartComponent from '@/components/common/ChartComponent.vue'
 
+//추가
 const props = defineProps({
   assetDetails: {
     type: Object,
     required: true
+    // 예: { cash: { total: 1000000 }, deposit: { total: 2000000 }, stock: { total: 1500000 }, insurance: { total: 500000 } }
   },
   title: {
     type: String,
     default: '자산 분포'
+    // 예: '내 자산 분포', '위험 추구형 평균 자산 분포', '전체 사용자 평균 자산 분포'
+  },
+  userType: {
+    type: String,
+    required: true
+    // 예: '위험 추구형', '안정 추구형', '자산 분산형', '대출 우선형'
+  },
+  comparisonType: {
+    type: String,
+    required: true
+    // 'personal', 'typeAverage', 'overallAverage' 중 하나
+  },
+  userAssetDetails: {
+    type: Object,
+    default: () => ({})
+    // 사용자의 실제 자산 정보. assetDetails와 같은 구조
   }
 })
+//추가
+const getIdealRatios = (userType) => {
+  switch (userType) {
+    case '위험 추구형':
+      return { safe: 0.5, risk: 0.5 }
+    case '자산 분산형':
+      return { safe: 0.6, risk: 0.4 }
+    case '안정 추구형':
+      return { safe: 0.8, risk: 0.2 }
+    case '대출 우선형':
+      return { safe: 1.0, risk: 0.0 }
+    default:
+      return { safe: 0.6, risk: 0.4 }
+  }
+}
 
-console.log('Distribution received assetDetails:', props.assetDetails)
-console.log('Distribution received title:', props.title)
+// 로그 추가
+console.log('Distribution component received props:')
+console.log('title:', props.title)
+console.log('userType:', props.userType)
+console.log('assetDetails:', props.assetDetails)
 
 // 자산 이름 매핑
 const assetNames = {
   cash: '현금자산',
   deposit: '예적금',
-  stock: '주식',
+  stock: '증권',
   insurance: '보험'
 }
 
@@ -78,56 +117,41 @@ const assetColors = {
 
 // computed 속성들
 const totalAsset = computed(() => {
-  const total = Object.values(props.assetDetails).reduce(
-    (sum, asset) => sum + (asset.total || 0),
-    0
-  )
-  // console.log('Total asset:', total)
-  return total
+  return Object.values(props.assetDetails).reduce((sum, asset) => sum + (asset.total || 0), 0)
 })
 
 const sortedAssetDetails = computed(() => {
-  const sorted = Object.entries(props.assetDetails)
+  return Object.entries(props.assetDetails)
     .map(([name, details]) => ({ name, ...details }))
     .sort((a, b) => b.total - a.total)
-  // console.log('Sorted asset details:', sorted)
-  return sorted
 })
 
 const filteredAssetDetails = computed(() => {
-  const filtered = sortedAssetDetails.value.filter((asset) => asset.total > 0)
-  // console.log('Filtered asset details:', filtered)
-  return filtered
+  return sortedAssetDetails.value.filter((asset) => asset.total > 0)
 })
 
 const highestAssetType = computed(() => {
-  const highest = sortedAssetDetails.value[0]?.name
-  // console.log('Highest asset type:', highest)
-  return highest
+  return sortedAssetDetails.value[0]?.name
 })
 
-// 숫자를 포맷하는 함수
 const formatNumber = (num) => {
   if (isNaN(num) || num === undefined || num === null) {
-    return '0' // Default to 0 when the value is NaN, undefined, or null
+    return '0'
   }
   return num.toLocaleString()
 }
 
-// 자산의 비율 계산
 const calculatePercentage = (value) => {
-  if (totalAsset.value === 0 || isNaN(value)) return '0.00' // Avoid NaN
+  if (totalAsset.value === 0 || isNaN(value)) return '0.00'
   return ((value / totalAsset.value) * 100).toFixed(2)
 }
 
-// 자산별 색상 반환
 const getAssetColor = (assetName) => {
   return assetColors[assetName] || '#9966FF'
 }
 
-// chartData computed 속성
 const chartData = computed(() => {
-  const data = {
+  return {
     labels: sortedAssetDetails.value.map((asset) => assetNames[asset.name]),
     datasets: [
       {
@@ -136,8 +160,6 @@ const chartData = computed(() => {
       }
     ]
   }
-  // console.log('Chart data:', data)
-  return data
 })
 
 const chartOptions = computed(() => ({
@@ -149,11 +171,10 @@ const chartOptions = computed(() => ({
       display: false
     },
     tooltip: {
-      enabled: true,
       callbacks: {
         label: function (context) {
           const label = context.label || ''
-          const value = context.raw || 0 // Use 0 if value is undefined
+          const value = context.raw || 0
           const percentage = calculatePercentage(value)
           return `${label}: ${formatNumber(value)}원 (${percentage}%)`
         }
@@ -161,11 +182,64 @@ const chartOptions = computed(() => ({
     }
   }
 }))
+
+//추가
+const calculateAssetRatios = (assets) => {
+  const safeAsset =
+    (assets.cash?.total || 0) + (assets.deposit?.total || 0) + (assets.insurance?.total || 0)
+  const riskAsset = assets.stock?.total || 0
+  const totalAsset = safeAsset + riskAsset
+  return {
+    safeRatio: safeAsset / totalAsset,
+    riskRatio: riskAsset / totalAsset
+  }
+}
+const assetEvaluation = computed(() => {
+  const { safeRatio, riskRatio } = calculateAssetRatios(props.assetDetails)
+  const idealRatios = getIdealRatios(props.userType)
+  const difference = safeRatio - idealRatios.safe
+
+  const getRelativeDescription = (diff) => {
+    if (Math.abs(diff) < 0.2) return null // 20% 미만 차이는 언급하지 않음
+    if (Math.abs(diff) < 0.3) return diff > 0 ? '높은' : '낮은'
+    return diff > 0 ? '매우 높은' : '매우 낮은'
+  }
+
+  const safeDescription = getRelativeDescription(difference)
+  const riskDescription = getRelativeDescription(-difference)
+
+  let evaluation = ''
+
+  if (safeDescription) {
+    evaluation += `현재 안전자산 비중이 ${props.userType}의 평균에 비해 ${safeDescription} 편이에요. `
+  }
+
+  if (!safeDescription && !riskDescription) {
+    evaluation = `현재 자산 분배가 ${props.userType}의 평균과 큰 차이가 없습니다. `
+  }
+
+  if (Math.abs(difference) < 0.2) {
+    evaluation += `전반적으로 ${props.userType}에 적합한 자산 분배를 하고 계시네요. 현재의 균형을 잘 유지해 보세요.`
+  } else if (difference > 0) {
+    if (difference > 0.4) {
+      evaluation += `안전자산 비중이 상당히 높습니다. 일부 안전자산을 위험자산으로 전환하는 것을 고려해보시는 건 어떨까요? 이는 잠재적으로 더 높은 수익을 얻을 기회를 제공할 수 있습니다.`
+    } else {
+      evaluation += `위험자산 비중을 조금 높이는 것을 고려해보시는 건 어떨까요? 이는 장기적으로 더 높은 수익을 얻을 수 있는 기회를 제공할 수 있습니다.`
+    }
+  } else {
+    if (difference < -0.4) {
+      evaluation += `위험자산 비중이 상당히 높습니다. 일부 위험자산을 안전자산으로 전환하는 것을 고려해보시는 건 어떨까요? 이는 자산을 보호하고 리스크를 줄이는 데 도움이 될 수 있습니다.`
+    } else {
+      evaluation += `안전자산 비중을 조금 높이는 것을 고려해보시는 건 어떨까요? 이는 자산을 안정적으로 관리하는 데 도움이 될 수 있습니다.`
+    }
+  }
+
+  return evaluation.trim()
+})
 </script>
 
 <style scoped>
 .asset-distribution {
-  /* 자산 분포 컨테이너에 둥근 모서리, 패딩, 배경색, 그리고 그림자 효과 적용 */
   border-radius: 25px;
   padding: 2rem 1.7rem;
   background-color: #fff;
@@ -227,14 +301,24 @@ const chartOptions = computed(() => ({
   font-weight: 700;
 }
 
+.asset-evaluation {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.asset-evaluation h4 {
+  color: #495057;
+  margin-bottom: 10px;
+}
+
 @media (max-width: 768px) {
   .asset-distribution {
-    /* 작은 화면에서는 패딩을 줄여 공간을 효율적으로 사용 */
     padding: 1.5rem 1.2rem;
   }
 
   .asset-type {
-    /* 작은 화면에서 글자 크기를 줄여 가독성을 높임 */
     font-size: 0.8rem;
   }
 }

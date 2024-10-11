@@ -18,11 +18,12 @@
         :class="['btn', { selected: selectedType === type.title }]"
         @click="selectType(type)"
       >
+        <div class="icon"><img :src="type.icon" alt="icon" class="icon-img" /></div>
         <div class="text-container">
           <div class="title">{{ type.title }}</div>
           <div class="description">{{ type.description }}</div>
         </div>
-        <div class="icon"><img :src="type.icon" alt="icon" class="icon-img" /></div>
+        <!-- <div class="icon"><img :src="type.icon" alt="icon" class="icon-img" /></div> -->
       </button>
     </div>
   </div>
@@ -96,6 +97,14 @@ onMounted(() => {
 </script>
 
 <style scope>
+.icon {
+}
+.icon-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+}
 .my-type h2.title {
   font-weight: 300;
 }
@@ -182,5 +191,3 @@ onMounted(() => {
   letter-spacing: -0.5px;
 }
 </style>
-
-<style scoped></style>
