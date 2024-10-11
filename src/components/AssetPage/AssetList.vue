@@ -116,7 +116,11 @@
               value="equal-principal-interest"
               v-model="repaymentMethod"
             />
-            <label for="equal-principal-interest" class="button-radio active">
+            <label
+              for="equal-principal-interest"
+              class="button-radio active"
+              :class="{ active: repaymentMethod === 'equal-principal-interest' }"
+            >
               원리금 균등상환
             </label>
           </dd>
@@ -127,7 +131,12 @@
               value="equal-principal"
               v-model="repaymentMethod"
             />
-            <label for="equal-principal" class="button-radio">원금 균등상환</label>
+            <label
+              for="equal-principal"
+              class="button-radio"
+              :class="{ active: repaymentMethod === 'equal-principal' }"
+              >원금 균등상환</label
+            >
           </dd>
         </dl>
         <!-- 대출 정보가 있는 경우 LoanInfo 컴포넌트로 대출 정보 표시 -->
