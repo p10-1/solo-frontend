@@ -78,7 +78,7 @@ onMounted(() => {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #007bff;
+  background-color: #6846f5;
   color: white;
   border: none;
   padding: 10px;
