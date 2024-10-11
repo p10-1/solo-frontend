@@ -179,18 +179,6 @@ const assetStyle = ref(null)
 
 const selectedAssetType = ref('cash') // 선택된 자산 타입 기본값은 'cash'
 
-// //슬라이드 구현
-// const currentSlide = ref(0)
-// const totalSlides = 3 // 전체 슬라이드 수를 3으로 변경
-
-// const nextSlide = () => {
-//   currentSlide.value = (currentSlide.value + 1) % totalSlides
-// }
-
-// const prevSlide = () => {
-//   currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides
-// }
-
 const assetNames = {
   cash: '현금자산',
   deposit: '예적금',
