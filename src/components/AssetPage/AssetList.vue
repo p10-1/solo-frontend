@@ -22,13 +22,13 @@
               <TotalAsset :totalAmount="processedData.totalAsset" />
             </div>
             <div class="asset-top-item">
-              <Distribution :assetDetails="processedData.assetDetails" title="내 자산 분포">
-                <template #extra>
-                  <div v-if="highestAssetType" class="asset-highlight">
-                    보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
-                  </div>
-                </template>
-              </Distribution>
+              <Distribution
+                :assetDetails="processedData.assetDetails"
+                :title="'내 자산 분포'"
+                :userType="processedData.assetDetails.type"
+                comparisonType="personal"
+                :userAssetDetails="processedData.assetDetails"
+              />
             </div>
             <div class="asset-top-item">
               <swiper v-if="processedData" :navigation="true" :modules="modules" class="yourSwiper">
@@ -37,6 +37,9 @@
                   <Distribution
                     :assetDetails="processedData.typeAverages"
                     :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
+                    :userType="processedData.assetDetails.type"
+                    comparisonType="typeAverage"
+                    :userAssetDetails="processedData.assetDetails"
                   />
                 </swiper-slide>
 
@@ -45,6 +48,9 @@
                   <Distribution
                     :assetDetails="processedData.overallAverages"
                     title="전체 사용자 평균 자산 분포"
+                    userType="전체"
+                    comparisonType="overallAverage"
+                    :userAssetDetails="processedData.assetDetails"
                   />
                 </swiper-slide>
               </swiper>
