@@ -103,7 +103,7 @@ console.log('assetDetails:', props.assetDetails)
 const assetNames = {
   cash: '현금자산',
   deposit: '예적금',
-  stock: '주식',
+  stock: '증권',
   insurance: '보험'
 }
 
@@ -183,7 +183,6 @@ const chartOptions = computed(() => ({
   }
 }))
 
-
 //추가
 const calculateAssetRatios = (assets) => {
   const safeAsset =
@@ -195,23 +194,47 @@ const calculateAssetRatios = (assets) => {
     riskRatio: riskAsset / totalAsset
   }
 }
-//추가
 const assetEvaluation = computed(() => {
   const { safeRatio, riskRatio } = calculateAssetRatios(props.assetDetails)
   const idealRatios = getIdealRatios(props.userType)
-  const difference = (safeRatio - idealRatios.safe) * 100
+  const difference = safeRatio - idealRatios.safe
 
-  let evaluation = `현재 안전자산 비중은 ${(safeRatio * 100).toFixed(1)}%, 위험자산 비중은 ${(riskRatio * 100).toFixed(1)}%입니다. `
-
-  if (Math.abs(difference) < 5) {
-    evaluation += `${props.userType}에 적합한 비율과 유사합니다.`
-  } else if (difference > 0) {
-    evaluation += `현재 안전자산 비중이 ${props.userType}에 비해 ${Math.abs(difference).toFixed(1)}% 높습니다. 위험자산 비중을 높이는 것을 고려해보세요.`
-  } else {
-    evaluation += `현재 위험자산 비중이 ${props.userType}에 비해 ${Math.abs(difference).toFixed(1)}% 높습니다. 안전자산 비중을 높이는 것을 고려해보세요.`
+  const getRelativeDescription = (diff) => {
+    if (Math.abs(diff) < 0.2) return null // 20% 미만 차이는 언급하지 않음
+    if (Math.abs(diff) < 0.3) return diff > 0 ? '높은' : '낮은'
+    return diff > 0 ? '매우 높은' : '매우 낮은'
   }
 
-  return evaluation
+  const safeDescription = getRelativeDescription(difference)
+  const riskDescription = getRelativeDescription(-difference)
+
+  let evaluation = ''
+
+  if (safeDescription) {
+    evaluation += `현재 안전자산 비중이 ${props.userType}의 평균에 비해 ${safeDescription} 편이에요. `
+  }
+
+  if (!safeDescription && !riskDescription) {
+    evaluation = `현재 자산 분배가 ${props.userType}의 평균과 큰 차이가 없습니다. `
+  }
+
+  if (Math.abs(difference) < 0.2) {
+    evaluation += `전반적으로 ${props.userType}에 적합한 자산 분배를 하고 계시네요. 현재의 균형을 잘 유지해 보세요.`
+  } else if (difference > 0) {
+    if (difference > 0.4) {
+      evaluation += `안전자산 비중이 상당히 높습니다. 일부 안전자산을 위험자산으로 전환하는 것을 고려해보시는 건 어떨까요? 이는 잠재적으로 더 높은 수익을 얻을 기회를 제공할 수 있습니다.`
+    } else {
+      evaluation += `위험자산 비중을 조금 높이는 것을 고려해보시는 건 어떨까요? 이는 장기적으로 더 높은 수익을 얻을 수 있는 기회를 제공할 수 있습니다.`
+    }
+  } else {
+    if (difference < -0.4) {
+      evaluation += `위험자산 비중이 상당히 높습니다. 일부 위험자산을 안전자산으로 전환하는 것을 고려해보시는 건 어떨까요? 이는 자산을 보호하고 리스크를 줄이는 데 도움이 될 수 있습니다.`
+    } else {
+      evaluation += `안전자산 비중을 조금 높이는 것을 고려해보시는 건 어떨까요? 이는 자산을 안정적으로 관리하는 데 도움이 될 수 있습니다.`
+    }
+  }
+
+  return evaluation.trim()
 })
 </script>
 
