@@ -1,15 +1,18 @@
 <template>
   <div class="point-management">
     <h2 class="title">나의 <span class="text-accent">포인트</span></h2>
+    <p class="custom-alert">
+      <span class="text-accent"><i class="fa-solid fa-circle-info"></i></span>포인트는
+      <b>500점</b>부터 현금전환이 가능합니다.
+    </p>
     <ul class="current-points">
-      <li>보유 포인트</li>
+      <li><i class="icon-point">P</i>보유 포인트</li>
       <li class="points-info">
         <span class="text-accent">{{ points }}</span>
-        P
       </li>
     </ul>
 
-    <h2 class="title margin-top-3rem">포인트 <span class="text-accent">출금</span></h2>
+    <h2 class="title margin-top-3rem">포인트 <span class="text-accent">현금 전환</span></h2>
     <div class="withdraw-section">
       <div class="form-group">
         <h3 class="title margin-top-2rem margin-bottom-1rem text-accent">입금할 계좌</h3>
@@ -117,7 +120,10 @@ onMounted(() => {
 .point-management .text-accent {
   font-weight: 300;
 }
-
+.point-management .custom-alert {
+  width: 100%;
+  margin-bottom: 10px;
+}
 .point-management ul.current-points {
   display: flex;
   justify-content: space-between;
@@ -137,14 +143,26 @@ onMounted(() => {
   font-size: 20px;
   letter-spacing: -1px;
 }
-
-.point-management ul.current-points li.points-info {
-  line-height: 1;
-}
-
-.point-management ul.current-points li.points-info span {
-  font-size: 30px;
+.point-management ul.current-points .icon-point {
+  display: inline-block;
+  width: 1.55rem;
+  height: 1.55rem;
+  border-radius: 50%;
+  color: #fff;
+  background-color: #6846f5;
+  font-style: normal;
   font-weight: 700;
+  text-align: center;
+  line-height: 1.5rem;
+  font-size: 1rem;
+  margin-right: 5px;
+  vertical-align: text-bottom;
+}
+.point-management ul.current-points li.points-info .text-accent {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -1.5px;
 }
 
 .point-management .withdraw-section {

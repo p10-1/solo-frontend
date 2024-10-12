@@ -1,8 +1,9 @@
 <template>
-  <PromotionSlide />
+  <!-- <PromotionSlide /> -->
   <div class="main-top">
     <div class="main-top-item">
-      <MainslideList />
+      <IntroMainslide v-if="!isLoggedIn" />
+      <MainslideList v-if="isLoggedIn" />
     </div>
     <div class="main-top-item">
       <div class="item-box">
@@ -25,6 +26,7 @@
 </template>
 
 <script>
+import IntroMainslide from '@/components/HomePage/IntroMainslide.vue'
 import MainslideList from '@/components/HomePage/MainslideList.vue'
 import CategoryList from '@/components/HomePage/CategoryList.vue'
 import QuizCard from '@/components/HomePage/QuizCard.vue'
@@ -34,14 +36,20 @@ import BoardCard from '@/components/HomePage/BoardCard.vue'
 // import PromotionSlide from '@/components/HomePage/PromotionSlide.vue'
 //import AssetSummary from '@/components/HomePage/AssetSummary.vue'
 // import ProductCard from '@/components/HomePage/ProductCard.vue'
+
+import { ref } from 'vue'
+// 로그인 전후
+const isLoggedIn = ref(false)
+
 export default {
   components: {
+    IntroMainslide,
     MainslideList,
     CategoryList,
     QuizCard,
     BoardCard,
     PolicyCard,
-    NewsCard,
+    NewsCard
     //AssetSummary
     // PromotionSlide,
     // ProductCard,
