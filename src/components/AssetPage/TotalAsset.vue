@@ -7,8 +7,8 @@
     </h3>
 
     <!-- 총 자산 금액 표시 영역 -->
-    <ul class="asset-amount">
-      <li>icon</li>
+    <ul class="asset-amount margin-top-1rem">
+      <li><i class="won-icon">￦</i></li>
       <li>
         <span class="text-accent">{{ animatedAmount }}</span
         >원
@@ -68,7 +68,7 @@ watch(
 <style scoped>
 .total-asset {
   border-radius: 25px;
-  padding: 2rem 1.7rem;
+  padding: 2rem 1.7rem 1.5rem;
   background-color: #fff;
   box-shadow: 0px 0px 15px rgb(221, 214, 255);
 }
@@ -83,9 +83,23 @@ watch(
 .total-asset .asset-amount {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   text-align: right;
   font-size: 2rem;
   letter-spacing: -1.8px;
+}
+.total-asset .asset-amount i.won-icon {
+  display: inline-block;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background-color: #6846f5;
+  color: #fff;
+  font-style: normal;
+  font-weight: 600;
+  text-align: center;
+  line-height: 2.2rem;
+  font-size: 1.2rem;
 }
 
 .total-asset .asset-amount .text-accent {
