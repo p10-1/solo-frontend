@@ -10,17 +10,7 @@
         <div class="robot-role">대출 멘토 Tip</div>
         <!-- 원리금 균등 상환 방식 가이드 -->
         <div v-if="repaymentMethod === 'equal-principal-interest'" class="comment">
-          <span v-if="loanData.purpose === '전세자금'">
-            이번 달 이자인
-            <span class="text-accent">{{ Math.floor(monthlyInterest).toLocaleString() }}</span
-            >원으로<br />
-            🍞 붕어빵 <span class="text-accent-black">{{ monthlyInterestBread }}마리</span>, <br />
-            🍵 커피 {{ monthlyInterestCoffee }}잔, <br />
-            🍗 치킨 {{ monthlyInterestChicken }}마리, <br />
-            🥘 호텔뷔페를 {{ monthlyInterestBuffet }}번 <br />
-            먹을 수 있어요!
-          </span>
-          <span v-else>
+          <span>
             이번 대출의 총 이자인
             <span class="text-accent">{{ Math.floor(totalInterest).toLocaleString() }}</span
             >원으로 <br />
@@ -34,17 +24,7 @@
 
         <!-- 원금 균등 상환 방식 가이드 -->
         <div v-if="repaymentMethod === 'equal-principal'" class="comment">
-          <span v-if="loanData.purpose === '전세자금'">
-            이번 달 이자인
-            <span class="text-accent">{{ Math.floor(monthlyInterest).toLocaleString() }}</span
-            >원으로 <br />
-            🍞 붕어빵 {{ monthlyInterestBread }}마리, <br />
-            🍵 커피 {{ monthlyInterestCoffee }}잔, <br />
-            🍗 치킨 {{ monthlyInterestChicken }}마리, <br />
-            🥘 호텔뷔페를 {{ monthlyInterestBuffet }}번 <br />
-            먹을 수 있어요!
-          </span>
-          <span v-else>
+          <span>
             이번 대출의 총 이자인
             <span class="text-accent">{{
               Math.floor(totalPrincipalInterest).toLocaleString()
@@ -54,6 +34,19 @@
             🍵 커피 {{ principalEqualizationPrincipal.coffee }}잔, <br />
             🍗 치킨 {{ principalEqualizationPrincipal.chicken }}마리, <br />
             🥘 호텔뷔페를 {{ principalEqualizationPrincipal.buffet }}번 <br />
+            먹을 수 있어요!
+          </span>
+        </div>
+        <!-- 만기 일시 상환 방식 가이드 -->
+        <div v-if="repaymentMethod === 'bullet-repayment'" class="comment">
+          <span>
+            이번 달 이자인
+            <span class="text-accent">{{ Math.floor(monthlyInterest).toLocaleString() }}</span
+            >원으로<br />
+            🍞 붕어빵 <span class="text-accent-black">{{ monthlyInterestBread }}마리</span>, <br />
+            🍵 커피 {{ monthlyInterestCoffee }}잔, <br />
+            🍗 치킨 {{ monthlyInterestChicken }}마리, <br />
+            🥘 호텔뷔페를 {{ monthlyInterestBuffet }}번 <br />
             먹을 수 있어요!
           </span>
         </div>
@@ -131,36 +124,20 @@ const totalPrincipalInterest = computed(() => {
 
 // 원리금 균등 상환 방식 가이드 계산
 const principalEqualization = computed(() => {
-  const { amount } = props.loanData
-  const r = props.loanData.interest / 100 / 12
-  const monthlyPayment =
-    (amount * r * Math.pow(1 + r, props.loanData.period)) /
-    (Math.pow(1 + r, props.loanData.period) - 1)
-
-  const bread = Math.floor(monthlyPayment / guidePrices.붕어빵)
-  const coffee = Math.floor(monthlyPayment / guidePrices.커피)
-  const chicken = Math.floor(monthlyPayment / guidePrices.치킨)
-  const buffet = Math.floor(monthlyPayment / guidePrices.호텔뷔페)
+  const bread = Math.floor(totalInterest.value / guidePrices.붕어빵)
+  const coffee = Math.floor(totalInterest.value / guidePrices.커피)
+  const chicken = Math.floor(totalInterest.value / guidePrices.치킨)
+  const buffet = Math.floor(totalInterest.value / guidePrices.호텔뷔페)
 
   return { bread, coffee, chicken, buffet }
 })
 
 // 원금 균등 상환 방식 가이드 계산
 const principalEqualizationPrincipal = computed(() => {
-  const { amount } = props.loanData
-  const monthlyPrincipal = amount / props.loanData.period
-  let totalInterest = 0
-
-  for (let month = 1; month <= props.loanData.period; month++) {
-    const remainingPrincipal = amount - monthlyPrincipal * (month - 1)
-    const monthlyInterest = remainingPrincipal * (props.loanData.interest / 100 / 12)
-    totalInterest += monthlyInterest
-  }
-
-  const bread = Math.floor(totalInterest / guidePrices.붕어빵)
-  const coffee = Math.floor(totalInterest / guidePrices.커피)
-  const chicken = Math.floor(totalInterest / guidePrices.치킨)
-  const buffet = Math.floor(totalInterest / guidePrices.호텔뷔페)
+  const bread = Math.floor(totalPrincipalInterest.value / guidePrices.붕어빵)
+  const coffee = Math.floor(totalPrincipalInterest.value / guidePrices.커피)
+  const chicken = Math.floor(totalPrincipalInterest.value / guidePrices.치킨)
+  const buffet = Math.floor(totalPrincipalInterest.value / guidePrices.호텔뷔페)
 
   return { bread, coffee, chicken, buffet }
 })

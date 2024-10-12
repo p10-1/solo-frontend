@@ -37,13 +37,7 @@
                 :userAssetDetails="processedData.assetDetails"
                 customTitle=" 현재 내 자산은 ?"
               />
-              <!-- <AssetComment
-                :assetDetails="processedData.typeAverages"
-                :userType="processedData.assetDetails.type"
-                comparisonType="typeAverage"
-                :userAssetDetails="processedData.assetDetails"
-                :customTitle="`${processedData.assetDetails.type} 유형 평균과 비교 하면은 ?`"
-              /> -->
+
               <AssetComment
                 :assetDetails="processedData.overallAverages"
                 userType="전체"
@@ -80,23 +74,6 @@
             </div>
           </div>
         </div>
-        <!-- 유형별 평균 자산 분포 -->
-        <!-- <Distribution
-          v-if="processedData.typeAverages"
-          :assetDetails="processedData.typeAverages"
-          :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
-        /> -->
-
-        <!-- 전체 사용자 평균 자산 분포 -->
-        <!-- <Distribution
-          v-if="processedData.overallAverages"
-          :assetDetails="processedData.overallAverages"
-          title="전체 사용자 평균 자산 분포"
-        /> -->
-
-        <!-- 다음 슬라이드 버튼 -->
-        <!-- <button @click="nextSlide" class="slider-btn next-btn">›</button> -->
-        <!-- </div> -->
 
         <!-- 섹션: 자산 비교 차트 영역 -->
         <section class="asset-comparison-container">
@@ -129,7 +106,7 @@
       <!-- 섹션: 대출 정보 -->
       <div class="margin-top-3rem">
         <h2 class="title">대출 정보</h2>
-        <dl v-if="processedData.loanData.purpose !== '전세자금'" class="radio-form margin-top-2rem">
+        <dl class="radio-form margin-top-2rem">
           <dt>상환 방법</dt>
           <dd>
             <input
@@ -160,11 +137,25 @@
               >원금 균등상환</label
             >
           </dd>
+          <dd>
+            <input
+              type="radio"
+              id="bullet-repayment"
+              value="bullet-repayment"
+              v-model="repaymentMethod"
+            />
+            <label
+              for="bullet-repayment"
+              class="button-radio"
+              :class="{ active: repaymentMethod === 'bullet-repayment' }"
+              >만기일시상환</label
+            >
+          </dd>
         </dl>
         <!-- 대출 정보가 있는 경우 LoanInfo 컴포넌트로 대출 정보 표시 -->
         <section v-if="hasLoanData" class="laon-container">
           <div class="loan-info">
-            <LoanInfo :loanData="processedData.loanData" />
+            <LoanInfo :loanData="processedData.loanData" :repaymentMethod="repaymentMethod" />
           </div>
           <div class="loan-guide">
             <LoanGuide :loanData="processedData.loanData" :repaymentMethod="repaymentMethod" />
@@ -220,24 +211,6 @@ const assetStyle = ref(null)
 
 const selectedAssetType = ref('cash') // 선택된 자산 타입 기본값은 'cash'
 
-// //슬라이드 구현
-// const currentSlide = ref(0)
-// const totalSlides = 3 // 전체 슬라이드 수를 3으로 변경
-
-// const nextSlide = () => {
-//   currentSlide.value = (currentSlide.value + 1) % totalSlides
-// }
-
-// const prevSlide = () => {
-//   currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides
-// }
-
-// const assetNames = {
-//   cash: '현금자산',
-//   deposit: '예적금',
-//   stock: '주식',
-//   insurance: '보험'
-// }
 // 자산 데이터 및 평균 데이터를 API로부터 로드하는 함수
 const fieldMapping = {
   cash: { bank: 'cashBank', account: 'cashAccount', value: 'cash' },
@@ -245,13 +218,7 @@ const fieldMapping = {
   stock: { bank: 'stockBank', account: 'stockAccount', value: 'stock' },
   insurance: { bank: 'insuranceCompany', account: 'insuranceName', value: 'insurance' }
 }
-// const highestAssetType = computed(() => {
-//   if (!processedData.value || !processedData.value.assetDetails) return null
-//   const sortedAssets = Object.entries(processedData.value.assetDetails).sort(
-//     ([, a], [, b]) => b.total - a.total
-//   )
-//   return sortedAssets[0]?.[0]
-// })
+
 const loadData = async () => {
   console.log('1. loadData 함수 시작')
   try {
