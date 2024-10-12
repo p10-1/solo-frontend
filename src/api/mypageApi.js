@@ -2,22 +2,13 @@ import axios from 'axios'
 
 const API_BASE_URL = '/api/mypage'
 
+// 자산조회
 export const getAsset = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/getAsset`, { withCredentials: true })
     return response.data
   } catch (error) {
     console.error('자산 불러오기 실패:', error)
-    throw error
-  }
-}
-
-export const updateAsset = async (data) => {
-  try {
-    await axios.put(`${API_BASE_URL}/updateAsset`, data, { withCredentials: true })
-    return true
-  } catch (error) {
-    console.error('업데이트 실패:', error)
     throw error
   }
 }
@@ -51,6 +42,7 @@ export const pointsToCash = async (accountIndex, withdrawAmount) => {
 export const getBank = async () => {
   try {
     const response = await axios.get(`${API_BASE_URL}/getBank`, { withCredentials: true })
+    console.log("getBank:", response.data);
     return response.data // 은행 정보 반환
   } catch (error) {
     console.error('계좌 조회 오류:', error)

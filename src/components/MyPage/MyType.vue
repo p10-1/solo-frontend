@@ -72,9 +72,17 @@ const loadUserAsset = async () => {
   }
 }
 
+// const selectType = (type) => {
+//   selectedType.value = type.title
+//   updateTypeValue(type)
+// }
+
 const selectType = (type) => {
-  selectedType.value = type.title
-  updateTypeValue(type)
+  const isConfirmed = confirm("자산타입을 변경하시겠습니까?");
+  if (isConfirmed) {
+    selectedType.value = type.title;
+    updateTypeValue(type);
+  }
 }
 
 const updateTypeValue = async (type) => {
@@ -165,7 +173,7 @@ onMounted(() => {
 .my-type .button-container .icon {
   display: inline-block;
   width: 35%;
-  margin-right:;
+
 }
 .my-type .icon-img {
   vertical-align: baseline;

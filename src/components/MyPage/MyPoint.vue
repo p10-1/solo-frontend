@@ -14,25 +14,19 @@
       <div class="form-group">
         <h3 class="title margin-top-2rem margin-bottom-1rem text-accent">입금할 계좌</h3>
         <select v-model="accountIndex" class="form-control mr-2 account-select" id="accountSelect">
-          <option value="disabled selected">내 계좌 선택</option>
+          <option value="" disabled selected>내 계좌 선택</option>
           <option v-for="(account, index) in accounts" :key="index" :value="index">
             {{ account }}
           </option>
         </select>
+
         <h3 class="title margin-top-2rem margin-bottom-1rem text-accent">입금액</h3>
         <div class="input-box">
-          <input
-            v-model.number="withdrawAmount"
-            type="number"
-            class="form-control ml-2 amount-input"
-            placeholder="출금할 포인트"
-          />
+          <input v-model.number="withdrawAmount" type="number" class="form-control ml-2 amount-input"
+            placeholder="출금할 포인트" />
           <span class="common-label">원</span>
         </div>
-        <button
-          @click="withdrawPoints"
-          class="button-main btn btn-success margin-top-1rem width100"
-        >
+        <button @click="withdrawPoints" class="button-main btn btn-success margin-top-1rem width100">
           <i class="fa-solid fa-money-bill-transfer"></i> 입금
         </button>
       </div>
@@ -53,7 +47,7 @@ const accountIndex = ref(null)
 const accounts = ref([])
 
 // 상수 정의
-const MIN_WITHDRAW_AMOUNT = 1000
+const MIN_WITHDRAW_AMOUNT = 500
 
 const loadPoints = async () => {
   try {
@@ -63,14 +57,43 @@ const loadPoints = async () => {
   }
 }
 
+// const loadBank = async () => {
+//   try {
+//     const data = await getBank()
+//     accounts.value = JSON.parse(data[0])
+//   } catch (error) {
+//     handleError('계좌 조회 오류가 발생했습니다.', error)
+//   }
+// }
+
+// const loadBank = async () => {
+//   try {
+//     const asset = await getBank() // 이제 AssetVO 객체를 반환
+//     if (asset) {
+//       accounts.value.push(`${asset.cashBank} ${asset.cashAccount}`) // 계좌 정보를 추가
+//     }
+//   } catch (error) {
+//     handleError('계좌 조회 오류가 발생했습니다.', error)
+//   }
+// }
+
 const loadBank = async () => {
   try {
-    const data = await getBank()
-    accounts.value = JSON.parse(data[0])
+    const asset = await getBank(); // AssetVO 객체를 반환
+    if (asset) {
+      // JSON 문자열을 파싱하여 배열로 변환
+      const cashAccounts = JSON.parse(asset.cashAccount);
+      const cashBanks = JSON.parse(asset.cashBank);
+
+      // 계좌 정보를 accounts 배열에 추가
+      accounts.value = cashAccounts.map((account, index) => `${cashBanks[index]} ${account}`);
+    }
   } catch (error) {
-    handleError('계좌 조회 오류가 발생했습니다.', error)
+    handleError('계좌 조회 오류가 발생했습니다.', error);
   }
 }
+
+
 
 // 에러 처리 함수
 const handleError = (message, error) => {
@@ -154,6 +177,7 @@ onMounted(() => {
 .point-management .form-group .input-box {
   position: relative;
 }
+
 .point-management .form-group .title {
   position: relative;
   font-weight: 400;
