@@ -3,9 +3,9 @@
   <div class="asset-comment margin-top-1rem">
     <dl class="comment-robot">
       <dt>
-        <span class="robot-icon">
+        <!-- <span class="robot-icon">
           <i class="fa-solid fa-graduation-cap"></i>
-        </span>
+        </span> -->
       </dt>
       <dd>
         <div class="robot-role">분석 멘토 Report</div>
