@@ -41,6 +41,9 @@ const props = defineProps({
     })
   }
 })
+const formatBigInt = (value) => {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+}
 
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value)

@@ -50,7 +50,7 @@ let chartInstance = null
 const assetTypeNames = {
   cash: '현금자산',
   deposit: '예적금',
-  stock: '주식',
+  stock: '증권',
   insurance: '보험'
 }
 

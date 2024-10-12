@@ -49,7 +49,7 @@
                       </li>
                       <li class="asset-amount">
                         <!-- 자산 총액 표시 -->
-                        {{ Math.round(myAssetChartData.datasets[0].data[key]) }} 원
+                        {{ formatCurrency(Math.round(myAssetChartData.datasets[0].data[key])) }} 원
                       </li>
                     </ul>
                   </div>
@@ -99,7 +99,10 @@
                       </li>
                       <li class="asset-amount">
                         <!-- 자산 총액 표시 -->
-                        {{ Math.round(typeAssetChartData.datasets[0].data[key]) }} 원
+                        {{
+                          formatCurrency(Math.round(typeAssetChartData.datasets[0].data[key]))
+                        }}
+                        원
                       </li>
                     </ul>
                   </div>
@@ -151,7 +154,7 @@
                       </li>
                       <li class="asset-amount">
                         <!-- 자산 총액 표시 -->
-                        {{ Math.round(overallAssetChartData.datasets[0].data[key]) }} 원
+                        {{ formatCurrency(Math.round(myAssetChartData.datasets[0].data[key])) }} 원
                       </li>
                     </ul>
                   </div>
@@ -294,6 +297,9 @@ export default {
       if (total === 0 || isNaN(value)) return '0.00'
       return ((value / total) * 100).toFixed(2)
     }
+    const formatCurrency = (value) => {
+      return new Intl.NumberFormat('ko-KR').format(value)
+    }
 
     // 컴포넌트가 마운트될 때 자산 데이터 로드
     onMounted(() => {
@@ -308,7 +314,8 @@ export default {
       chartOptions,
       userType,
       assetColors,
-      calculatePercentage
+      calculatePercentage,
+      formatCurrency // 새로 추가된 함수를 반환
     }
   }
 }
