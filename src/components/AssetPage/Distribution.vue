@@ -36,10 +36,10 @@
     </div>
 
     <!-- 추가 -->
-    <div class="asset-evaluation">
+    <!-- <div class="asset-evaluation">
       <h4>자산 평가</h4>
       <p>{{ assetEvaluation }}</p>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -78,20 +78,20 @@ const props = defineProps({
   }
 })
 //추가
-const getIdealRatios = (userType) => {
-  switch (userType) {
-    case '위험 추구형':
-      return { safe: 0.5, risk: 0.5 }
-    case '자산 분산형':
-      return { safe: 0.6, risk: 0.4 }
-    case '안정 추구형':
-      return { safe: 0.8, risk: 0.2 }
-    case '대출 우선형':
-      return { safe: 1.0, risk: 0.0 }
-    default:
-      return { safe: 0.6, risk: 0.4 }
-  }
-}
+// const getIdealRatios = (userType) => {
+//   switch (userType) {
+//     case '위험 추구형':
+//       return { safe: 0.5, risk: 0.5 }
+//     case '자산 분산형':
+//       return { safe: 0.6, risk: 0.4 }
+//     case '안정 추구형':
+//       return { safe: 0.8, risk: 0.2 }
+//     case '대출 우선형':
+//       return { safe: 1.0, risk: 0.0 }
+//     default:
+//       return { safe: 0.6, risk: 0.4 }
+//   }
+// }
 
 // 로그 추가
 console.log('Distribution component received props:')
@@ -184,58 +184,58 @@ const chartOptions = computed(() => ({
 }))
 
 //추가
-const calculateAssetRatios = (assets) => {
-  const safeAsset =
-    (assets.cash?.total || 0) + (assets.deposit?.total || 0) + (assets.insurance?.total || 0)
-  const riskAsset = assets.stock?.total || 0
-  const totalAsset = safeAsset + riskAsset
-  return {
-    safeRatio: safeAsset / totalAsset,
-    riskRatio: riskAsset / totalAsset
-  }
-}
-const assetEvaluation = computed(() => {
-  const { safeRatio, riskRatio } = calculateAssetRatios(props.assetDetails)
-  const idealRatios = getIdealRatios(props.userType)
-  const difference = safeRatio - idealRatios.safe
+// const calculateAssetRatios = (assets) => {
+//   const safeAsset =
+//     (assets.cash?.total || 0) + (assets.deposit?.total || 0) + (assets.insurance?.total || 0)
+//   const riskAsset = assets.stock?.total || 0
+//   const totalAsset = safeAsset + riskAsset
+//   return {
+//     safeRatio: safeAsset / totalAsset,
+//     riskRatio: riskAsset / totalAsset
+//   }
+// }
+// const assetEvaluation = computed(() => {
+//   const { safeRatio, riskRatio } = calculateAssetRatios(props.assetDetails)
+//   const idealRatios = getIdealRatios(props.userType)
+//   const difference = safeRatio - idealRatios.safe
 
-  const getRelativeDescription = (diff) => {
-    if (Math.abs(diff) < 0.2) return null // 20% 미만 차이는 언급하지 않음
-    if (Math.abs(diff) < 0.3) return diff > 0 ? '높은' : '낮은'
-    return diff > 0 ? '매우 높은' : '매우 낮은'
-  }
+//   const getRelativeDescription = (diff) => {
+//     if (Math.abs(diff) < 0.2) return null // 20% 미만 차이는 언급하지 않음
+//     if (Math.abs(diff) < 0.3) return diff > 0 ? '높은' : '낮은'
+//     return diff > 0 ? '매우 높은' : '매우 낮은'
+//   }
 
-  const safeDescription = getRelativeDescription(difference)
-  const riskDescription = getRelativeDescription(-difference)
+//   const safeDescription = getRelativeDescription(difference)
+//   const riskDescription = getRelativeDescription(-difference)
 
-  let evaluation = ''
+//   let evaluation = ''
 
-  if (safeDescription) {
-    evaluation += `현재 안전자산 비중이 ${props.userType}의 평균에 비해 ${safeDescription} 편이에요. `
-  }
+//   if (safeDescription) {
+//     evaluation += `현재 안전자산 비중이 ${props.userType}의 평균에 비해 ${safeDescription} 편이에요. `
+//   }
 
-  if (!safeDescription && !riskDescription) {
-    evaluation = `현재 자산 분배가 ${props.userType}의 평균과 큰 차이가 없습니다. `
-  }
+//   if (!safeDescription && !riskDescription) {
+//     evaluation = `현재 자산 분배가 ${props.userType}의 평균과 큰 차이가 없습니다. `
+//   }
 
-  if (Math.abs(difference) < 0.2) {
-    evaluation += `전반적으로 ${props.userType}에 적합한 자산 분배를 하고 계시네요. 현재의 균형을 잘 유지해 보세요.`
-  } else if (difference > 0) {
-    if (difference > 0.4) {
-      evaluation += `안전자산 비중이 상당히 높습니다. 일부 안전자산을 위험자산으로 전환하는 것을 고려해보시는 건 어떨까요? 이는 잠재적으로 더 높은 수익을 얻을 기회를 제공할 수 있습니다.`
-    } else {
-      evaluation += `위험자산 비중을 조금 높이는 것을 고려해보시는 건 어떨까요? 이는 장기적으로 더 높은 수익을 얻을 수 있는 기회를 제공할 수 있습니다.`
-    }
-  } else {
-    if (difference < -0.4) {
-      evaluation += `위험자산 비중이 상당히 높습니다. 일부 위험자산을 안전자산으로 전환하는 것을 고려해보시는 건 어떨까요? 이는 자산을 보호하고 리스크를 줄이는 데 도움이 될 수 있습니다.`
-    } else {
-      evaluation += `안전자산 비중을 조금 높이는 것을 고려해보시는 건 어떨까요? 이는 자산을 안정적으로 관리하는 데 도움이 될 수 있습니다.`
-    }
-  }
+//   if (Math.abs(difference) < 0.2) {
+//     evaluation += `전반적으로 ${props.userType}에 적합한 자산 분배를 하고 계시네요. 현재의 균형을 잘 유지해 보세요.`
+//   } else if (difference > 0) {
+//     if (difference > 0.4) {
+//       evaluation += `안전자산 비중이 상당히 높습니다. 일부 안전자산을 위험자산으로 전환하는 것을 고려해보시는 건 어떨까요? 이는 잠재적으로 더 높은 수익을 얻을 기회를 제공할 수 있습니다.`
+//     } else {
+//       evaluation += `위험자산 비중을 조금 높이는 것을 고려해보시는 건 어떨까요? 이는 장기적으로 더 높은 수익을 얻을 수 있는 기회를 제공할 수 있습니다.`
+//     }
+//   } else {
+//     if (difference < -0.4) {
+//       evaluation += `위험자산 비중이 상당히 높습니다. 일부 위험자산을 안전자산으로 전환하는 것을 고려해보시는 건 어떨까요? 이는 자산을 보호하고 리스크를 줄이는 데 도움이 될 수 있습니다.`
+//     } else {
+//       evaluation += `안전자산 비중을 조금 높이는 것을 고려해보시는 건 어떨까요? 이는 자산을 안정적으로 관리하는 데 도움이 될 수 있습니다.`
+//     }
+//   }
 
-  return evaluation.trim()
-})
+//   return evaluation.trim()
+// })
 </script>
 
 <style scoped>
@@ -301,7 +301,7 @@ const assetEvaluation = computed(() => {
   font-weight: 700;
 }
 
-.asset-evaluation {
+/* .asset-evaluation {
   margin-top: 20px;
   padding: 15px;
   background-color: #f8f9fa;
@@ -311,7 +311,7 @@ const assetEvaluation = computed(() => {
 .asset-evaluation h4 {
   color: #495057;
   margin-bottom: 10px;
-}
+} */
 
 @media (max-width: 768px) {
   .asset-distribution {
