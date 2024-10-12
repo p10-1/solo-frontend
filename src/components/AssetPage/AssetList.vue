@@ -399,6 +399,8 @@ const selectAssetType = (type) => {
   selectedAssetType.value = type
 }
 
+const repaymentMethod = ref('equal-principal-interest')
+
 onMounted(async () => {
   await loadData()
 })
