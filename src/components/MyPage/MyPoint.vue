@@ -14,7 +14,7 @@
       <div class="form-group">
         <h3 class="title margin-top-2rem margin-bottom-1rem text-accent">입금할 계좌</h3>
         <select v-model="accountIndex" class="form-control mr-2 account-select" id="accountSelect">
-          <option value="" disabled selected>내 계좌 선택</option>
+          <option value="" disabled hidden selected>내 계좌 선택</option>
           <option v-for="(account, index) in accounts" :key="index" :value="index">
             {{ account }}
           </option>
@@ -43,7 +43,7 @@ const emit = defineEmits(['update'])
 
 const points = ref(0)
 const withdrawAmount = ref(0)
-const accountIndex = ref(null)
+const accountIndex = ref("")
 const accounts = ref([])
 
 // 상수 정의
@@ -57,31 +57,11 @@ const loadPoints = async () => {
   }
 }
 
-// const loadBank = async () => {
-//   try {
-//     const data = await getBank()
-//     accounts.value = JSON.parse(data[0])
-//   } catch (error) {
-//     handleError('계좌 조회 오류가 발생했습니다.', error)
-//   }
-// }
-
-// const loadBank = async () => {
-//   try {
-//     const asset = await getBank() // 이제 AssetVO 객체를 반환
-//     if (asset) {
-//       accounts.value.push(`${asset.cashBank} ${asset.cashAccount}`) // 계좌 정보를 추가
-//     }
-//   } catch (error) {
-//     handleError('계좌 조회 오류가 발생했습니다.', error)
-//   }
-// }
-
+// 계좌정보 불러오기
 const loadBank = async () => {
   try {
-    const asset = await getBank(); // AssetVO 객체를 반환
+    const asset = await getBank(); 
     if (asset) {
-      // JSON 문자열을 파싱하여 배열로 변환
       const cashAccounts = JSON.parse(asset.cashAccount);
       const cashBanks = JSON.parse(asset.cashBank);
 
@@ -92,7 +72,6 @@ const loadBank = async () => {
     handleError('계좌 조회 오류가 발생했습니다.', error);
   }
 }
-
 
 
 // 에러 처리 함수
@@ -196,4 +175,7 @@ onMounted(() => {
   margin-left: 0;
   color: #fff;
 }
+
+
+
 </style>
