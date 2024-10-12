@@ -1,8 +1,9 @@
 <template>
   <section class="recommend-container">
     <h2 class="comment-title">
-      "<span class="text-accent">ㅇㅇ</span>"님의 <span class="text-accent">자산 형성</span>을
-      도와줄 <span class="text-accent">금융 상품</span>을 가져왔어요
+      "<span class="text-accent">{{ authStore.userInfo.userName }}</span
+      >"님의 <span class="text-accent">자산 형성</span>을 도와줄
+      <span class="text-accent">금융 상품</span>을 가져왔어요
       <span class="text-accent"><i class="fa-regular fa-face-smile"></i></span>
     </h2>
     <section class="recommend-content">
