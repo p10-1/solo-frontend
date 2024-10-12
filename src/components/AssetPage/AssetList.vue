@@ -1,6 +1,6 @@
 <template>
   <h2 class="comment-title">
-    "<span class="text-accent">ㅇㅇ</span>"님의 자산을 <span class="text-accent">분석</span>했어요
+    "<span class="text-accent">{{ authStore.userInfo.userName }}</span>"님의 자산을 <span class="text-accent">분석</span>했어요
     <span class="text-accent"><i class="fa-regular fa-face-smile-wink"></i></span>
   </h2>
   <section class="asset-list">
@@ -19,17 +19,18 @@
           <!-- 이전 슬라이드 버튼 -->
           <div class="asset-statistics">
             <div class="asset-top-item">
-              <TotalAsset :totalAmount="processedData.totalAsset" />
+              <Distribution
+                :assetDetails="processedData.assetDetails"
+                :title="'내 자산 분포'"
+                :userType="processedData.assetDetails.type"
+                comparisonType="personal"
+                :userAssetDetails="processedData.assetDetails"
+              />
             </div>
             <div class="asset-top-item">
-              <Distribution :assetDetails="processedData.assetDetails" title="내 자산 분포">
-                <template #extra>
-                  <div v-if="highestAssetType" class="asset-highlight">
-                    보유 자산 중 {{ assetNames[highestAssetType] }}이 제일 많아요!
-                  </div>
-                </template>
-              </Distribution>
+              <TotalAsset :totalAmount="processedData.totalAsset" />
             </div>
+
             <div class="asset-top-item">
               <swiper v-if="processedData" :navigation="true" :modules="modules" class="yourSwiper">
                 <!-- 유형별 평균 자산 분포 슬라이드 -->
@@ -37,6 +38,9 @@
                   <Distribution
                     :assetDetails="processedData.typeAverages"
                     :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
+                    :userType="processedData.assetDetails.type"
+                    comparisonType="typeAverage"
+                    :userAssetDetails="processedData.assetDetails"
                   />
                 </swiper-slide>
 
@@ -45,6 +49,9 @@
                   <Distribution
                     :assetDetails="processedData.overallAverages"
                     title="전체 사용자 평균 자산 분포"
+                    userType="전체"
+                    comparisonType="overallAverage"
+                    :userAssetDetails="processedData.assetDetails"
                   />
                 </swiper-slide>
               </swiper>
@@ -98,18 +105,18 @@
       </section>
 
       <!-- 섹션: 대출 정보 -->
-      <div v-if="processedData.loanData.purpose !== '전세자금'" class="margin-top-3rem">
+      <div class="margin-top-3rem">
         <h2 class="title">대출 정보</h2>
-        <dl class="radio-form margin-top-2rem">
+        <dl v-if="processedData.loanData.purpose !== '전세자금'" class="radio-form margin-top-2rem">
           <dt>상환 방법</dt>
           <dd>
             <input
               type="radio"
               id="equal-principal-interest"
-              value="equal-principal-interest"
+              value="equal-principal-interest"    
               v-model="repaymentMethod"
             />
-            <label for="equal-principal-interest" class="button-radio active">
+            <label for="equal-principal-interest" class="button-radio" :class="{ active: repaymentMethod === 'equal-principal-interest' }">
               원리금 균등상환
             </label>
           </dd>
@@ -120,7 +127,7 @@
               value="equal-principal"
               v-model="repaymentMethod"
             />
-            <label for="equal-principal" class="button-radio">원금 균등상환</label>
+            <label for="equal-principal" class="button-radio" :class="{ active: repaymentMethod === 'equal-principal' }">원금 균등상환</label>
           </dd>
         </dl>
         <!-- 대출 정보가 있는 경우 LoanInfo 컴포넌트로 대출 정보 표시 -->
@@ -157,6 +164,7 @@
 
 import { ref, computed, onMounted } from 'vue'
 import { fetchAssetData, fetchAssetComparison } from '@/api/assetApi'
+import { useAuthStore } from '@/stores/authStore'
 import TotalAsset from '@/components/AssetPage/TotalAsset.vue'
 import Distribution from '@/components/AssetPage/Distribution.vue'
 import AssetTypeButtons from '@/components/AssetPage/AssetTypeButtons.vue'
@@ -170,6 +178,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { Navigation } from 'swiper/modules'
 const modules = [Navigation]
+const authStore = useAuthStore()
 const loading = ref(true) // 로딩 상태 관리
 const error = ref(null) // 에러 상태 관리
 
@@ -191,12 +200,12 @@ const selectedAssetType = ref('cash') // 선택된 자산 타입 기본값은 'c
 //   currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides
 // }
 
-const assetNames = {
-  cash: '현금자산',
-  deposit: '예적금',
-  stock: '주식',
-  insurance: '보험'
-}
+// const assetNames = {
+//   cash: '현금자산',
+//   deposit: '예적금',
+//   stock: '주식',
+//   insurance: '보험'
+// }
 // 자산 데이터 및 평균 데이터를 API로부터 로드하는 함수
 const fieldMapping = {
   cash: { bank: 'cashBank', account: 'cashAccount', value: 'cash' },
@@ -204,13 +213,13 @@ const fieldMapping = {
   stock: { bank: 'stockBank', account: 'stockAccount', value: 'stock' },
   insurance: { bank: 'insuranceCompany', account: 'insuranceName', value: 'insurance' }
 }
-const highestAssetType = computed(() => {
-  if (!processedData.value || !processedData.value.assetDetails) return null
-  const sortedAssets = Object.entries(processedData.value.assetDetails).sort(
-    ([, a], [, b]) => b.total - a.total
-  )
-  return sortedAssets[0]?.[0]
-})
+// const highestAssetType = computed(() => {
+//   if (!processedData.value || !processedData.value.assetDetails) return null
+//   const sortedAssets = Object.entries(processedData.value.assetDetails).sort(
+//     ([, a], [, b]) => b.total - a.total
+//   )
+//   return sortedAssets[0]?.[0]
+// })
 const loadData = async () => {
   console.log('1. loadData 함수 시작')
   try {
