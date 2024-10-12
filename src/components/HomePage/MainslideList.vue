@@ -18,7 +18,7 @@
           <router-link to="asset">
             <div class="main-card">
               <div class="card-body">
-                <h5 class="card-title text-align-left link">내 자산 분포</h5>
+                <h3 class="title card-title text-align-left link">내 자산 분포</h3>
                 <!-- 도넛 차트를 보여주는 섹션 -->
                 <div class="card-content">
                   <ChartComponent
@@ -315,12 +315,20 @@ export default {
 </script>
 
 <style scoped>
-.card-content {
-  /* 카드 내 콘텐츠 영역 설정 */
+.main-slide-box .main-card {
+  background-color: #f3f3ff;
+  padding: 2rem 1.5rem;
+  border-radius: 28px;
+}
+.main-slide-box .main-card .card-title {
+}
+.main-slide-box .main-card .card-content {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 300px;
+  background-color: #fff;
 }
 
 .asset-legend {
