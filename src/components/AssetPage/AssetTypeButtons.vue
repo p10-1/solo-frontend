@@ -31,7 +31,7 @@ const emit = defineEmits(['select-type']) // 부모에게 타입 선택 이벤�
 const assetTypes = ref([
   { name: '현금자산', value: 'cash' },
   { name: '예적금', value: 'deposit' },
-  { name: '주식', value: 'stock' },
+  { name: '증권', value: 'stock' },
   { name: '보험', value: 'insurance' }
 ])
 

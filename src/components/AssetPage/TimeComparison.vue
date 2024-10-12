@@ -15,7 +15,11 @@
       <ul class="comparison-info">
         <li>최근 {{ processedData.length }}개월 변화</li>
         <li :class="['time-comparison__trend', trendDirection]">
-          <span class="text-accent">{{ trendDirection === 'increase' ? '증가' : '감소' }}</span>
+          <span class="text-accent">
+            <i v-if="trendDirection === 'increase'" class="fa-solid fa-circle-arrow-up"></i>
+            <i v-else class="fa-solid fa-circle-arrow-down"></i>
+            {{ trendDirection === 'increase' ? '증가' : '감소' }}
+          </span>
           <span class="time-comparison__percentage">(변화율: {{ trendPercentage }}%)</span>
         </li>
       </ul>
@@ -50,7 +54,7 @@ let chartInstance = null
 const assetTypeNames = {
   cash: '현금자산',
   deposit: '예적금',
-  stock: '주식',
+  stock: '증권',
   insurance: '보험'
 }
 
