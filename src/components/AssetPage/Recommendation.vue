@@ -1,8 +1,9 @@
 <template>
   <section class="recommend-container">
     <h2 class="comment-title">
-      "<span class="text-accent">ㅇㅇ</span>"님의 <span class="text-accent">자산 형성</span>을
-      도와줄 <span class="text-accent">금융 상품</span>을 가져왔어요
+      "<span class="text-accent">{{ authStore.userInfo.userName }}</span
+      >"님의 <span class="text-accent">자산 형성</span>을 도와줄
+      <span class="text-accent">금융 상품</span>을 가져왔어요
       <span class="text-accent"><i class="fa-regular fa-face-smile"></i></span>
     </h2>
     <section class="recommend-content">
@@ -27,8 +28,9 @@
           <dd>
             <div class="robot-role">자산 멘토 Tip</div>
             <P class="comment">
-              <b class="text-accent">ㅇㅇ</b>님이 가지고 계신 <b class="text-accent">대출</b>과
-              <b class="text-accent">기간</b>을 비교했을 때 <b class="text-accent">이자율</b>이
+              <b class="text-accent">{{ authStore.userInfo.userName }}</b
+              >님이 가지고 계신 <b class="text-accent">대출</b>과 <b class="text-accent">기간</b>을
+              비교했을 때 <b class="text-accent">이자율</b>이
               <b class="text-accent">??% 높아요!</b>
             </P>
           </dd>
