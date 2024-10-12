@@ -20,7 +20,7 @@
           </ul>
         </div>
         <div class="post-content margin-top-1rem">
-          <div>{{ board.content }}</div>
+          <div v-html="board.content"></div>
           <div v-if="board.attaches && board.attaches.length">
             <ul>
               <li v-for="attach in board.attaches" :key="attach.attachmentNo">

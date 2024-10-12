@@ -15,7 +15,11 @@
       <ul class="comparison-info">
         <li>최근 {{ processedData.length }}개월 변화</li>
         <li :class="['time-comparison__trend', trendDirection]">
-          <span class="text-accent">{{ trendDirection === 'increase' ? '증가' : '감소' }}</span>
+          <span class="text-accent">
+            <i v-if="trendDirection === 'increase'" class="fa-solid fa-circle-arrow-up"></i
+            ><i v-else class="fa-solid fa-circle-arrow-down"></i>
+            {{ trendDirection === 'increase' ? '증가' : '감소' }}</span
+          >
           <span class="time-comparison__percentage">(변화율: {{ trendPercentage }}%)</span>
         </li>
       </ul>
