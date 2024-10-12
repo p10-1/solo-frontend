@@ -458,7 +458,7 @@ onMounted(async () => {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 4.6rem;
+  gap: 2rem;
   background-color: #f3f3ff;
   padding: 2rem 1.5rem;
   border-radius: 28px;

@@ -169,4 +169,8 @@ onMounted(fetchRecommendedProducts)
 .comment-robot .robot-role {
   color: #e9b566;
 }
+.recommend-content .comment-robot .comment {
+  line-height: 1.45rem;
+  font-size: 1.05rem;
+}
 </style>

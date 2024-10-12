@@ -2,11 +2,11 @@
 <template>
   <div class="asset-comment margin-top-1rem">
     <dl class="comment-robot">
-      <dt>
+      <!-- <dt>
         <span class="robot-icon">
           <i class="fa-solid fa-graduation-cap"></i>
         </span>
-      </dt>
+      </dt> -->
       <dd>
         <div class="robot-role">분석 멘토 Report</div>
         <div class="comment">
@@ -181,7 +181,6 @@ const assetEvaluationAdvice = computed(() => {
 }
 .comment-robot .comment .report-content .intro {
   font-weight: 600;
-  color: #6846f5;
 }
 .comment-robot .comment .report-content .advice {
   border-top: 1px dashed #cfc6fd;
