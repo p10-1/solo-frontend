@@ -1,6 +1,7 @@
 <template>
   <h2 class="comment-title">
-    "<span class="text-accent">{{ authStore.userInfo.userName }}</span>"님의 자산을 <span class="text-accent">분석</span>했어요
+    "<span class="text-accent">{{ authStore.userInfo.userName }}</span
+    >"님의 자산을 <span class="text-accent">분석</span>했어요
     <span class="text-accent"><i class="fa-regular fa-face-smile-wink"></i></span>
   </h2>
   <section class="asset-list">
@@ -29,6 +30,27 @@
             </div>
             <div class="asset-top-item">
               <TotalAsset :totalAmount="processedData.totalAsset" />
+              <AssetComment
+                :assetDetails="processedData.assetDetails"
+                :userType="processedData.assetDetails.type"
+                comparisonType="personal"
+                :userAssetDetails="processedData.assetDetails"
+                customTitle=" 현재 내 자산은 ?"
+              />
+              <AssetComment
+                :assetDetails="processedData.typeAverages"
+                :userType="processedData.assetDetails.type"
+                comparisonType="typeAverage"
+                :userAssetDetails="processedData.assetDetails"
+                :customTitle="`${processedData.assetDetails.type} 유형 평균과 비교 하면은 ?`"
+              />
+              <AssetComment
+                :assetDetails="processedData.overallAverages"
+                userType="전체"
+                comparisonType="overallAverage"
+                :userAssetDetails="processedData.assetDetails"
+                customTitle="전체 사용자 평균과 비교 하면 ?"
+              />
             </div>
 
             <div class="asset-top-item">
@@ -113,10 +135,14 @@
             <input
               type="radio"
               id="equal-principal-interest"
-              value="equal-principal-interest"    
+              value="equal-principal-interest"
               v-model="repaymentMethod"
             />
-            <label for="equal-principal-interest" class="button-radio" :class="{ active: repaymentMethod === 'equal-principal-interest' }">
+            <label
+              for="equal-principal-interest"
+              class="button-radio"
+              :class="{ active: repaymentMethod === 'equal-principal-interest' }"
+            >
               원리금 균등상환
             </label>
           </dd>
@@ -127,7 +153,12 @@
               value="equal-principal"
               v-model="repaymentMethod"
             />
-            <label for="equal-principal" class="button-radio" :class="{ active: repaymentMethod === 'equal-principal' }">원금 균등상환</label>
+            <label
+              for="equal-principal"
+              class="button-radio"
+              :class="{ active: repaymentMethod === 'equal-principal' }"
+              >원금 균등상환</label
+            >
           </dd>
         </dl>
         <!-- 대출 정보가 있는 경우 LoanInfo 컴포넌트로 대출 정보 표시 -->
@@ -173,6 +204,7 @@ import TimeComparison from '@/components/AssetPage/TimeComparison.vue'
 import LoanInfo from '@/components/AssetPage/LoanInfo.vue'
 import Recommendation from '@/components/AssetPage/Recommendation.vue'
 import LoanGuide from '@/components/AssetPage/LoanGuide.vue'
+import AssetComment from '@/components/AssetPage/AssetComment.vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -409,6 +441,7 @@ onMounted(async () => {
 .asset-statistics .asset-top-item {
   width: calc(33.3% - 0.3rem);
 }
+
 .asset-comparison-charts {
   display: flex;
   justify-content: flex-start;
