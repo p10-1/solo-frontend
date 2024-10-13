@@ -12,7 +12,7 @@ dl {
   z-index: 10;
   top: 0;
   left: 0;
-  padding: 0 4vw;
+  padding: 0 3vw;
   display: flex;
   justify-content: space-between; /* 왼쪽과 오른쪽 끝으로 정렬 */
   align-items: center;
@@ -38,13 +38,6 @@ dl {
 .navigation.scrolled .nav-list li a:hover::after {
   bottom: -18px;
   background-color: #f7d095;
-}
-
-.navigation.scrolled .login-wrapper .button-main {
-  background-color: #f7d095; /* 스크롤 시 버튼 색 변경 */
-  color: #222;
-  border-color: #f7d095;
-  transition: background-color 0.3s ease;
 }
 
 .navigation.scrolled .login-wrapper > .login-box > .nav-list > a {
@@ -203,12 +196,10 @@ dl {
 } */
 
 /* 드롭 다운 끝 */
-
 .login-wrapper > .login-box > .nav-list > a {
   display: flex;
   align-items: center;
   text-align: left;
-  padding: 20px 0;
 }
 
 /* 로그인 유저 */
