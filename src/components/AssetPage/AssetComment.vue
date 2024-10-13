@@ -2,18 +2,18 @@
 <template>
   <div class="asset-comment margin-top-1rem">
     <dl class="comment-robot">
-      <dt>
-        <!-- <span class="robot-icon">
+      <!-- <dt>
+        <span class="robot-icon">
           <i class="fa-solid fa-graduation-cap"></i>
-        </span> -->
-      </dt>
+        </span>
+      </dt> -->
       <dd>
         <div class="robot-role">분석 멘토 Report</div>
         <div class="comment">
           <h4 class="report-title margin-top-1rem">
             {{ customTitle || title }}
           </h4>
-          <div class="report-content margin-top-1rem">
+          <div class="report-content">
             <p class="intro">{{ assetEvaluationIntro }}</p>
             <p class="comparison">{{ assetEvaluationComparison }}</p>
             <div class="advice">
@@ -155,6 +155,9 @@ const assetEvaluationAdvice = computed(() => {
 </script>
 
 <style scoped>
+.asset-comment .comment-robot {
+  flex-wrap: wrap;
+}
 .comment-robot .comment .report-title {
   font-size: 1.2rem;
   color: #333;
@@ -164,6 +167,7 @@ const assetEvaluationAdvice = computed(() => {
 .comment-robot .comment .report-content {
   border-top: 1px dashed #cfc6fd;
   padding-top: 10px;
+  margin-top: 10px;
 }
 .comment-robot .comment .report-content p {
   font-size: 1rem;
@@ -177,7 +181,6 @@ const assetEvaluationAdvice = computed(() => {
 }
 .comment-robot .comment .report-content .intro {
   font-weight: 600;
-  color: #6846f5;
 }
 .comment-robot .comment .report-content .advice {
   border-top: 1px dashed #cfc6fd;

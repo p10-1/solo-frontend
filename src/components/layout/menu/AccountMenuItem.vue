@@ -6,7 +6,7 @@ defineProps({ username: String })
     <router-link class="" to="/mypage">
       <div class="user-info">
         <b>{{ username }}</b
-        >님<i class="fa-solid fa-caret-down margin-left"></i>
+        >님
       </div>
     </router-link>
     <!-- 드롭 다운 메뉴 -->

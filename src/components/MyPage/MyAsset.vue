@@ -137,12 +137,6 @@
         </div>
       </div>
     </div>
-
-    <div class="text-center margin-top-1rem">
-      <button class="button-sub" @click="toggleEditMode">
-        {{ editMode ? '저장하기' : '수정하기' }}
-      </button>
-    </div>
   </div>
 </template>
 
@@ -259,9 +253,6 @@ const prepareUpdatedData = () => {
 </script>
 
 <style scoped>
-.my-asset-manager {
-}
-
 /* 자산 */
 .my-asset-list div.list-align {
   display: flex;

@@ -14,7 +14,7 @@
         <div class="modal-body">
           <div class="point"><span>참여시 10P 지급</span></div>
           <div class="description">{{ description }}</div>
-          <div class="info-text">하루 1번씩 참여할 수 있어요!</div>
+          <div class="info-text">정답을 맞추면, 하루 1번 10P를 드려요!</div>
           <div class="input-text-box">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input
@@ -113,7 +113,6 @@ const checkAnswer = async () => {
   position: relative;
   margin-top: 25px;
   display: flex;
-  margin-bottom: 10px;
 }
 
 .modal-body .input-text-box i {
@@ -122,7 +121,7 @@ const checkAnswer = async () => {
   margin-left: 15px;
   z-index: 12;
   font-size: 21px;
-  color: #666;
+  color: #6846f5;
 }
 
 .modal-body .quiz-input {
@@ -154,26 +153,27 @@ const checkAnswer = async () => {
 }
 
 .result-message {
-  font-size: 1.15rem; /* 텍스트 크기 */
-  margin-top: 10px; /* 마진 조정 */
+  font-size: 1.15rem;
+  margin-top: 10px;
   font-weight: 600;
-  letter-spacing: -1px; /* 텍스트 촘촘하게 */
+  letter-spacing: -1px;
   display: flex;
-  /* align-items: center; */
-  justify-content: flex-start; /* 왼쪽 정렬 */
+  justify-content: flex-start;
 }
 
 .result-message i {
-  font-size: 1.15rem; /* 아이콘 크기 */
-  margin-right: 5px; /* 아이콘과 텍스트 사이의 간격 */
+  font-size: 1.15rem;
+  margin-right: 5px;
 }
 
 .success {
-  color: #1e90ff; /* 파란색 (성공 시) */
+  color: #1e90ff;
+  padding: 0;
 }
 
 .error {
-  color: #e32626; /* 빨간색 (오류 시) */
+  color: #e32626;
+  padding: 0;
 }
 
 .point-message {
