@@ -160,10 +160,10 @@ const isLoanDetailsValid = computed(() => {
 // 자산 타입 이름 가져오기
 const getAssetTypeName = (type) =>
   ({
-    cash: '현금 자산',
-    deposit: '예적금 자산',
-    stock: '증권 자산',
-    insurance: '보험 자산'
+    cash: '현금',
+    deposit: '예적금',
+    stock: '증권',
+    insurance: '보험'
   })[type] || type
 
 // 자산 파싱
