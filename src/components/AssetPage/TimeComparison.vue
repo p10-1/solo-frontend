@@ -18,9 +18,17 @@
           <span class="text-accent">
             <i v-if="trendDirection === 'increase'" class="fa-solid fa-circle-arrow-up"></i>
             <i v-else class="fa-solid fa-circle-arrow-down"></i>
-            {{ trendDirection === 'increase' ? '증가' : '감소' }}
+            {{
+              trendDirection === 'increase'
+                ? '증가'
+                : trendDirection === 'decrease'
+                  ? '감소'
+                  : '유지'
+            }}
           </span>
-          <span class="time-comparison__percentage">(변화율: {{ trendPercentage }}%)</span>
+          <span v-if="trendDirection !== 'maintain'" class="time-comparison__percentage">
+            (변화율: {{ trendPercentage }}%)
+          </span>
         </li>
       </ul>
     </div>
@@ -107,6 +115,8 @@ const trendDirection = computed(() => {
   if (processedData.value.length < 2) return 'neutral'
   const firstValue = processedData.value[0].value
   const lastValue = processedData.value[processedData.value.length - 1].value
+
+  if (lastValue === firstValue) return 'maintain' // 변화율이 0일 경우 '유지'
   return lastValue > firstValue ? 'increase' : 'decrease'
 })
 
@@ -114,6 +124,7 @@ const trendPercentage = computed(() => {
   if (processedData.value.length < 2) return 0
   const firstValue = processedData.value[0].value
   const lastValue = processedData.value[processedData.value.length - 1].value
+
   return (((lastValue - firstValue) / firstValue) * 100).toFixed(2)
 })
 
