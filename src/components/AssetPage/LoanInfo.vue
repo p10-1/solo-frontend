@@ -5,8 +5,7 @@
       <ul v-for="(value, key) in formattedHouseLoanInfo" :key="key" class="loan-item">
         <li class="loan-label">{{ key }}</li>
         <li class="loan-value">
-          <span class="text-accent">{{ value }}</span
-          >원
+          <span class="text-accent">{{ value }}</span>
         </li>
       </ul>
     </div>
@@ -16,8 +15,7 @@
       <ul v-for="(value, key) in formattedLoanInfo" :key="key" class="loan-item">
         <li class="loan-label">{{ key }}</li>
         <li class="loan-value">
-          <span class="text-accent">{{ value }}</span
-          >원
+          <span class="text-accent">{{ value }}</span>
         </li>
       </ul>
     </div>

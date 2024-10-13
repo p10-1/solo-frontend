@@ -7,7 +7,7 @@
 
     <!-- 차트 렌더링을 위한 캔버스 -->
     <div class="time-comparison__chart-container">
-      <canvas ref="chartRef"></canvas>
+      <canvas ref="chartRef" class="canvas-chart"></canvas>
     </div>
 
     <!-- 자산 변동 요약 정보가 있을 경우 표시 -->
@@ -15,7 +15,11 @@
       <ul class="comparison-info">
         <li>최근 {{ processedData.length }}개월 변화</li>
         <li :class="['time-comparison__trend', trendDirection]">
-          <span class="text-accent">{{ trendDirection === 'increase' ? '증가' : '감소' }}</span>
+          <span class="text-accent">
+            <i v-if="trendDirection === 'increase'" class="fa-solid fa-circle-arrow-up"></i>
+            <i v-else class="fa-solid fa-circle-arrow-down"></i>
+            {{ trendDirection === 'increase' ? '증가' : '감소' }}
+          </span>
           <span class="time-comparison__percentage">(변화율: {{ trendPercentage }}%)</span>
         </li>
       </ul>
@@ -204,11 +208,16 @@ onBeforeUnmount(() => {
     transform 0.3s,
     box-shadow 0.3s;
 }
+.time-comparison .canvas-chart {
+  width: auto;
+  height: 320px !important;
+}
 .time-comparison .comparison-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
+  margin-top: 1rem;
   margin-bottom: 1rem;
   border-bottom: 1px dashed #cfc6fd;
 }

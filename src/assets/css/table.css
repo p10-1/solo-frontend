@@ -62,30 +62,12 @@ dl.total dd {
 }
 
 .table thead tr th.text-align-left,
-.table tbody tr td.text-align-left,
-.table tbody tr:hover td.link a {
+.table tbody tr td.text-align-left {
   text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
-
-.link {
-  text-overflow: ellipsis;
-}
-.table tbody tr:hover td.link a {
-  cursor: pointer;
-  color: #6846f5;
-  text-decoration: underline;
-  transition:
-    transform 0.3s ease,
-    background-color 0.3s ease;
-}
-
-.table tbody td {
-  height: 45px;
+.table tbody tr td {
   padding: 1.2rem 15px !important;
-  line-height: 25px;
+  line-height: 24px;
   border-bottom: 1px solid #f1eeff;
   letter-spacing: -0.02em;
   text-align: center;
@@ -93,9 +75,52 @@ dl.total dd {
   white-space: pre-line;
   border-right: 1px solid #eee;
 }
-.table tbody td:last-child {
+.table tbody tr td:last-child {
   border-right: 0;
 }
+.table tbody tr td a {
+  display: block;
+}
+.table tbody tr td a .board-title {
+  position: relative;
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
+}
+.table tbody tr td a .board-title:hover {
+  color: #6846f5;
+  text-decoration: underline;
+}
+
+/* 새로운 글 */
+.table tbody .truncated {
+  padding: 0;
+  font-size: 18px;
+  line-height: 1;
+
+  text-align: left;
+  color: #222;
+  font-weight: 500;
+}
+
+.table tbody .date {
+  font-size: 16px;
+  font-weight: 500;
+  color: #6d6d6d;
+  line-height: 22px;
+}
+
+.table-ex-info li {
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 14px;
+  color: #c9c9c9;
+}
+/* 뱃지 */
 .badge {
   height: 20px;
   line-height: 19px;
@@ -110,72 +135,13 @@ dl.total dd {
   margin-right: 5px;
   margin-bottom: 5px;
 }
-.table tbody .link a {
-  padding: 0;
-  font-size: 18px;
-  line-height: 1;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  text-align: left;
-  color: #222;
-  font-weight: 500;
-}
 
-.table tbody .date {
-  font-size: 16px;
-  font-weight: 500;
-  color: #6d6d6d;
-  line-height: 22px;
-}
-
-.table-ex-info li {
-  margin-top: 8px;
-  display: inline-block;
-  margin-right: 8px;
-  font-size: 14px;
-  color: #c9c9c9;
-}
-
-/* 게시판 인기글 */
-.table .top-post td {
-  background-color: #fbfbff;
-}
-.table .top-post td.link a {
-  padding-left: 1.8rem;
-}
-
-.table .truncated {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-  display: inline-block;
-  position: relative;
-}
-
-.table .truncated:hover::after {
-  content: attr(title);
-  position: absolute;
-  left: 0;
-  top: 100%;
-  background: #333;
-  color: #fff;
-  padding: 5px 10px;
-  white-space: nowrap;
-  z-index: 1000;
-  font-size: 14px;
-  border-radius: 4px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
+/* 게시판 새글 */
 .table .new-label {
   color: #6846f5;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: -0.8px;
   margin-left: 8px;
-}
-
-/* 페이지 네이션 */
-.pagination {
+  vertical-align: super;
 }

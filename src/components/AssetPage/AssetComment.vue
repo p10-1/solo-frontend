@@ -1,10 +1,29 @@
 <!-- AssetComment.vue -->
 <template>
-  <div class="asset-comment">
-    <h4><i class="fas fa-chart-line"></i> {{ customTitle || title }}</h4>
-    <p class="evaluation-intro">{{ assetEvaluationIntro }}</p>
-    <p class="evaluation-comparison">{{ assetEvaluationComparison }}</p>
-    <p class="evaluation-advice">{{ assetEvaluationAdvice }}</p>
+  <div class="asset-comment margin-top-1rem">
+    <dl class="comment-robot">
+      <!-- <dt>
+        <span class="robot-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </span>
+      </dt> -->
+      <dd>
+        <div class="robot-role">분석 멘토 Report</div>
+        <div class="comment">
+          <h4 class="report-title margin-top-1rem">
+            {{ customTitle || title }}
+          </h4>
+          <div class="report-content">
+            <p class="intro">{{ assetEvaluationIntro }}</p>
+            <p class="comparison">{{ assetEvaluationComparison }}</p>
+            <div class="advice">
+              <div class="guide">Solution</div>
+              <p>{{ assetEvaluationAdvice }}</p>
+            </div>
+          </div>
+        </div>
+      </dd>
+    </dl>
   </div>
 </template>
 
@@ -93,7 +112,10 @@ const getRelativeDescription = (diff) => {
 const assetEvaluationIntro = computed(() => {
   const { safeRatio, riskRatio } = calculateAssetRatios(props.assetDetails)
   const idealRatios = getIdealRatios(props.userType)
-  return `현재 귀하의 자산 비율은 안전자산 ${(safeRatio * 100).toFixed(1)}%, 위험자산 ${(riskRatio * 100).toFixed(1)}%입니다.`
+  return `자산 비율은 
+  안전자산 ${(safeRatio * 100).toFixed(1)}%, 
+  위험자산 ${(riskRatio * 100).toFixed(1)}%
+  입니다.`
 })
 
 const assetEvaluationComparison = computed(() => {
@@ -103,9 +125,9 @@ const assetEvaluationComparison = computed(() => {
   const safeDescription = getRelativeDescription(difference)
 
   if (!safeDescription) {
-    return `현재 자산 분배가 ${props.userType}의 평균과 큰 차이가 없습니다.`
+    return `자산 분배가 ${props.userType}의 평균과 큰 차이가 없습니다.`
   } else {
-    return `현재 안전자산 비중이 ${props.userType}의 평균에 비해 ${safeDescription} 편이에요.`
+    return `안전자산 비중이 ${props.userType}의 평균에 비해 ${safeDescription} 편이에요.`
   }
 })
 
@@ -118,51 +140,62 @@ const assetEvaluationAdvice = computed(() => {
     return `전반적으로 ${props.userType}에 적합한 자산 분배를 하고 계시네요. 현재의 균형을 잘 유지해 보세요.`
   } else if (difference > 0) {
     if (difference > 0.4) {
-      return `안전자산 비중이 상당히 높습니다. 일부 안전자산을 위험자산으로 전환하는 것을 고려해보시는 건 어떨까요? 이는 잠재적으로 더 높은 수익을 얻을 기회를 제공할 수 있습니다.`
+      return `안전자산 비중이 상당히 높습니다. 일부 안전자산을 위험자산으로 전환하는 것을 고려해보시는 건 어떨까요? 잠재적으로 더 높은 수익을 얻을 기회를 제공할 수 있습니다.`
     } else {
-      return `위험자산 비중을 조금 높이는 것을 고려해보시는 건 어떨까요? 이는 장기적으로 더 높은 수익을 얻을 수 있는 기회를 제공할 수 있습니다.`
+      return `위험자산 비중을 조금 높이는 것을 고려해보시는 건 어떨까요? 장기적으로 더 높은 수익을 얻을 수 있는 기회를 제공할 수 있습니다.`
     }
   } else {
     if (difference < -0.4) {
-      return `위험자산 비중이 상당히 높습니다. 일부 위험자산을 안전자산으로 전환하는 것을 고려해보시는 건 어떨까요? 이는 자산을 보호하고 리스크를 줄이는 데 도움이 될 수 있습니다.`
+      return `위험자산 비중이 상당히 높습니다. 일부 위험자산을 안전자산으로 전환하는 것을 고려해보시는 건 어떨까요? 자산을 보호하고 리스크를 줄이는 데 도움이 될 수 있습니다.`
     } else {
-      return `안전자산 비중을 조금 높이는 것을 고려해보시는 건 어떨까요? 이는 자산을 안정적으로 관리하는 데 도움이 될 수 있습니다.`
+      return `안전자산 비중을 조금 높이는 것을 고려해보시는 건 어떨까요? 자산을 안정적으로 관리하는 데 도움이 될 수 있습니다.`
     }
   }
 })
 </script>
 
 <style scoped>
-.asset-comment {
-  background-color: #f8f9fa;
-  border-radius: 15px;
-  padding: 1.5rem;
-  margin-top: 1.5rem;
+.asset-comment .comment-robot {
+  flex-wrap: wrap;
 }
-
-.asset-comment h4 {
+.comment-robot .comment .report-title {
   font-size: 1.2rem;
-  color: #6846f5;
-  margin-bottom: 1rem;
-}
-
-.asset-comment p {
-  font-size: 1rem;
-  line-height: 1.6;
   color: #333;
-  margin-bottom: 1rem;
+  font-weight: 600;
+  word-break: keep-all;
 }
-
-.evaluation-intro {
-  font-weight: bold;
+.comment-robot .comment .report-content {
+  border-top: 1px dashed #cfc6fd;
+  padding-top: 10px;
+  margin-top: 10px;
 }
-
-.evaluation-comparison {
-  color: #4a4a4a;
+.comment-robot .comment .report-content p {
+  font-size: 1rem;
+  line-height: 1.3;
+  color: #333;
+  word-break: keep-all;
+  margin-bottom: 10px;
 }
-
-.evaluation-advice {
-  font-style: italic;
-  color: #0056b3;
+.comment-robot .comment .report-content p:last-child {
+  margin-bottom: 0;
+}
+.comment-robot .comment .report-content .intro {
+  font-weight: 600;
+}
+.comment-robot .comment .report-content .advice {
+  border-top: 1px dashed #cfc6fd;
+  margin-top: 10px;
+  padding-top: 10px;
+}
+.comment-robot .comment .report-content .advice .guide {
+  display: block;
+  font-weight: 600;
+  color: #b6a8ff;
+  letter-spacing: -0.8px;
+  margin-bottom: 5px;
+}
+.comment-robot .comment .report-content .advice p {
+  color: #666;
+  word-break: keep-all;
 }
 </style>

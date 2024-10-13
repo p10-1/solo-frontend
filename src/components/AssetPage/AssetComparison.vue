@@ -175,6 +175,7 @@ const formatCurrency = (value) => {
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
+  margin-top: 1rem;
   margin-bottom: 1rem;
   border-bottom: 1px dashed #cfc6fd;
 }
