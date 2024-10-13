@@ -12,11 +12,44 @@
       >
         <swiper-slide v-for="(slide, index) in slides" :key="index">
           <router-link to="asset">
-            <div class="asset-distribution">
-              <h3 class="slide-title">{{ slide.title }}</h3>
-              <div v-if="slide.highlight" class="asset-highlight">
-                <i class="fa-solid fa-circle-info"></i>
-                {{ slide.highlight }}
+            <div class="main-card">
+              <div class="card-body">
+                <h3 class="title card-title text-align-left link">내 자산 분포</h3>
+                <!-- 도넛 차트를 보여주는 섹션 -->
+                <div class="card-content">
+                  <ChartComponent
+                    type="doughnut"
+                    :data="myAssetChartData"
+                    :options="chartOptions"
+                  />
+                  <div class="asset-legend">
+                    <!-- 자산 분포 범례 -->
+                    <ul
+                      v-for="(value, key) in myAssetChartData.labels"
+                      :key="key"
+                      class="asset-type"
+                    >
+                      <li class="asset-name">
+                        <!-- 자산 종류와 색상 표시 -->
+                        <span
+                          :style="{ backgroundColor: assetColors[key] }"
+                          class="type-color"
+                        ></span>
+                        {{ value }}
+                      </li>
+                      <li class="asset-percentage">
+                        <!-- 자산 비율 계산 및 표시 -->
+                        {{
+                          Math.round(calculatePercentage(myAssetChartData.datasets[0].data[key]))
+                        }}%
+                      </li>
+                      <li class="asset-amount">
+                        <!-- 자산 총액 표시 -->
+                        {{ Math.round(myAssetChartData.datasets[0].data[key]) }} 원
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
               <div class="asset-content">
                 <div class="asset-chart-container">
@@ -191,41 +224,20 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.asset-distribution {
-  border-radius: 25px;
-  padding: 2rem 1.7rem;
-  background-color: #fff;
-  box-shadow: 0px 0px 15px rgb(221, 214, 255);
+.main-slide-box .main-card {
+  background-color: #f3f3ff;
+  padding: 2rem 1.5rem;
+  border-radius: 28px;
 }
-
-.slide-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+.main-slide-box .main-card .card-title {
 }
-
-.asset-highlight {
-  font-size: 1rem;
-  color: #555;
-  letter-spacing: -0.5px;
-  font-weight: 500;
-  padding: 10px 12px;
-  word-break: keep-all;
-  border-radius: 12px;
-  background-color: #fffbec;
-  color: var(--font-secondary, #475067);
-  margin-bottom: 15px;
-}
-
-.asset-content {
+.main-slide-box .main-card .card-content {
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.asset-chart-container {
-  width: 50%;
-  max-width: 300px;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  background-color: #fff;
 }
 
 .asset-legend {
