@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
 import IntroMainslide from '@/components/HomePage/IntroMainslide.vue'
 import MainslideList from '@/components/HomePage/MainslideList.vue'
 import CategoryList from '@/components/HomePage/CategoryList.vue'
@@ -34,7 +36,7 @@ import PolicyCard from '@/components/HomePage/PolicyCard.vue'
 import NewsCard from '@/components/HomePage/NewsCard.vue'
 import BoardCard from '@/components/HomePage/BoardCard.vue'
 // import PromotionSlide from '@/components/HomePage/PromotionSlide.vue'
-//import AssetSummary from '@/components/HomePage/AssetSummary.vue'
+// import AssetSummary from '@/components/HomePage/AssetSummary.vue'
 // import ProductCard from '@/components/HomePage/ProductCard.vue'
 
 import { ref } from 'vue'
@@ -50,9 +52,20 @@ export default {
     BoardCard,
     PolicyCard,
     NewsCard
-    //AssetSummary
-    // PromotionSlide,
-    // ProductCard,
+  },
+  setup() {
+    const authStore = useAuthStore()
+
+    // 로그인 상태를 스토어에서 가져옴
+    const isLoggedIn = computed(() => authStore.isLoggedIn)
+
+    // 사용자 이름을 스토어에서 가져옴 (필요한 경우)
+    const username = computed(() => authStore.username)
+
+    return {
+      isLoggedIn,
+      username
+    }
   }
 }
 </script>

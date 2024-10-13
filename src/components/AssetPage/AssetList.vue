@@ -304,6 +304,7 @@ const processAssetData = (data, assetTypes) => {
         accounts: accounts.length ? accounts : ['']
       }
     }
+    // processed.loanAmount = BigInt(data.loanAmount || 0)
     return processed
   }, {})
 }
