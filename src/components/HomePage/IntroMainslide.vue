@@ -82,7 +82,7 @@ const modules = [Pagination, Autoplay]
 /* 슬라이드 카드 css */
 .intro-slide-box .intro-card {
   position: relative;
-  height: 24.2rem;
+  height: 23.5rem;
   padding: 3.5rem 3.3rem;
   border-radius: 28px;
   background-color: #f3f3ff;
