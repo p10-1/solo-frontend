@@ -8,8 +8,8 @@
       <table class="table">
         <colgroup>
           <col width="13%" />
-          <col width="60%" />
-          <col width="27%" />
+          <col width="65%" />
+          <col width="22%" />
         </colgroup>
         <thead>
           <tr>
@@ -29,9 +29,10 @@
                 }"
               >
                 <!-- text가 길때 제한길이 이하는 '...'으로 표시되고 hover하면 전체 text 보여주기 -->
-                <div class="link truncated" :title="board.title">
+                <div class="board-title truncated" :title="board.title">
                   {{ truncateTitle(board.title) }}
                 </div>
+                <span class="new-label">NEW</span>
                 <ul class="table-ex-info">
                   <li><i class="fa-solid fa-user"></i> {{ board.views }}</li>
                   <li><i class="fa-solid fa-heart"></i> {{ board.likes }}</li>

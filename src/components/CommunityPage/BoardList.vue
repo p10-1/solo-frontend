@@ -56,16 +56,16 @@
       <tbody>
         <tr v-for="board in list" :key="board.boardNo">
           <td>{{ board.boardNo }}</td>
-          <td class="text-align-left link">
+          <td class="text-align-left">
             <router-link
               :to="{
                 name: 'board/detail',
                 params: { boardNo: board.boardNo }
               }"
-              class="router-link no-underline"
+              class="router-link"
             >
               <!-- text가 길때 제한길이 이하는 '...'으로 표시되고 hover하면 전체 text 보여주기 -->
-              <div class="truncated" :title="board.title">
+              <div class="board-title truncated" :title="board.title">
                 {{ truncateTitle(board.title) }}
               </div>
               <!-- 24시간 이내 새 게시물 new 보여주기 -->

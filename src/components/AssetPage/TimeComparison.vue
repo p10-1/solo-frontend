@@ -7,7 +7,7 @@
 
     <!-- 차트 렌더링을 위한 캔버스 -->
     <div class="time-comparison__chart-container">
-      <canvas ref="chartRef"></canvas>
+      <canvas ref="chartRef" class="canvas-chart"></canvas>
     </div>
 
     <!-- 자산 변동 요약 정보가 있을 경우 표시 -->
@@ -208,11 +208,16 @@ onBeforeUnmount(() => {
     transform 0.3s,
     box-shadow 0.3s;
 }
+.time-comparison .canvas-chart {
+  width: auto;
+  height: 320px !important;
+}
 .time-comparison .comparison-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
+  margin-top: 1rem;
   margin-bottom: 1rem;
   border-bottom: 1px dashed #cfc6fd;
 }

@@ -3,20 +3,20 @@
     <div class="board-detail">
       <div>
         <h2 class="title">{{ board.title }}</h2>
-        <div class="box">
-          <dl class="card-text">
+        <div class="post-content-top">
+          <dl class="post-info">
             <dt>작성자:</dt>
             <dd class="badge">{{ board.userName }}</dd>
             <dt>작성일:</dt>
             <dd class="text-muted">{{ moment(board.regDate).format('YYYY-MM-DD HH:mm:ss') }}</dd>
           </dl>
           <ul class="post-stats">
-            <i class="fa-solid fa-user"></i>
-            <span class="badge">{{ board.views }}</span>
             <i class="fa-solid fa-heart"></i>
             <span class="badge">{{ board.likes }}</span>
             <i class="fa-solid fa-comment"></i>
             <span class="badge">{{ board.comments }}</span>
+            <i class="fa-solid fa-user"></i>
+            <span class="badge">{{ board.views }}</span>
           </ul>
         </div>
         <div class="post-content margin-top-1rem">
@@ -48,10 +48,21 @@
         </div>
       </div>
     </div>
+    <!-- 좋아요 수, 코멘트 수 -->
+    <ul class="post-stats2 margin-top-2rem">
+      <li>
+        <span class="badge"><i class="fa-solid fa-heart"></i></span>
+        {{ board.likes }}
+      </li>
+      <li>
+        <span class="badge"><i class="fa-solid fa-comment"></i></span>
+        {{ board.comments }}
+      </li>
+    </ul>
 
     <!-- 댓글 리스트 -->
     <div class="comments-section">
-      <h2 class="title margin-top-3rem">댓글</h2>
+      <h2 class="title margin-top-1rem">댓글</h2>
       <div v-if="comments && comments.length">
         <ul>
           <li v-for="comment in comments" :key="comment.commentNo">
@@ -225,42 +236,33 @@ onMounted(() => {
 </script>
 
 <style>
-.card-title {
-  font-size: 36px;
-  font-weight: 700;
+/* 게시글 상단 */
+.board-detail .title {
+  font-size: 2rem;
+  font-weight: 500;
   word-break: keep-all;
   margin-bottom: 24px;
 }
 
-dl.card-text {
-  position: relative;
+.post-content-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
-dl.card-text dt {
-  display: inline-block;
-  font-size: 18px;
-  letter-spacing: -1px;
+.post-content-top dl.post-info {
+  display: flex;
+  gap: 5px;
 }
 
-dl.card-text dd {
-  display: inline-block;
-  font-size: 18px;
-  margin-left: 5px;
-  margin-right: 20px;
-  font-weight: 600;
-}
-
-.board-detail .box {
-  position: relative;
-}
-.post-stats {
-  position: absolute;
-  top: 0;
-  right: 0;
+.post-content-top .post-stats {
+  display: flex;
+  gap: 15px;
   font-size: 18px;
   color: #cfc6fd;
 }
 
+/* 게시글 본문 */
 .board-detail .post-content {
   min-height: 200px;
   padding: 80px 20px;
@@ -270,18 +272,40 @@ dl.card-text dd {
 }
 
 .responsive-img {
-  max-width: 100%; /* 최대 너비를 100%로 설정 */
-  height: auto; /* 비율을 유지하며 자동으로 높이 조절 */
-  cursor: pointer; /* 클릭 가능하게 표시 */
+  max-width: 100%;
+  height: auto;
+  cursor: pointer;
 }
 
 .board-detail .button-box {
   position: relative;
   margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.post-stats2 {
+  text-align: center;
+}
+.post-stats2 li {
+  display: inline-block;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+  margin-right: 1rem;
+}
+.post-stats2 li .badge {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  margin-right: 0;
+  background-color: #e4deff;
+}
+.post-stats2 li .badge i {
+  font-size: 1.35rem;
+  line-height: 3.7rem;
 }
 
 /* 댓글 */
@@ -316,9 +340,11 @@ dl.card-text dd {
   margin-bottom: 0;
   padding: 1.7rem 1.5rem;
   background-color: #f3f3ff;
+  word-break: keep-all;
   border-radius: 0px 28px 28px 28px;
   width: 100%;
   letter-spacing: -0.7px;
+  line-height: 1.45;
 }
 
 .comments-section .text-muted {

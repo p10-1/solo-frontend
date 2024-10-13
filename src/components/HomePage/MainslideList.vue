@@ -55,12 +55,6 @@
                   </div>
                 </div>
               </div>
-              <div class="card-bottom">
-                <!-- 자세히 보기 버튼 -->
-                <button class="button-main">
-                  <i class="fa-solid fa-magnifying-glass"></i> 자세히 보기
-                </button>
-              </div>
             </div>
           </router-link>
         </swiper-slide>
@@ -104,12 +98,6 @@
                     </ul>
                   </div>
                 </div>
-              </div>
-              <div class="card-bottom">
-                <!-- 자세히 보기 버튼 -->
-                <button class="button-main">
-                  <i class="fa-solid fa-magnifying-glass"></i> 자세히 보기
-                </button>
               </div>
             </div>
           </router-link>
@@ -156,12 +144,6 @@
                     </ul>
                   </div>
                 </div>
-              </div>
-              <div class="card-bottom">
-                <!-- 자세히 보기 버튼 -->
-                <button class="button-main">
-                  <i class="fa-solid fa-magnifying-glass"></i> 자세히 보기
-                </button>
               </div>
             </div>
           </router-link>

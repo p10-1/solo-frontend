@@ -121,8 +121,8 @@ const truncateContent = (content, length = 100) => {
   color: #7d64da;
 }
 .best-card:hover .card-ex-info li,
-.best-card:hover .card-ex-info .text-muted {
-  color: #cfc6fd !important;
+.best-card:hover .text-mute {
+  color: #cfc6fd;
 }
 .best-card .badge {
   background: none;

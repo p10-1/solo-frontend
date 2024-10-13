@@ -88,10 +88,18 @@ onMounted(() => {
   font-family: FontAwesome;
   color: #fff;
   font-size: 16rem;
-  opacity: 0.05;
+  opacity: 0.07;
   position: absolute;
   bottom: -5rem;
   right: 1rem;
+  transition:
+    bottom 0.4s ease,
+    transform 0.4s ease;
+  transform: rotate(0deg);
+}
+.main-policy-card:hover::after {
+  bottom: -3rem;
+  transform: rotate(20deg);
 }
 .main-policy-card:hover .button-main {
   background-color: #502fd4;
