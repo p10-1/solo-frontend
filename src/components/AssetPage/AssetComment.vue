@@ -13,7 +13,7 @@
           <h4 class="report-title margin-top-1rem">
             {{ customTitle || title }}
           </h4>
-          <div class="report-content margin-top-1rem">
+          <div class="report-content">
             <p class="intro">{{ assetEvaluationIntro }}</p>
             <p class="comparison">{{ assetEvaluationComparison }}</p>
             <div class="advice">
@@ -155,6 +155,14 @@ const assetEvaluationAdvice = computed(() => {
 </script>
 
 <style scoped>
+.asset-comment .comment-robot {
+  flex-wrap: wrap;
+}
+.asset-comment .comment-robot dd::after {
+  left: 1.9rem;
+  top: -18px;
+  transform: rotate(360deg);
+}
 .comment-robot .comment .report-title {
   font-size: 1.2rem;
   color: #333;
@@ -164,6 +172,7 @@ const assetEvaluationAdvice = computed(() => {
 .comment-robot .comment .report-content {
   border-top: 1px dashed #cfc6fd;
   padding-top: 10px;
+  margin-top: 10px;
 }
 .comment-robot .comment .report-content p {
   font-size: 1rem;
@@ -177,7 +186,6 @@ const assetEvaluationAdvice = computed(() => {
 }
 .comment-robot .comment .report-content .intro {
   font-weight: 600;
-  color: #6846f5;
 }
 .comment-robot .comment .report-content .advice {
   border-top: 1px dashed #cfc6fd;

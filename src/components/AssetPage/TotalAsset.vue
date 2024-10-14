@@ -1,19 +1,16 @@
 <template>
   <div class="total-asset">
-    <!-- 사용자 이름과 총 자산 타이틀 -->
-    <h3>
-      <span class="text-accent">{{ userName }}</span
-      >님의 총 자산
-    </h3>
-
-    <!-- 총 자산 금액 표시 영역 -->
-    <ul class="asset-amount margin-top-1rem">
-      <li><i class="won-icon">￦</i></li>
-      <li>
+    <div class="asset-amount">
+      <h3>
+        "<span class="text-accent">{{ userName }}</span
+        >"님의 총 자산
+      </h3>
+      <div>
+        <i class="won-icon">￦</i>
         <span class="text-accent">{{ animatedAmount }}</span
         >원
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
   
 </template>
@@ -77,32 +74,35 @@ watch(
   text-align: center;
   font-size: 1.4rem;
   letter-spacing: -0.8px;
-  margin-bottom: 0.8rem;
 }
 
 .total-asset .asset-amount {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
+  font-size: 1.4rem;
+  font-weight: 500;
   text-align: right;
-  font-size: 2rem;
   letter-spacing: -1.8px;
 }
-.total-asset .asset-amount i.won-icon {
+i.won-icon {
   display: inline-block;
-  width: 2.2rem;
-  height: 2.2rem;
+  width: 2rem;
+  height: 2rem;
   border-radius: 50%;
   background-color: #6846f5;
   color: #fff;
   font-style: normal;
   font-weight: 600;
   text-align: center;
-  line-height: 2.2rem;
-  font-size: 1.2rem;
+  line-height: 2rem;
+  font-size: 1.1rem;
+  vertical-align: text-top;
+  margin-right: 5px;
 }
 
-.total-asset .asset-amount .text-accent {
+.total-asset .asset-amount div .text-accent {
   font-weight: 600;
+  font-size: 2rem;
 }
 </style>

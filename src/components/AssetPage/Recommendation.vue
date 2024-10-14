@@ -31,7 +31,7 @@
               <b class="text-accent">{{ authStore.userInfo.userName }}</b
               >님이 가지고 계신 <b class="text-accent">대출</b>과 <b class="text-accent">기간</b>을
               비교했을 때 <b class="text-accent">이자율</b>이
-              <b class="text-accent">??% 높아요!</b>
+              높은 상품 추천드려요!
             </P>
           </dd>
         </dl>
@@ -101,7 +101,6 @@ const fetchRecommendedProducts = async () => {
 
 onMounted(fetchRecommendedProducts)
 
-// watch(() => props.loanPeriod, fetchRecommendedProducts)
 </script>
 
 <style scoped>
@@ -168,5 +167,9 @@ onMounted(fetchRecommendedProducts)
 }
 .comment-robot .robot-role {
   color: #e9b566;
+}
+.recommend-content .comment-robot .comment {
+  line-height: 1.45rem;
+  font-size: 1.05rem;
 }
 </style>

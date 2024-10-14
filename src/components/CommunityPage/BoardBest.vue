@@ -121,8 +121,8 @@ const truncateContent = (content, length = 100) => {
   color: #7d64da;
 }
 .best-card:hover .card-ex-info li,
-.best-card:hover .card-ex-info .text-muted {
-  color: #cfc6fd !important;
+.best-card:hover .text-mute {
+  color: #cfc6fd;
 }
 .best-card .badge {
   background: none;
@@ -174,5 +174,15 @@ const truncateContent = (content, length = 100) => {
   font-weight: 500;
   color: #b9b9b9;
   letter-spacing: -0.8px;
+}
+
+/* Swiper 페이지네이션 스타일 커스터마이징 */
+:deep(.swiper-pagination-bullet) {
+  background: #cfc6fd;
+  opacity: 1;
+}
+
+:deep(.swiper-pagination-bullet-active) {
+  background: #6846f5;
 }
 </style>

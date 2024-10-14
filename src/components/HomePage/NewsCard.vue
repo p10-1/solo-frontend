@@ -63,7 +63,7 @@ const selectedCategory = ref('경제') // 기본 선택 카테고리
 const fetchNews = async () => {
   try {
     const response = await recommendNews()
-    console.log("news",response);
+    console.log('news', response)
     if (response && typeof response === 'object') {
       newsList.value = Object.entries(response).map(([category, news]) => ({
         category,
@@ -84,7 +84,7 @@ const fetchNews = async () => {
 
 const filteredNews = computed(() => {
   const categoryData = newsList.value.find((item) => item.category === selectedCategory.value)
-  return categoryData ? categoryData.newsItems.filter(newsItem => newsItem.imageUrl) : []
+  return categoryData ? categoryData.newsItems.filter((newsItem) => newsItem.imageUrl) : []
 })
 
 // 현재 인덱스에 따라 표시할 뉴스
@@ -148,5 +148,15 @@ onMounted(async () => {
   margin-top: 15px;
   font-size: 15px;
   text-align: center;
+}
+
+/* Swiper 페이지네이션 스타일 커스터마이징 */
+:deep(.swiper-pagination-bullet) {
+  background: #cfc6fd;
+  opacity: 1;
+}
+
+:deep(.swiper-pagination-bullet-active) {
+  background: #6846f5;
 }
 </style>

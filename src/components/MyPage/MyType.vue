@@ -18,11 +18,11 @@
         :class="['btn', { selected: selectedType === type.title }]"
         @click="selectType(type)"
       >
-        <div class="icon"><img :src="type.icon" alt="icon" class="icon-img" /></div>
         <div class="text-container">
           <div class="title">{{ type.title }}</div>
           <div class="description">{{ type.description }}</div>
         </div>
+        <img :src="type.icon" alt="icon" class="icon-img" />
         <!-- <div class="icon"><img :src="type.icon" alt="icon" class="icon-img" /></div> -->
       </button>
     </div>
@@ -105,14 +105,6 @@ onMounted(() => {
 </script>
 
 <style scope>
-.icon {
-}
-.icon-img {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 80%;
-}
 .my-type h2.title {
   font-weight: 300;
 }
@@ -150,15 +142,20 @@ onMounted(() => {
   display: flex;
   gap: 10px;
 }
-.my-type .button-container .btn {
+.my-type .btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
   padding: 1.6rem 1.4rem;
   border-radius: 28px;
   border: 3px solid #e4deff;
   background-color: #fcfcfc;
+  letter-spacing: -1px;
   width: 100%;
   transition: all 0.6s;
 }
-.my-type .button-container .btn:hover {
+.my-type .btn:hover {
   background-color: #fffbec;
   border: 3px solid #ffba62;
   box-shadow: 0px 0px 15px rgb(253, 228, 195);
@@ -166,23 +163,25 @@ onMounted(() => {
     transform 0.3s,
     box-shadow 0.3s;
 }
+.my-type .btn:hover .icon-img {
+  filter: brightness(0) saturate(100%) invert(50%) sepia(65%) saturate(800%) hue-rotate(11deg);
+}
 .my-type .button-container .btn.selected {
   background-color: #fffbec;
   border: 3px solid #ffba62;
 }
-.my-type .button-container .icon {
-  display: inline-block;
-  width: 35%;
-
-}
-.my-type .icon-img {
-  vertical-align: baseline;
+.my-type .button-container .btn.selected .icon-img {
+  filter: brightness(0) saturate(100%) invert(50%) sepia(65%) saturate(800%) hue-rotate(11deg);
 }
 .my-type .button-container .text-container {
-  margin-right: 5%;
-  display: inline-block;
   width: 60%;
   text-align: left;
+}
+.my-type .btn .icon-img {
+  width: calc(40% - 5px);
+  vertical-align: baseline;
+  margin-right: -5px;
+  transition: filter 0.5s ease;
 }
 .my-type .button-container .title {
   line-height: 1;
