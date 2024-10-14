@@ -3,13 +3,10 @@
     <swiper
       :pagination="{ clickable: true }"
       :modules="modules"
-      :loop="true"
-      :slides-per-view="1"
-      :space-between="20"
-      :initial-slide="0"
+      v-bind="swiperOptions"
       class="mySwiper"
     >
-      <!-- 각 슬라이드에 대한 반복 -->
+      <!-- 각 슬라이드에 대한 반복 (key 추가) -->
       <swiper-slide v-for="(slide, index) in slides" :key="index">
         <router-link to="asset">
           <div class="asset-distribution">
@@ -20,7 +17,6 @@
                 <ChartComponent type="doughnut" :data="slide.chartData" :options="chartOptions" />
               </div>
               <!-- 자산 상세 정보 목록 -->
-
               <div class="asset-legend">
                 <div class="total-asset">
                   <span class="total-label">총 자산</span>
@@ -40,8 +36,7 @@
                   </li>
                   <li class="asset-percentage">{{ formatNumber(asset.percentage) }}%</li>
                   <li class="asset-amount">
-                    <span class="text-accent">{{ formatNumber(Math.round(asset.total)) }}</span
-                    >원
+                    <span class="text-accent">{{ formatNumber(Math.round(asset.total)) }}</span>원
                   </li>
                 </ul>
               </div>
@@ -52,11 +47,10 @@
     </swiper>
   </div>
 </template>
-
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Pagination, Autoplay, Navigation } from 'swiper/modules'
+import { Pagination, Autoplay } from 'swiper/modules'
 import ChartComponent from '@/components/common/ChartComponent.vue'
 import { fetchAssetData, fetchAssetComparison } from '@/api/assetApi'
 import 'swiper/css'
@@ -105,6 +99,7 @@ const sortAssetDetails = (assetDetails) => {
     .sort((a, b) => b.percentage - a.percentage)
     .filter((asset) => asset.total > 0)
 }
+
 // 퍼센티지 계산 함수
 const calculatePercentage = (value, total) => {
   if (total === 0 || isNaN(value)) return 0
@@ -250,16 +245,19 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
 }
+
 .total-asset .total-label {
   font-size: 1.1rem;
   font-weight: 600;
   color: #333;
 }
+
 .total-asset .total-amount {
   font-size: 1.3rem;
   font-weight: 700;
   color: #6846f5;
 }
+
 .asset-distribution {
   width: 100%;
   padding: 1rem 0;
@@ -283,14 +281,17 @@ onMounted(() => {
   width: 50%;
   max-width: 250px;
 }
+
 /* 자산 범례 스타일 */
 .asset-distribution .card-content .asset-legend {
   width: 50%;
 }
+
 .asset-legend .advice {
   margin-top: -1.5rem;
   margin-bottom: 20px;
 }
+
 .asset-legend .advice .guide {
   display: block;
   font-weight: 600;
@@ -298,6 +299,7 @@ onMounted(() => {
   letter-spacing: -0.8px;
   margin-bottom: 5px;
 }
+
 .asset-legend .advice p {
   font-size: 0.81rem;
   line-height: 1.5;
@@ -311,10 +313,12 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px; /* 자산 항목 간의 간격 조정 */
+  margin-bottom: 12px;
+  /* 자산 항목 간의 간격 조정 */
   padding-bottom: 10px;
   border-bottom: 1px dashed #eae6ff;
 }
+
 .asset-legend .asset-type:last-child {
   margin-bottom: 0;
   border-bottom: 0;
@@ -328,6 +332,7 @@ onMounted(() => {
   font-weight: 500;
   letter-spacing: -0.8px;
 }
+
 /* 자산 유형 색상 표시 스타일 */
 .asset-legend .asset-name .type-color {
   display: inline-block;
@@ -358,6 +363,7 @@ onMounted(() => {
   letter-spacing: -0.8px;
   color: #333;
 }
+
 .asset-legend .asset-amount .text-accent {
   font-weight: 700;
 }

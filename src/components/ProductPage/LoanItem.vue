@@ -96,7 +96,6 @@ async function toggleDetails() {
 
 .product-card .memo-box {
   background: rgb(247, 208, 149, 0.25);
-  /* background-color: #f3f3ff; */
   padding: 1.7rem;
   border-radius: 27px;
   font-size: 0.9rem;

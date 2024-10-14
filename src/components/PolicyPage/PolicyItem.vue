@@ -14,7 +14,6 @@
 <script setup>
 import { ref } from 'vue'
 import PolicyModal from './PolicyModal.vue'
-// const { policy } = props
 defineProps({
   policy: {
     type: Object,
