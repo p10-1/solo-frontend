@@ -8,7 +8,12 @@
         </span>
       </dt>
       <dd>
-        <div class="robot-role">분석 멘토 Report</div>
+        <div class="robot-role">
+          <span class="dd-robot-icon">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </span>
+          분석 멘토 Report
+        </div>
         <div class="comment">
           <h4 class="report-title margin-top-1rem">
             {{ customTitle || title }}
@@ -161,12 +166,25 @@ const assetEvaluationAdvice = computed(() => {
 <style scoped>
 .asset-comment .comment-robot {
   flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+/* 화살표 */
+.asset-comment:first-child .comment-robot dd::after {
+  top: 2rem;
+  left: -18px;
+  right: auto;
+  transform: rotate(270deg);
 }
 .asset-comment .comment-robot dd::after {
-  left: 1.9rem;
-  top: -18px;
-  transform: rotate(360deg);
+  top: 2rem;
+  left: auto;
+  right: -18px;
+  transform: rotate(90deg);
 }
+.asset-comment .comment-robot dd .dd-robot-icon {
+  font-size: 1.3rem;
+}
+/* 코멘트 제목 */
 .comment-robot .comment .report-title {
   font-size: 1.2rem;
   color: #333;

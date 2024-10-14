@@ -20,29 +20,28 @@
         class="mySwiper"
       >
         <swiper-slide v-for="(post, index) in bestPosts" :key="index" class="posts-list">
-          <!-- 링크 연결 실패ㅠㅠ -->
           <router-link
             :to="{
               name: 'board/detail',
               params: { boardNo: post.boardNo }
             }"
-          ></router-link>
-          <div class="posts-card">
-            <div class="card-body">
-              <div class="card-ex-info">
-                <ul class="ex-info">
-                  <li><i class="fa-solid fa-user"></i> {{ post.views }}</li>
-                  <li><i class="fa-solid fa-heart"></i> {{ post.likes }}</li>
-                  <li><i class="fa-solid fa-comment"></i> {{ post.comments }}</li>
-                </ul>
-                <div class="text-mute">{{ formatDate(post.regDate) }}</div>
+          >
+            <div class="posts-card">
+              <div class="card-body">
+                <div class="card-ex-info">
+                  <ul class="ex-info">
+                    <li><i class="fa-solid fa-user"></i> {{ post.views }}</li>
+                    <li><i class="fa-solid fa-heart"></i> {{ post.likes }}</li>
+                    <li><i class="fa-solid fa-comment"></i> {{ post.comments }}</li>
+                  </ul>
+                  <div class="text-mute">{{ formatDate(post.regDate) }}</div>
+                </div>
+                <h5 class="card-title link">{{ post.title }}</h5>
+                <div class="card-content">{{ post.content }}</div>
+                <span class="badge">{{ post.userName }}</span>
               </div>
-              <h5 class="card-title link">{{ post.title }}</h5>
-              <div class="card-content">{{ post.content }}</div>
-              <span class="badge">{{ post.userName }}</span>
             </div>
-          </div>
-          <!-- </router-link> -->
+          </router-link>
         </swiper-slide>
       </swiper>
     </div>
