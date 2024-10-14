@@ -11,12 +11,12 @@
             <dd class="text-muted">{{ moment(board.regDate).format('YYYY-MM-DD HH:mm:ss') }}</dd>
           </dl>
           <ul class="post-stats">
+            <i class="fa-solid fa-user"></i>
+            <span class="badge">{{ board.views }}</span>
             <i class="fa-solid fa-heart"></i>
             <span class="badge">{{ board.likes }}</span>
             <i class="fa-solid fa-comment"></i>
             <span class="badge">{{ board.comments }}</span>
-            <i class="fa-solid fa-user"></i>
-            <span class="badge">{{ board.views }}</span>
           </ul>
         </div>
         <div class="post-content margin-top-1rem">
