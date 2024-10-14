@@ -34,8 +34,7 @@
             <div class="intro-card intro-card02">
               <h5 class="card-title">빚없솔에서<br />함께하며 공감대를</h5>
               <div class="card-content">
-                커뮤니티에서 서로의 금융지식과,<br />경험을 공유하여 더 나은 자산관리를 함께
-                해보아요!
+                커뮤니티에서 서로의 금융지식과,<br />경험을 공유하며 함께 해보아요!
               </div>
               <div class="card-bottom">
                 <router-link to="login" class="button-main"
@@ -48,7 +47,7 @@
         <swiper-slide>
           <router-link to="login">
             <div class="intro-card intro-card03">
-              <h5 class="card-title">티끌 모아<br />티끌 부자되기!</h5>
+              <h5 class="card-title">티끌 모아<br />태산 부자되기!</h5>
               <div class="card-content">
                 매일 금융 퀴즈를 맞추며,<br />포인트도 쌓고, 금융 상식도 쌓아요.
               </div>
@@ -89,17 +88,17 @@ const modules = [Pagination, Autoplay]
 }
 .intro-slide-box .intro-card01 {
   background-image: url(/src/assets/images/intro-bg01.png);
-  background-position: 90% 70%;
+  background-position: 93% 70%;
   background-repeat: no-repeat;
   background-size: 40%;
-  background-color: #9180f7;
+  background-color: #6846f5;
   color: #fff;
 }
 .intro-slide-box .intro-card02 {
   background-image: url(/src/assets/images/intro-bg02.png);
-  background-position: 85% 60%;
+  background-position: 93% 80%;
   background-repeat: no-repeat;
-  background-size: 30%;
+  background-size: 42%;
   background-color: #fefbde;
 }
 .intro-slide-box .intro-card03 {

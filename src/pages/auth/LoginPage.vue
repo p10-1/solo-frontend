@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <h2 class="title">로그인</h2>
+    <h2 class="title text-align-center">로그인</h2>
     <div class="login-body default-content-bgDark">
       <div class="login-content">
         <span class="introduce">Introduce</span>
@@ -56,6 +56,11 @@ const login = async () => {
 }
 </script>
 <style scope>
+.login-container h2.title {
+  border-bottom: 0;
+  margin-bottom: 5px;
+}
+
 .default-content-bgDark {
   /* 이 색은 너무 어두운 듯 */
   /* background: rgb(58, 46, 134); */
