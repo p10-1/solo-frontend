@@ -1,5 +1,4 @@
 <template>
-  <!-- <Header /> -->
   <NavBar />
   <section class="container min-height-container">
     <slot></slot>

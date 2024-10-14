@@ -185,8 +185,6 @@
 </template>
 
 <script setup>
-//src/components/AssetPage/AssetList.vue
-
 import { ref, computed, onMounted } from 'vue'
 import { fetchAssetData, fetchAssetComparison } from '@/api/assetApi'
 import { useAuthStore } from '@/stores/authStore'
@@ -223,12 +221,10 @@ const fieldMapping = {
 }
 
 const loadData = async () => {
-  console.log('1. loadData 함수 시작')
   try {
     loading.value = true
     const assetData = await fetchAssetData()
     rawAssetData.value = assetData
-    // assetAverages.value = averages
     const assetDetail = await fetchAssetComparison(assetData[0].type)
     assetAverages.value = assetDetail.overallAverage
     assetStyle.value = assetDetail.typeAverage
@@ -237,7 +233,6 @@ const loadData = async () => {
     error.value = '데이터를 불러오는데 실패했습니다. 나중에 다시 시도해주세요.'
   } finally {
     loading.value = false
-    console.log('4. loadData 함수 종료')
   }
 }
 // 자산 데이터를 처리하여 필요한 형태로 변환하는 함수
@@ -271,7 +266,6 @@ const processAssetData = (data, assetTypes) => {
         accounts: accounts.length ? accounts : ['']
       }
     }
-    // processed.loanAmount = BigInt(data.loanAmount || 0)
     return processed
   }, {})
 }

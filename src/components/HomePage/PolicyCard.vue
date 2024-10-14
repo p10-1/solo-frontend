@@ -76,7 +76,6 @@ onMounted(() => {
   overflow: hidden;
   width: 100%;
   padding: 3rem;
-  /* background-color: #897fe6; */
   background-color: #6846f5;
   height: 18rem;
   border-radius: 28px;

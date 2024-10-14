@@ -111,7 +111,6 @@ const openModal = () => {
   position: absolute;
   transform: translateX(-50%);
   bottom: 0;
-  /* width: 100%; */
   height: 40px;
   line-height: 37px;
   background: linear-gradient(to right top, #7d64da, #a686f3);

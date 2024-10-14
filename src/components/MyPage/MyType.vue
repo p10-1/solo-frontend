@@ -23,7 +23,6 @@
           <div class="description">{{ type.description }}</div>
         </div>
         <img :src="type.icon" alt="icon" class="icon-img" />
-        <!-- <div class="icon"><img :src="type.icon" alt="icon" class="icon-img" /></div> -->
       </button>
     </div>
   </div>
@@ -72,10 +71,6 @@ const loadUserAsset = async () => {
   }
 }
 
-// const selectType = (type) => {
-//   selectedType.value = type.title
-//   updateTypeValue(type)
-// }
 
 const selectType = (type) => {
   const isConfirmed = confirm("자산타입을 변경하시겠습니까?");
