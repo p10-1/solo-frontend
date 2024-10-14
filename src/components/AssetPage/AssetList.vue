@@ -19,29 +19,6 @@
           <!-- 이전 슬라이드 버튼 -->
           <TotalAsset :totalAmount="processedData.totalAsset" />
           <div class="asset-statistics">
-            <div class="asset-top-item">
-              <AssetComment
-                :assetDetails="processedData.assetDetails"
-                :userType="processedData.assetDetails.type"
-                comparisonType="personal"
-                :userAssetDetails="processedData.assetDetails"
-                customTitle=" 현재 내 자산은 ?"
-              />
-              <AssetComment
-                :assetDetails="processedData.typeAverages"
-                :userType="processedData.assetDetails.type"
-                comparisonType="typeAverage"
-                :userAssetDetails="processedData.assetDetails"
-                :customTitle="`${processedData.assetDetails.type} 유형 평균과 비교 하면은 ?`"
-              />
-              <AssetComment
-                :assetDetails="processedData.overallAverages"
-                userType="전체"
-                comparisonType="overallAverage"
-                :userAssetDetails="processedData.assetDetails"
-                customTitle="전체 사용자 평균과 비교 하면 ?"
-              />
-            </div>
             <div class="asset-top-item margin-top-1rem">
               <Distribution
                 :assetDetails="processedData.assetDetails"
@@ -51,8 +28,43 @@
                 :userAssetDetails="processedData.assetDetails"
               />
             </div>
+            <div class="asset-top-item">
+              <AssetComment
+                :assetDetails="processedData.assetDetails"
+                :userType="processedData.assetDetails.type"
+                comparisonType="personal"
+                :userAssetDetails="processedData.assetDetails"
+                customTitle=" 현재 내 자산은 ?"
+                :showIcon="true"
+              />
+              <!-- Conditionally Render Average Comments Based on Active Slide -->
+              <AssetComment
+                v-if="currentSlide === 'typeAverage'"
+                :assetDetails="processedData.typeAverages"
+                :userType="processedData.assetDetails.type"
+                comparisonType="typeAverage"
+                :userAssetDetails="processedData.assetDetails"
+                :customTitle="`${processedData.assetDetails.type} 유형 평균과 비교하면?`"
+              />
+
+              <!-- 전체 평균 (Distribution이 overallAverage일 때만 표시) -->
+              <AssetComment
+                v-if="currentSlide === 'overallAverage'"
+                :assetDetails="processedData.overallAverages"
+                userType="전체"
+                comparisonType="overallAverage"
+                :userAssetDetails="processedData.assetDetails"
+                customTitle="전체 사용자 평균과 비교하면?"
+              />
+            </div>
             <div class="asset-top-item margin-top-1rem">
-              <swiper v-if="processedData" :navigation="true" :modules="modules" class="yourSwiper">
+              <swiper
+                v-if="processedData"
+                :navigation="true"
+                @slideChange="onSlideChange"
+                :modules="modules"
+                class="yourSwiper"
+              >
                 <!-- 유형별 평균 자산 분포 슬라이드 -->
                 <swiper-slide v-if="processedData.typeAverages">
                   <Distribution
@@ -77,7 +89,7 @@
               </swiper>
             </div>
           </div>
-        </div>     
+        </div>
         <!-- 섹션: 자산 비교 차트 영역 -->
         <section class="asset-comparison-container">
           <div class="asset-comparison-content">
@@ -185,7 +197,6 @@
 </template>
 
 <script setup>
-
 import { ref, computed, onMounted } from 'vue'
 import { fetchAssetData, fetchAssetComparison } from '@/api/assetApi'
 import { useAuthStore } from '@/stores/authStore'
@@ -202,6 +213,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { Navigation } from 'swiper/modules'
+
 const modules = [Navigation]
 const authStore = useAuthStore()
 const loading = ref(true) // 로딩 상태 관리
@@ -212,6 +224,17 @@ const assetAverages = ref(null) // 평균 자산 데이터
 const assetStyle = ref(null)
 
 const selectedAssetType = ref('cash') // 선택된 자산 타입 기본값은 'cash'
+const currentSlide = ref('typeAverage') // Default to 'typeAverage' slide
+
+// Handle slide change for Swiper
+const onSlideChange = (swiper) => {
+  const activeIndex = swiper.activeIndex
+  if (activeIndex === 0) {
+    currentSlide.value = 'typeAverage'
+  } else if (activeIndex === 1) {
+    currentSlide.value = 'overallAverage'
+  }
+}
 
 // 자산 데이터 및 평균 데이터를 API로부터 로드하는 함수
 const fieldMapping = {
