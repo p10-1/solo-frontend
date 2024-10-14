@@ -6,17 +6,14 @@
       v-bind="swiperOptions"
       class="mySwiper"
     >
-      <!-- 각 슬라이드에 대한 반복 (key 추가) -->
       <swiper-slide v-for="(slide, index) in slides" :key="index">
         <router-link to="asset">
           <div class="asset-distribution">
             <h3 class="main-title">{{ slide.title }}</h3>
             <div class="card-content">
-              <!-- 도넛 차트 컴포넌트 -->
               <div class="asset-chart-container">
                 <ChartComponent type="doughnut" :data="slide.chartData" :options="chartOptions" />
               </div>
-              <!-- 자산 상세 정보 목록 -->
               <div class="asset-legend">
                 <div class="total-asset">
                   <span class="total-label">총 자산</span>
@@ -36,7 +33,8 @@
                   </li>
                   <li class="asset-percentage">{{ formatNumber(asset.percentage) }}%</li>
                   <li class="asset-amount">
-                    <span class="text-accent">{{ formatNumber(Math.round(asset.total)) }}</span>원
+                    <span class="text-accent">{{ formatNumber(Math.round(asset.total)) }}</span
+                    >원
                   </li>
                 </ul>
               </div>
@@ -47,22 +45,21 @@
     </swiper>
   </div>
 </template>
+
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Pagination, Autoplay } from 'swiper/modules'
+import { Pagination } from 'swiper/modules'
 import ChartComponent from '@/components/common/ChartComponent.vue'
 import { fetchAssetData, fetchAssetComparison } from '@/api/assetApi'
 import 'swiper/css'
 import 'swiper/css/pagination'
 
-// 자산 데이터와 비교 데이터를 저장할 ref
 const assetData = ref(null)
 const comparisonData = ref(null)
 const userType = ref('')
-const modules = [Pagination, Autoplay]
+const modules = [Pagination]
 
-// 자산 유형에 대한 한글 이름 매핑
 const assetNames = {
   cash: '현금',
   deposit: '예적금',
@@ -70,7 +67,6 @@ const assetNames = {
   insurance: '보험'
 }
 
-// 자산 유형별 색상 매핑
 const assetColors = {
   cash: '#FFCC00',
   deposit: '#CFDF4B',
@@ -78,88 +74,84 @@ const assetColors = {
   insurance: '#5F7DFF'
 }
 
-// API에서 자산 데이터를 불러오는 함수
 const loadAssetData = async () => {
   try {
     const data = await fetchAssetData()
+    console.log('Fetched user asset data:', data)
     if (data && data.length > 0) {
-      assetData.value = processAssetData(data[0])
+      assetData.value = processAndSortAssetData(data[0], '사용자 자산')
       userType.value = data[0].type || '전체'
     }
     const comparison = await fetchAssetComparison(userType.value)
+    console.log('Fetched comparison data:', comparison)
     comparisonData.value = comparison
   } catch (error) {
-    // 에러 처리
+    console.error('데이터 로드 중 오류 발생:', error)
   }
 }
-// 자산 데이터를 정렬하는 함수
-const sortAssetDetails = (assetDetails) => {
-  return Object.entries(assetDetails)
-    .map(([name, details]) => ({ name, ...details }))
-    .sort((a, b) => b.total - a.total)
-    .filter((asset) => asset.total > 0)
-}
 
-// 퍼센티지 계산 함수
 const calculatePercentage = (value, total) => {
   if (total === 0 || isNaN(value)) return 0
-  return Math.round((value / total) * 100) // 소수점 첫째 자리에서 반올림
+  return Math.round((value / total) * 100)
 }
 
-// 평균 데이터 처리 함수
-const processAverageData = (data) => {
-  const total = Object.values(data).reduce((sum, value) => sum + value, 0)
-  const result = Object.entries(data).map(([name, value]) => ({
-    name,
-    total: value,
-    percentage: calculatePercentage(value, total)
-  }))
-  return result
-}
+const processAndSortAssetData = (data, slideType) => {
+  console.log(`1. ${slideType} - 원본 데이터:`, data)
 
-// 자산 데이터 처리 함수
-const processAssetData = (data) => {
-  const assetTypes = ['cash', 'deposit', 'stock', 'insurance']
-  const processed = {}
+  let processedData = {}
   let total = 0
-  assetTypes.forEach((type) => {
-    const values = JSON.parse(data[type] || '[]')
-    const typeTotal = values.reduce((sum, val) => sum + Number(val), 0)
-    processed[type] = {
-      total: typeTotal,
-      details: values.map((value) => ({ value: Number(value) }))
-    }
-    total += typeTotal
-  })
-  // 퍼센트 계산 추가
-  for (const type in processed) {
-    processed[type].percentage = calculatePercentage(processed[type].total, total)
+
+  if (slideType === '사용자 자산') {
+    const assetTypes = ['cash', 'deposit', 'stock', 'insurance']
+    assetTypes.forEach((type) => {
+      let typeTotal = 0
+      if (Array.isArray(data[type])) {
+        typeTotal = data[type].reduce((sum, val) => sum + Number(val), 0)
+      } else if (typeof data[type] === 'string') {
+        const values = JSON.parse(data[type] || '[]')
+        typeTotal = values.reduce((sum, val) => sum + Number(val), 0)
+      } else if (typeof data[type] === 'number') {
+        typeTotal = data[type]
+      }
+      processedData[type] = { total: typeTotal }
+      total += typeTotal
+    })
+  } else {
+    processedData = { ...data }
+    total = Object.values(data).reduce((sum, value) => sum + Number(value), 0)
   }
-  return processed
+
+  console.log(`2. ${slideType} - 처리된 데이터:`, processedData)
+
+  const sortedAssets = Object.entries(processedData)
+    .map(([name, details]) => ({
+      name,
+      total: typeof details === 'object' ? details.total : details,
+      percentage: calculatePercentage(typeof details === 'object' ? details.total : details, total)
+    }))
+    .sort((a, b) => b.total - a.total)
+    .filter((asset) => asset.total > 0)
+
+  console.log(`3. ${slideType} - 정렬 및 필터링된 자산:`, sortedAssets)
+
+  return { sortedAssets, total }
 }
 
-// 차트 데이터 생성 함수
-const createChartData = (data) => {
-  const total = Object.values(data).reduce(
-    (sum, value) => sum + (typeof value === 'object' ? value.total : value),
-    0
-  )
-  const result = {
-    labels: Object.keys(data).map((key) => assetNames[key]),
+const createChartData = (sortedAssets) => {
+  return {
+    labels: sortedAssets.map((asset) => assetNames[asset.name]),
     datasets: [
       {
-        data: Object.entries(data).map(([key, value]) => ({
-          value: typeof value === 'object' ? value.total : value,
-          percentage: calculatePercentage(typeof value === 'object' ? value.total : value, total)
+        data: sortedAssets.map((asset) => ({
+          value: asset.total,
+          percentage: asset.percentage
         })),
-        backgroundColor: Object.keys(data).map((key) => assetColors[key])
+        backgroundColor: sortedAssets.map((asset) => getAssetColor(asset.name))
       }
     ]
   }
-  return result
 }
 
-// 차트 옵션 설정
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
@@ -172,9 +164,9 @@ const chartOptions = {
       callbacks: {
         label: function (context) {
           const label = context.label || ''
-          const value = context.raw.value || 0
-          const percentage = context.raw.percentage || 0
-          return `${label}: ${formatNumber(value)}원 (${percentage}%)`
+          const value = context.raw.value
+          const percentage = context.raw.percentage
+          return `${label}: ${formatNumber(value)}원 (${formatNumber(percentage)}%)`
         }
       }
     }
@@ -185,51 +177,56 @@ const formatNumber = (num) => {
   if (isNaN(num) || num === undefined || num === null) {
     return '0'
   }
-  return Math.round(num).toLocaleString() // 소수점 값을 반올림하여 정수로 표시
+  return Math.round(num).toLocaleString()
 }
 
-// 자산 유형에 따른 색상 반환 함수
 const getAssetColor = (assetName) => {
   return assetColors[assetName] || '#9966FF'
 }
 
-// 슬라이드 데이터 계산
-// 슬라이드 데이터 계산 함수 수정
 const slides = computed(() => {
   if (!assetData.value || !comparisonData.value) return []
 
-  const calculateTotalAsset = (data) => {
-    return Object.values(data).reduce((sum, asset) => sum + (asset.total || asset), 0)
-  }
+  console.log('슬라이드 데이터 계산 시작')
+  console.log('assetData:', assetData.value)
+  console.log('comparisonData:', comparisonData.value)
 
   const userAssetSlide = {
     title: '내 자산 분포',
-    chartData: createChartData(assetData.value || {}),
-    filteredAssetDetails: Object.entries(assetData.value || {})
-      .map(([name, details]) => ({ name, ...details }))
-      .filter((asset) => asset.total > 0),
-    highlight: '보유 자산 중 현금이 제일 많아요!',
-    totalAsset: calculateTotalAsset(assetData.value || {})
+    chartData: createChartData(assetData.value.sortedAssets),
+    filteredAssetDetails: assetData.value.sortedAssets,
+    totalAsset: assetData.value.total,
+    highlight: '보유 자산 중 현금이 제일 많아요!'
   }
+  console.log('사용자 자산 슬라이드:', userAssetSlide)
 
+  const typeAverageProcessed = processAndSortAssetData(
+    comparisonData.value?.typeAverage || {},
+    '유형별 평균'
+  )
   const typeAverageSlide = {
     title: `${userType.value} 평균 자산 분포`,
-    chartData: createChartData(comparisonData.value?.typeAverage || {}),
-    filteredAssetDetails: processAverageData(comparisonData.value?.typeAverage || {}),
-    totalAsset: calculateTotalAsset(comparisonData.value?.typeAverage || {})
+    chartData: createChartData(typeAverageProcessed.sortedAssets),
+    filteredAssetDetails: typeAverageProcessed.sortedAssets,
+    totalAsset: typeAverageProcessed.total
   }
+  console.log('유형별 평균 자산 슬라이드:', typeAverageSlide)
 
+  const overallAverageProcessed = processAndSortAssetData(
+    comparisonData.value?.overallAverage || {},
+    '전체 평균'
+  )
   const overallAverageSlide = {
     title: '전체 평균 자산 분포',
-    chartData: createChartData(comparisonData.value?.overallAverage || {}),
-    filteredAssetDetails: processAverageData(comparisonData.value?.overallAverage || {}),
-    totalAsset: calculateTotalAsset(comparisonData.value?.overallAverage || {})
+    chartData: createChartData(overallAverageProcessed.sortedAssets),
+    filteredAssetDetails: overallAverageProcessed.sortedAssets,
+    totalAsset: overallAverageProcessed.total
   }
+  console.log('전체 평균 자산 슬라이드:', overallAverageSlide)
 
   return [userAssetSlide, typeAverageSlide, overallAverageSlide]
 })
 
-// 컴포넌트 마운트 시 데이터 로드
 onMounted(() => {
   loadAssetData()
 })

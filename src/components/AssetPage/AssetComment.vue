@@ -2,7 +2,7 @@
 <template>
   <div class="asset-comment margin-top-1rem">
     <dl class="comment-robot">
-      <dt>
+      <dt v-if="showIcon">
         <span class="robot-icon">
           <i class="fa-solid fa-graduation-cap"></i>
         </span>
@@ -14,8 +14,8 @@
             {{ customTitle || title }}
           </h4>
           <div class="report-content">
-            <p class="intro">{{ assetEvaluationIntro }}</p>
-            <p class="comparison">{{ assetEvaluationComparison }}</p>
+            <!-- <p class="intro">{{ assetEvaluationIntro }}</p> -->
+            <p class="intro">{{ assetEvaluationComparison }}</p>
             <div class="advice">
               <div class="guide">Solution</div>
               <p>{{ assetEvaluationAdvice }}</p>
@@ -54,6 +54,11 @@ const props = defineProps({
   customTitle: {
     type: String,
     default: ''
+  },
+  showIcon: {
+    // Add a new prop for controlling the icon display
+    type: Boolean,
+    default: false
   }
 })
 
