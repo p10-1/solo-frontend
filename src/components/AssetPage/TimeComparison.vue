@@ -160,6 +160,7 @@ const createChart = () => {
     },
     options: {
       responsive: true,
+
       scales: {
         y: {
           beginAtZero: true,
