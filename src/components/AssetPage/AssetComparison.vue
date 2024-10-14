@@ -84,7 +84,17 @@ const assetTypeNames = {
   stock: '증권',
   insurance: '보험'
 }
-
+const formatNumber = (num) => {
+  if (isNaN(num) || num === undefined || num === null) {
+    return '0'
+  }
+  return Math.round(num).toLocaleString() // 소수점 값을 반올림하여 정수로 표시
+}
+// 퍼센티지 계산 함수 추가
+const calculatePercentage = (value, total) => {
+  if (total === 0 || isNaN(value)) return 0
+  return (value / total) * 100
+}
 // 자산 타입에 따른 이름 반환
 const selectedAssetTypeName = computed(() => {
   return assetTypeNames[props.selectedAssetType] || '자산'
@@ -138,13 +148,14 @@ const chartData = computed(() => {
 })
 
 // 차트 옵션 설정
+// 차트 옵션 설정 수정
 const chartOptions = computed(() => ({
   responsive: true,
   scales: {
     y: {
       beginAtZero: true,
       ticks: {
-        callback: (value) => formatCurrency(value)
+        callback: (value) => formatCurrency(value) + `원`
       }
     },
     x: {
@@ -152,12 +163,30 @@ const chartOptions = computed(() => ({
         display: false // This hides the x-axis labels
       }
     }
+  },
+  plugins: {
+    tooltip: {
+      callbacks: {
+        label: function (context) {
+          const label = context.dataset.label || ''
+          const value = context.raw
+          const total = context.chart.data.datasets.reduce(
+            (sum, dataset) => sum + dataset.data[0],
+            0
+          )
+          const percentage = calculatePercentage(value, total)
+          const roundedPercentage = Math.round(percentage)
+          return `${label}: ${formatCurrency(value)}원 (${roundedPercentage}%)`
+        }
+      }
+    }
   }
 }))
 
 // 통화 형식 변환 함수
+// 통화 형식 변환 함수 수정
 const formatCurrency = (value) => {
-  return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value)
+  return formatNumber(value)
 }
 </script>
 

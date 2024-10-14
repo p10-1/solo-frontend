@@ -25,7 +25,7 @@
             }}
           </span>
           <span v-if="trendDirection !== 'maintain'" class="time-comparison__percentage">
-            (변화율: {{ trendPercentage }}%)
+            (변화율 : {{ formatNumber(trendPercentage) }}%)
           </span>
         </li>
       </ul>
@@ -61,7 +61,12 @@ const assetTypeNames = {
   stock: '증권',
   insurance: '보험'
 }
-
+const formatNumber = (num) => {
+  if (isNaN(num) || num === undefined || num === null) {
+    return '0'
+  }
+  return Math.round(num).toLocaleString() // 소수점 값을 반올림하여 정수로 표시
+}
 const parseJsonArray = (jsonString) => {
   try {
     return JSON.parse(jsonString)
@@ -134,6 +139,15 @@ const createChart = () => {
 
   const ctx = chartRef.value.getContext('2d')
 
+  // 데이터의 최소값과 최대값 계산
+  const values = processedData.value.map((data) => data.value)
+  const minValue = Math.min(...values)
+  const maxValue = Math.max(...values)
+
+  // 범위의 10%를 계산
+  const range = maxValue - minValue
+  const padding = range * 0.2
+
   // 라인 차트 생성
   chartInstance = new Chart(ctx, {
     type: 'line',
@@ -156,21 +170,23 @@ const createChart = () => {
     },
     options: {
       responsive: true,
-
       scales: {
         y: {
-          beginAtZero: true,
+          beginAtZero: false,
+          suggestedMin: Math.max(0, minValue - padding),
+          suggestedMax: maxValue + padding,
           ticks: {
             callback: function (value) {
-              return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(
-                value
-              )
+              return formatNumber(value) + '원'
             }
           }
         }
       },
       plugins: {
         tooltip: {
+          enabled: true,
+          mode: 'index',
+          intersect: false,
           callbacks: {
             label: function (context) {
               let label = context.dataset.label || ''
@@ -178,19 +194,25 @@ const createChart = () => {
                 label += ': '
               }
               if (context.parsed.y !== null) {
-                label += new Intl.NumberFormat('ko-KR', {
-                  style: 'currency',
-                  currency: 'KRW'
-                }).format(context.parsed.y)
+                label += formatNumber(context.parsed.y) + '원'
               }
               return label
             }
           }
+        },
+        legend: {
+          display: false // 범례를 숨깁니다. 필요하다면 true로 설정하세요.
         }
+      },
+      interaction: {
+        mode: 'nearest',
+        axis: 'x',
+        intersect: false
       }
     }
   })
 }
+
 onMounted(createChart) // 컴포넌트가 마운트되면 차트 생성
 
 // 자산 타입 또는 데이터가 변경될 때 차트 다시 생성
