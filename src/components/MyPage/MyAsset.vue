@@ -142,7 +142,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { getAsset, updateAsset } from '@/api/mypageApi'
+import { getAsset } from '@/api/mypageApi'
 
 // 상태 정의
 const assetTypes = ref({ cash: [], deposit: [], stock: [], insurance: [] })
@@ -214,42 +214,6 @@ const loadAsset = async () => {
   }
 }
 
-// 수정 모드 전환
-const toggleEditMode = async () => {
-  if (editMode.value) {
-    const updatedData = prepareUpdatedData()
-    try {
-      await updateAsset(updatedData)
-      alert('자산 및 대출 정보가 업데이트되었습니다.')
-    } catch {
-      alert('업데이트 실패. 다시 시도해 주세요.')
-    }
-  }
-  editMode.value = !editMode.value
-}
-
-// 업데이트된 데이터 준비
-const prepareUpdatedData = () => {
-  const updatedData = {}
-  assetTypesList.forEach((type) => {
-    updatedData[type] = JSON.stringify(assetTypes.value[type].map((asset) => asset.amount))
-    updatedData[`${type}Account`] = JSON.stringify(
-      assetTypes.value[type].map((asset) => asset.accountNumber)
-    )
-    updatedData[`${type}Bank`] = JSON.stringify(assetTypes.value[type].map((asset) => asset.bank))
-  })
-  Object.assign(updatedData, loanDetails.value)
-
-  if (assetTypes.value.insurance.length > 0) {
-    updatedData.insuranceCompany = JSON.stringify(assetTypes.value.insurance.map((ins) => ins.bank))
-    updatedData.insuranceName = JSON.stringify(
-      assetTypes.value.insurance.map((ins) => ins.accountNumber)
-    )
-    updatedData.insurance = JSON.stringify(assetTypes.value.insurance.map((ins) => ins.amount))
-  }
-
-  return updatedData
-}
 </script>
 
 <style scoped>

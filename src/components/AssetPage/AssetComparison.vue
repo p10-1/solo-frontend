@@ -60,7 +60,7 @@ import { fetchAssetComparison } from '@/api/assetApi'
 
 // Props 정의
 const props = defineProps({
-  userAsset: {
+  userAsset: {  
     type: Object,
     required: true
   },
