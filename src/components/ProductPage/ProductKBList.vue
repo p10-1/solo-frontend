@@ -23,7 +23,6 @@
 import { ref, onMounted, watch } from 'vue'
 import { fetchKbProducts } from '@/api/productApi'
 import ProductKBItem from './ProductKBItem.vue'
-// import { useAuthStore } from '@/stores/authStore'
 
 const props = defineProps({
   productType: {

@@ -1,6 +1,5 @@
 <template>
   <a href="#" class="button-main log-out-button" @click.prevent="logout"> 로그아웃 </a>
-  <!-- <router-link class="button-main" to="board/create">글쓰기</router-link> -->
 </template>
 
 <script setup>
