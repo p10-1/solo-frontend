@@ -1,4 +1,3 @@
-// import { isAuthenticated } from '@/util/guards'
 import BoardDetail from '@/components/CommunityPage/BoardDetail.vue'
 import Board from '@/pages/board/BoardPage.vue'
 import BoardCreate from '@/components/CommunityPage/BoardCreate.vue'
@@ -31,20 +30,5 @@ const routes = [
     beforeEnter: isAuthenticated
   }
 ]
-// const router = createRouter({
-//   history: createWebHistory(),
-//   routes
-// })
+
 export default routes
-//   {
-//     path: '/board/create',
-//     name: 'board/create',
-//     component: () => import('@/components/CommunityPage/')
-//     // beforeEnter: isAuthenticated,
-//   },
-//   {
-//     path: '/board/update/:no',
-//     name: 'board/update',
-//     component: () => import('../pages/board/BoardUpdatePage.vue')
-//     // beforeEnter: isAuthenticated,
-//   }

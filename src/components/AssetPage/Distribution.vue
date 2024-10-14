@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="asset-distribution">
     <!-- 자산 분포를 설명하는 타이틀 -->
@@ -40,7 +41,7 @@
 <script setup>
 //src/components/AssetPage/Distribution.vue
 
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import ChartComponent from '@/components/common/ChartComponent.vue'
 
 //추가
@@ -118,27 +119,7 @@ const calculatePercentage = (value) => {
   if (totalAsset.value === 0 || isNaN(value)) return 0
   return (value / totalAsset.value) * 100 // 소수점을 유지한 채 반환
 }
-// 정확한 퍼센티지 계산을 위한 함수
-const getAccuratePercentages = computed(() => {
-  const total = totalAsset.value
-  if (total === 0) return {}
 
-  const percentages = {}
-  let remainingPercentage = 100
-
-  sortedAssetDetails.value.forEach((asset, index, array) => {
-    if (index === array.length - 1) {
-      // 마지막 항목은 남은 퍼센티지를 할당
-      percentages[asset.name] = remainingPercentage
-    } else {
-      const percentage = Math.round((asset.total / total) * 100)
-      percentages[asset.name] = percentage
-      remainingPercentage -= percentage
-    }
-  })
-
-  return percentages
-})
 const getAssetColor = (assetName) => {
   return assetColors[assetName] || '#9966FF'
 }

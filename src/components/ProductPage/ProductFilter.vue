@@ -24,12 +24,10 @@ const props = defineProps({
 const emits = defineEmits(['update:productType'])
 const selectedType = ref(props.productType)
 
-// Watch for changes on selectedType to emit updates
 watch(selectedType, (newType) => {
   emits('update:productType', newType)
 })
 
-// Watch for changes on props.productType to sync with local state
 watch(
   () => props.productType,
   (newType) => {
@@ -40,7 +38,6 @@ watch(
   }
 )
 
-// On mounted, set the initial selected type from the props
 onMounted(() => {
   selectedType.value = props.productType
 })

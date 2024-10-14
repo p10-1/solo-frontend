@@ -3,13 +3,10 @@
     <swiper
       :pagination="{ clickable: true }"
       :modules="modules"
-      :loop="true"
-      :slides-per-view="1"
-      :space-between="20"
-      :initial-slide="0"
+      v-bind="swiperOptions"
       class="mySwiper"
     >
-      <!-- 각 슬라이드에 대한 반복 -->
+      <!-- 각 슬라이드에 대한 반복 (key 추가) -->
       <swiper-slide v-for="(slide, index) in slides" :key="index">
         <router-link to="asset">
           <div class="asset-distribution">
@@ -20,7 +17,6 @@
                 <ChartComponent type="doughnut" :data="slide.chartData" :options="chartOptions" />
               </div>
               <!-- 자산 상세 정보 목록 -->
-
               <div class="asset-legend">
                 <div class="total-asset">
                   <span class="total-label">총 자산</span>
@@ -56,7 +52,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Pagination, Autoplay, Navigation } from 'swiper/modules'
+import { Pagination, Autoplay } from 'swiper/modules'
 import ChartComponent from '@/components/common/ChartComponent.vue'
 import { fetchAssetData, fetchAssetComparison } from '@/api/assetApi'
 import 'swiper/css'
@@ -102,9 +98,10 @@ const loadAssetData = async () => {
 const sortAssetDetails = (assetDetails) => {
   return Object.entries(assetDetails)
     .map(([name, details]) => ({ name, ...details }))
-    .sort((a, b) => b.percentage - a.percentage)
+    .sort((a, b) => b.total - a.total)
     .filter((asset) => asset.total > 0)
 }
+
 // 퍼센티지 계산 함수
 const calculatePercentage = (value, total) => {
   if (total === 0 || isNaN(value)) return 0

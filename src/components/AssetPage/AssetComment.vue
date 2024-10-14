@@ -111,7 +111,7 @@ const getRelativeDescription = (diff) => {
 
 const assetEvaluationIntro = computed(() => {
   const { safeRatio, riskRatio } = calculateAssetRatios(props.assetDetails)
-  const idealRatios = getIdealRatios(props.userType)
+  // const idealRatios = getIdealRatios(props.userType)
   return `자산 비율은 
   안전자산 ${(safeRatio * 100).toFixed(1)}%, 
   위험자산 ${(riskRatio * 100).toFixed(1)}%

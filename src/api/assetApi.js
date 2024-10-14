@@ -43,6 +43,4 @@ export const fetchAssetComparison = async (type) => {
     console.error('AssetApi: Failed to fetch asset comparison data:', error.response || error)
     throw error
   }
-
-  
 }

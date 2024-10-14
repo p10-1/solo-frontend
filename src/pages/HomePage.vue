@@ -36,8 +36,6 @@ import PolicyCard from '@/components/HomePage/PolicyCard.vue'
 import NewsCard from '@/components/HomePage/NewsCard.vue'
 import BoardCard from '@/components/HomePage/BoardCard.vue'
 
-import { ref } from 'vue'
-
 // 로그인 전후
 
 export default {

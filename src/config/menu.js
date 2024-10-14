@@ -1,6 +1,5 @@
 // eslint-disable-next-line no-unused-vars
 import MyPage from '@/pages/auth/MyPage.vue'
-
 export default {
   title: '빚이 없는 솔로', // 메인 타이틀
   subtitle: '자산분석해조', // 서브 타이틀
@@ -12,8 +11,7 @@ export default {
     },
     {
       title: '게시판',
-      url: '/board',
-      icon: 'fa-solid fa-paste'
+      url: '/board'
     },
     {
       title: '뉴스',
@@ -27,18 +25,5 @@ export default {
       title: '상품',
       url: '/product'
     }
-  ],
-  accoutMenus: {
-    // 인증 관련 메뉴 정보
-    login: {
-      url: '/login',
-      title: '마이페이지',
-      icon: 'fa-solid fa-user' // 사용자 아이콘
-    }
-    // join: {
-    //   url: '/logout',
-    //   title: '로그아웃',
-    //   icon: ''
-    // }
-  }
+  ]
 }
