@@ -1,381 +1,360 @@
 <template>
   <div class="main-slide-box">
-    <!-- 슬라이더 전체 컨테이너 -->
-    <h2 class="main-title">내 자산 현황</h2>
-    <!-- 자산 현황 타이틀 -->
-    <div class="main-slide-contents margin-top-1rem">
-      <swiper
-        :pagination="{ clickable: true }"
-        :modules="modules"
-        :loop="true"
-        :slides-per-view="1"
-        :space-between="20"
-        class="mySwiper"
-      >
-        <!-- 슬라이더 컴포넌트 설정 -->
-        <swiper-slide>
-          <!-- 첫 번째 슬라이드 - 내 자산 분포 -->
-          <router-link to="asset">
-            <div class="main-card">
-              <div class="card-body">
-                <h3 class="title card-title text-align-left link">내 자산 분포</h3>
-                <!-- 도넛 차트를 보여주는 섹션 -->
-                <div class="card-content">
-                  <ChartComponent
-                    type="doughnut"
-                    :data="myAssetChartData"
-                    :options="chartOptions"
-                  />
-                  <div class="asset-legend">
-                    <!-- 자산 분포 범례 -->
-                    <ul
-                      v-for="(value, key) in myAssetChartData.labels"
-                      :key="key"
-                      class="asset-type"
-                    >
-                      <li class="asset-name">
-                        <!-- 자산 종류와 색상 표시 -->
-                        <span
-                          :style="{ backgroundColor: assetColors[key] }"
-                          class="type-color"
-                        ></span>
-                        {{ value }}
-                      </li>
-                      <li class="asset-percentage">
-                        <!-- 자산 비율 계산 및 표시 -->
-                        {{
-                          Math.round(calculatePercentage(myAssetChartData.datasets[0].data[key]))
-                        }}%
-                      </li>
-                      <li class="asset-amount">
-                        <!-- 자산 총액 표시 -->
-                        {{ Math.round(myAssetChartData.datasets[0].data[key]) }} 원
-                      </li>
-                    </ul>
-                  </div>
+    <swiper
+      :pagination="{ clickable: true }"
+      :modules="modules"
+      :loop="true"
+      :slides-per-view="1"
+      :space-between="20"
+      :initial-slide="0"
+      class="mySwiper"
+    >
+      <!-- 각 슬라이드에 대한 반복 -->
+      <swiper-slide v-for="(slide, index) in slides" :key="index">
+        <router-link to="asset">
+          <div class="asset-distribution">
+            <h3 class="main-title">{{ slide.title }}</h3>
+            <div class="card-content">
+              <!-- 도넛 차트 컴포넌트 -->
+              <div class="asset-chart-container">
+                <ChartComponent type="doughnut" :data="slide.chartData" :options="chartOptions" />
+              </div>
+              <!-- 자산 상세 정보 목록 -->
+              <div class="asset-legend">
+                <div class="advice">
+                  <div class="guide">Info</div>
+                  <p>자산이 <strong>0.5% 미만</strong>이면 <strong>0%로 표시</strong>됩니다.</p>
                 </div>
+                <ul
+                  v-for="asset in slide.filteredAssetDetails"
+                  :key="asset.name"
+                  class="asset-type"
+                >
+                  <li class="asset-name">
+                    <span
+                      :style="{ backgroundColor: getAssetColor(asset.name) }"
+                      class="type-color"
+                    ></span>
+                    {{ assetNames[asset.name] }}
+                  </li>
+                  <li class="asset-percentage">{{ formatNumber(asset.percentage) }}%</li>
+                  <li class="asset-amount">
+                    <span class="text-accent">{{ formatNumber(Math.round(asset.total)) }}</span
+                    >원
+                  </li>
+                </ul>
               </div>
             </div>
-          </router-link>
-        </swiper-slide>
-        <swiper-slide>
-          <!-- 두 번째 슬라이드 - 사용자 유형 평균 자산 분포 -->
-          <router-link to="asset">
-            <div class="main-card">
-              <div class="card-body">
-                <h5 class="card-title text-align-left">{{ userType }} 평균 자산 분포</h5>
-                <div class="card-content">
-                  <ChartComponent
-                    type="doughnut"
-                    :data="typeAssetChartData"
-                    :options="chartOptions"
-                  />
-                  <div class="asset-legend">
-                    <!-- 자산 분포 범례 -->
-                    <ul
-                      v-for="(value, key) in typeAssetChartData.labels"
-                      :key="key"
-                      class="asset-type"
-                    >
-                      <li class="asset-name">
-                        <!-- 자산 종류와 색상 표시 -->
-                        <span
-                          :style="{ backgroundColor: assetColors[key] }"
-                          class="type-color"
-                        ></span>
-                        {{ value }}
-                      </li>
-                      <li class="asset-percentage">
-                        <!-- 자산 비율 계산 및 표시 -->
-                        {{
-                          Math.round(calculatePercentage(typeAssetChartData.datasets[0].data[key]))
-                        }}%
-                      </li>
-                      <li class="asset-amount">
-                        <!-- 자산 총액 표시 -->
-                        {{ Math.round(typeAssetChartData.datasets[0].data[key]) }} 원
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </router-link>
-        </swiper-slide>
-        <swiper-slide>
-          <!-- 세 번째 슬라이드 - 전체 평균 자산 분포 -->
-          <router-link to="asset">
-            <div class="main-card">
-              <div class="card-body">
-                <h5 class="card-title text-align-left">전체 평균 자산 분포</h5>
-                <div class="card-content">
-                  <ChartComponent
-                    type="doughnut"
-                    :data="overallAssetChartData"
-                    :options="chartOptions"
-                  />
-                  <div class="asset-legend">
-                    <!-- 자산 분포 범례 -->
-                    <ul
-                      v-for="(value, key) in overallAssetChartData.labels"
-                      :key="key"
-                      class="asset-type"
-                    >
-                      <li class="asset-name">
-                        <!-- 자산 종류와 색상 표시 -->
-                        <span
-                          :style="{ backgroundColor: assetColors[key] }"
-                          class="type-color"
-                        ></span>
-                        {{ value }}
-                      </li>
-                      <li class="asset-percentage">
-                        <!-- 자산 비율 계산 및 표시 -->
-                        {{
-                          Math.round(
-                            calculatePercentage(overallAssetChartData.datasets[0].data[key])
-                          )
-                        }}%
-                      </li>
-                      <li class="asset-amount">
-                        <!-- 자산 총액 표시 -->
-                        {{ Math.round(overallAssetChartData.datasets[0].data[key]) }} 원
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </router-link>
-        </swiper-slide>
-      </swiper>
-    </div>
+          </div>
+        </router-link>
+      </swiper-slide>
+    </swiper>
   </div>
 </template>
 
-<script>
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Pagination, Autoplay } from 'swiper/modules'
+<script setup>
 import { ref, computed, onMounted } from 'vue'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Pagination, Autoplay, Navigation } from 'swiper/modules'
 import ChartComponent from '@/components/common/ChartComponent.vue'
 import { fetchAssetData, fetchAssetComparison } from '@/api/assetApi'
 import 'swiper/css'
 import 'swiper/css/pagination'
 
-export default {
-  components: {
-    Swiper,
-    SwiperSlide,
-    ChartComponent
-  },
-  setup() {
-    const assetData = ref(null)
-    const comparisonData = ref(null)
-    const userType = ref('')
-    const modules = [Pagination, Autoplay]
+// 자산 데이터와 비교 데이터를 저장할 ref
+const assetData = ref(null)
+const comparisonData = ref(null)
+const userType = ref('')
+const modules = [Pagination, Autoplay]
 
-    // 자산 종류와 이름 매핑
-    const assetNames = {
-      cash: '현금자산',
-      deposit: '예적금',
-      stock: '증권',
-      insurance: '보험'
+// 자산 유형에 대한 한글 이름 매핑
+const assetNames = {
+  cash: '현금',
+  deposit: '예적금',
+  stock: '증권',
+  insurance: '보험'
+}
+
+// 자산 유형별 색상 매핑
+const assetColors = {
+  cash: '#FFCC00',
+  deposit: '#CFDF4B',
+  stock: '#A17FF0',
+  insurance: '#5F7DFF'
+}
+
+// API에서 자산 데이터를 불러오는 함수
+const loadAssetData = async () => {
+  try {
+    const data = await fetchAssetData()
+    if (data && data.length > 0) {
+      assetData.value = processAssetData(data[0])
+      userType.value = data[0].type || '전체'
     }
+    const comparison = await fetchAssetComparison(userType.value)
+    comparisonData.value = comparison
+  } catch (error) {
+    // 에러 처리
+  }
+}
 
-    // 자산 종류와 색상 매핑
-    const assetColors = {
-      cash: '#FF6384',
-      deposit: '#36A2EB',
-      stock: '#FFCE56',
-      insurance: '#4BC0C0'
+// 퍼센티지 계산 함수
+const calculatePercentage = (value, total) => {
+  if (total === 0 || isNaN(value)) return 0
+  return Math.round((value / total) * 100) // 소수점 첫째 자리에서 반올림
+}
+
+// 평균 데이터 처리 함수
+const processAverageData = (data) => {
+  const total = Object.values(data).reduce((sum, value) => sum + value, 0)
+  const result = Object.entries(data).map(([name, value]) => ({
+    name,
+    total: value,
+    percentage: calculatePercentage(value, total)
+  }))
+  return result
+}
+
+// 자산 데이터 처리 함수
+const processAssetData = (data) => {
+  const assetTypes = ['cash', 'deposit', 'stock', 'insurance']
+  const processed = {}
+  let total = 0
+  assetTypes.forEach((type) => {
+    const values = JSON.parse(data[type] || '[]')
+    const typeTotal = values.reduce((sum, val) => sum + Number(val), 0)
+    processed[type] = {
+      total: typeTotal,
+      details: values.map((value) => ({ value: Number(value) }))
     }
+    total += typeTotal
+  })
+  // 퍼센트 계산 추가
+  for (const type in processed) {
+    processed[type].percentage = calculatePercentage(processed[type].total, total)
+  }
+  return processed
+}
 
-    // 자산 데이터를 로드하는 함수
-    const loadAssetData = async () => {
-      try {
-        const data = await fetchAssetData()
-        if (data && data.length > 0) {
-          assetData.value = processAssetData(data[0])
-          userType.value = data[0].type || '전체'
-        }
-        const comparison = await fetchAssetComparison(userType.value)
-        comparisonData.value = comparison
-      } catch (error) {
-        console.error('Failed to load asset data:', error)
+// 차트 데이터 생성 함수
+const createChartData = (data) => {
+  const total = Object.values(data).reduce(
+    (sum, value) => sum + (typeof value === 'object' ? value.total : value),
+    0
+  )
+  const result = {
+    labels: Object.keys(data).map((key) => assetNames[key]),
+    datasets: [
+      {
+        data: Object.entries(data).map(([key, value]) => ({
+          value: typeof value === 'object' ? value.total : value,
+          percentage: calculatePercentage(typeof value === 'object' ? value.total : value, total)
+        })),
+        backgroundColor: Object.keys(data).map((key) => assetColors[key])
       }
-    }
+    ]
+  }
+  return result
+}
 
-    // 자산 데이터를 처리하는 함수
-    const processAssetData = (data) => {
-      const assetTypes = ['cash', 'deposit', 'stock', 'insurance']
-      const processed = {}
-      assetTypes.forEach((type) => {
-        const values = JSON.parse(data[type] || '[]')
-        processed[type] = {
-          total: values.reduce((sum, val) => sum + Number(val), 0),
-          details: values.map((value) => ({ value: Number(value) }))
+// 차트 옵션 설정
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  cutout: '60%',
+  plugins: {
+    legend: {
+      display: false
+    },
+    tooltip: {
+      callbacks: {
+        label: function (context) {
+          const label = context.label || ''
+          const value = context.raw.value || 0
+          const percentage = context.raw.percentage || 0
+          return `${label}: ${formatNumber(value)}원 (${percentage}%)`
         }
-      })
-      return processed
-    }
-
-    // 차트 데이터를 생성하는 함수
-    const createChartData = (data) => {
-      return {
-        labels: Object.keys(data).map((key) => assetNames[key]),
-        datasets: [
-          {
-            data: Object.values(data).map((value) =>
-              typeof value === 'object' ? value.total : value
-            ),
-            backgroundColor: Object.keys(data).map((key) => assetColors[key])
-          }
-        ]
       }
-    }
-
-    // 내 자산 차트 데이터 계산
-    const myAssetChartData = computed(() => {
-      const data = createChartData(assetData.value || {})
-      return data
-    })
-
-    // 사용자 유형 평균 자산 차트 데이터 계산
-    const typeAssetChartData = computed(() => {
-      const data = createChartData(comparisonData.value?.typeAverage || {})
-      return data
-    })
-
-    // 전체 평균 자산 차트 데이터 계산
-    const overallAssetChartData = computed(() => {
-      const data = createChartData(comparisonData.value?.overallAverage || {})
-      return data
-    })
-
-    // 차트 옵션 설정
-    const chartOptions = {
-      responsive: true,
-      maintainAspectRatio: true,
-      aspectRatio: 1,
-      radius: '60%',
-      plugins: {
-        legend: {
-          display: false
-        }
-      },
-      layout: {
-        padding: 5
-      }
-    }
-
-    // 자산 비율을 계산하는 함수
-    const calculatePercentage = (value) => {
-      const total = assetData.value
-        ? Object.values(assetData.value).reduce((sum, asset) => sum + (asset.total || 0), 0)
-        : 0
-      if (total === 0 || isNaN(value)) return '0.00'
-      return ((value / total) * 100).toFixed(2)
-    }
-
-    // 컴포넌트가 마운트될 때 자산 데이터 로드
-    onMounted(() => {
-      loadAssetData()
-    })
-
-    return {
-      modules,
-      myAssetChartData,
-      typeAssetChartData,
-      overallAssetChartData,
-      chartOptions,
-      userType,
-      assetColors,
-      calculatePercentage
     }
   }
 }
+
+// 숫자 포맷팅 함수
+const formatNumber = (num) => {
+  if (isNaN(num) || num === undefined || num === null) {
+    return '0'
+  }
+  return num.toLocaleString()
+}
+
+// 자산 유형에 따른 색상 반환 함수
+const getAssetColor = (assetName) => {
+  return assetColors[assetName] || '#9966FF'
+}
+
+// 슬라이드 데이터 계산
+const slides = computed(() => {
+  if (!assetData.value || !comparisonData.value) return []
+
+  const userAssetSlide = {
+    title: '내 자산 분포',
+    chartData: createChartData(assetData.value || {}),
+    filteredAssetDetails: Object.entries(assetData.value || {})
+      .map(([name, details]) => ({ name, ...details }))
+      .filter((asset) => asset.total > 0),
+    highlight: '보유 자산 중 현금자산이 제일 많아요!'
+  }
+
+  const typeAverageSlide = {
+    title: `${userType.value} 평균 자산 분포`,
+    chartData: createChartData(comparisonData.value?.typeAverage || {}),
+    filteredAssetDetails: processAverageData(comparisonData.value?.typeAverage || {})
+  }
+
+  const overallAverageSlide = {
+    title: '전체 평균 자산 분포',
+    chartData: createChartData(comparisonData.value?.overallAverage || {}),
+    filteredAssetDetails: processAverageData(comparisonData.value?.overallAverage || {})
+  }
+
+  return [userAssetSlide, typeAverageSlide, overallAverageSlide]
+})
+
+// 컴포넌트 마운트 시 데이터 로드
+onMounted(() => {
+  loadAssetData()
+})
 </script>
 
 <style scoped>
-.main-slide-box .main-card {
-  background-color: #f3f3ff;
-  padding: 2rem 1.5rem;
-  border-radius: 28px;
+/* 자산 분포 컨테이너 스타일 */
+.asset-distribution {
+  width: 100%;
+  padding: 1rem 0;
 }
-.main-slide-box .main-card .card-title {
-}
-.main-slide-box .main-card .card-content {
-  position: relative;
+
+/* 자산 콘텐츠 레이아웃 */
+.asset-distribution .card-content {
+  margin-top: 1rem;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  height: 300px;
+  padding: 1.5rem 1rem;
+  border-radius: 25px;
   background-color: #fff;
+  box-shadow: 0px 0px 12px rgba(221, 214, 255, 1);
+  margin: 1.2rem 0.5rem 0;
 }
 
-.asset-legend {
-  /* 자산 범례 위치 및 레이아웃 설정 */
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+/* 차트 컨테이너 크기 설정 */
+.asset-chart-container {
+  width: 50%;
+  max-width: 300px;
+}
+/* 자산 범례 스타일 */
+.asset-distribution .card-content .asset-legend {
+  width: 50%;
+}
+.asset-legend .advice {
+  margin-top: -1.5rem;
+  margin-bottom: 20px;
+}
+.asset-legend .advice .guide {
+  display: block;
+  font-weight: 600;
+  color: #b6a8ff;
+  letter-spacing: -0.8px;
+  margin-bottom: 5px;
+}
+.asset-legend .advice p {
+  font-size: 0.81rem;
+  line-height: 1.5;
+  color: #666;
+  word-break: keep-all;
+  margin-bottom: 0;
 }
 
-.asset-type {
-  /* 개별 자산 항목 스타일 */
+/* 각 자산 유형 항목 스타일 */
+.asset-legend ul.asset-type {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px; /* 자산 항목 간의 간격 조정 */
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #eae6ff;
+}
+.asset-legend .asset-type:last-child {
+  margin-bottom: 0;
+  border-bottom: 0;
+  padding-bottom: 0;
 }
 
-.asset-name {
-  /* 자산 이름 스타일 */
-  display: flex;
-  align-items: center;
+/* 자산 이름 스타일 */
+.asset-legend .asset-name {
+  flex: 0 0 30%;
+  font-size: 1rem;
   font-weight: 500;
+  letter-spacing: -0.8px;
 }
-
-.type-color {
-  /* 자산 색상 표시 스타일 */
-  width: 15px;
-  height: 15px;
+/* 자산 유형 색상 표시 스타일 */
+.asset-legend .asset-name .type-color {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  margin-right: 8px;
+  margin-right: 2px;
 }
 
-.asset-percentage {
-  /* 자산 비율 스타일 */
+/* 자산 퍼센티지 스타일 */
+.asset-legend .asset-percentage {
+  flex: 0 0 10%;
+  font-weight: 600;
+  padding: 3px 10px;
+  background-color: #f3f3ff;
+  color: #666;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  line-height: 1rem;
+}
+
+/* 자산 금액 스타일 */
+.asset-legend .asset-amount {
+  text-align: right;
+  flex: 0 0 50%;
+  font-size: 1rem;
   font-weight: 500;
-  margin-left: 10px;
+  letter-spacing: -0.8px;
   color: #333;
 }
-
-.asset-amount {
-  /* 자산 금액 스타일 */
+.asset-legend .asset-amount .text-accent {
   font-weight: 700;
-  margin-left: 10px;
 }
 
-.button-main {
-  /* 버튼 스타일 설정 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 20px;
-  font-weight: bold;
-  border-radius: 5px;
-  background-color: #5b6dfc;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
+/* 반응형 디자인: 모바일 화면 대응 */
+@media (max-width: 768px) {
+  .asset-content {
+    flex-direction: column;
+  }
+
+  .asset-chart-container,
+  .asset-legend {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+  }
+
+  .asset-chart-container {
+    margin-bottom: 20px;
+  }
 }
 
-.button-main:hover {
-  /* 버튼 호버 스타일 */
-  background-color: #4a5bdb;
+/* Swiper 페이지네이션 스타일 커스터마이징 */
+:deep(.swiper-pagination-bullet) {
+  background: #cfc6fd;
+  opacity: 1;
+}
+
+:deep(.swiper-pagination-bullet-active) {
+  background: #6846f5;
 }
 </style>
