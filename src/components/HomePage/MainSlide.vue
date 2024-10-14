@@ -20,10 +20,11 @@
                 <ChartComponent type="doughnut" :data="slide.chartData" :options="chartOptions" />
               </div>
               <!-- 자산 상세 정보 목록 -->
+
               <div class="asset-legend">
-                <div class="advice">
-                  <div class="guide">Info</div>
-                  <p>자산이 <strong>0.5% 미만</strong>이면 <strong>0%로 표시</strong>됩니다.</p>
+                <div class="total-asset">
+                  <span class="total-label">총 자산</span>
+                  <span class="total-amount">{{ formatNumber(slide.totalAsset) }}원</span>
                 </div>
                 <ul
                   v-for="asset in slide.filteredAssetDetails"
@@ -97,7 +98,13 @@ const loadAssetData = async () => {
     // 에러 처리
   }
 }
-
+// 자산 데이터를 정렬하는 함수
+const sortAssetDetails = (assetDetails) => {
+  return Object.entries(assetDetails)
+    .map(([name, details]) => ({ name, ...details }))
+    .sort((a, b) => b.percentage - a.percentage)
+    .filter((asset) => asset.total > 0)
+}
 // 퍼센티지 계산 함수
 const calculatePercentage = (value, total) => {
   if (total === 0 || isNaN(value)) return 0
@@ -179,12 +186,11 @@ const chartOptions = {
   }
 }
 
-// 숫자 포맷팅 함수
 const formatNumber = (num) => {
   if (isNaN(num) || num === undefined || num === null) {
     return '0'
   }
-  return num.toLocaleString()
+  return Math.round(num).toLocaleString() // 소수점 값을 반올림하여 정수로 표시
 }
 
 // 자산 유형에 따른 색상 반환 함수
@@ -193,8 +199,13 @@ const getAssetColor = (assetName) => {
 }
 
 // 슬라이드 데이터 계산
+// 슬라이드 데이터 계산 함수 수정
 const slides = computed(() => {
   if (!assetData.value || !comparisonData.value) return []
+
+  const calculateTotalAsset = (data) => {
+    return Object.values(data).reduce((sum, asset) => sum + (asset.total || asset), 0)
+  }
 
   const userAssetSlide = {
     title: '내 자산 분포',
@@ -202,19 +213,22 @@ const slides = computed(() => {
     filteredAssetDetails: Object.entries(assetData.value || {})
       .map(([name, details]) => ({ name, ...details }))
       .filter((asset) => asset.total > 0),
-    highlight: '보유 자산 중 현금자산이 제일 많아요!'
+    highlight: '보유 자산 중 현금이 제일 많아요!',
+    totalAsset: calculateTotalAsset(assetData.value || {})
   }
 
   const typeAverageSlide = {
     title: `${userType.value} 평균 자산 분포`,
     chartData: createChartData(comparisonData.value?.typeAverage || {}),
-    filteredAssetDetails: processAverageData(comparisonData.value?.typeAverage || {})
+    filteredAssetDetails: processAverageData(comparisonData.value?.typeAverage || {}),
+    totalAsset: calculateTotalAsset(comparisonData.value?.typeAverage || {})
   }
 
   const overallAverageSlide = {
     title: '전체 평균 자산 분포',
     chartData: createChartData(comparisonData.value?.overallAverage || {}),
-    filteredAssetDetails: processAverageData(comparisonData.value?.overallAverage || {})
+    filteredAssetDetails: processAverageData(comparisonData.value?.overallAverage || {}),
+    totalAsset: calculateTotalAsset(comparisonData.value?.overallAverage || {})
   }
 
   return [userAssetSlide, typeAverageSlide, overallAverageSlide]
@@ -228,6 +242,24 @@ onMounted(() => {
 
 <style scoped>
 /* 자산 분포 컨테이너 스타일 */
+.total-asset {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #eae6ff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.total-asset .total-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+.total-asset .total-amount {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #6846f5;
+}
 .asset-distribution {
   width: 100%;
   padding: 1rem 0;
@@ -249,7 +281,7 @@ onMounted(() => {
 /* 차트 컨테이너 크기 설정 */
 .asset-chart-container {
   width: 50%;
-  max-width: 300px;
+  max-width: 250px;
 }
 /* 자산 범례 스타일 */
 .asset-distribution .card-content .asset-legend {

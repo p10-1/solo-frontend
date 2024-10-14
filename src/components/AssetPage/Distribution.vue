@@ -111,14 +111,34 @@ const formatNumber = (num) => {
   if (isNaN(num) || num === undefined || num === null) {
     return '0'
   }
-  return num.toLocaleString()
+  return Math.round(num).toLocaleString() // 소수점 값을 반올림하여 정수로 표시
 }
 
 const calculatePercentage = (value) => {
-  if (totalAsset.value === 0 || isNaN(value)) return '0.00'
-  return ((value / totalAsset.value) * 100).toFixed(2)
+  if (totalAsset.value === 0 || isNaN(value)) return 0
+  return (value / totalAsset.value) * 100 // 소수점을 유지한 채 반환
 }
+// 정확한 퍼센티지 계산을 위한 함수
+const getAccuratePercentages = computed(() => {
+  const total = totalAsset.value
+  if (total === 0) return {}
 
+  const percentages = {}
+  let remainingPercentage = 100
+
+  sortedAssetDetails.value.forEach((asset, index, array) => {
+    if (index === array.length - 1) {
+      // 마지막 항목은 남은 퍼센티지를 할당
+      percentages[asset.name] = remainingPercentage
+    } else {
+      const percentage = Math.round((asset.total / total) * 100)
+      percentages[asset.name] = percentage
+      remainingPercentage -= percentage
+    }
+  })
+
+  return percentages
+})
 const getAssetColor = (assetName) => {
   return assetColors[assetName] || '#9966FF'
 }
@@ -149,66 +169,13 @@ const chartOptions = computed(() => ({
           const label = context.label || ''
           const value = context.raw || 0
           const percentage = calculatePercentage(value)
-          return `${label}: ${formatNumber(value)}원 (${percentage}%)`
+          const roundedPercentage = Math.round(percentage) // 소수점 첫째 자리에서 반올림
+          return `${label}: ${formatNumber(value)}원 (${roundedPercentage}%)`
         }
       }
     }
   }
 }))
-
-//추가
-// const calculateAssetRatios = (assets) => {
-//   const safeAsset =
-//     (assets.cash?.total || 0) + (assets.deposit?.total || 0) + (assets.insurance?.total || 0)
-//   const riskAsset = assets.stock?.total || 0
-//   const totalAsset = safeAsset + riskAsset
-//   return {
-//     safeRatio: safeAsset / totalAsset,
-//     riskRatio: riskAsset / totalAsset
-//   }
-// }
-// const assetEvaluation = computed(() => {
-//   const { safeRatio, riskRatio } = calculateAssetRatios(props.assetDetails)
-//   const idealRatios = getIdealRatios(props.userType)
-//   const difference = safeRatio - idealRatios.safe
-
-//   const getRelativeDescription = (diff) => {
-//     if (Math.abs(diff) < 0.2) return null // 20% 미만 차이는 언급하지 않음
-//     if (Math.abs(diff) < 0.3) return diff > 0 ? '높은' : '낮은'
-//     return diff > 0 ? '매우 높은' : '매우 낮은'
-//   }
-
-//   const safeDescription = getRelativeDescription(difference)
-//   const riskDescription = getRelativeDescription(-difference)
-
-//   let evaluation = ''
-
-//   if (safeDescription) {
-//     evaluation += `현재 안전자산 비중이 ${props.userType}의 평균에 비해 ${safeDescription} 편이에요. `
-//   }
-
-//   if (!safeDescription && !riskDescription) {
-//     evaluation = `현재 자산 분배가 ${props.userType}의 평균과 큰 차이가 없습니다. `
-//   }
-
-//   if (Math.abs(difference) < 0.2) {
-//     evaluation += `전반적으로 ${props.userType}에 적합한 자산 분배를 하고 계시네요. 현재의 균형을 잘 유지해 보세요.`
-//   } else if (difference > 0) {
-//     if (difference > 0.4) {
-//       evaluation += `안전자산 비중이 상당히 높습니다. 일부 안전자산을 위험자산으로 전환하는 것을 고려해보시는 건 어떨까요? 이는 잠재적으로 더 높은 수익을 얻을 기회를 제공할 수 있습니다.`
-//     } else {
-//       evaluation += `위험자산 비중을 조금 높이는 것을 고려해보시는 건 어떨까요? 이는 장기적으로 더 높은 수익을 얻을 수 있는 기회를 제공할 수 있습니다.`
-//     }
-//   } else {
-//     if (difference < -0.4) {
-//       evaluation += `위험자산 비중이 상당히 높습니다. 일부 위험자산을 안전자산으로 전환하는 것을 고려해보시는 건 어떨까요? 이는 자산을 보호하고 리스크를 줄이는 데 도움이 될 수 있습니다.`
-//     } else {
-//       evaluation += `안전자산 비중을 조금 높이는 것을 고려해보시는 건 어떨까요? 이는 자산을 안정적으로 관리하는 데 도움이 될 수 있습니다.`
-//     }
-//   }
-
-//   return evaluation.trim()
-// })
 </script>
 
 <style scoped>
