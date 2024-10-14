@@ -15,7 +15,6 @@
           <span class="text-accent">
             <i v-if="trendDirection === 'increase'" class="fa-solid fa-circle-arrow-up"></i>
             <i v-else-if="trendDirection === 'decrease'" class="fa-solid fa-circle-arrow-down"></i>
-            <i v-else class="icon-hold">...</i>
             {{
               trendDirection === 'increase'
                 ? '증가'
@@ -261,19 +260,6 @@ onBeforeUnmount(() => {
 .time-comparison .comparison-info .text-accent {
   font-size: 1.5rem;
   font-weight: 600;
-}
-.icon-hold {
-  display: inline-block;
-  width: 1.7rem;
-  height: 1.7rem;
-  line-height: 0.75rem;
-  font-weight: 500;
-  text-align: center;
-  background-color: #6846f5;
-  border-radius: 50%;
-  color: #fff;
-  font-style: normal;
-  font-size: 1.45rem;
 }
 .time-comparison__percentage {
   margin-top: 7px;

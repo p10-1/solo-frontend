@@ -167,6 +167,7 @@ const chartOptions = computed(() => ({
   box-shadow: 0px 0px 15px rgb(221, 214, 255);
 }
 .asset-highlight {
+  margin-top: 0.8rem;
   font-size: 0.8rem;
   letter-spacing: -0.7px;
   font-weight: 500;
@@ -179,6 +180,10 @@ const chartOptions = computed(() => ({
 .asset-highlight i {
   color: #f7d095;
   margin-right: 2px;
+}
+/* 차트 높이 수정 */
+.asset-distribution .chart-container {
+  height: 300px !important;
 }
 .asset-legend ul.asset-type {
   display: flex;
@@ -194,7 +199,7 @@ const chartOptions = computed(() => ({
   border-bottom: 0;
 }
 .asset-type .asset-name {
-  flex: 0 0 30%;
+  flex: 0 0 25%;
   font-size: 1rem;
   letter-spacing: -1px;
   font-weight: 500;
@@ -225,18 +230,6 @@ const chartOptions = computed(() => ({
 .asset-type .asset-amount .text-accent {
   font-weight: 700;
 }
-
-/* .asset-evaluation {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-}
-
-.asset-evaluation h4 {
-  color: #495057;
-  margin-bottom: 10px;
-} */
 
 @media (max-width: 768px) {
   .asset-distribution {

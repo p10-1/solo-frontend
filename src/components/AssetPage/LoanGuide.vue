@@ -145,13 +145,17 @@ const principalEqualizationPrincipal = computed(() => {
 
 <style scoped>
 .loan-guide .comment-robot .comment {
-  font-size: 1.08rem;
-  line-height: 1.7rem;
+  font-size: 1.19rem;
+  line-height: 1.8rem;
   letter-spacing: -1px;
   color: #333;
 }
 .loan-guide .comment-robot .comment .text-accent {
   font-weight: 600;
   font-size: 1.5rem;
+}
+.loan-guide .comment-robot .comment strong {
+  font-size: 1.5rem;
+  color: #333;
 }
 </style>

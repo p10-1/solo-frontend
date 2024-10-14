@@ -32,7 +32,7 @@
                 <div class="board-title truncated" :title="board.title">
                   {{ truncateTitle(board.title) }}
                 </div>
-                <span class="new-label">NEW</span>
+
                 <ul class="table-ex-info">
                   <li><i class="fa-solid fa-user"></i> {{ board.views }}</li>
                   <li><i class="fa-solid fa-heart"></i> {{ board.likes }}</li>

@@ -35,7 +35,7 @@
                 comparisonType="personal"
                 :userAssetDetails="processedData.assetDetails"
                 customTitle=" 현재 내 자산은 ?"
-                :showIcon="true"
+                :showIcon="false"
               />
               <!-- Conditionally Render Average Comments Based on Active Slide -->
               <AssetComment
