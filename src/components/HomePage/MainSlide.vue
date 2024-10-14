@@ -202,7 +202,7 @@ const slides = computed(() => {
     filteredAssetDetails: Object.entries(assetData.value || {})
       .map(([name, details]) => ({ name, ...details }))
       .filter((asset) => asset.total > 0),
-    highlight: '보유 자산 중 현금자산이 제일 많아요!'
+    highlight: '보유 자산 중 현금이 제일 많아요!'
   }
 
   const typeAverageSlide = {
