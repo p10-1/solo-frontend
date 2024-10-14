@@ -1,24 +1,21 @@
 <template>
   <div class="time-comparison">
-    <!-- 자산 타입에 따라 동적으로 타이틀 표시 -->
     <h2 class="title">
       <span class="text-accent">{{ assetTypeNames[assetType] }} 월별</span> 비교
     </h2>
 
-    <!-- 차트 렌더링을 위한 캔버스 -->
     <div class="time-comparison__chart-container">
       <canvas ref="chartRef" class="canvas-chart"></canvas>
     </div>
 
-    <!-- 자산 변동 요약 정보가 있을 경우 표시 -->
     <div v-if="processedData.length > 0" class="time-comparison__summary">
       <ul class="comparison-info">
         <li>최근 {{ processedData.length }}개월 변화</li>
         <li :class="['time-comparison__trend', trendDirection]">
           <span class="text-accent">
             <i v-if="trendDirection === 'increase'" class="fa-solid fa-circle-arrow-up"></i>
+            <i v-else-if="trendDirection === 'decrease'" class="fa-solid fa-circle-arrow-down"></i>
             <i v-else class="icon-hold">...</i>
-            <i v-else class="fa-solid fa-circle-arrow-down"></i>
             {{
               trendDirection === 'increase'
                 ? '증가'
