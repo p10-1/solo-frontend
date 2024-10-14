@@ -95,12 +95,16 @@ const loadAssetData = async () => {
     // 에러 처리
   }
 }
+
 // 자산 데이터를 정렬하는 함수
 const sortAssetDetails = (assetDetails) => {
-  return Object.entries(assetDetails)
+  console.log('정렬 전 자산 데이터:', assetDetails)
+  const sortedAssets = Object.entries(assetDetails)
     .map(([name, details]) => ({ name, ...details }))
     .sort((a, b) => b.total - a.total)
     .filter((asset) => asset.total > 0)
+  console.log('정렬 후 자산 데이터:', sortedAssets)
+  return sortedAssets
 }
 
 // 퍼센티지 계산 함수
@@ -120,8 +124,9 @@ const processAverageData = (data) => {
   return result
 }
 
-// 자산 데이터 처리 함수
+// 자산 데이터 처리 함수 수정
 const processAssetData = (data) => {
+  console.log('자산 데이터 처리 시작:', data)
   const assetTypes = ['cash', 'deposit', 'stock', 'insurance']
   const processed = {}
   let total = 0
@@ -138,6 +143,7 @@ const processAssetData = (data) => {
   for (const type in processed) {
     processed[type].percentage = calculatePercentage(processed[type].total, total)
   }
+  console.log('처리된 자산 데이터:', processed)
   return processed
 }
 
