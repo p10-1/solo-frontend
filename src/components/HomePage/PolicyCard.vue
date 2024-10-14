@@ -138,6 +138,17 @@ onMounted(() => {
   bottom: 2.7rem;
 }
 .main-policy-card .button-main {
-  border-color: #502fd4;
+  background-color: rgba(51, 51, 51, 0.15);
+  border-color: rgba(238, 238, 238, 0.05);
+}
+
+/* Swiper 페이지네이션 스타일 커스터마이징 */
+:deep(.swiper-pagination-bullet) {
+  background: #cfc6fd;
+  opacity: 1;
+}
+
+:deep(.swiper-pagination-bullet-active) {
+  background: #6846f5;
 }
 </style>

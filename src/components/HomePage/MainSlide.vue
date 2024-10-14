@@ -1,59 +1,54 @@
 <template>
   <div class="main-slide-box">
-    <h2 class="main-title">내 자산 현황</h2>
-    <div class="main-slide-contents margin-top-1rem">
-      <!-- Swiper 컴포넌트를 사용하여 슬라이드 구현 -->
-      <swiper
-        :pagination="{ clickable: true }"
-        :modules="modules"
-        :loop="true"
-        :slides-per-view="1"
-        :space-between="20"
-        :initial-slide="0"
-        class="mySwiper"
-      >
-        <!-- 각 슬라이드에 대한 반복 -->
-        <swiper-slide v-for="(slide, index) in slides" :key="index">
-          <router-link to="asset">
-            <div class="asset-distribution">
-              <h3 class="slide-title">{{ slide.title }}</h3>
-              <!-- 하이라이트 정보 표시 (있는 경우) -->
-              <div v-if="slide.highlight" class="asset-highlight">
-                <i class="fa-solid fa-circle-info"></i>
-                {{ slide.highlight }}
+    <swiper
+      :pagination="{ clickable: true }"
+      :modules="modules"
+      :loop="true"
+      :slides-per-view="1"
+      :space-between="20"
+      :initial-slide="0"
+      class="mySwiper"
+    >
+      <!-- 각 슬라이드에 대한 반복 -->
+      <swiper-slide v-for="(slide, index) in slides" :key="index">
+        <router-link to="asset">
+          <div class="asset-distribution">
+            <h3 class="main-title">{{ slide.title }}</h3>
+            <div class="card-content">
+              <!-- 도넛 차트 컴포넌트 -->
+              <div class="asset-chart-container">
+                <ChartComponent type="doughnut" :data="slide.chartData" :options="chartOptions" />
               </div>
-              <div class="asset-content">
-                <!-- 도넛 차트 컴포넌트 -->
-                <div class="asset-chart-container">
-                  <ChartComponent type="doughnut" :data="slide.chartData" :options="chartOptions" />
+              <!-- 자산 상세 정보 목록 -->
+              <div class="asset-legend">
+                <div class="advice">
+                  <div class="guide">Info</div>
+                  <p>자산이 <strong>0.5% 미만</strong>이면 <strong>0%로 표시</strong>됩니다.</p>
                 </div>
-                <!-- 자산 상세 정보 목록 -->
-                <div class="asset-legend">
-                  <ul
-                    v-for="asset in slide.filteredAssetDetails"
-                    :key="asset.name"
-                    class="asset-type"
-                  >
-                    <li class="asset-name">
-                      <span
-                        :style="{ backgroundColor: getAssetColor(asset.name) }"
-                        class="type-color"
-                      ></span>
-                      {{ assetNames[asset.name] }}
-                    </li>
-                    <li class="asset-percentage">{{ formatNumber(asset.percentage) }}%</li>
-                    <li class="asset-amount">
-                      <span class="text-accent">{{ formatNumber(Math.round(asset.total)) }}</span>
-                      원
-                    </li>
-                  </ul>
-                </div>
+                <ul
+                  v-for="asset in slide.filteredAssetDetails"
+                  :key="asset.name"
+                  class="asset-type"
+                >
+                  <li class="asset-name">
+                    <span
+                      :style="{ backgroundColor: getAssetColor(asset.name) }"
+                      class="type-color"
+                    ></span>
+                    {{ assetNames[asset.name] }}
+                  </li>
+                  <li class="asset-percentage">{{ formatNumber(asset.percentage) }}%</li>
+                  <li class="asset-amount">
+                    <span class="text-accent">{{ formatNumber(Math.round(asset.total)) }}</span
+                    >원
+                  </li>
+                </ul>
               </div>
             </div>
-          </router-link>
-        </swiper-slide>
-      </swiper>
-    </div>
+          </div>
+        </router-link>
+      </swiper-slide>
+    </swiper>
   </div>
 </template>
 
@@ -82,10 +77,10 @@ const assetNames = {
 
 // 자산 유형별 색상 매핑
 const assetColors = {
-  cash: '#FF6384',
-  deposit: '#36A2EB',
-  stock: '#FFCE56',
-  insurance: '#4BC0C0'
+  cash: '#FFCC00',
+  deposit: '#CFDF4B',
+  stock: '#A17FF0',
+  insurance: '#5F7DFF'
 }
 
 // API에서 자산 데이터를 불러오는 함수
@@ -234,89 +229,105 @@ onMounted(() => {
 <style scoped>
 /* 자산 분포 컨테이너 스타일 */
 .asset-distribution {
-  border-radius: 25px;
-  padding: 2rem 1.7rem;
-  background-color: #fff;
-  box-shadow: 0px 0px 15px rgb(221, 214, 255);
-}
-
-/* 슬라이드 제목 스타일 */
-.slide-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
-/* 자산 하이라이트 정보 스타일 */
-.asset-highlight {
-  font-size: 1rem;
-  color: #555;
-  letter-spacing: -0.5px;
-  font-weight: 500;
-  padding: 10px 12px;
-  word-break: keep-all;
-  border-radius: 12px;
-  background-color: #fffbec;
-  color: var(--font-secondary, #475067);
-  margin-bottom: 15px;
+  width: 100%;
+  padding: 1rem 0;
 }
 
 /* 자산 콘텐츠 레이아웃 */
-.asset-content {
+.asset-distribution .card-content {
+  margin-top: 1rem;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  padding: 1.5rem 1rem;
+  border-radius: 25px;
+  background-color: #fff;
+  box-shadow: 0px 0px 12px rgba(221, 214, 255, 1);
+  margin: 1.2rem 0.5rem 0;
 }
 
 /* 차트 컨테이너 크기 설정 */
 .asset-chart-container {
-  width: 45%;
+  width: 50%;
   max-width: 300px;
 }
-
 /* 자산 범례 스타일 */
-.asset-legend {
-  width: 45%;
-  margin-left: 5%;
+.asset-distribution .card-content .asset-legend {
+  width: 50%;
+}
+.asset-legend .advice {
+  margin-top: -1.5rem;
+  margin-bottom: 20px;
+}
+.asset-legend .advice .guide {
+  display: block;
+  font-weight: 600;
+  color: #b6a8ff;
+  letter-spacing: -0.8px;
+  margin-bottom: 5px;
+}
+.asset-legend .advice p {
+  font-size: 0.81rem;
+  line-height: 1.5;
+  color: #666;
+  word-break: keep-all;
+  margin-bottom: 0;
 }
 
 /* 각 자산 유형 항목 스타일 */
-.asset-type {
+.asset-legend ul.asset-type {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 12px; /* 자산 항목 간의 간격 조정 */
   padding-bottom: 10px;
-  border-bottom: 1px dashed #cfc6fd;
+  border-bottom: 1px dashed #eae6ff;
+}
+.asset-legend .asset-type:last-child {
+  margin-bottom: 0;
+  border-bottom: 0;
+  padding-bottom: 0;
 }
 
 /* 자산 이름 스타일 */
-.asset-name {
-  display: flex;
-  align-items: center;
+.asset-legend .asset-name {
+  flex: 0 0 30%;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.8px;
 }
-
 /* 자산 유형 색상 표시 스타일 */
-.type-color {
+.asset-legend .asset-name .type-color {
   display: inline-block;
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  margin-right: 8px;
+  margin-right: 2px;
 }
 
 /* 자산 퍼센티지 스타일 */
-.asset-percentage {
-  font-weight: bold;
-  padding: 2px 6px;
+.asset-legend .asset-percentage {
+  flex: 0 0 10%;
+  font-weight: 600;
+  padding: 3px 10px;
   background-color: #f3f3ff;
-  border-radius: 10px;
+  color: #666;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  line-height: 1rem;
 }
 
 /* 자산 금액 스타일 */
-.asset-amount {
-  font-size: 0.9rem;
+.asset-legend .asset-amount {
+  text-align: right;
+  flex: 0 0 50%;
+  font-size: 1rem;
   font-weight: 500;
+  letter-spacing: -0.8px;
+  color: #333;
+}
+.asset-legend .asset-amount .text-accent {
+  font-weight: 700;
 }
 
 /* 반응형 디자인: 모바일 화면 대응 */
