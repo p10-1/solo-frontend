@@ -16,7 +16,6 @@
       <section class="asset-container">
         <div class="asset-top-content">
           <!-- 섹션: 자산 분포 및 평균과의 비교를 위한 슬라이더 -->
-          <!-- <div class="asset-list__distribution-slider"> -->
           <!-- 이전 슬라이드 버튼 -->
           <TotalAsset :totalAmount="processedData.totalAsset" />
           <div class="asset-statistics">
@@ -78,25 +77,7 @@
               </swiper>
             </div>
           </div>
-        </div>
-        <!-- 유형별 평균 자산 분포 -->
-        <!-- <Distribution
-          v-if="processedData.typeAverages"
-          :assetDetails="processedData.typeAverages"
-          :title="`${processedData.assetDetails.type || '전체'} 평균 자산 분포`"
-        /> -->
-
-        <!-- 전체 사용자 평균 자산 분포 -->
-        <!-- <Distribution
-          v-if="processedData.overallAverages"
-          :assetDetails="processedData.overallAverages"
-          title="전체 사용자 평균 자산 분포"
-        /> -->
-
-        <!-- 다음 슬라이드 버튼 -->
-        <!-- <button @click="nextSlide" class="slider-btn next-btn">›</button> -->
-        <!-- </div> -->
-
+        </div>     
         <!-- 섹션: 자산 비교 차트 영역 -->
         <section class="asset-comparison-container">
           <div class="asset-comparison-content">
@@ -204,7 +185,6 @@
 </template>
 
 <script setup>
-//src/components/AssetPage/AssetList.vue
 
 import { ref, computed, onMounted } from 'vue'
 import { fetchAssetData, fetchAssetComparison } from '@/api/assetApi'
@@ -233,24 +213,6 @@ const assetStyle = ref(null)
 
 const selectedAssetType = ref('cash') // 선택된 자산 타입 기본값은 'cash'
 
-// //슬라이드 구현
-// const currentSlide = ref(0)
-// const totalSlides = 3 // 전체 슬라이드 수를 3으로 변경
-
-// const nextSlide = () => {
-//   currentSlide.value = (currentSlide.value + 1) % totalSlides
-// }
-
-// const prevSlide = () => {
-//   currentSlide.value = (currentSlide.value - 1 + totalSlides) % totalSlides
-// }
-
-// const assetNames = {
-//   cash: '현금자산',
-//   deposit: '예적금',
-//   stock: '주식',
-//   insurance: '보험'
-// }
 // 자산 데이터 및 평균 데이터를 API로부터 로드하는 함수
 const fieldMapping = {
   cash: { bank: 'cashBank', account: 'cashAccount', value: 'cash' },
@@ -258,24 +220,13 @@ const fieldMapping = {
   stock: { bank: 'stockBank', account: 'stockAccount', value: 'stock' },
   insurance: { bank: 'insuranceCompany', account: 'insuranceName', value: 'insurance' }
 }
-// const highestAssetType = computed(() => {
-//   if (!processedData.value || !processedData.value.assetDetails) return null
-//   const sortedAssets = Object.entries(processedData.value.assetDetails).sort(
-//     ([, a], [, b]) => b.total - a.total
-//   )
-//   return sortedAssets[0]?.[0]
-// })
+
 const loadData = async () => {
-  console.log('1. loadData 함수 시작')
   try {
     loading.value = true
     const assetData = await fetchAssetData()
-    console.log('3.assetData: ', assetData[0].type)
     rawAssetData.value = assetData
-    console.log('3.rawAssetData: ', rawAssetData.value)
-    // assetAverages.value = averages
     const assetDetail = await fetchAssetComparison(assetData[0].type)
-    console.log('assetDetail: ', assetDetail)
     assetAverages.value = assetDetail.overallAverage
     assetStyle.value = assetDetail.typeAverage
   } catch (err) {
@@ -283,7 +234,6 @@ const loadData = async () => {
     error.value = '데이터를 불러오는데 실패했습니다. 나중에 다시 시도해주세요.'
   } finally {
     loading.value = false
-    console.log('4. loadData 함수 종료')
   }
 }
 // 자산 데이터를 처리하여 필요한 형태로 변환하는 함수
@@ -317,7 +267,6 @@ const processAssetData = (data, assetTypes) => {
         accounts: accounts.length ? accounts : ['']
       }
     }
-    // processed.loanAmount = BigInt(data.loanAmount || 0)
     return processed
   }, {})
 }

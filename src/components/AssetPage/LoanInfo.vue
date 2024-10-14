@@ -1,9 +1,19 @@
 <template>
   <div class="loan-info-container">
     <label for="month">몇 번째 달의 상환금을 확인하시겠습니까?</label>
-    <select v-model="selectedMonth" id="month">
-      <option v-for="month in loanMonths" :key="month" :value="month">{{ month }}개월</option>
-    </select>
+    <input
+      v-model.number="inputMonth"
+      type="number"
+      id="month"
+      :min="1"
+      :max="props.loanData.period"
+      placeholder="숫자만 입력"
+    />
+    <button @click="applySelectedMonth">확인</button>
+    <span v-if="!isValidMonth" class="error"
+      >1에서 {{ props.loanData.period }} 사이의 값을 입력해주세요.</span
+    >
+
     <!-- 만기일시상환인 경우 -->
     <div v-if="props.repaymentMethod === 'bullet-repayment'">
       <ul v-for="(value, key) in formattedBullet" :key="key" class="loan-item">
@@ -35,10 +45,9 @@
 </template>
 
 <script setup>
-//src/components/AssetPage/LoanInfo.vue
-
 import { computed, ref } from 'vue'
 
+const inputMonth = ref(1)
 const selectedMonth = ref(1)
 const props = defineProps({
   loanData: {
@@ -56,10 +65,18 @@ const props = defineProps({
     required: true
   }
 })
-// const formatBigInt = (value) => {
-//   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-// }
 
+const isValidMonth = computed(
+  () => inputMonth.value > 0 && inputMonth.value <= props.loanData.period
+)
+
+const applySelectedMonth = () => {
+  if (isValidMonth.value) {
+    selectedMonth.value = inputMonth.value
+  }
+}
+
+// 이하 나머지 코드는 그대로 유지
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value)
 }
@@ -90,8 +107,7 @@ const calculateEqualPrincipalPayments = (amount, interest, period) => {
   return payments
 }
 
-// Loan months: 1 to the total loan period
-const loanMonths = computed(() => Array.from({ length: props.loanData.period }, (_, i) => i + 1))
+// const loanMonths = computed(() => Array.from({ length: props.loanData.period }, (_, i) => i + 1))
 
 const monthlyPayment = computed(() =>
   calculateMonthlyPayment(props.loanData.amount, props.loanData.interest, props.loanData.period)
@@ -181,5 +197,10 @@ const formattedBullet = computed(() => ({
 .loan-item .loan-value .text-accent {
   font-weight: 600;
   font-size: 1.4rem;
+}
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 5px;
 }
 </style>

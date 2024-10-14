@@ -12,29 +12,6 @@
         <a @click="handleClick('대출')"><i class="fa-solid fa-house-circle-check"></i>전세대출</a>
       </li>
     </ul>
-    <!-- <h2 class="main-title">제공 서비스</h2>
-    <ul class="catagory-list margin-top-1rem">
-      <li>
-        <router-link :to="{ name: 'asset' }">
-          <i class="fa-solid fa-chart-pie"></i>
-          <i class="fa-solid fa-chart-simple"></i>
-          자산분석
-        </router-link>
-      </li>
-      <li>
-        <router-link :to="{ name: 'board' }">
-          <i class="fa-solid fa-comments"></i>
-          <i class="fa-solid fa-user-group"></i>
-          커뮤니티
-        </router-link>
-      </li>
-      <li>
-        <router-link :to="{ name: 'mypage' }">
-          <i class="fa-solid fa-face-smile"></i>
-          마이페이지
-        </router-link>
-      </li>
-    </ul> -->
   </div>
 </template>
 <script setup>

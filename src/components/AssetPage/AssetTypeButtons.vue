@@ -44,7 +44,6 @@ const selectType = (type) => {
   text-align: center;
   padding: 0.8rem 1rem;
   border-radius: 25px;
-  /* background-color: #cfc6fd; */
   font-size: 18px;
   font-weight: 500;
   line-height: 1;

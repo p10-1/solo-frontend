@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, computed } from 'vue'
-import config from '@/config'
+import config from '@/config/menu'
 import MenuGroup from './menu/MenuGroup.vue'
 import AccountMenuGroup from './menu/AccountMenuGroup.vue'
 
