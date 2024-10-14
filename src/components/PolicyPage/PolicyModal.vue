@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
 const props = defineProps({
   isVisible: {
@@ -43,16 +43,31 @@ const formattedPolicyDetails = computed(() => {
   // 일단 동그라미 네모만 포멧해놓음
   return props.policy.sporCn.replace('○', '<br>○').replace('□', '<br>□')
 })
+
+watch(
+  () => props.isVisible,
+  (newVal) => {
+    if (newVal) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+  }
+)
 </script>
 
 <style scoped>
 .policy-modal .modal-dialog {
   max-width: 50vw;
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
 .policy-modal .modal-content {
   padding: 1.7rem;
   animation: slide-down 0.3s ease;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .policy-modal .policy-type {

@@ -1,5 +1,5 @@
 <template>
-  <h2 class="title">글 작성</h2>
+  <h1><i class="fa-regular fa-pen-to-square"></i> 글 작성</h1>
   <form @submit.prevent="submitForm">
     <div class="mb-3 mt-3">
       <label for="title" class="form-label">제목 </label>
@@ -33,8 +33,14 @@
       />
     </div>
     <div class="my-5 text-center">
-      <button type="submit" class="button-main">확인</button>
-      <router-link class="button-sub margin-left-1rem" :to="{ name: 'board' }"> 목록 </router-link>
+      <button type="submit" class="btn btn-primary me-3">
+        <i class="fa-solid fa-check"></i>
+        확인
+      </button>
+      <router-link class="btn btn-primary" :to="{ name: 'board' }">
+        <i class="fa-solid fa-list"></i>
+        목록
+      </router-link>
     </div>
   </form>
 </template>
@@ -70,6 +76,11 @@ const handleFileUpload = (event) => {
 // 폼 제출 핸들러
 const submitForm = async () => {
   try {
+    const formattedContent = article.value.content
+      .replace(/\n/g, '<br>') // 줄바꿈 처리
+      .replace(/ /g, '&nbsp;') // 공백 처리
+
+    article.value.content = formattedContent // 변환된 내용으로 설정
     await create(article.value)
     alert('글이 성공적으로 작성되었습니다')
     router.push('/board') // 글 작성 후 게시판 페이지로 이동

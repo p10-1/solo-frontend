@@ -39,7 +39,6 @@ import BoardCard from '@/components/HomePage/BoardCard.vue'
 import { ref } from 'vue'
 
 // 로그인 전후
-const isLoggedIn = ref(false)
 
 export default {
   components: {

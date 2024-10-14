@@ -34,12 +34,6 @@
         </div>
       </div>
     </div>
-
-    <!-- 추가 -->
-    <!-- <div class="asset-evaluation">
-      <h4>자산 평가</h4>
-      <p>{{ assetEvaluation }}</p>
-    </div> -->
   </div>
 </template>
 
@@ -77,27 +71,6 @@ const props = defineProps({
     // 사용자의 실제 자산 정보. assetDetails와 같은 구조
   }
 })
-//추가
-// const getIdealRatios = (userType) => {
-//   switch (userType) {
-//     case '위험 추구형':
-//       return { safe: 0.5, risk: 0.5 }
-//     case '자산 분산형':
-//       return { safe: 0.6, risk: 0.4 }
-//     case '안정 추구형':
-//       return { safe: 0.8, risk: 0.2 }
-//     case '대출 우선형':
-//       return { safe: 1.0, risk: 0.0 }
-//     default:
-//       return { safe: 0.6, risk: 0.4 }
-//   }
-// }
-
-// 로그 추가
-console.log('Distribution component received props:')
-console.log('title:', props.title)
-console.log('userType:', props.userType)
-console.log('assetDetails:', props.assetDetails)
 
 // 자산 이름 매핑
 const assetNames = {

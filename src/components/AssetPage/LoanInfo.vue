@@ -1,18 +1,30 @@
 <template>
   <div class="loan-info-container">
-    <!-- purpose가 '전세자금'인 경우 -->
-    <div v-if="props.loanData.purpose === '전세자금'">
-      <ul v-for="(value, key) in formattedHouseLoanInfo" :key="key" class="loan-item">
+    <label for="month">몇 번째 달의 상환금을 확인하시겠습니까?</label>
+    <select v-model="selectedMonth" id="month">
+      <option v-for="month in loanMonths" :key="month" :value="month">{{ month }}개월</option>
+    </select>
+    <!-- 만기일시상환인 경우 -->
+    <div v-if="props.repaymentMethod === 'bullet-repayment'">
+      <ul v-for="(value, key) in formattedBullet" :key="key" class="loan-item">
         <li class="loan-label">{{ key }}</li>
         <li class="loan-value">
           <span class="text-accent">{{ value }}</span>
         </li>
       </ul>
     </div>
-
-    <!-- 그 외의 경우 -->
-    <div v-else>
-      <ul v-for="(value, key) in formattedLoanInfo" :key="key" class="loan-item">
+    <!-- 원금균등상환인 경우 -->
+    <div v-if="props.repaymentMethod === 'equal-principal'">
+      <ul v-for="(value, key) in formattedPrincipal" :key="key" class="loan-item">
+        <li class="loan-label">{{ key }}</li>
+        <li class="loan-value">
+          <span class="text-accent">{{ value }}</span>
+        </li>
+      </ul>
+    </div>
+    <!-- 원리금균등상환인 경우 -->
+    <div v-if="props.repaymentMethod === 'equal-principal-interest'">
+      <ul v-for="(value, key) in formattedInterest" :key="key" class="loan-item">
         <li class="loan-label">{{ key }}</li>
         <li class="loan-value">
           <span class="text-accent">{{ value }}</span>
@@ -25,8 +37,9 @@
 <script setup>
 //src/components/AssetPage/LoanInfo.vue
 
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
+const selectedMonth = ref(1)
 const props = defineProps({
   loanData: {
     type: Object,
@@ -37,6 +50,10 @@ const props = defineProps({
       period: 0,
       interest: 0
     })
+  },
+  repaymentMethod: {
+    type: String,
+    required: true
   }
 })
 // const formatBigInt = (value) => {
@@ -58,6 +75,24 @@ const calculateMonthlyInterest = (amount, interest) => {
   return amount * monthlyInterestRate
 }
 
+const calculateEqualPrincipalPayments = (amount, interest, period) => {
+  const monthlyPrincipal = amount / period
+  const payments = []
+  let remainingBalance = amount
+
+  for (let i = 0; i < period; i++) {
+    const monthlyInterest = remainingBalance * (interest / 100 / 12)
+    const totalMonthlyPayment = monthlyPrincipal + monthlyInterest
+    payments.push(totalMonthlyPayment)
+    remainingBalance -= monthlyPrincipal
+  }
+
+  return payments
+}
+
+// Loan months: 1 to the total loan period
+const loanMonths = computed(() => Array.from({ length: props.loanData.period }, (_, i) => i + 1))
+
 const monthlyPayment = computed(() =>
   calculateMonthlyPayment(props.loanData.amount, props.loanData.interest, props.loanData.period)
 )
@@ -68,7 +103,20 @@ const monthlyInterest = computed(() =>
   calculateMonthlyInterest(props.loanData.amount, props.loanData.interest)
 )
 
-const formattedLoanInfo = computed(() => ({
+const equalPrincipalPayments = computed(() =>
+  calculateEqualPrincipalPayments(
+    props.loanData.amount,
+    props.loanData.interest,
+    props.loanData.period
+  )
+)
+
+const selectedMonthPayment = computed(() => {
+  const month = selectedMonth.value - 1
+  return month >= 0 && month < props.loanData.period ? equalPrincipalPayments.value[month] : 0
+})
+
+const formattedInterest = computed(() => ({
   '대출 금액': formatCurrency(props.loanData.amount),
   '대출 목적': props.loanData.purpose,
   '대출 기간': `${props.loanData.period}개월`,
@@ -77,7 +125,16 @@ const formattedLoanInfo = computed(() => ({
   '총 상환금': formatCurrency(totalPayment.value)
 }))
 
-const formattedHouseLoanInfo = computed(() => ({
+const formattedPrincipal = computed(() => ({
+  '대출 금액': formatCurrency(props.loanData.amount),
+  '대출 목적': props.loanData.purpose,
+  '대출 기간': `${props.loanData.period}개월`,
+  이자율: `${props.loanData.interest}%`,
+  '월 상환금': formatCurrency(selectedMonthPayment.value),
+  '총 상환금': formatCurrency(equalPrincipalPayments.value.reduce((a, b) => a + b, 0))
+}))
+
+const formattedBullet = computed(() => ({
   '대출 금액': formatCurrency(props.loanData.amount),
   '대출 목적': props.loanData.purpose,
   '대출 기간': `${props.loanData.period}개월`,

@@ -8,25 +8,19 @@
             <dt>작성자:</dt>
             <dd class="badge">{{ board.userName }}</dd>
             <dt>작성일:</dt>
-            <dd class="text-mute">{{ moment(board.regDate).format('YYYY-MM-DD HH:mm:ss') }}</dd>
+            <dd class="text-muted">{{ moment(board.regDate).format('YYYY-MM-DD HH:mm:ss') }}</dd>
           </dl>
           <ul class="post-stats">
-            <li>
-              <i class="fa-solid fa-heart"></i>
-              {{ board.likes }}
-            </li>
-            <li>
-              <i class="fa-solid fa-comment"></i>
-              {{ board.comments }}
-            </li>
-            <li>
-              <i class="fa-solid fa-user"></i>
-              {{ board.views }}
-            </li>
+            <i class="fa-solid fa-user"></i>
+            <span class="badge">{{ board.views }}</span>
+            <i class="fa-solid fa-heart"></i>
+            <span class="badge">{{ board.likes }}</span>
+            <i class="fa-solid fa-comment"></i>
+            <span class="badge">{{ board.comments }}</span>
           </ul>
         </div>
         <div class="post-content margin-top-1rem">
-          <div>{{ board.content }}</div>
+          <div v-html="board.content"></div>
           <div v-if="board.attaches && board.attaches.length">
             <ul>
               <li v-for="attach in board.attaches" :key="attach.attachmentNo">
