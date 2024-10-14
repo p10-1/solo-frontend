@@ -2,11 +2,11 @@
 <template>
   <div class="asset-comment margin-top-1rem">
     <dl class="comment-robot">
-      <!-- <dt>
+      <dt>
         <span class="robot-icon">
           <i class="fa-solid fa-graduation-cap"></i>
         </span>
-      </dt> -->
+      </dt>
       <dd>
         <div class="robot-role">분석 멘토 Report</div>
         <div class="comment">
@@ -157,6 +157,11 @@ const assetEvaluationAdvice = computed(() => {
 <style scoped>
 .asset-comment .comment-robot {
   flex-wrap: wrap;
+}
+.asset-comment .comment-robot dd::after {
+  left: 1.9rem;
+  top: -18px;
+  transform: rotate(360deg);
 }
 .comment-robot .comment .report-title {
   font-size: 1.2rem;

@@ -14,20 +14,28 @@
             이번 달 이자인
             <span class="text-accent">{{ Math.floor(monthlyInterest).toLocaleString() }}</span
             >원으로<br />
-            🍞 붕어빵 <span class="text-accent-black">{{ monthlyInterestBread }}마리</span>, <br />
-            🍵 커피 {{ monthlyInterestCoffee }}잔, <br />
-            🍗 치킨 {{ monthlyInterestChicken }}마리, <br />
-            🥘 호텔뷔페를 {{ monthlyInterestBuffet }}번 <br />
+            🥐 붕어빵 <strong>{{ monthlyInterestBread }}</strong
+            > 마리 <br />
+            ☕️ 커피 <strong>{{ monthlyInterestCoffee }}</strong
+            > 잔 <br />
+            🍗 치킨 <strong>{{ monthlyInterestChicken }}</strong
+            > 마리 <br />
+            🍽️ 호텔뷔페를 <strong>{{ monthlyInterestBuffet }}</strong
+            > 번 <br />
             먹을 수 있어요!
           </span>
           <span v-else>
             이번 대출의 총 이자인
             <span class="text-accent">{{ Math.floor(totalInterest).toLocaleString() }}</span
             >원으로 <br />
-            🍞 붕어빵 {{ principalEqualization.bread }}마리, <br />
-            🍵 커피 {{ principalEqualization.coffee }}잔, <br />
-            🍗 치킨 {{ principalEqualization.chicken }}마리, <br />
-            🥘 호텔뷔페를 {{ principalEqualization.buffet }}번 <br />
+            🥐 붕어빵 <strong>{{ principalEqualization.bread }}</strong
+            > 마리 <br />
+            ☕️ 커피 <strong>{{ principalEqualization.coffee }}</strong
+            > 잔 <br />
+            🍗 치킨 <strong>{{ principalEqualization.chicken }}</strong
+            > 마리 <br />
+            🍽️ 호텔뷔페를 <strong>{{ principalEqualization.buffet }}</strong
+            > 번 <br />
             먹을 수 있어요!
           </span>
         </div>
@@ -38,10 +46,14 @@
             이번 달 이자인
             <span class="text-accent">{{ Math.floor(monthlyInterest).toLocaleString() }}</span
             >원으로 <br />
-            🍞 붕어빵 {{ monthlyInterestBread }}마리, <br />
-            🍵 커피 {{ monthlyInterestCoffee }}잔, <br />
-            🍗 치킨 {{ monthlyInterestChicken }}마리, <br />
-            🥘 호텔뷔페를 {{ monthlyInterestBuffet }}번 <br />
+            🥐 붕어빵 <strong>{{ monthlyInterestBread }}</strong
+            > 마리 <br />
+            ☕️ 커피 <strong>{{ monthlyInterestCoffee }}</strong
+            > 잔 <br />
+            🍗 치킨 <strong>{{ monthlyInterestChicken }}</strong
+            > 마리 <br />
+            🍽️ 호텔뷔페를 <strong>{{ monthlyInterestBuffet }}</strong
+            > 번 <br />
             먹을 수 있어요!
           </span>
           <span v-else>
@@ -50,10 +62,14 @@
               Math.floor(totalPrincipalInterest).toLocaleString()
             }}</span
             >원으로<br />
-            🍞 붕어빵 {{ principalEqualizationPrincipal.bread }}마리, <br />
-            🍵 커피 {{ principalEqualizationPrincipal.coffee }}잔, <br />
-            🍗 치킨 {{ principalEqualizationPrincipal.chicken }}마리, <br />
-            🥘 호텔뷔페를 {{ principalEqualizationPrincipal.buffet }}번 <br />
+            🥐 붕어빵 <strong>{{ principalEqualizationPrincipal.bread }}</strong
+            > 마리 <br />
+            ☕️ 커피 <strong>{{ principalEqualizationPrincipal.coffee }}</strong
+            > 잔 <br />
+            🍗 치킨 <strong>{{ principalEqualizationPrincipal.chicken }}</strong
+            > 마리 <br />
+            🍽️ 호텔뷔페를 <strong>{{ principalEqualizationPrincipal.buffet }}</strong
+            > 번 <br />
             먹을 수 있어요!
           </span>
         </div>
@@ -168,7 +184,7 @@ const principalEqualizationPrincipal = computed(() => {
 
 <style scoped>
 .loan-guide .comment-robot .comment {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   line-height: 1.8rem;
   letter-spacing: -1px;
   color: #333;
@@ -182,5 +198,10 @@ const principalEqualizationPrincipal = computed(() => {
 .loan-guide .comment-robot .comment .text-accent {
   font-weight: 600;
   font-size: 1.5rem;
+}
+.loan-guide .comment-robot .comment strong {
+  font-size: 1.5rem;
+  font-weight: 600;
+  /* color: #6846f5; */
 }
 </style>

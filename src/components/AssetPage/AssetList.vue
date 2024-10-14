@@ -19,8 +19,10 @@
           <!-- 섹션: 자산 분포 및 평균과의 비교를 위한 슬라이더 -->
           <!-- <div class="asset-list__distribution-slider"> -->
           <!-- 이전 슬라이드 버튼 -->
+          <TotalAsset :totalAmount="processedData.totalAsset" />
           <div class="asset-statistics">
             <div class="asset-top-item">
+<<<<<<< HEAD
               <Distribution
                 :assetDetails="processedData.assetDetails"
                 :title="'내 자산 분포'"
@@ -30,6 +32,8 @@
               />
             </div>
             <div class="asset-top-item">
+=======
+>>>>>>> 6373ed9110c7fb34820e72035ca4bcd07b0a4b94
               <AssetComment
                 :assetDetails="processedData.assetDetails"
                 :userType="processedData.assetDetails.type"
@@ -52,8 +56,16 @@
                 customTitle="전체 사용자 평균과 비교 하면 ?"
               />
             </div>
-
-            <div class="asset-top-item">
+            <div class="asset-top-item margin-top-1rem">
+              <Distribution
+                :assetDetails="processedData.assetDetails"
+                :title="'내 자산 분포'"
+                :userType="processedData.assetDetails.type"
+                comparisonType="personal"
+                :userAssetDetails="processedData.assetDetails"
+              />
+            </div>
+            <div class="asset-top-item margin-top-1rem">
               <swiper v-if="processedData" :navigation="true" :modules="modules" class="yourSwiper">
                 <!-- 유형별 평균 자산 분포 슬라이드 -->
                 <swiper-slide v-if="processedData.typeAverages">
@@ -304,6 +316,7 @@ const processAssetData = (data, assetTypes) => {
         accounts: accounts.length ? accounts : ['']
       }
     }
+    // processed.loanAmount = BigInt(data.loanAmount || 0)
     return processed
   }, {})
 }
