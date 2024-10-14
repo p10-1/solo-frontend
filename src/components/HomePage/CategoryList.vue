@@ -1,7 +1,7 @@
 <template>
   <div class="catagory-box">
     <h2 class="main-title">자산 형성 도움</h2>
-    <ul class="catagory-list margin-top-1rem margin-bottom-2rem">
+    <ul class="catagory-list margin-top-1rem">
       <li>
         <a @click="handleClick('예금')"><i class="fa-solid fa-coins"></i>예금</a>
       </li>
@@ -85,7 +85,7 @@ const navigateToProduct = () => {
 }
 .catagory-list li a {
   display: block;
-  padding: 2rem 1.7rem;
+  padding: 1.7rem;
   font-size: 17px;
   letter-spacing: -0.8px;
   text-align: center;

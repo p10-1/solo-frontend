@@ -3,7 +3,7 @@
     <!-- 자산 분포를 설명하는 타이틀 -->
     <h3 class="main-title">{{ title }}</h3>
     <div class="asset-content">
-      <div v-if="highestAssetType" class="asset-highlight margin-top-1rem">
+      <div v-if="highestAssetType" class="asset-highlight">
         <i class="fa-solid fa-circle-info"></i>
         보유 자산 중 <b>{{ assetNames[highestAssetType] }}</b
         >이 제일 많아요!
@@ -74,7 +74,7 @@ const props = defineProps({
 
 // 자산 이름 매핑
 const assetNames = {
-  cash: '현금자산',
+  cash: '현금',
   deposit: '예적금',
   stock: '증권',
   insurance: '보험'
@@ -82,10 +82,10 @@ const assetNames = {
 
 // 자산 색상 매핑
 const assetColors = {
-  cash: '#FF6384',
-  deposit: '#36A2EB',
-  stock: '#FFCE56',
-  insurance: '#4BC0C0'
+  cash: '#FFCC00',
+  deposit: '#CFDF4B',
+  stock: '#A17FF0',
+  insurance: '#5F7DFF'
 }
 
 // computed 속성들
@@ -214,16 +214,15 @@ const chartOptions = computed(() => ({
 <style scoped>
 .asset-distribution {
   border-radius: 25px;
-  padding: 2rem 1.7rem;
+  padding: 2rem 1.7rem 1.7rem;
   background-color: #fff;
   box-shadow: 0px 0px 15px rgb(221, 214, 255);
 }
 .asset-highlight {
-  font-size: 1rem;
-  color: #555;
+  font-size: 0.8rem;
   letter-spacing: -0.7px;
   font-weight: 500;
-  padding: 12px 16px;
+  padding: 10px 12px;
   word-break: keep-all;
   border-radius: 12px;
   background-color: #fffbec;
@@ -233,7 +232,7 @@ const chartOptions = computed(() => ({
   color: #f7d095;
   margin-right: 2px;
 }
-.asset-legend .asset-type {
+.asset-legend ul.asset-type {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -242,8 +241,12 @@ const chartOptions = computed(() => ({
   padding-bottom: 10px;
   border-bottom: 1px dashed #cfc6fd;
 }
+.asset-legend ul.asset-type:last-child {
+  margin-bottom: 0;
+  border-bottom: 0;
+}
 .asset-type .asset-name {
-  flex: 0 0 45%;
+  flex: 0 0 30%;
   font-size: 1rem;
   letter-spacing: -1px;
   font-weight: 500;
@@ -257,14 +260,15 @@ const chartOptions = computed(() => ({
 }
 .asset-type .asset-percentage {
   flex: 0 0 10%;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 0.9rem;
   padding: 3px 10px;
   background-color: #f3f3ff;
-  border-radius: 20%;
+  border-radius: 20px;
 }
 .asset-type .asset-amount {
   text-align: right;
-  flex: 0 0 30%;
+  flex: 0 0 50%;
   font-size: 1rem;
   font-weight: 500;
   letter-spacing: -0.8px;

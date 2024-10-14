@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 // import config from '@/config'
 </script>
 <template>
@@ -6,4 +6,5 @@
     <h1>{{ config.title }}</h1>
     <p>{{ config.subtitle }}</p>
   </div> -->
-</template>
+<!-- </template> -->
+-->

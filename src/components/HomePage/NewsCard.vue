@@ -149,4 +149,14 @@ onMounted(async () => {
   font-size: 15px;
   text-align: center;
 }
+
+/* Swiper 페이지네이션 스타일 커스터마이징 */
+:deep(.swiper-pagination-bullet) {
+  background: #cfc6fd;
+  opacity: 1;
+}
+
+:deep(.swiper-pagination-bullet-active) {
+  background: #6846f5;
+}
 </style>
