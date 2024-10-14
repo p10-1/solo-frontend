@@ -2,8 +2,8 @@
   <!-- <PromotionSlide /> -->
   <div class="main-top">
     <div class="main-top-item">
-      <IntroMainslide v-if="!isLoggedIn" />
-      <MainslideList v-if="isLoggedIn" />
+      <IntroSlide v-if="!authStore.isLoggedIn" />
+      <MainSlide v-if="authStore.isLoggedIn" />
     </div>
     <div class="main-top-item">
       <div class="item-box">
@@ -25,36 +25,19 @@
   </div>
 </template>
 
-<script>
-import IntroMainslide from '@/components/HomePage/IntroMainslide.vue'
-import MainslideList from '@/components/HomePage/MainslideList.vue'
+<script setup>
+import IntroSlide from '@/components/HomePage/IntroSlide.vue'
+import MainSlide from '@/components/HomePage/MainSlide.vue'
 import CategoryList from '@/components/HomePage/CategoryList.vue'
 import QuizCard from '@/components/HomePage/QuizCard.vue'
 import PolicyCard from '@/components/HomePage/PolicyCard.vue'
 import NewsCard from '@/components/HomePage/NewsCard.vue'
 import BoardCard from '@/components/HomePage/BoardCard.vue'
-// import PromotionSlide from '@/components/HomePage/PromotionSlide.vue'
-//import AssetSummary from '@/components/HomePage/AssetSummary.vue'
-// import ProductCard from '@/components/HomePage/ProductCard.vue'
 
-import { ref } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
+
 // 로그인 전후
-const isLoggedIn = ref(false)
-
-export default {
-  components: {
-    IntroMainslide,
-    MainslideList,
-    CategoryList,
-    QuizCard,
-    BoardCard,
-    PolicyCard,
-    NewsCard
-    //AssetSummary
-    // PromotionSlide,
-    // ProductCard,
-  }
-}
+const authStore = useAuthStore()
 </script>
 <style scoped>
 .main-top {

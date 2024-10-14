@@ -159,7 +159,6 @@ import { Pagination, Autoplay } from 'swiper/modules'
 import { ref, computed, onMounted } from 'vue'
 import ChartComponent from '@/components/common/ChartComponent.vue'
 import { fetchAssetData, fetchAssetComparison } from '@/api/assetApi'
-import { useAuthStore } from '@/stores/authStore'
 import 'swiper/css'
 import 'swiper/css/pagination'
 
@@ -174,7 +173,6 @@ export default {
     const comparisonData = ref(null)
     const userType = ref('')
     const modules = [Pagination, Autoplay]
-    const authStore = useAuthStore()
 
     // 자산 종류와 이름 매핑
     const assetNames = {
