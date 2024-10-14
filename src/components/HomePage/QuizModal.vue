@@ -143,10 +143,6 @@ const checkAnswer = async () => {
   background-color: #6846f5;
   border: none;
 }
-.modal-overlay {
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
 .result-body {
   padding: 10px 25px 20px;
   border-top: 1px dashed #e8e8e8;

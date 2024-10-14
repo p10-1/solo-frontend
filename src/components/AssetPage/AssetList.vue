@@ -35,7 +35,7 @@
                 comparisonType="personal"
                 :userAssetDetails="processedData.assetDetails"
                 customTitle=" 현재 내 자산은 ?"
-                :showIcon="true"
+                :showIcon="false"
               />
               <!-- Conditionally Render Average Comments Based on Active Slide -->
               <AssetComment
@@ -433,7 +433,7 @@ onMounted(async () => {
   justify-content: flex-start;
   align-items: flex-start;
   gap: 1rem;
-  background-color: #e4deff;
+  background-color: #f3f3ff;
   padding: 2rem 1.5rem;
   border-radius: 28px;
 }

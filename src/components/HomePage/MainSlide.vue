@@ -17,7 +17,10 @@
               <div class="asset-legend">
                 <div class="total-asset">
                   <span class="total-label">총 자산</span>
-                  <span class="total-amount">{{ formatNumber(slide.totalAsset) }}원</span>
+                  <span class="total-amount"
+                    ><span class="text-accent">{{ formatNumber(slide.totalAsset) }}</span
+                    >원</span
+                  >
                 </div>
                 <ul
                   v-for="asset in slide.filteredAssetDetails"
@@ -236,23 +239,25 @@ onMounted(() => {
 /* 자산 분포 컨테이너 스타일 */
 .total-asset {
   margin-bottom: 15px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #eae6ff;
+  padding-bottom: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .total-asset .total-label {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.18rem;
+  font-weight: 500;
   color: #333;
 }
 
 .total-asset .total-amount {
   font-size: 1.3rem;
+  color: #333;
+  font-weight: 500;
+}
+.total-asset .total-amount .text-accent {
   font-weight: 700;
-  color: #6846f5;
 }
 
 .asset-distribution {
@@ -282,6 +287,7 @@ onMounted(() => {
 /* 자산 범례 스타일 */
 .asset-distribution .card-content .asset-legend {
   width: 50%;
+  padding-right: 1.5rem;
 }
 
 .asset-legend .advice {
@@ -316,7 +322,7 @@ onMounted(() => {
   border-bottom: 1px dashed #eae6ff;
 }
 
-.asset-legend .asset-type:last-child {
+.asset-legend ul.asset-type:last-child {
   margin-bottom: 0;
   border-bottom: 0;
   padding-bottom: 0;
@@ -324,7 +330,7 @@ onMounted(() => {
 
 /* 자산 이름 스타일 */
 .asset-legend .asset-name {
-  flex: 0 0 30%;
+  flex: 0 0 28%;
   font-size: 1rem;
   font-weight: 500;
   letter-spacing: -0.8px;

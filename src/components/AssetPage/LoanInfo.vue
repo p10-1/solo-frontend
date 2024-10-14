@@ -1,18 +1,23 @@
 <template>
   <div class="loan-info-container">
-    <label for="month">몇 번째 달의 상환금을 확인하시겠습니까?</label>
-    <input
-      v-model.number="inputMonth"
-      type="number"
-      id="month"
-      :min="1"
-      :max="props.loanData.period"
-      placeholder="숫자만 입력"
-    />
-    <button @click="applySelectedMonth">확인</button>
-    <span v-if="!isValidMonth" class="error"
-      >1에서 {{ props.loanData.period }} 사이의 값을 입력해주세요.</span
-    >
+    <div class="form-box">
+      <label for="month">개월수마다 대출 상환금을 확인하시겠습니까?</label>
+      <div>
+        <input
+          class="form-control basic-input"
+          v-model.number="inputMonth"
+          type="number"
+          id="month"
+          :min="1"
+          :max="props.loanData.period"
+          placeholder="숫자만 입력"
+        />
+        <button @click="applySelectedMonth" class="button-input">확인</button>
+      </div>
+      <span v-if="!isValidMonth" class="error">
+        1에서 {{ props.loanData.period }} 사이의 값을 입력해주세요.
+      </span>
+    </div>
 
     <!-- 만기일시상환인 경우 -->
     <div v-if="props.repaymentMethod === 'bullet-repayment'">
@@ -170,6 +175,44 @@ const formattedBullet = computed(() => ({
   transition:
     transform 0.3s,
     box-shadow 0.3s;
+}
+.loan-info-container .form-box label {
+  display: block;
+  font-size: 1.08rem;
+  font-weight: 500;
+  letter-spacing: -1px;
+  color: #333;
+  margin-bottom: 15px;
+}
+.form-box > div {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+.form-box .basic-input {
+  padding: 0.375rem 0.75rem;
+  border: 2px solid #e4deff;
+  background-color: #e4deff;
+  border-radius: 12px;
+  font-size: 1rem;
+  letter-spacing: -1px;
+}
+.form-box .button-input {
+  margin-left: 5px;
+  text-wrap: nowrap;
+  width: 100px;
+  padding: 12px 20px;
+  line-height: 1;
+  border-radius: 12px;
+  color: #fff;
+  background-color: #6846f5;
+  border: 1px solid #6846f5;
+}
+.form-box .error {
+  display: block;
+  text-align: left;
+  padding: 0;
+  margin-bottom: 10px;
 }
 .loan-info-container .loan-item {
   display: flex;

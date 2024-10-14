@@ -17,6 +17,7 @@
                   maxlength="25"
                   required
                 />
+
                 <button
                   type="button"
                   class="button-sub button-input"
@@ -60,6 +61,7 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -161,6 +163,7 @@ const registerUser = async () => {
   background-color: #6846f5;
   border: 1px solid #6846f5;
 }
+
 .join-content ul li .error {
   font-size: 1rem;
   font-weight: 400;
