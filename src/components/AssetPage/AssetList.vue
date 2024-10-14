@@ -128,7 +128,7 @@
       <!-- 섹션: 대출 정보 -->
       <div class="margin-top-3rem">
         <h2 class="title">대출 정보</h2>
-        <dl v-if="processedData.loanData.purpose !== '전세자금'" class="radio-form margin-top-2rem">
+        <dl class="radio-form margin-top-2rem">
           <dt>상환 방법</dt>
           <dd>
             <input
@@ -159,11 +159,25 @@
               >원금 균등상환</label
             >
           </dd>
+          <dd>
+            <input
+              type="radio"
+              id="bullet-repayment"
+              value="bullet-repayment"
+              v-model="repaymentMethod"
+            />
+            <label
+              for="bullet-repayment"
+              class="button-radio"
+              :class="{ active: repaymentMethod === 'bullet-repayment' }"
+              >만기일시 상환</label
+            >
+          </dd>
         </dl>
         <!-- 대출 정보가 있는 경우 LoanInfo 컴포넌트로 대출 정보 표시 -->
         <section v-if="hasLoanData" class="laon-container">
           <div class="loan-info">
-            <LoanInfo :loanData="processedData.loanData" />
+            <LoanInfo :loanData="processedData.loanData" :repaymentMethod="repaymentMethod" />
           </div>
           <div class="loan-guide">
             <LoanGuide :loanData="processedData.loanData" :repaymentMethod="repaymentMethod" />
