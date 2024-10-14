@@ -17,6 +17,7 @@
         <li :class="['time-comparison__trend', trendDirection]">
           <span class="text-accent">
             <i v-if="trendDirection === 'increase'" class="fa-solid fa-circle-arrow-up"></i>
+            <i v-else class="icon-hold">...</i>
             <i v-else class="fa-solid fa-circle-arrow-down"></i>
             {{
               trendDirection === 'increase'
@@ -42,7 +43,6 @@ import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import Chart from 'chart.js/auto'
 
 // 부모 컴포넌트로부터 자산 타입과 데이터를 props로 받음
-
 const props = defineProps({
   assetType: {
     type: String,
@@ -58,7 +58,6 @@ const chartRef = ref(null)
 let chartInstance = null
 
 // 자산 타입 이름 매핑
-
 const assetTypeNames = {
   cash: '현금자산',
   deposit: '예적금',
@@ -74,8 +73,8 @@ const parseJsonArray = (jsonString) => {
     return []
   }
 }
-// 자산 데이터를 처리하여 월별 변동 데이터로 변환
 
+// 자산 데이터를 처리하여 월별 변동 데이터로 변환
 const processedData = computed(() => {
   if (!props.assetData || props.assetData.length === 0) return []
 
@@ -149,12 +148,12 @@ const createChart = () => {
         {
           label: `${assetTypeNames[props.assetType]}`,
           data: processedData.value.map((data) => data.value),
-          backgroundColor: 'rgba(75, 192, 192, 0.6)',
-          borderColor: 'rgb(75, 192, 192)',
+          backgroundColor: '#6846F5',
+          borderColor: '#6846F5',
           borderWidth: 1,
           pointRadius: (context) => (context.dataIndex === context.dataset.data.length - 1 ? 5 : 3),
           pointBackgroundColor: (context) =>
-            context.dataIndex === context.dataset.data.length - 1 ? 'red' : 'rgb(75, 192, 192)'
+            context.dataIndex === context.dataset.data.length - 1 ? '#6846F5' : '#A892FF'
         }
       ]
     },
@@ -212,7 +211,7 @@ onBeforeUnmount(() => {
   width: 100%;
   min-height: 17rem;
   border-radius: 25px;
-  padding: 2rem 1.7rem;
+  padding: 2rem 1.7rem 1.5rem;
   background-color: #fff;
   box-shadow: 0px 0px 15px rgb(221, 214, 255);
   transition:
@@ -221,16 +220,14 @@ onBeforeUnmount(() => {
 }
 .time-comparison .canvas-chart {
   width: auto;
-  height: 320px !important;
+  height: 310px !important;
 }
 .time-comparison .comparison-info {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   padding: 10px 0;
   margin-top: 1rem;
-  margin-bottom: 1rem;
-  border-bottom: 1px dashed #cfc6fd;
 }
 .time-comparison .comparison-info li {
   font-size: 1.08rem;
@@ -238,10 +235,30 @@ onBeforeUnmount(() => {
   letter-spacing: -1px;
   color: #333;
 }
+.time-comparison .comparison-info li:last-child {
+  text-align: right;
+}
 .time-comparison .comparison-info .text-accent {
+  font-size: 1.5rem;
   font-weight: 600;
 }
+.icon-hold {
+  display: inline-block;
+  width: 1.7rem;
+  height: 1.7rem;
+  line-height: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+  background-color: #6846f5;
+  border-radius: 50%;
+  color: #fff;
+  font-style: normal;
+  font-size: 1.45rem;
+}
 .time-comparison__percentage {
+  margin-top: 7px;
+  font-size: 0.87rem;
+  display: block;
   color: #888;
 }
 </style>

@@ -14,13 +14,17 @@
     <!-- 자산 데이터 요약 정보 -->
     <div v-if="comparisonData" class="asset-comparison__summary">
       <ul class="comparison-info">
-        <li>자산 유형</li>
         <li>
-          <span class="text-accent">{{ userType }}</span>
+          <span class="text-accent user-type">{{ userType }}</span> 내
+          {{ selectedAssetTypeName }} 자산
+        </li>
+        <li>
+          <span class="text-accent">{{ formatCurrency(selectedUserAsset) }}</span
+          >원
         </li>
       </ul>
       <ul class="comparison-info">
-        <li>전체 평균 {{ selectedAssetTypeName }} 자산</li>
+        <li>전체 <span class="text-accent">평균</span> {{ selectedAssetTypeName }} 자산</li>
         <li>
           <span class="text-accent">{{
             formatCurrency(comparisonData.overallAverage[selectedAssetType])
@@ -30,18 +34,13 @@
       </ul>
       <!-- 사용자 유형별 평균 자산을 표시 -->
       <ul class="comparison-info">
-        <li>{{ userType }} 평균 {{ selectedAssetTypeName }} 자산</li>
+        <li>
+          <span class="text-accent">{{ userType }} 평균</span> {{ selectedAssetTypeName }} 자산
+        </li>
         <li>
           <span class="text-accent">{{
             formatCurrency(comparisonData.typeAverage[selectedAssetType])
           }}</span
-          >원
-        </li>
-      </ul>
-      <ul class="comparison-info">
-        <li>내 {{ selectedAssetTypeName }} 자산</li>
-        <li>
-          <span class="text-accent">{{ formatCurrency(selectedUserAsset) }}</span
           >원
         </li>
       </ul>
@@ -122,17 +121,17 @@ const chartData = computed(() => {
       {
         label: '전체 평균',
         data: overallAverageData,
-        backgroundColor: 'rgba(54, 162, 235, 0.5)'
+        backgroundColor: '#6846F5'
       },
       {
         label: `${props.userType} 평균`,
         data: typeAverageData,
-        backgroundColor: 'rgba(75, 192, 192, 0.5)'
+        backgroundColor: '#CFDF4B'
       },
       {
         label: '내 자산',
         data: userData,
-        backgroundColor: 'rgba(255, 99, 132, 0.5)'
+        backgroundColor: '#FFCC00'
       }
     ]
   }
@@ -179,6 +178,18 @@ const formatCurrency = (value) => {
   margin-bottom: 1rem;
   border-bottom: 1px dashed #cfc6fd;
 }
+.asset-comparison .comparison-info .user-type {
+  background-color: #cfdf4b;
+  border-radius: 4px;
+  color: #333;
+  font-weight: 400;
+  font-size: 0.85rem;
+  padding: 3px 10px;
+  vertical-align: inherit;
+}
+.asset-comparison .comparison-info:last-child {
+  margin-bottom: 0;
+}
 .asset-comparison .comparison-info li {
   font-size: 1.08rem;
   font-weight: 500;
@@ -186,6 +197,6 @@ const formatCurrency = (value) => {
   color: #333;
 }
 .asset-comparison .comparison-info .text-accent {
-  font-weight: 600;
+  font-weight: 700;
 }
 </style>
