@@ -48,7 +48,7 @@
         <swiper-slide>
           <router-link to="login">
             <div class="intro-card intro-card03">
-              <h5 class="card-title">티끌 모아<br />티끌 부자되기!</h5>
+              <h5 class="card-title">티끌 모아<br />태산 부자되기!</h5>
               <div class="card-content">
                 매일 금융 퀴즈를 맞추며,<br />포인트도 쌓고, 금융 상식도 쌓아요.
               </div>

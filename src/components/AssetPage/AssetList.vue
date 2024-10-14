@@ -15,6 +15,7 @@
     <template v-else-if="processedData">
       <section class="asset-container">
         <div class="asset-top-content">
+          <!-- 섹션: 자산 분포 및 평균과의 비교를 위한 슬라이더 -->
           <!-- 이전 슬라이드 버튼 -->
           <TotalAsset :totalAmount="processedData.totalAsset" />
           <div class="asset-statistics">
@@ -89,7 +90,6 @@
             </div>
           </div>
         </div>
-
         <!-- 섹션: 자산 비교 차트 영역 -->
         <section class="asset-comparison-container">
           <div class="asset-comparison-content">
