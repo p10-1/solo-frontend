@@ -69,7 +69,7 @@ const modules = [Pagination, Autoplay]
 
 // 자산 유형에 대한 한글 이름 매핑
 const assetNames = {
-  cash: '현금자산',
+  cash: '현금',
   deposit: '예적금',
   stock: '증권',
   insurance: '보험'

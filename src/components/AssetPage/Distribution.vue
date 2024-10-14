@@ -101,7 +101,7 @@ console.log('assetDetails:', props.assetDetails)
 
 // 자산 이름 매핑
 const assetNames = {
-  cash: '현금자산',
+  cash: '현금',
   deposit: '예적금',
   stock: '증권',
   insurance: '보험'

@@ -146,6 +146,11 @@ const chartOptions = computed(() => ({
       ticks: {
         callback: (value) => formatCurrency(value)
       }
+    },
+    x: {
+      ticks: {
+        display: false // This hides the x-axis labels
+      }
     }
   }
 }))

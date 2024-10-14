@@ -32,7 +32,7 @@ const formatCurrency = (value) => {
 
 const formattedAssetData = computed(() => ({
   'User ID': props.assetData.userId || 'N/A',
-  현금자산: formatCurrency(props.assetData.cash || 0),
+  현금: formatCurrency(props.assetData.cash || 0),
   예금: formatCurrency(props.assetData.deposit || 0),
   주식: formatCurrency(props.assetData.stock || 0),
   보험: formatCurrency(props.assetData.insurance || 0),
