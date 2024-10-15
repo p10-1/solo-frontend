@@ -1,6 +1,6 @@
 <template>
   <div class="join-container">
-    <h2 class="title text-align-center">신규 정보 등록</h2>
+    <h2 class="title text-align-center">신규 가입</h2>
     <div class="join-body">
       <div class="join-content">
         <form @submit.prevent="registerUser">
@@ -17,7 +17,6 @@
                   maxlength="25"
                   required
                 />
-
                 <button
                   type="button"
                   class="button-sub button-input"
@@ -53,7 +52,7 @@
               class="button-main margin-top-2rem"
               :disabled="!isuserNameAvailable"
             >
-              제출
+              회원 가입
             </button>
           </div>
         </form>
@@ -67,7 +66,6 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { registerFirstUser, checkuserName } from '@/api/authApi' // API import
 import { useAuthStore } from '@/stores/authStore'
-
 const userName = ref('')
 const birthdate = ref('')
 const isuserNameAvailable = ref(false)
@@ -75,7 +73,6 @@ const isChecking = ref(false)
 const userNameCheckMessage = ref('')
 const router = useRouter()
 const authStore = useAuthStore()
-
 const check = async () => {
   isChecking.value = true
   try {
@@ -95,7 +92,6 @@ const check = async () => {
     isChecking.value = false
   }
 }
-
 const registerUser = async () => {
   if (!isuserNameAvailable.value) {
     alert('닉네임 중복 확인을 해주세요.')
@@ -114,7 +110,6 @@ const registerUser = async () => {
   }
 }
 </script>
-
 <style scoped>
 .join-container h2.title {
   border-bottom: 0;

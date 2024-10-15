@@ -19,7 +19,7 @@
         :autoplay="{ delay: 2000, disableOnInteraction: false }"
         class="mySwiper"
       >
-        <swiper-slide v-for="(post, index) in bestPosts" :key="index" class="posts-list">
+        <swiper-slide v-for="post in bestPosts" :key="post.boardNo" class="posts-list">
           <router-link
             :to="{
               name: 'board/detail',
@@ -37,7 +37,7 @@
                   <div class="text-mute">{{ formatDate(post.regDate) }}</div>
                 </div>
                 <h5 class="card-title link">{{ post.title }}</h5>
-                <div class="card-content">{{ post.content }}</div>
+                <div class="card-content">{{ stripHtml(post.content) }}</div>
                 <span class="badge">{{ post.userName }}</span>
               </div>
             </div>
@@ -73,6 +73,12 @@ const loadBestPosts = async () => {
   } catch (error) {
     console.error('인기글을 불러오는 데 실패했습니다.', error)
   }
+}
+
+const stripHtml = (html) => {
+  const tempDiv = document.createElement('div')
+  tempDiv.innerHTML = html
+  return tempDiv.textContent || tempDiv.innerText || ''
 }
 
 // 날짜 포맷팅 (월.일 형식)

@@ -123,7 +123,7 @@ watch(keyword, async () => {
   pageNum.value = 1
   list.value = []
   noMoreData.value = false
-  await loadProducts() // Load products whenever keyword changes
+  await loadProducts()
 })
 
 const handleScroll = () => {
@@ -136,7 +136,6 @@ const handleScroll = () => {
 onMounted(() => {
   keyword.value = route.query.keyword || ''
   pageNum.value = parseInt(route.query.page) || 1
-  // productType.value = route.query.productType || '에금'
   loadProducts()
 
   window.addEventListener('scroll', handleScroll)

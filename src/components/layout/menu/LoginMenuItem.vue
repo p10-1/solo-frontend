@@ -9,4 +9,3 @@ const goTologin = () => {
   router.push({ name: 'login' })
 }
 </script>
-

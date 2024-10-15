@@ -31,8 +31,7 @@
             <P class="comment">
               <b class="text-accent">{{ authStore.userInfo.userName }}</b
               >님이 가지고 계신 <b class="text-accent">대출</b>과 <b class="text-accent">기간</b>을
-              비교했을 때 <b class="text-accent">이자율</b>이
-              높은 상품 추천드려요!
+              비교했을 때 <b class="text-accent">이자율</b>이 높은 상품 추천드려요!
             </P>
           </dd>
         </dl>
@@ -101,7 +100,6 @@ const fetchRecommendedProducts = async () => {
 }
 
 onMounted(fetchRecommendedProducts)
-
 </script>
 
 <style scoped>

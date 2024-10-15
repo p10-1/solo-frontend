@@ -80,7 +80,7 @@ const reset = () => {
   article.boardNo = orgArticle.value.boardNo
   article.title = orgArticle.value.title
   article.userName = orgArticle.value.userName
-  article.content = orgArticle.value.content
+  article.content = stripHtml(orgArticle.value.content)
 }
 
 const removeFile = async (no, filename) => {
@@ -96,11 +96,22 @@ const removeFile = async (no, filename) => {
   }
 }
 
+const stripHtml = (html) => {
+  const tempDiv = document.createElement('div')
+  tempDiv.innerHTML = html
+  return tempDiv.textContent || tempDiv.innerText || ''
+}
+
 const submit = async () => {
   if (!confirm('수정할까요?')) return
   if (files.value && files.value.files.length > 0) {
     article.files = Array.from(files.value.files)
   }
+  const formattedContent = article.content
+    .replace(/\n/g, '<br>') // 줄바꿈을 <br>로 변환
+    .replace(/ /g, '&nbsp;') // 공백을 &nbsp;로 변환
+
+  article.content = formattedContent
   await update(article)
   router.push({ name: 'board/detail', params: { boardNo }, query: route.query })
 }
@@ -108,6 +119,9 @@ const submit = async () => {
 const load = async () => {
   const data = await get(boardNo)
   orgArticle.value = { ...data }
+  article.content = stripHtml(orgArticle.value.content)
+    .replace(/<br>/g, '\n\n') // <br>을 줄바꿈으로 변환
+    .replace(/&nbsp;/g, ' ') // &nbsp;를 공백으로 변환
   attachments.value = data.attaches
   reset()
 }
