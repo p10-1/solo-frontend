@@ -145,9 +145,12 @@
 
 ## API 명세
 
+
+
 자세한 API 명세는 [API 명세서.pdf](https://github.com/user-attachments/files/17366139/API.pdf)를 참조해 주세요.
 
 ## 컴포넌트 구조
+![localhost_9000_swagger-ui html](https://github.com/user-attachments/assets/4e1beda9-7902-49f5-bff0-dab8b563a01b)
 
 자세한 컴포넌트 구조는 [컴포넌트 설계](https://github.com/user-attachments/files/17365916/default.pdf)를 참조해 주세요.
 
