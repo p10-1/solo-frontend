@@ -1,45 +1,26 @@
 <template>
-  <h1><i class="fa-regular fa-pen-to-square"></i> 글 작성</h1>
+  <h2 class="title">글 작성</h2>
   <form @submit.prevent="submitForm">
     <div class="mb-3 mt-3">
       <label for="title" class="form-label">제목 </label>
-      <input
-        type="text"
-        class="form-control"
-        placeholder="제목"
-        v-model="article.title"
-        id="title"
-        required
-      />
+      <input type="text" class="form-control" placeholder="제목" v-model="article.title" id="title" required />
     </div>
     <div class="mb-3 mt-3">
       <label for="content" class="form-label">내용 </label>
-      <textarea
-        class="form-control"
-        placeholder="내용"
-        v-model="article.content"
-        id="content"
-        required
-      ></textarea>
+      <textarea class="form-control" placeholder="내용" v-model="article.content" id="content" required></textarea>
     </div>
     <div class="mb-3 mt-3">
       <label for="files" class="form-label">첨부파일 </label>
-      <input
-        type="file"
-        class="form-control"
-        placeholder="첨부파일"
-        @change="handleFileUpload"
-        multiple
-      />
+      <input type="file" class="form-control" placeholder="첨부파일" @change="handleFileUpload" multiple />
     </div>
     <div class="my-5 text-center">
-      <button type="submit" class="btn btn-primary me-3">
+      <button type="submit" class="button-main">
         <i class="fa-solid fa-check"></i>
         확인
       </button>
-      <router-link class="btn btn-primary" :to="{ name: 'board' }">
-        <i class="fa-solid fa-list"></i>
-        목록
+      <router-link class="button-sub margin-left-1rem" :to="{ name: 'board' }">
+        <i class="fa-solid fa-reply"></i>
+        뒤로
       </router-link>
     </div>
   </form>

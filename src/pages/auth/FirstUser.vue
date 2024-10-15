@@ -1,6 +1,6 @@
 <template>
   <div class="join-container">
-    <h2 class="title text-align-center">신규 정보 등록</h2>
+    <h2 class="title text-align-center">신규 가입</h2>
     <div class="join-body">
       <div class="join-content">
         <form @submit.prevent="registerUser">
@@ -17,7 +17,6 @@
                   maxlength="25"
                   required
                 />
-
                 <button
                   type="button"
                   class="button-sub button-input"
@@ -53,7 +52,7 @@
               class="button-main margin-top-2rem"
               :disabled="!isuserNameAvailable"
             >
-              제출
+              회원 가입
             </button>
           </div>
         </form>
@@ -108,7 +107,8 @@ const registerUser = async () => {
     authStore.setUserInfo(userInfo)
     sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
     console.log('등록된 사용자:', result)
-    router.push('/') // 홈으로 리다이렉트
+    router.push('/mypage') // 홈으로 리다이렉트
+    //router.push('/') // 홈으로 리다이렉트
   } catch (error) {
     console.error('사용자 등록 중 오류가 발생했습니다:', error)
   }
