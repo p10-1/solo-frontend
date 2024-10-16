@@ -1,0 +1,626 @@
+/* 전체 초기화 css */
+/* 부트스트랩의 reset과 충돌하는 부분은 주석 처리 */
+
+/* 
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+*/
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+button {
+  background: inherit;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  overflow: visible;
+  cursor: pointer;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* a 태그는 부트스트랩의 스타일을 따름 */
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+/* 화면 최소 크기 */
+body {
+  min-height: 100vh;
+  font-size: 16px;
+}
+
+/* 공통 CSS */
+/* 부트스트랩의 flex 및 float 클래스를 대체 */
+/*
+.layout-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+.layout-Flex-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.layout-Inline-Flex {
+  display: inline-flex;
+}
+.layout-Flex-Item {
+  display: flex;
+}
+.layout-float-left {
+  float: left;
+}
+.layout-float-right {
+  float: right;
+}
+*/
+
+/* 부트스트랩의 grid system 사용 */
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.min-height-container {
+  min-height: 100vh;
+  margin-top: 95px;
+  padding: 2rem 1rem 3.5rem;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+/* title css */
+.title-box {
+  position: relative;
+}
+
+.title-box .link {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -20px;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 10px 18px;
+  border: 1px solid #f1eeff;
+  color: #6846f5;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.title-box b {
+  color: #6846f5;
+}
+
+.title-box .link:hover {
+  font-weight: bold;
+  color: #fff;
+  background-color: #6846f5;
+  border-color: #6846f5;
+  transition: all 0.6s;
+}
+
+h1.title {
+  font-size: 40px;
+  font-weight: 300;
+  color: #333;
+  box-sizing: border-box;
+  line-height: 1;
+  letter-spacing: -1.5px;
+  padding-top: 4rem;
+  margin-bottom: 1.2rem;
+}
+
+h2.comment-title {
+  position: relative;
+  text-align: center;
+  font-weight: 300;
+  line-height: 1;
+  font-size: 32px;
+  letter-spacing: -1.5px;
+  color: #222;
+  padding: 15px 25px;
+  border-radius: 20px;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
+  display: inline-block;
+  margin: 0 auto 20px;
+  min-width: 40rem;
+  word-break: keep-all;
+  left: 50%;
+  transform: translateX(-50%);
+}
+h2.comment-title::after {
+  content: '';
+  position: absolute;
+  bottom: -19px;
+  left: 50%;
+  transform: translateX(-50%) rotate(180deg);
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent #fff transparent;
+}
+
+h2.title {
+  margin-bottom: 20px;
+  font-weight: 300;
+  line-height: 1;
+  font-size: 32px;
+  letter-spacing: -1.5px;
+  color: #222;
+  padding: 10px 0 20px 0;
+  border-bottom: 2px solid #222;
+}
+
+h3.title {
+  font-weight: 500;
+  line-height: 1;
+  padding: 10px 0 22px 0;
+  letter-spacing: -1px;
+  font-size: 25px;
+  color: #222;
+}
+
+h4.title {
+  font-size: 1.4em;
+  line-height: 1.4em;
+  font-weight: 600;
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+}
+
+p.text {
+  line-height: 1.61em;
+  font-weight: 300;
+  font-size: 1.2em;
+  letter-spacing: -0.8px;
+  line-height: 1.7rem;
+  word-break: keep-all;
+}
+
+.text-accent {
+  color: #6846f5;
+}
+
+/* font-weight css */
+.font-weigth-300 {
+  font-weight: 300;
+}
+.font-weigth-400 {
+  font-weight: 400;
+}
+.font-weigth-600 {
+  font-weight: 400;
+}
+.font-weigth-700 {
+  font-weight: 400;
+}
+
+/* text-align css */
+.text-align-left {
+  text-align: left;
+}
+
+/* label type css */
+.label-type-green,
+.label-type-blue,
+.label-type-purple,
+.label-type-red {
+  display: inline-block;
+  height: 35px;
+  line-height: 35px;
+  min-width: 120px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  color: #fff;
+}
+
+.label-type-green {
+  background-color: #4ca542;
+}
+
+.label-type-blue {
+  background-color: #4991c2;
+}
+
+.label-type-purple {
+  background-color: #9040d1;
+}
+
+.label-type-red {
+  background-color: #d34659;
+}
+
+/* margin css */
+.margin-top-1rem {
+  margin-top: 1rem;
+}
+
+.margin-left-1rem {
+  margin-left: 1rem;
+}
+
+.margin-right-1rem {
+  margin-right: 1rem;
+}
+
+.margin-bottom-1rem {
+  margin-bottom: 1rem;
+}
+
+.margin-top-2rem {
+  margin-top: 2rem;
+}
+
+.margin-left-2rem {
+  margin-left: 2rem;
+}
+
+.margin-right-2rem {
+  margin-right: 2rem;
+}
+
+.margin-bottom-2rem {
+  margin-bottom: 2rem;
+}
+
+.margin-top-3rem {
+  margin-top: 3rem;
+}
+
+.margin-left-3rem {
+  margin-left: 3rem;
+}
+
+.margin-right-3rem {
+  margin-right: 3rem;
+}
+
+.margin-bottom-3rem {
+  margin-bottom: 3rem;
+}
+
+.margin-top-4rem {
+  margin-top: 4rem;
+}
+
+.margin-left-4rem {
+  margin-left: 4rem;
+}
+
+.margin-right-4rem {
+  margin-right: 4rem;
+}
+
+.margin-bottom-4rem {
+  margin-bottom: 4rem;
+}
+
+/* padding css */
+.padding-top-1rem {
+  padding-top: 1rem;
+}
+.padding-left-1rem {
+  padding-left: 1rem;
+}
+.padding-right-1rem {
+  padding-right: 1rem;
+}
+.padding-bottom-1rem {
+  padding-bottom: 1rem;
+}
+
+.padding-top-2rem {
+  padding-top: 2rem;
+}
+.padding-left-2rem {
+  padding-left: 2rem;
+}
+.padding-right-2rem {
+  padding-right: 2rem;
+}
+.padding-bottom-2rem {
+  padding-bottom: 2rem;
+}
+.padding-top-3rem {
+  padding-top: 3rem;
+}
+.padding-left-3rem {
+  padding-left: 3rem;
+}
+.padding-right-3rem {
+  padding-right: 3rem;
+}
+.padding-bottom-3rem {
+  padding-bottom: 3rem;
+}
+.padding-top-4rem {
+  padding-top: 4rem;
+}
+.padding-left-4rem {
+  padding-left: 4rem;
+}
+.padding-right-4rem {
+  padding-right: 4rem;
+}
+.padding-bottom-4rem {
+  padding-bottom: 4rem;
+}
+/* text css */
+.font-weight-bold {
+  font-weight: bold;
+}
+
+.width100 {
+  width: 100%;
+}
+
+/* filter-bar css */
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.5rem;
+  margin: 0;
+}
+
+.filter-bar input[type='radio'] {
+  display: none;
+}
+
+.filter-bar label {
+  min-width: 100px;
+  text-align: center;
+  padding: 0.8rem 1rem;
+  border-radius: 25px;
+  /* background-color: #cfc6fd; */
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1;
+  color: #222;
+  letter-spacing: -1px;
+  transition: all 0.6s;
+  cursor: pointer;
+}
+
+.filter-bar label:hover,
+.filter-bar label:active {
+  background-color: #6846f5;
+  color: #fff;
+}
+
+.filter-bar label.active {
+  background-color: #6846f5;
+  color: #fff;
+}
+
+/* 로딩, 에러 기타 css */
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #6846f5;
+  font-size: 2.5rem;
+  letter-spacing: -1px;
+  font-weight: 300;
+}
+.loading i {
+  display: block;
+  font-size: 2.5rem;
+}
+.no-more {
+  text-align: center;
+  padding: 20px;
+  color: #6846f5;
+  font-size: 2.1rem;
+  font-weight: 300;
+  letter-spacing: -1px;
+}
+.no-more i {
+  display: block;
+  font-size: 3rem;
+}
+
+.error {
+  text-align: center;
+  padding: 20px;
+  color: #ff4c4c;
+  font-size: 2.1rem;
+  font-weight: 300;
+  letter-spacing: -1px;
+  word-break: keep-all;
+}
+
+.error i {
+  display: block;
+  font-size: 3rem;
+}
+
+/* 코멘트 로봇 */
+.comment-robot {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  width: fit-content;
+  margin-bottom: 1.5rem;
+}
+.comment-robot dt {
+  text-align: center;
+}
+.comment-robot dd {
+  position: relative;
+  max-width: 45vw;
+  margin-bottom: 0;
+  padding: 1rem 2rem 1rem 1.7rem;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
+  border-radius: 45px;
+}
+.comment-robot dd::after {
+  content: '';
+  position: absolute;
+  left: -18px;
+  top: 2rem;
+  transform: rotate(270deg);
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent #fff transparent;
+}
+.comment-robot .robot-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b6a8ff;
+  background-color: #fff;
+  border-radius: 50%;
+  width: 5rem;
+  height: 5rem;
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
+}
+.comment-robot .robot-icon i {
+  font-size: 2.4rem;
+}
+.comment-robot .robot-role {
+  display: block;
+  font-weight: 600;
+  color: #b6a8ff;
+  letter-spacing: -0.8px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.comment-robot .comment {
+  word-break: keep-all;
+  margin: 10px 0 0;
+  letter-spacing: -0.8px;
+  line-height: 1.3rem;
+}

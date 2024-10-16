@@ -1,0 +1,50 @@
+/* 로그인 전 홈페이지 */
+
+/* 로그인 후 홈페이지 */
+
+/* graph list info css */
+.asset-graph-list {
+  margin: 0.5rem 0;
+  padding: 10px;
+  border: 2px solid #eee;
+  border-radius: 8px;
+}
+
+.asset-graph-list li {
+  position: relative;
+  display: inline-flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  padding: 0.5rem 1.8rem 0.5rem 1.3rem;
+  font-size: 1.13rem;
+  font-weight: 600;
+}
+
+.asset-graph-list li::before {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -8px;
+  content: '';
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+
+.asset-graph-list li.sefe::before {
+  background-color: #5686f7;
+}
+.asset-graph-list li.warring::before {
+  background-color: #69c774;
+}
+.asset-graph-list li.warring-1::before {
+  background-color: #f7ce46;
+}
+.asset-graph-list li.warring-2::before {
+  background-color: #ee8031;
+}
+.asset-graph-list li.warring-3::before {
+  background-color: #eb4a64;
+}
+
+/* 홈페이지 레이아웃 10-04 */

@@ -1,0 +1,353 @@
+/* 초기화 css */
+ol,
+ul,
+dl {
+  margin: 0;
+  padding-left: 0;
+}
+
+/* 메뉴 */
+.navigation {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  padding: 0 3vw;
+  display: flex;
+  justify-content: space-between; /* 왼쪽과 오른쪽 끝으로 정렬 */
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid #eeeeee;
+  background-color: #fff;
+}
+
+/* 스크롤시 변경될 배경색과 높이 */
+.navigation.scrolled {
+  background-color: #fff;
+  transition: background-color 0.8s ease;
+  border: 0;
+  box-shadow: 0px 0px 10px rgba(207, 198, 253, 0.4);
+}
+
+.navigation.scrolled .nav-list li a {
+  height: 60px;
+  line-height: 60px;
+  color: #222;
+}
+
+.navigation.scrolled .nav-list li a:hover::after {
+  bottom: -18px;
+  background-color: #f7d095;
+}
+
+.navigation.scrolled .login-wrapper > .login-box > .nav-list > a {
+  padding: 7px 0;
+}
+
+/* 끝 */
+
+.navi-icon {
+  flex: 0 1 auto;
+  margin-right: auto;
+  overflow: hidden;
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+}
+
+.navi-icon > a {
+  display: block;
+}
+
+.navi-icon > a > img {
+  width: 100%;
+}
+
+.menu-box {
+  flex: 1;
+  flex-basis: auto;
+}
+
+.login-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+.nav-list {
+  text-align: center;
+  margin: 0;
+  flex-wrap: nowrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-list > li {
+  display: inline-block;
+  padding: 0 1.5vw;
+  white-space: nowrap;
+}
+
+.nav-list > li > a {
+  position: relative;
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: -1.5px;
+  color: #484848;
+  height: 95px;
+  line-height: 90px;
+  cursor: pointer;
+  transition: all 0.8s;
+}
+
+.nav-list li a:hover {
+  color: #6846f5;
+  font-weight: bold;
+}
+
+.nav-list li a:hover::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -33px;
+  width: 100%;
+  height: 5px;
+  background-color: #6846f5;
+  transition: all 1.8s;
+}
+
+.login-wrapper .login-box {
+  display: flex;
+  justify-content: space-between; /* 왼쪽과 오른쪽 끝으로 정렬 */
+  align-items: center;
+}
+
+.login-wrapper .login-box .nav-list {
+  position: relative;
+}
+
+/* 마우스 hover 시 드롭다운 메뉴 표시 */
+/* .login-wrapper .login-box .nav-list:hover .dropdown-menu {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+} */
+
+/* 기본적으로 드롭다운 메뉴 숨김 */
+/* .dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #eee;
+  list-style: none;
+  margin-left: 50px;
+  padding: 0;
+  top: 100%;
+  left: -50%;
+  min-width: 230px;
+  overflow: hidden;
+  z-index: 1000;
+  transform: translateY(-10px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-menu li {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px dashed #eee;
+  padding: 15px 20px;
+}
+
+.dropdown-menu li:first-child {
+  border-top: none;
+}
+
+.dropdown-menu li:hover {
+  background-color: #fff8db;
+  transition: all 1s;
+}
+
+.dropdown-menu li a {
+  position: relative;
+  display: block !important;
+  line-height: inherit !important;
+  color: #636363;
+  font-size: 18px;
+  height: inherit !important;
+  text-decoration: none;
+} */
+
+/* .dropdown-menu li a:hover {
+  color: #222;
+  display: block;
+}
+
+.dropdown-menu li a:hover::after {
+  display: none;
+}
+
+.dropdown-menu li.logout a:hover {
+  color: #fff !important;
+  background-color: #222;
+} */
+
+/* 드롭 다운 끝 */
+.login-wrapper > .login-box > .nav-list > a {
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
+
+/* 로그인 유저 */
+
+.login-wrapper .login-box .nav-list a .user-info {
+  margin-top: -6px;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}
+
+.login-wrapper .login-box .nav-list a .user-info:hover {
+  color: #6846f5;
+}
+
+/* 햄버거 버튼 */
+.navbar-toggler {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  /* 메뉴 */
+  .navigation {
+    /* justify-content: center; */
+    padding: 1vw 2vw;
+  }
+
+  /* 모바일 메뉴 */
+  .navbar-toggler {
+    display: block;
+  }
+
+  /* 햄버거 버튼 */
+  .navbar-toggler .navbar-toggler-icon {
+    border: 2px solid #6846f5;
+    width: 45px;
+    height: 40px;
+    border-radius: 4px;
+    color: #6846f5;
+    text-align: center;
+    font-size: 20px;
+  }
+
+  .navbar-toggler .navbar-toggler-icon i {
+    vertical-align: -webkit-baseline-middle;
+  }
+
+  .navbar-toggler .navbar-toggler-icon:hover,
+  .navbar-toggler .navbar-toggler-icon:active {
+    background-color: #222;
+    border-color: #222;
+    color: #fff;
+  }
+
+  .navigation .navi-icon {
+    /* margin: 0 auto; */
+  }
+
+  .navigation .menu-box {
+    display: none;
+    opacity: 0;
+    transform: translateX(100%);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .navigation .menu-box.show {
+    display: block;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 10;
+    background-color: rgb(22 22 22 / 95%);
+    opacity: 1;
+    transform: translateX(0);
+    height: 100%;
+    width: 100vw;
+    padding: 4rem 1rem;
+  }
+
+  .navigation .mobile-nav-button {
+    position: fixed;
+    top: 8px;
+    right: 2vw;
+    z-index: 11;
+  }
+
+  .navigation .mobile-nav-button span {
+    color: #fff;
+  }
+
+  .navigation .mobile-nav-button span:hover,
+  .navigation .mobile-nav-button span:active {
+    background-color: #fff !important;
+    color: #222;
+  }
+
+  .navigation .show .nav-list {
+    display: block;
+    height: 100vw;
+    text-align: right;
+  }
+
+  .navigation .show .nav-list > li {
+    display: block;
+    border-bottom: 1px dashed #393939;
+    padding: 0;
+  }
+
+  .navigation .show .nav-list > li:last-child {
+    border-bottom: 0;
+  }
+
+  .navigation .show .nav-list > li > a {
+    height: 60px;
+    line-height: 60px;
+    color: #fff !important;
+    font-size: 1rem;
+    display: block;
+  }
+
+  .navigation .show .nav-list > li > a:hover {
+    color: #f8d648 !important;
+    margin-right: 15vw;
+  }
+
+  .navigation .show .nav-list > li > a::after {
+    top: 50%;
+    left: 0;
+    width: 85%;
+    height: 2px;
+  }
+
+  .navigation .login-wrapper {
+    display: block;
+    position: fixed !important;
+    right: 1rem;
+    bottom: 2rem;
+    z-index: 11;
+  }
+
+  .navigation .login-wrapper .login-box .button-main {
+    background-color: #383838;
+    color: #a0a0a0;
+  }
+
+  .navigation .login-wrapper .login-box .button-main:hover {
+    color: #fff;
+  }
+}
