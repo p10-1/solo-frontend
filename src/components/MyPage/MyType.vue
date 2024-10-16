@@ -71,12 +71,11 @@ const loadUserAsset = async () => {
   }
 }
 
-
 const selectType = (type) => {
-  const isConfirmed = confirm("자산타입을 변경하시겠습니까?");
+  const isConfirmed = confirm('자산타입을 변경하시겠습니까?')
   if (isConfirmed) {
-    selectedType.value = type.title;
-    updateTypeValue(type);
+    selectedType.value = type.title
+    updateTypeValue(type)
   }
 }
 
@@ -94,7 +93,7 @@ const updateTypeValue = async (type) => {
 
 onMounted(() => {
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-  nickName.value = userInfo ? userInfo.nickName : '사용자'
+  nickName.value = userInfo ? userInfo.userName : '사용자'
   loadUserAsset() // 사용자 자산 로드
 })
 </script>
