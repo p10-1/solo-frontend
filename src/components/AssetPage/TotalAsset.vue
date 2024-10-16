@@ -1,11 +1,18 @@
 <template>
   <div class="total-asset">
-    <h2>{{ userName }}님의 총 자산</h2>
     <div class="asset-amount">
-      <span class="currency">₩</span>
-      <span class="amount">{{ animatedAmount }}</span>
+      <h3>
+        "<span class="text-accent">{{ userName }}</span
+        >"님의 총 자산
+      </h3>
+      <div>
+        <i class="won-icon">￦</i>
+        <span class="text-accent">{{ animatedAmount }}</span
+        >원
+      </div>
     </div>
   </div>
+  
 </template>
 
 <script setup>
@@ -57,15 +64,45 @@ watch(
 
 <style scoped>
 .total-asset {
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
+  border-radius: 25px;
+  padding: 2rem 1.7rem 1.5rem;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
 }
 
-h2 {
-  margin: 0;
-  font-size: 1.5em;
-  color: #333;
+.total-asset h3 {
+  text-align: center;
+  font-size: 1.4rem;
+  letter-spacing: -0.8px;
+}
+
+.total-asset .asset-amount {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 1.4rem;
+  font-weight: 500;
+  text-align: right;
+  letter-spacing: -1.8px;
+}
+i.won-icon {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: #6846f5;
+  color: #fff;
+  font-style: normal;
+  font-weight: 600;
+  text-align: center;
+  line-height: 2rem;
+  font-size: 1.1rem;
+  vertical-align: text-top;
+  margin-right: 5px;
+}
+
+.total-asset .asset-amount div .text-accent {
+  font-weight: 600;
+  font-size: 2rem;
 }
 </style>

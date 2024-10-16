@@ -1,0 +1,47 @@
+.footer {
+  clear: both;
+  background: #f3f3ff;
+  margin: 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  min-height: 220px;
+}
+
+.footer .container {
+  padding: 2vw 1vw 3vw;
+}
+
+.footer h1 {
+  margin: 0;
+}
+
+.footer .dic {
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+}
+
+.footer .dic ul li {
+  margin: 0.5rem 0.7rem;
+}
+
+.footer .dic ul li,
+.footer .dic ul li a {
+  display: inline-block;
+  color: #8c7ce3;
+  padding: 0;
+  vertical-align: inherit;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.footer .dic ul li a:hover {
+  color: #623df3;
+  text-decoration: underline;
+}
+
+.footer .copyright {
+  margin-top: 20px;
+  color: #b5a9f3;
+  font-size: 13px;
+}

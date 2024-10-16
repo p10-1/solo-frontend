@@ -1,5 +1,5 @@
 import axios from 'axios'
-const API_URL = 'http://localhost:9000/api/quiz'
+const API_URL = '/api/quiz'
 
 export const makeQuiz = async () => {
   try {

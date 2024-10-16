@@ -1,12 +1,17 @@
 <template>
-  <div class="search-bar mb-4">
+  <div class="search-bar margin-top-1rem margin-bottom-1rem">
+    <div class="decoration">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
     <input
       v-model="searchTerm"
       :placeholder="props.placeholder"
       class="form-control"
       @keyup.enter="emitSearch"
     />
-    <button @click="emitSearch" class="btn btn-primary ml-2">{{ props.buttonText }}</button>
+    <button @click="emitSearch" class="search-button btn btn-primary ml-2">
+      {{ props.buttonText }}
+    </button>
   </div>
 </template>
 
@@ -33,12 +38,18 @@ const emitSearch = () => {
 </script>
 
 <style scoped>
-.search-bar {
-  display: flex;
-}
-
-.search-bar input {
-  flex-grow: 1;
-  margin-right: 10px;
+input.form-control {
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  padding: 5px 12px;
+  padding-left: 38px;
+  border: 2px solid #f1eeff;
+  background-color: #f3f3ff;
+  border-radius: 12px;
+  accent-color: #6846f5;
+  vertical-align: top;
+  font-size: 16px;
+  font-weight: 500;
 }
 </style>

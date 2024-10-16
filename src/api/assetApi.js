@@ -13,9 +13,9 @@ const handleApiError = (error, message) => {
 
 export const fetchAssetData = async () => {
   try {
-    console.log('assetApi: Fetching asset data')
+    // console.log('assetApi: Fetching asset data')
     const response = await axios.get(API_URL, { withCredentials: true })
-    console.log('Fetched asset data:', response.data)
+    // console.log('Fetched asset data:', response.data)
     return response.data
   } catch (error) {
     console.error('assetApi: Error fetching asset data:', error)
@@ -26,9 +26,21 @@ export const fetchAssetData = async () => {
 export const fetchAssetAverages = async () => {
   try {
     const response = await axios.get(`${API_URL}/average`, { withCredentials: true })
-    console.log('Fetched asset averages:', response.data)
+    // console.log('Fetched asset averages:', response.data)
     return response.data
   } catch (error) {
     handleApiError(error, '평균 자산 데이터를 가져오는 데 실패했습니다:')
+  }
+}
+
+export const fetchAssetComparison = async (type) => {
+  try {
+    // console.log('AssetApi: Sending request for type:', type)
+    const response = await axios.get(`${API_URL}/comparison/${encodeURIComponent(type)}`)
+    // console.log('AssetApi: Received response:', response.data)
+    return response.data
+  } catch (error) {
+    console.error('AssetApi: Failed to fetch asset comparison data:', error.response || error)
+    throw error
   }
 }

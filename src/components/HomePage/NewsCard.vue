@@ -1,130 +1,162 @@
 <template>
-  <div id="newsCarousel" class="d-flex justify-content-between">
-    <template v-if="newsList.length > 0">
-      <div
-        v-for="(categoryItem, categoryIndex) in newsList"
-        :key="categoryIndex"
-        class="news-card"
-      >
-        <h3>{{ categoryItem.category }}의 뉴스</h3>
-        <div class="news-item">
-          <h5 class="news-title">{{ categoryItem.newsItems[categoryItem.currentNewsIndex].title }}</h5>
-          <p class="news-description">{{ categoryItem.newsItems[categoryItem.currentNewsIndex].link }}</p>
-          <button class="btn btn-primary btn-sm mt-3" @click.stop="goToNews">
-            더 알아보기
-          </button>
+  <div class="news-content margin-top-2rem">
+    <div class="title-box">
+      <h2 class="main-title">뉴스</h2>
+      <router-link to="news">
+        <span class="link"><i class="fa-solid fa-plus"></i> 더보기</span>
+      </router-link>
+    </div>
+
+    <div class="filter-bar">
+      <input type="radio" id="economy" value="경제" v-model="selectedCategory" />
+      <label for="economy" :class="{ active: selectedCategory === '경제' }">경제</label>
+
+      <input type="radio" id="real-estate" value="부동산" v-model="selectedCategory" />
+      <label for="real-estate" :class="{ active: selectedCategory === '부동산' }">부동산</label>
+
+      <input type="radio" id="stocks" value="증권" v-model="selectedCategory" />
+      <label for="stocks" :class="{ active: selectedCategory === '증권' }">증권</label>
+    </div>
+
+    <swiper
+      ref="swiper"
+      v-if="filteredNews.length > 0"
+      :navigation="true"
+      :modules="modules"
+      :loop="true"
+      :slides-per-view="2"
+      :space-between="25"
+      autoplay
+    >
+      <swiper-slide v-for="(newsItem, index) in displayedNews" :key="index">
+        <div @click="goToNews(newsItem.link)" class="news-card margin-top-1rem">
+          <!-- URL로 이동하도록 수정 -->
+          <div class="img-content margin-bottom-1rem">
+            <img
+              v-if="newsItem.imageUrl"
+              :src="newsItem.imageUrl"
+              alt="뉴스 이미지"
+              class="news-image img-fluid"
+            />
+          </div>
+          <h5 class="news-title">{{ newsItem.title }}</h5>
+          <div class="pub-date">{{ newsItem.pubDate }}</div>
         </div>
-        <div class="d-flex justify-content-between mt-2">
-          <button class="btn btn-secondary btn-sm" @click.prevent="prevNews(categoryIndex)">이전</button>
-          <button class="btn btn-secondary btn-sm" @click.prevent="nextNews(categoryIndex)">다음</button>
-        </div>
-      </div>
-    </template>
-    <template v-else>
-      <div>뉴스가 없습니다.</div>
-    </template>
+      </swiper-slide>
+    </swiper>
   </div>
 </template>
-
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { recommendNews } from '@/api/newsAPI'
+import { ref, onMounted, computed } from 'vue'
+import { recommendNews } from '@/api/newsApi'
+// Swiper 컴포넌트 임포트
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Pagination, Navigation, Autoplay } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/pagination'
 
-const router = useRouter()
-const newsList = ref([]) 
-let autoSlideIntervals = [] // 각 카테고리별 자동 슬라이드 타이머
+const modules = [Pagination, Navigation, Autoplay]
 
-// 뉴스 데이터를 가져오는 함수
+const newsList = ref([])
+const selectedCategory = ref('경제') // 기본 선택 카테고리
+
 const fetchNews = async () => {
   try {
-    const response = await recommendNews(); 
-    newsList.value = Object.entries(response).map(([category, news]) => ({
-      category,
-      newsItems: Array.isArray(news) ? news : [news], 
-      currentNewsIndex: 0 
-    }));
-    console.log('Fetched News:', newsList.value); // 가져온 뉴스 리스트를 콘솔에 출력
+    const response = await recommendNews()
+    console.log('news', response)
+    if (response && typeof response === 'object') {
+      newsList.value = Object.entries(response).map(([category, news]) => ({
+        category,
+        newsItems: Array.isArray(news)
+          ? news.map((item) => ({
+              ...item,
+              imageUrl: item.imageUrl
+            }))
+          : [{ ...news, imageUrl: news.imageUrl }]
+      }))
+    } else {
+      console.error('잘못된 응답 형식:', response)
+    }
   } catch (error) {
-    console.error('뉴스를 가져오는 데 실패했습니다:', error);
+    console.error('뉴스를 가져오는 데 실패했습니다:', error)
   }
-};
-
-// 뉴스 페이지로 이동하는 함수
-const goToNews = () => {
-  router.push('/news') // 뉴스 페이지로 이동
 }
 
-// 다음 뉴스로 이동하는 함수
-const nextNews = (categoryIndex) => {
-  const category = newsList.value[categoryIndex];
-  category.currentNewsIndex = (category.currentNewsIndex + 1) % category.newsItems.length; // 다음 뉴스로 순환
-}
-
-// 이전 뉴스로 이동하는 함수
-const prevNews = (categoryIndex) => {
-  const category = newsList.value[categoryIndex];
-  category.currentNewsIndex = (category.currentNewsIndex - 1 + category.newsItems.length) % category.newsItems.length; // 이전 뉴스로 순환
-}
-
-// 자동으로 다음 뉴스로 넘어가는 함수
-const startAutoSlide = () => {
-  autoSlideIntervals = newsList.value.map((_, index) => {
-    return setInterval(() => {
-      nextNews(index); // 각 카테고리의 뉴스 인덱스를 증가시킴
-    }, 3000); // 3초마다 자동으로 다음 뉴스로 넘어감
-  });
-}
-
-onMounted(() => {
-  fetchNews();
-  startAutoSlide();
+const filteredNews = computed(() => {
+  const categoryData = newsList.value.find((item) => item.category === selectedCategory.value)
+  return categoryData ? categoryData.newsItems.filter((newsItem) => newsItem.imageUrl) : []
 })
 
-onUnmounted(() => {
-  autoSlideIntervals.forEach(interval => clearInterval(interval)); // 타이머 정리
+// 현재 인덱스에 따라 표시할 뉴스
+const displayedNews = computed(() => {
+  return filteredNews.value.slice(0, 5) // 첫 5개 뉴스 항목 반환
 })
 
+const goToNews = (link) => {
+  window.open(link, '_blank') // 새 탭에서 링크 열기
+}
+
+onMounted(async () => {
+  await fetchNews()
+})
 </script>
-
 <style scoped>
-#newsCarousel {
-  display: flex;
-  justify-content: space-between;
+.news-content {
+  width: 100%;
 }
-
 .news-card {
-  width: 30%; 
-  background: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  text-align: center;
+  cursor: pointer;
+}
+.news-card:hover .img-content img {
+  transform: scale(1.1);
+}
+.news-card:hover .news-title {
+  font-weight: 600;
+  color: #6846f5;
+  text-decoration: underline;
+  transition: all 0.4s ease;
+}
+.news-card:hover .pub-date {
+  color: #6846f5;
+}
+.news-card .img-content {
+  border-radius: 27px;
+  width: 100%;
+  height: 8rem;
+  overflow: hidden;
+}
+.news-card .img-content img {
+  width: 100%;
+  height: 100%;
   transition: transform 0.3s ease;
 }
-
-.news-item {
-  margin: 10px 0; 
+.news-card .news-title {
+  text-align: center;
+  font-size: 1.12rem;
+  font-weight: 500;
+  letter-spacing: -1px;
+  line-height: 1.6rem;
+  word-break: keep-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+.news-card .pub-date {
+  margin-top: 15px;
+  font-size: 15px;
+  text-align: center;
 }
 
-.news-card:hover {
-  transform: scale(1.05);
+/* Swiper 페이지네이션 스타일 커스터마이징 */
+:deep(.swiper-pagination-bullet) {
+  background: #cfc6fd;
+  opacity: 1;
 }
 
-.news-title {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin: 10px 0;
-  color: #333;
-}
-
-.news-description {
-  font-size: 0.9rem;
-  color: #777; 
-}
-
-button.btn-sm {
-  font-size: 0.875rem;
-  padding: 5px 10px;
+:deep(.swiper-pagination-bullet-active) {
+  background: #6846f5;
 }
 </style>

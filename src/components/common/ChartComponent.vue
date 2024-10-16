@@ -37,6 +37,13 @@ const createChart = () => {
   }
 
   const ctx = chartRef.value.getContext('2d')
+  if (!ctx) {
+    console.error('Failed to get context for canvas')
+    return
+  }
+
+  // console.log('Creating new chart with data:', props.data)
+
   chartInstance = new Chart(ctx, {
     type: props.type,
     data: props.data,
@@ -62,5 +69,8 @@ onBeforeUnmount(() => {
 <style scoped>
 .chart-container {
   width: 100%;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+  height: 320px !important;
 }
 </style>

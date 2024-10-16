@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:9000/api/news'
+const API_URL = '/api/news'
 
 // 전체 뉴스를 가져오는 함수
 export const getNews = async (currentPage) => {
@@ -12,7 +12,7 @@ export const getNews = async (currentPage) => {
       }
     })
 
-    console.log('Fetched News: ', response.data)
+    console.log('전체뉴스: ', response.data)
     return response.data
   } catch (error) {
     console.error('뉴스를 가져오는 데 실패했습니다:', error)
@@ -22,7 +22,7 @@ export const getNews = async (currentPage) => {
 
 // 카테고리별로 가져오는 함수
 export const getNewsBycategory = async (currentPage, category) => {
-  try {
+    try {
     const response = await axios.get(`${API_URL}/getNewsBycategory`, {
       params: {
         page: currentPage,
@@ -39,13 +39,12 @@ export const getNewsBycategory = async (currentPage, category) => {
   }
 }
 
-
-export const recommendNews= async () => {
+export const recommendNews = async () => {
   try {
     const response = await axios.get(`${API_URL}/recommend`)
     return response.data
   } catch (error) {
-    console.error('추천 정책을 가져오는 데 실패했습니다:', error)
+    console.error('추천 뉴스를 가져오는 데 실패했습니다:', error)
     throw error
   }
 }

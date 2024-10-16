@@ -6,7 +6,6 @@ const headers = { 'Content-Type': 'multipart/form-data' }
 
 export const getList = async (pageNum, category, keyword, sortBy) => {
   try {
-    console.log('API 요청 파라미터:', pageNum, category, keyword, sortBy)
     const response = await axios.get(API_URL, {
       params: {
         page: pageNum,
@@ -16,7 +15,6 @@ export const getList = async (pageNum, category, keyword, sortBy) => {
         sort: sortBy
       }
     })
-    console.log('BOARD GET LIST: ', response.data)
     return response.data
   } catch (error) {
     console.error('게시판을 가져오는 데 실패했습니다:', error)
@@ -37,9 +35,7 @@ export const getBest = async () => {
 
 export const getComments = async (boardNo) => {
   try {
-    console.log('댓글을 요청한 boardNo: ', boardNo)
     const response = await axios.get(`${API_URL}/${boardNo}/comments`)
-    console.log('댓글 리스트: ', response.data)
     return response
   } catch (error) {
     console.error('댓글을 가져오는 데 실패했습니다.', error)
@@ -49,7 +45,6 @@ export const getComments = async (boardNo) => {
 
 export const createComment = async (commentData) => {
   try {
-    console.log('commentData: ', commentData)
     const response = await axios.post(`${API_URL}/comment`, commentData)
     return response.data
   } catch (error) {
@@ -59,9 +54,7 @@ export const createComment = async (commentData) => {
 }
 
 export const get = async (boardNo) => {
-  console.log('get no: ', boardNo)
   const { data } = await axios.get(`${API_URL}/${boardNo}`)
-  console.log('BOARD GET', data)
   return data
 }
 
@@ -79,7 +72,6 @@ export const create = async (article) => {
   }
 
   const { data } = await axios.post(API_URL, formData, { headers })
-  console.log('BOARD POST: ', data)
   return data
 }
 
@@ -99,7 +91,6 @@ export const update = async (article) => {
 
   try {
     const { data } = await axios.put(`${API_URL}/${article.boardNo}`, formData, { headers })
-    console.log('BOARD PUT: ', data)
     return data
   } catch (error) {
     console.error('게시글 수정 실패:', error)
@@ -109,7 +100,6 @@ export const update = async (article) => {
 
 export const deleteBoard = async (boardNo) => {
   const { data } = await axios.delete(`${API_URL}/${boardNo}`)
-  console.log('BOARD DELETE: ', data)
   return data
 }
 
@@ -120,13 +110,11 @@ export const downloadAttachment = async (no) => {
 
 export const deleteAttachment = async (no) => {
   const { data } = await axios.delete(`${API_URL}/deleteAttachment/${no}`)
-  console.log('ATTACHMENT DELETE: ', data)
   return data
 }
 
 export const likeBoard = async (boardNo, userName) => {
   try {
-    console.log('api 안에서: ', boardNo, userName)
     const response = await axios.get(`${API_URL}/like`, {
       params: {
         boardNo: boardNo,
@@ -142,13 +130,11 @@ export const likeBoard = async (boardNo, userName) => {
 
 export const myBoard = async (userName) => {
   try {
-    console.log(userName)
     const response = await axios.get(`${API_URL}/mine`, {
       params: {
         userName: userName
       }
     })
-    console.log('resp:', response.data)
     return response.data
   } catch (error) {
     console.error('내 게시물을 가져오는 데 실패했습니다.', error)

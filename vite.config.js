@@ -16,6 +16,11 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:9000',
         changeOrigin: true
+      },
+      '/finlife': {
+        target: 'https://finlife.fss.or.kr',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/finlife/, '')
       }
     }
   },

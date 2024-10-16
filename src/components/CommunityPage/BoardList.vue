@@ -1,71 +1,103 @@
 <template>
   <div class="board-list">
-    <div class="search-section">
-      <select v-model="category">
-        <option value="title">제목</option>
-        <option value="content">내용</option>
-        <option value="userName">작성자</option>
-      </select>
-      <search-bar v-model="keyword" @search="searchBoards" />
+    <h2 class="title">커뮤니티</h2>
 
-      <!-- 정렬 기준 선택 -->
-      <select v-model="sortBy" @change="loadBoards">
-        <option value="latest">최신순</option>
-        <option value="likes">좋아요순</option>
-        <option value="views">조회순</option>
-        <option value="comments">댓글순</option>
-      </select>
+    <!-- 정렬 기준 선택 -->
+    <div class="search-section">
+      <div class="select-form">
+        <select v-model="sortBy" @change="loadBoards">
+          <option value="latest">최신순</option>
+          <option value="likes">좋아요순</option>
+          <option value="views">조회순</option>
+          <option value="comments">댓글순</option>
+        </select>
+      </div>
+      <div class="select-form">
+        <select v-model="category">
+          <option value="title">제목</option>
+          <option value="content">내용</option>
+          <option value="userName">작성자</option>
+        </select>
+      </div>
+      <search-bar v-model="keyword" @search="searchBoards" />
     </div>
-    <!-- <BoardBest /> -->
-    <div class="alert alert-info mt-3">
-      * 인기 글은 저번 달 조회수, 댓글 수, 좋아요 수를 기준으로 선정되었습니다.
+    <div class="table-top-box margin-top-1rem margin-bottom-1rem">
+      <dl class="total">
+        <dt>전체</dt>
+        <dd>
+          <b>{{ totalCnt }}</b
+          >건
+        </dd>
+      </dl>
+
+      <div class="button-box">
+        <router-link :to="{ name: 'board/create' }" class="button-main btn btn-primary">
+          글쓰기
+        </router-link>
+      </div>
     </div>
+
     <!-- Board List -->
     <table class="table">
+      <colgroup>
+        <col width="8%" />
+        <col width="70%" />
+        <col width="10%" />
+        <col width="22%" />
+      </colgroup>
       <thead>
         <tr>
           <th>번호</th>
           <th>제목</th>
-          <th></th>
           <th>작성자</th>
           <th>작성일</th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="(board, index) in list"
-          :key="board.boardNo"
-          :class="{ 'top-post': pageNum === 1 && index < 5 }"
-        >
+        <tr v-for="board in list" :key="board.boardNo">
           <td>{{ board.boardNo }}</td>
-          <td>
+          <td class="text-align-left">
             <router-link
               :to="{
                 name: 'board/detail',
                 params: { boardNo: board.boardNo }
               }"
+              class="router-link"
             >
-              {{ board.title }}
+              <!-- text가 길때 제한길이 이하는 '...'으로 표시되고 hover하면 전체 text 보여주기 -->
+              <div class="board-title truncated" :title="board.title">
+                {{ truncateTitle(board.title) }}
+              </div>
+              <!-- 24시간 이내 새 게시물 new 보여주기 -->
+              <span v-if="isNew(board.regDate)" class="new-label">NEW</span>
+              <ul class="table-ex-info">
+                <li><i class="fa-solid fa-user"></i> {{ board.views }}</li>
+                <li><i class="fa-solid fa-heart"></i> {{ board.likes }}</li>
+                <li><i class="fa-solid fa-comment"></i> {{ board.comments }}</li>
+              </ul>
             </router-link>
           </td>
           <td>
-            <i class="fa-solid fa-eye"></i> {{ board.views }}&nbsp;&nbsp;<i
-              class="fa-solid fa-comment"
-            ></i>
-            {{ board.comments }}&nbsp;&nbsp;<i class="fa-solid fa-thumbs-up"></i> {{ board.likes }}
+            <span class="badge">{{ board.userName }}</span>
           </td>
-          <td>{{ board.userName }}</td>
-          <td>{{ moment(board.regDate).format('YYYY-MM-DD HH:mm') }}</td>
+          <td class="date">{{ formatTimeAgo(board.regDate) }}</td>
         </tr>
-        <router-link :to="{ name: 'board/create' }" class="btn btn-primary">
-          <i class="fa-solid fa-pen-to-square"></i> 글 작성
-        </router-link>
       </tbody>
     </table>
 
     <pagination :currentPage="pageNum" :totalPages="totalPage" @page-change="changePage" />
   </div>
 </template>
+
+<style scope>
+.board-list {
+  position: relative;
+}
+.button-box {
+  position: absolute;
+  right: 0;
+}
+</style>
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
@@ -84,6 +116,7 @@ const amount = ref(10)
 const sortBy = ref('latest')
 const router = useRouter()
 const route = useRoute()
+const totalCnt = ref(0)
 
 const loadBoards = async () => {
   try {
@@ -92,6 +125,7 @@ const loadBoards = async () => {
     totalPage.value = data.totalPage || 0
     pageNum.value = data.pageNum || 1
     amount.value = data.amount || 10
+    totalCnt.value = data.totalCount || 0
   } catch (error) {
     console.error('Error loading boards:', error)
   }
@@ -112,6 +146,26 @@ const searchBoards = async (searchTerm) => {
   await loadBoards()
 }
 
+const formatTimeAgo = (regDate) => {
+  const now = moment()
+  const postDate = moment(regDate)
+
+  if (now.isSame(postDate, 'day')) {
+    const hoursDiff = now.diff(postDate, 'hours')
+    const minutesDiff = now.diff(postDate, 'minutes')
+    const secondDiff = now.diff(postDate, 'seconds')
+    if (hoursDiff === 0 && minutesDiff === 0) {
+      return `${secondDiff}초 전`
+    } else if (hoursDiff === 0 && minutesDiff < 60) {
+      return `${minutesDiff}분 전`
+    } else if (hoursDiff < 24) {
+      return `${hoursDiff}시간 전`
+    }
+  }
+
+  return moment(regDate).format('YYYY-MM-DD HH:mm') // 오늘이 아니면 원래 포맷으로 반환
+}
+
 const changePage = async (page) => {
   pageNum.value = page
   await router.push({
@@ -124,6 +178,23 @@ const changePage = async (page) => {
     }
   })
   await loadBoards()
+}
+
+// 타이틀 길이 제한
+const truncateTitle = (title) => {
+  const maxLength = 35 // 길이제한(47:시간 아래로 들여쓰기됨)
+  if (title.length > maxLength) {
+    return title.slice(0, maxLength) + '...' // 제한길이 이하는 '...'로 표시
+  }
+  return title
+}
+
+// new 보여주기
+const isNew = (regDate) => {
+  const postDate = moment(regDate)
+  const now = moment()
+  const hoursDiff = now.diff(postDate, 'hours')
+  return hoursDiff <= 24 // 24시간  이내만
 }
 
 onMounted(() => {
@@ -147,44 +218,4 @@ watch(
 )
 </script>
 
-<style scoped>
-.table {
-  width: 100%;
-  table-layout: fixed;
-}
-
-.table th,
-.table td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.table th {
-  text-align: left;
-}
-
-.board-list .top-post {
-  background-color: #ffeb3b !important;
-  border-left: 5px solid #f57f17;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition:
-    transform 0.3s ease,
-    background-color 0.3s ease;
-}
-
-.top-post:hover {
-  transform: scale(1.02);
-  background-color: #e8f5e9;
-}
-
-.table th,
-.table td {
-  padding: 12px 15px;
-}
-
-.table td {
-  vertical-align: middle;
-  word-break: break-word;
-}
-</style>
+<style scoped></style>

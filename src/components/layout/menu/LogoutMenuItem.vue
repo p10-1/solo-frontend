@@ -1,8 +1,5 @@
 <template>
-  <a href="#" class="nav-link" @click.prevent="logout">
-    <i class="fa-solid fa-right-from-bracket"></i>
-    로그아웃
-  </a>
+  <a href="#" class="button-main log-out-button" @click.prevent="logout"> 로그아웃 </a>
 </template>
 
 <script setup>
@@ -16,3 +13,9 @@ const logout = async () => {
   sessionStorage.removeItem('userInfo')
 }
 </script>
+
+<style scope>
+.log-out-button {
+  margin-left: 2rem;
+}
+</style>

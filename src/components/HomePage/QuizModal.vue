@@ -1,32 +1,41 @@
 <template>
   <div class="modal-overlay" @click.self="$emit('close')">
     <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-header">
+        <h4>
+          오늘의 <b class="text-accent">퀴즈</b>
+          <i class="fa-solid fa-hat-wizard text-accent icon"></i>
+        </h4>
+        <button type="button" class="close" @click="$emit('close')">
+          <span>&times;</span>
+        </button>
+      </div>
       <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title">오늘의 퀴즈</h5>
-          <button type="button" class="close" @click="$emit('close')">
-            <span>&times;</span>
-          </button>
-        </div>
         <div class="modal-body">
-          <p class="description"><strong>설명:</strong> {{ description }}</p>
-          <input
-            type="text"
-            v-model="userAnswer"
-            class="form-control mt-3 quiz-input"
-            placeholder="정답을 입력하세요"
-          />
+          <div class="point"><span>참여시 10P 지급</span></div>
+          <div class="description">{{ description }}</div>
+          <div class="info-text">정답을 맞추면, 하루 1번 10P를 드려요!</div>
+          <div class="input-text-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input
+              type="text"
+              v-model="userAnswer"
+              class="form-control mt-3 quiz-input"
+              placeholder="정답을 입력하세요"
+            />
+            <button class="btn btn-success" @click="checkAnswer">정답 확인</button>
+          </div>
         </div>
-        <div class="modal-footer">
-          <button class="btn btn-success" @click="checkAnswer">정답 확인</button>
-          <button class="btn btn-secondary" @click="$emit('close')">닫기</button>
-        </div>
-        <div v-if="isCorrect !== null" class="result-body">
-          <p class="result-message">
-            <strong>정답:</strong> {{ isCorrect ? '맞았습니다!' : '틀렸습니다.' }}
-          </p>
-          <p class="point-message">{{ isPoint }}</p>
-        </div>
+      </div>
+      <div v-if="isCorrect !== null" class="result-body">
+        <p :class="['result-message', { success: isCorrect, error: isCorrect === false }]">
+          <i
+            :class="isCorrect ? 'fa-regular fa-face-laugh-squint' : 'fa-regular fa-face-sad-tear'"
+          ></i>
+          <!-- 웃는 표정은 맞았을 때, 우는 표정은 틀렸을 때 -->
+          {{ isCorrect ? '맞았습니다!' : '틀렸습니다!' }}
+        </p>
+        <p class="point-message">{{ isPoint }}</p>
       </div>
     </div>
   </div>
@@ -67,90 +76,107 @@ const checkAnswer = async () => {
 </script>
 
 <style scoped>
-/* 모달 오버레이 스타일 */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.5); /* 배경 투명도 */
-  z-index: 1050;
-}
-
-.modal-dialog {
-  max-width: 600px;
-  width: 100%;
-  background-color: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.modal-header {
-  background-color: #007bff;
-  padding: 20px;
-}
-
-.modal-title {
-  font-size: 1.5rem;
-  margin: 0;
-}
-
-.close {
-  cursor: pointer;
-  font-size: 1.2rem;
-  color: white;
-}
-
 .modal-body {
-  padding: 20px;
+  padding: 25px;
+  min-height: 200px;
 }
 
-.description {
-  font-size: 1rem;
+.modal-body .point span {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  border: 1px solid #6846f5;
+  color: #6846f5;
+  padding: 1px 8px;
+  line-height: 1;
+  border-radius: 20px;
+}
+
+.modal-body .description {
+  font-size: 1.05rem;
   color: #333;
-  margin-bottom: 10px;
+  word-break: keep-all;
+  line-height: 28px;
+  letter-spacing: -1px;
+  font-weight: 500;
+  margin: 10px 0;
 }
 
-.quiz-input {
-  padding: 12px;
-  border: 2px solid #007bff;
-  border-radius: 8px;
-  font-size: 1rem;
+.modal-body .info-text {
+  color: #6846f5;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: -0.3px;
 }
 
-.modal-footer {
+.modal-body .input-text-box {
+  position: relative;
+  margin-top: 25px;
   display: flex;
-  justify-content: space-between;
-  padding: 15px 20px;
-  background-color: #f1f1f1;
 }
 
-.btn-success {
-  background-color: #28a745;
-  border-color: #28a745;
+.modal-body .input-text-box i {
+  position: absolute;
+  margin-top: 28px;
+  margin-left: 15px;
+  z-index: 12;
+  font-size: 21px;
+  color: #6846f5;
 }
 
-.btn-secondary {
-  background-color: #6c757d;
-  border-color: #6c757d;
+.modal-body .quiz-input {
+  padding-left: 40px;
+  border: 2px solid #e4deff;
+  background-color: #e4deff;
+  border-radius: 12px;
+  font-size: 1rem;
+  letter-spacing: -1px;
 }
 
+.modal-body .btn-success {
+  margin-left: 10px;
+  text-wrap: nowrap;
+  margin-top: 17px;
+  padding: 12px 20px;
+  line-height: 1;
+  border-radius: 12px;
+  background-color: #6846f5;
+  border: none;
+}
 .result-body {
-  padding: 20px;
+  padding: 10px 25px 20px;
+  border-top: 1px dashed #e8e8e8;
 }
 
 .result-message {
-  font-size: 1.2rem;
-  margin-top: 15px;
+  font-size: 1.15rem;
+  margin-top: 10px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.result-message i {
+  font-size: 1.15rem;
+  margin-right: 5px;
+}
+
+.success {
+  color: #1e90ff;
+  padding: 0;
+}
+
+.error {
+  color: #e32626;
+  padding: 0;
 }
 
 .point-message {
-  font-size: 1rem;
+  font-size: 1.15rem;
   margin-top: 10px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  color: #6846f5;
 }
 </style>

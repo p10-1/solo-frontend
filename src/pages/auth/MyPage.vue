@@ -3,37 +3,36 @@
     <div class="top-section">
       <MyType />
     </div>
-    <br /><br />
 
     <div class="middle-section">
       <MyAsset />
     </div>
 
-    <!-- 하단 컴포넌트 (MyPoint, MyBoard) -->
     <div class="bottom-section">
       <div class="bottom-components">
-        <MyPoint />
-        <MyBoard />
+        <div :style="{ width: '35%' }">
+          <MyPoint @update="handleUpdate" />
+        </div>
+        <div :style="{ width: '65%' }">
+          <MyBoard />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-// 컴포넌트 임포트
+<script setup>
 import MyPoint from '@/components/MyPage/MyPoint.vue'
 import MyType from '@/components/MyPage/MyType.vue'
 import MyAsset from '@/components/MyPage/MyAsset.vue'
 import MyBoard from '@/components/MyPage/MyBoard.vue'
 
-export default {
-  name: 'App',
-  components: {
-    MyPoint,
-    MyType,
-    MyAsset,
-    MyBoard
-  }
+const handleUpdate = () => {
+  refreshPage()
+}
+
+const refreshPage = () => {
+  window.location.reload() // 페이지 새로 고침
 }
 </script>
 
@@ -44,28 +43,25 @@ export default {
   padding: 20px;
   text-align: center;
 }
-
-h1 {
-  margin-bottom: 30px;
-}
-
 /* 상단 섹션 (MyType) */
 .top-section {
-  margin-bottom: 30px; /* 아래 여백 추가 */
+  margin-bottom: 3rem; /* 아래 여백 추가 */
 }
 
 /* 중간 섹션 (MyType) */
 .middle-section {
-  margin-bottom: 50px;
+  margin-bottom: 3rem;
 }
 
 /* 하단 섹션 (MyPoint, MyBoard) */
 .bottom-section {
-  margin-bottom: 50px;
+  margin-bottom: 3rem;
 }
 
 .bottom-components {
-  display: flex; /* Flexbox 사용 */
-  justify-content: space-between; /* 좌우로 배치 */
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 3rem;
 }
 </style>

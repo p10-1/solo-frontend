@@ -1,5 +1,5 @@
 <template>
-  <h1><i class="fa-regular fa-pen-to-square"></i> 글 수정</h1>
+  <h2 class="title">글 수정</h2>
 
   <form @submit.prevent="submit">
     <div class="mb-3 mt-3">
@@ -50,19 +50,10 @@
     </div>
 
     <div class="my-5 text-center">
-      <button type="submit" class="btn btn-primary me-3">
-        <i class="fa-solid fa-check"></i>
-        확인
-      </button>
-
-      <button type="button" class="btn btn-primary me-3" @click="reset">
-        <i class="fa-solid fa-undo"></i>
-        취소
-      </button>
-
-      <button class="btn btn-primary" @click="back">
-        <i class="fa-solid fa-arrow-left"></i>
-        돌아가기
+      <button type="submit" class="button-main">확인</button>
+      <button type="button" class="button-sub margin-left-1rem" @click="reset">취소</button>
+      <button class="button-sub margin-left-1rem" @click="back">
+        <i class="fa-solid fa-reply"></i> 뒤로
       </button>
     </div>
   </form>
@@ -89,7 +80,7 @@ const reset = () => {
   article.boardNo = orgArticle.value.boardNo
   article.title = orgArticle.value.title
   article.userName = orgArticle.value.userName
-  article.content = orgArticle.value.content
+  article.content = stripHtml(orgArticle.value.content)
 }
 
 const removeFile = async (no, filename) => {
@@ -105,11 +96,22 @@ const removeFile = async (no, filename) => {
   }
 }
 
+const stripHtml = (html) => {
+  const tempDiv = document.createElement('div')
+  tempDiv.innerHTML = html
+  return tempDiv.textContent || tempDiv.innerText || ''
+}
+
 const submit = async () => {
   if (!confirm('수정할까요?')) return
   if (files.value && files.value.files.length > 0) {
     article.files = Array.from(files.value.files)
   }
+  const formattedContent = article.content
+    .replace(/\n/g, '<br>') // 줄바꿈을 <br>로 변환
+    .replace(/ /g, '&nbsp;') // 공백을 &nbsp;로 변환
+
+  article.content = formattedContent
   await update(article)
   router.push({ name: 'board/detail', params: { boardNo }, query: route.query })
 }
@@ -117,7 +119,10 @@ const submit = async () => {
 const load = async () => {
   const data = await get(boardNo)
   orgArticle.value = { ...data }
-  //   attachments.value = data.attaches
+  article.content = stripHtml(orgArticle.value.content)
+    .replace(/<br>/g, '\n\n') // <br>을 줄바꿈으로 변환
+    .replace(/&nbsp;/g, ' ') // &nbsp;를 공백으로 변환
+  attachments.value = data.attaches
   reset()
 }
 

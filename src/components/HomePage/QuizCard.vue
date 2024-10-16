@@ -1,14 +1,19 @@
 <template>
-  <div class="quiz-container mt-5">
-    <div class="quiz-card card" @click="openModal">
-      <div class="card-body text-center">
-        <h1 class="card-title">오늘의 금융 퀴즈</h1>
-        <div v-if="description" class="quiz-description">
-          <p><strong>설명:</strong> {{ description }}</p>
-        </div>
-        <div v-else>
-          <p>퀴즈를 불러오는 중입니다...</p>
-        </div>
+  <div class="quiz-container">
+    <h3 class="main-title">
+      오늘의 금융 퀴즈
+      <span class="text-accent"
+        ><i class="fa-solid fa-question"></i><i class="fa-solid fa-exclamation"></i
+      ></span>
+    </h3>
+    <div class="quiz-card" @click="openModal">
+      <div v-if="description" class="quiz-description">
+        <p>{{ description }}</p>
+        <div class="button-main">참여하기</div>
+      </div>
+      <div class="loading" v-else>
+        <i class="fa-solid fa-spinner margin-bottom-1rem"></i>
+        퀴즈를 불러오는 중입니다...
       </div>
     </div>
 
@@ -21,6 +26,7 @@
     />
   </div>
 </template>
+<style scope></style>
 
 <script setup>
 import { ref, onMounted } from 'vue'
@@ -59,41 +65,70 @@ const openModal = () => {
 
 <style scoped>
 .quiz-container {
-  display: flex;
-  justify-content: center;
-}
-
-.quiz-card {
-  max-width: 400px; /* 가로 크기 조정 */
   width: 100%;
-  border: 2px solid #007bff;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out;
-  background-color: #f9f9f9;
+  padding: 1rem 0;
 }
-
-.quiz-card:hover {
-  transform: translateY(-5px); /* 호버 시 살짝 올라가는 효과 */
-}
-
-.card-title {
-  font-size: 1.8rem; /* 제목 크기 */
-  color: #007bff; /* 퀴즈 느낌 살리기 위해 파란색 적용 */
-  margin-bottom: 20px;
-}
-
-.quiz-description {
-  font-size: 1rem;
-  color: #333;
-}
-
-.text-center {
+.quiz-card {
+  margin-top: 16px;
+  width: 100%;
+  padding: 2rem 1rem;
+  border-radius: 25px;
   text-align: center;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px rgb(221, 214, 255);
+  transition: all 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
+  cursor: pointer;
+}
+.quiz-card:hover {
+  transform: translateY(-10px);
 }
 
-.card-body {
-  padding: 20px;
+.quiz-card:hover .quiz-description p {
+  font-weight: 600;
+  color: #6846f5;
+}
+.quiz-card .quiz-description {
+  position: relative;
+  height: 6.15rem;
+  padding: 0 1rem;
+}
+.quiz-card .quiz-description p {
+  font-size: 1.05rem;
+  line-height: 1.45rem;
+  word-break: keep-all;
+  margin-bottom: 15px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.quiz-card .quiz-description .button-main {
+  position: absolute;
+  transform: translateX(-50%);
+  bottom: 0;
+  height: 40px;
+  line-height: 37px;
+  background: linear-gradient(to right top, #7d64da, #a686f3);
+  border-color: #cfc6fd;
+}
+.quiz-card:hover .button-main {
+  background-color: #6846f5;
+}
+
+.quiz-card .loading {
+  line-height: 2rem;
+  font-size: 18px;
+  letter-spacing: -1px;
+  text-align: center;
+  font-weight: 400;
+}
+.quiz-card .loading i {
+  display: block;
+  margin-bottom: 10px;
 }
 </style>
