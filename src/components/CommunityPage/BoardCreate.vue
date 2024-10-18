@@ -77,11 +77,9 @@ const handleFileUpload = (event) => {
 // 폼 제출 핸들러
 const submitForm = async () => {
   try {
-    const formattedContent = article.value.content
-      .replace(/\n/g, '<br>') // 줄바꿈 처리
-      .replace(/ /g, '&nbsp;') // 공백 처리
+    const formattedContent = article.value.content.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;')
 
-    article.value.content = formattedContent // 변환된 내용으로 설정
+    article.value.content = formattedContent
     await create(article.value)
     alert('글이 성공적으로 작성되었습니다')
     router.push('/board') // 글 작성 후 게시판 페이지로 이동

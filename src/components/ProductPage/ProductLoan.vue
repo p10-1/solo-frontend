@@ -59,7 +59,7 @@ const handleScroll = () => {
       }
       loading.value = false // 로딩 종료
       isFetching = false // 데이터 가져오기 완료
-    }, 500) // 0.5초 지연
+    }, 500)
   }
 }
 

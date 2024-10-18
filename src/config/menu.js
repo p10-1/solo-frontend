@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-
+import MyPage from '@/pages/auth/MyPage.vue'
 export default {
   title: '빚이 없는 솔로', // 메인 타이틀
   subtitle: '자산분석해조', // 서브 타이틀
@@ -11,7 +11,7 @@ export default {
     },
     {
       title: '게시판',
-      url: '/board',
+      url: '/board'
     },
     {
       title: '뉴스',

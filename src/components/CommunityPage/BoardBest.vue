@@ -41,7 +41,7 @@
             </h5>
             <span class="text-mute">{{ moment(board.regDate).format('YYYY-MM-DD') }}</span>
             <div class="card-content">
-              {{ truncateContent(board.content) }}
+              {{ stripHtml(truncateContent(board.content)) }}
             </div>
             <div class="card-ex-info">
               <ul class="table-ex-info">
@@ -86,7 +86,12 @@ onMounted(async () => {
   }
 })
 
-// Helper function to truncate content
+const stripHtml = (html) => {
+  const tempDiv = document.createElement('div')
+  tempDiv.innerHTML = html
+  return tempDiv.textContent || tempDiv.innerText || ''
+}
+
 const truncateContent = (content, length = 100) => {
   return content.length > length ? content.slice(0, length) + '...' : content
 }

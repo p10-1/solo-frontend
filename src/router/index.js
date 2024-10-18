@@ -77,7 +77,7 @@ const router = createRouter({
     },
     ...boardRoutes
   ],
-    scrollBehavior() {
+  scrollBehavior() {
     // 항상 상단으로 스크롤
     return { top: 0 }
   }

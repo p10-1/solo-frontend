@@ -5,7 +5,7 @@
       <div class="login-content">
         <span class="introduce">Introduce</span>
         <h3 class="title">
-          청년 1인 가구를 위한 금융 자산 분석 서비스, <br />
+          청년을 위한 금융 자산 분석 서비스, <br />
           <span class="text-accent">빚이 없는 솔로</span>입니다.
         </h3>
         <a href="#" class="button-main button-kakao" @click.prevent="login">
@@ -13,7 +13,7 @@
           {{ isProcessing ? '로그인 중...' : '카카오톡 로그인' }}
         </a>
         <div class="text">
-          <h4 class="text-accent">이제는 1인 가구 시대!</h4>
+          <h4 class="text-accent">이제는 MZ의 시대!</h4>
           <p>우리 서비스는 사용자의 금융 자산을 분석하고 비교해줍니다.</p>
           <p>
             자산 유형별로 비교 및 분석할 수 있으며, 청년 정책과 예적금, 전세자금대출 등 다양한 금융
