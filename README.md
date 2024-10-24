@@ -15,8 +15,8 @@
 10. [설치 및 실행 방법과 사용예시](#설치-및-실행-방법과-사용예시)
 11. [감사의 글](#감사의-글)
 
-## 프로젝트 소개
-
+## 💸 프로젝트 소개
+저희 팀 워크스페이스는 <a href="https://www.notion.so/b83ba20953634c2dbc6fb94ffafb2697?pvs=4"><img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white" style="width: 70px; height: auto; border-radius: 10px;"></a> 에서 확인할 수  있습니다.<br>
 **빚이 없는 솔로**는 금융 문맹률이 높은 청년층을 위한 종합적인 금융자산 분석 비교 서비스입니다.
 
 - **개발 기간**: 2024.09.05 ~ 2024.10.15
